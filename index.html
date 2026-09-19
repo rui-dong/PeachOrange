@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>探索世界 | 创意旅行博客目录</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-warm: #FFF1E8;
+      --accent-soft: #F7B89C;
+      --accent-dark: #E9826A;
+      --text-main: #49352F;
+      --text-muted: #4F8491;
+      --font-family: 'Plus Jakarta Sans', 'Noto Serif SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --card-width: 250px;
+      --card-gap: 1.8rem;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-warm);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Header 与模式切换按钮 */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2.5rem 6%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .logo span { color: var(--accent-soft); }
+
+    .category-switch-wrapper {
+      display: flex;
+      justify-content: center ;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem ;
+    }
+
+    .mode-switch {
+      display: flex;
+      background: rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 30px;
+      padding: 4px;
+      backdrop-filter: blur(10px);
+    }
+
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent-dark);
+      padding: 0.5rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .mode-btn.active {
+      background: var(--accent-soft);
+      color: var(--bg-warm);
+      box-shadow: 0 4px 12px rgba(247, 184, 156, 0.3);
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 2.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover { color: var(--text-main); }
+
+    .hero-header {
+      padding: 5.5rem 6% 0.5rem;
+    }
+
+    .hero-header h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+    }
+
+    .hero-header p {
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+    }
+
+    /* SESSION 核心布局 */
+    .region-session {
+      position: relative;
+      width: 100%;
+      height: 75vh;
+      min-height: 540px;
+      margin-bottom: 10rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .session-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 0.8s ease-in-out; /* background-image 0.8s cubic-bezier(0.25, 1, 0.5, 1); */
+      z-index: 1;
+    }
+
+    .session-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;   
+      height: 100%;
+      background: linear-gradient(
+        90deg, 
+        rgba(4, 17, 23, 0.95) 0%, 
+        rgba(4, 17, 23, 0.75) 40%, 
+        rgba(4, 17, 23, 0.25) 100%
+      );
+      z-index: 2;
+    }
+
+    /* 顶部节点指示器 */
+    .session-progress-bar {
+      position: relative;
+      z-index: 10;
+      width: 65%;
+      margin: 0 auto 3.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .node-track {
+      position: relative;
+      width: 100%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .node-track::before {
+      content: '';
+      position: absolute;
+      left: -35px;
+      width: 35px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25));
+    }
+
+    .node-track::after {
+      content: '';
+      position: absolute;
+      right: -35px;
+      width: 35px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.25), transparent);
+    }
+
+    .node-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .node-dot.active {
+      width: 20px;
+      height: 20px;
+      background: #FFFFFF;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 0 0 20px var(--accent-soft);
+      border: 4px solid var(--accent-soft);
+    }
+
+    .session-container {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 42% 58%;
+      align-items: center;
+    }
+
+    /* 左侧文本内容 */
+    .left-content {
+      padding-left: 14%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 560px;
+    }
+
+    .region-badge {
+      position: relative;
+      z-index: 10;
+      
+      display: inline-block;
+      align-self: flex-start; /* 靠左对齐（若要居中可改为 center） */
+      top: 0rem;   /* ◄ 控制 Badge 距离 Session 顶部的距离（往上提或往下压） */
+      left: 2%;      /* ◄ 控制 Badge 距离 Session 左侧的边缘对齐距离 */
+
+      /* margin-left: 4%;     */    /* 保持与 Session 内部内容的左边距一致 */
+      /* margin-bottom: 15rem;   */ /* ◄ 控制 Badge 距离下方 Session 主体的间距 */
+      
+      /* 基础视觉样式（保持不变或根据需要调整） */
+      padding: 6px 16px;
+      background: none;
+      border: none;
+      /* border-radius: 20px;
+      font-size: 0.85rem;
+      color: #fff;
+      backdrop-filter: blur(8px); */
+
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent-soft);
+      /*margin-bottom: 1rem; */
+      letter-spacing: 1px;               /* 增加字间距，提升精致感 */
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* 添加淡淡的文字阴影，保证在浅色背景图上依然清晰 */
+    }
+
+    .article-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 1.2rem;
+      transition: opacity 0.3s ease;
+      color: var(--bg-warm) ;
+      /* ◄ 新增：强制固定占据 2 行的高度 */
+      display: -webkit-box;
+      -webkit-line-clamp: 2;        /* 限制最多显示 2 行，多余文字打省略号 */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      
+      /* 核心：计算并固定 2 行的文字高度 (3.5rem * 1.1 * 2 ≈ 7.7em / 7.7rem) */
+      height: 7.7rem;               
+      min-height: 7.7rem;          /* 即使标题只有 1 行，也固定保留 2 行的空间 */
+    }
+
+    .article-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 2.2rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      transition: opacity 0.3s ease;
+      /* 固定 subtitle 的最小高度（3行行高约 5.04rem），文字少时依然占用该高度 */
+      min-height: 5rem; 
+    }
+
+    /* 3. 新增水平操作容器：绑定按钮在同一水平线上 */
+    .action-controls-wrapper {
+      display: flex;
+      align-items: center;  /* 垂直居中对齐 */
+      gap: 3rem;          /* Explore 按钮与 slider-controls 之间的间距 */
+      margin-top: auto;     /* 自动顶到容器底部，位置始终固定 */
+    }
+
+    .explore-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 2.4rem;
+      background: var(--accent-dark);
+      color: #FFFFFF;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 10px 25px rgba(233, 130, 106, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .explore-btn:hover {
+      background: var(--accent-soft);
+      color: var(--bg-warm);
+      transform: translateY(-2px);
+    }
+
+    .explore-btn:not([href]):hover {
+      background: var(--accent-dark);
+      color: #FFFFFF;
+      transform: none;
+      box-shadow: 0 10px 25px rgba(233, 130, 106, 0.4);
+    }
+
+    .explore-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+    
+    .slider-controls {
+      position: static;     /* ◄ 关键：取消原先的 absolute 定位 */
+      display: flex;
+      gap: 0.8rem;          /* 左右箭头按钮之间的间距 */
+      z-index: 10;
+    }
+
+    .control-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(4, 17, 23, 0.6);
+      backdrop-filter: blur(8px);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+    }
+
+    .control-btn:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent-soft);
+      color: var(--bg-warm);
+      transform: scale(1.08);
+    }
+
+    /* 右侧卡片滑块与原始防裁剪外罩 */
+    .right-slider-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding: 3.5rem 0 3.5rem 1rem;
+      margin-top: -1.5rem;
+      margin-bottom: -1.5rem;
+    }
+
+    .cards-track {
+      display: flex;
+      gap: var(--card-gap);
+      align-items: center;
+      will-change: transform;
+    }
+
+    .cards-track.is-animating {
+      transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* 卡片基础与原始放缩动画样式 */
+    .option-card {
+      position: relative;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s;
+      width: var(--card-width);
+      height: 380px;
+      border-radius: 22px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      flex-shrink: 0;
+      
+      transform-origin: left center;
+      transform: scale(0.88);
+      opacity: 0.7;
+      filter: brightness(0.8);
+      
+      transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+                  opacity 0.45s ease,
+                  filter 0.45s ease,
+                  border-color 0.45s ease,
+                  box-shadow 0.45s ease;
+    }
+
+    .option-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .card-label {
+      position: absolute;
+      top: 1.2rem;
+      left: 1.2rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--bg-warm);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+      z-index: 2;
+    }
+
+    .option-card.active {
+      opacity: 1;
+      filter: brightness(1);
+      transform: scale(1.08);
+      border-color: var(--accent-soft);
+      margin-right: 2.4rem;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), 0 0 25px rgba(89, 171, 174, 0.35);
+      z-index: 5;
+    }
+
+    .option-card.active img {
+      transform: scale(1.05);
+    }
+
+    
+
+    @media (max-width: 1024px) {
+      .session-container { grid-template-columns: 1fr; }
+      .left-content { padding-left: 6%; max-width: 100%; }
+      .region-session { height: auto; padding: 5rem 0; }
+      .session-progress-bar { width: 85%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">WANDER<span>LUST</span></div>
+
+    <nav>
+      <a href="#">首页</a>
+      <a href="#">目的地目录</a>
+      <a href="#">关于博客</a>
+    </nav>
+  </header>
+
+  <div class="hero-header">
+    <h1>全球灵感目录</h1>
+    <p>切换顶部分类模式，无缝探索深度游记</p>
+  </div>
+
+  <!-- 顶部分类模式切换 -->
+  <div class="category-switch-wrapper"> 
+    <div class="mode-switch">
+      <button class="mode-btn active" data-mode="geo">目的地/Destination</button>
+      <button class="mode-btn" data-mode="time">旅行时间/Time of Travel</button>
+      <button class="mode-btn" data-mode="type">旅行方式/Type of Travel</button>
+    </div>
+  </div>
+
+  <!-- 动态 Session 挂载容器 -->
+  <main id="app-sessions-container"></main>
+
+  <script>
+    // 1. 全局卡片完整数据集 (包含地理分类与年份)
+    const ALL_CARDS = [
+          { id: "01",  region: "ASIA",     regionName:  "亚洲",        year: 2013.05	,  label: "Singapore",         title:  "泰国·马来西亚·新加坡", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/14kU3nscbXH7fn_kQDm883c5ybQ-ViISj", img: "https://lh3.googleusercontent.com/d/14kU3nscbXH7fn_kQDm883c5ybQ-ViISj",
+url: "" },
+  { id: "02",  region: "ASIA",     regionName:  "亚洲",        year: 2013.12	,  label: "Maldives",          title:  "马尔代夫", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1U0P8Gxm7eS94jjMnoigkNxmhHh7rju5T", img: "https://lh3.googleusercontent.com/d/1wP5pqDW7BtkBmfm7DsUXkEIwIesYq9c5",
+url: "" },
+  { id: "03",  region: "USA",      regionName:  "美国",        year: 2014.03	,  label: "California",        title:  "丹佛·旧金山·1号公路·洛杉矶", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1Pj7YNarP3d-U2mlTt9M4y0jLH13fj6hf", img: "https://lh3.googleusercontent.com/d/1Pj7YNarP3d-U2mlTt9M4y0jLH13fj6hf",
+url: "https://sites.google.com/view/peach-orange/trips/trip-California" },
+  { id: "04",  region: "USA",      regionName:  "美国",        year: 2014.04	,  label: "Washington DC",     title:  "华盛顿特区", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1vZfrRcyoxCZg4kwdIr4AoDyRHWhKaCLx", img: "https://lh3.googleusercontent.com/d/1vZfrRcyoxCZg4kwdIr4AoDyRHWhKaCLx",
+url: "https://sites.google.com/view/peach-orange/trips/trip-DC" },
+  { id: "05",  region: "USA",      regionName:  "美国",        year: 2014.07	,  label: "Atlanta",           title:  "亚特兰大", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1gPQEHSRQ6Jkd1w2YrdD3-EJJ_CYYwePA", img: "https://lh3.googleusercontent.com/d/1gPQEHSRQ6Jkd1w2YrdD3-EJJ_CYYwePA",
+url: "" },
+  { id: "06",  region: "USA",      regionName:  "美国",        year: 2014.10	,  label: "Great Smoky Mt.",   title:  "大烟山国家公园", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1vmdtmhirRrAohiY6J2taDL-Ixvi9jRUw", img: "https://lh3.googleusercontent.com/d/1vmdtmhirRrAohiY6J2taDL-Ixvi9jRUw",
+url: "https://sites.google.com/view/peach-orange/trips/trip-GreatSmoky" },
+  { id: "07",  region: "USA",      regionName:  "美国",        year: 2014.12	,  label: "Florida",           title:  "迈阿密·奥兰多·西礁岛", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1h3NPTtDierXIYWdCOQIvlllTlWhZqiWR", img: "https://lh3.googleusercontent.com/d/1h3NPTtDierXIYWdCOQIvlllTlWhZqiWR",
+url: "https://sites.google.com/view/peach-orange/trips/trip-Florida" },
+  { id: "08",  region: "USA",      regionName:  "美国",        year: 2014.12	,  label: "Caribbean Cruise",  title:  "加勒比邮轮", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1f9J9gxBMXkgcAEXIENYP57KMCxpf-wDo", img: "https://lh3.googleusercontent.com/d/14JtKXQxiBhxuAJM8X9kGTJkTw-64O3FR",
+url: "https://sites.google.com/view/peach-orange/trips/trip-cruise" },
+  { id: "09",  region: "USA",      regionName:  "美国",        year: 2015.03	,  label: "Northeast",         title:  "纽约·波士顿·费城", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1AAA0mzZfdiqXCzNHoHJOF9-vDRsfOQFe", img: "https://lh3.googleusercontent.com/d/1PyVRRMW7Kh3dEy-75dVB12mfa31zbbDW",
+url: "https://sites.google.com/view/peach-orange/trips/trip-NYMA" },
+  { id: "10",  region: "USA",      regionName:  "美国",        year: 2015.06	,  label: "Yellow Stone",      title:  "维加斯·大峡谷·黄石", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1PfsEA5vNIzoINC_vzvK3JgoOP8HsYPuc", img: "https://lh3.googleusercontent.com/d/1PfsEA5vNIzoINC_vzvK3JgoOP8HsYPuc",
+url: "https://sites.google.com/view/peach-orange/trips/trip-yellowstone" },
+  { id: "11",  region: "USA",      regionName:  "美国",        year: 2015.07	,  label: "Orlando",           title:  "奥兰多环球影城", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1zzf7gQMeNf7L09X9BUAqMxwNPgNBijWA", img: "https://lh3.googleusercontent.com/d/1zzf7gQMeNf7L09X9BUAqMxwNPgNBijWA",
+url: "https://sites.google.com/view/peach-orange/trips/trip-Universal" },
+  { id: "12",  region: "USA",      regionName:  "美国",        year: 2015.10	,  label: "Blue Ridge Pkwy",   title:  "蓝岭·仙娜度·外滩", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1y7nzYOpqTOJfLYDdEJiZsBvdZLEkMj56", img: "https://lh3.googleusercontent.com/d/1y7nzYOpqTOJfLYDdEJiZsBvdZLEkMj56",
+url: "https://sites.google.com/view/peach-orange/trips/trip-Shenandoah" },
+  { id: "13",  region: "MENA",     regionName:  "中东和北非",   year: 2016.12 ,  label: "UAE",               title:  "阿布扎比·迪拜", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/13x6wAk5rghvy_HFxPkx2JE4I00KjaI5x", img: "https://lh3.googleusercontent.com/d/13x6wAk5rghvy_HFxPkx2JE4I00KjaI5x",
+url: "https://sites.google.com/view/peach-orange/trips/trip-UAE" },
+  { id: "14",  region: "EUROPE",   regionName:  "欧洲",        year: 2017.03	,  label: "Spain/Portugal",    title:  "巴塞罗那·里斯本·马德里", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1OTBq_vkymlSj_pYHd_9a8Hi8uE1KdMib", img: "https://lh3.googleusercontent.com/d/1OTBq_vkymlSj_pYHd_9a8Hi8uE1KdMib",
+url: "https://sites.google.com/view/peach-orange/trips/trip-Spain-Portogal" },
+  { id: "15",  region: "EUROPE",   regionName:  "欧洲",        year: 2017.12	,  label: "Denmark",           title:  "哥本哈根", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1OhmL2Ie3EbBz5YqetDZBaQGayvoMsyfo", img: "https://lh3.googleusercontent.com/d/1OhmL2Ie3EbBz5YqetDZBaQGayvoMsyfo",
+url: "https://sites.google.com/view/peach-orange/trips/trip-Denmark" },
+  { id: "16",  region: "EUROPE",   regionName:  "欧洲",        year: 2018.02	,  label: "Poland",            title:  "华沙·克拉科夫", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1lD7sYbsKg0vQVRjPJNLEHnfQDKQ813E1", img: "https://lh3.googleusercontent.com/d/1lD7sYbsKg0vQVRjPJNLEHnfQDKQ813E1",
+url: "https://sites.google.com/view/peach-orange/trips/trip-poland" },
+  { id: "17",  region: "ASIA",     regionName:  "亚洲",        year: 2019.02	,  label: "Hongkong",          title:  "香港", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/18Mp1WHiIzEUtpUUVl6yw1gCV2jcxO6DG", img: "https://lh3.googleusercontent.com/d/1xiJWN1746cFnt9nTLi0zge-M1zHj4e84",
+url: "https://sites.google.com/view/peach-orange/trips/trip-Hongkong" },
+  { id: "18",  region: "EUROPE",   regionName:  "欧洲",        year: 2019.03	,  label: "Greece",            title:  "圣托里尼·雅典", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1i6Mro3IiFYuBGLCBz2CnjqElS7jb-qCE", img: "https://lh3.googleusercontent.com/d/1i6Mro3IiFYuBGLCBz2CnjqElS7jb-qCE",
+url: "https://sites.google.com/view/peach-orange/trips/trip-Greece" },
+  { id: "19",  region: "EUROPE",   regionName:  "中东和北非",   year: 2019.03 ,  label: "Morocco",           title:  "摩洛哥·菲斯·摩尔祖卡·卡萨布兰卡·马拉喀什", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1vM7IQIYfvRvhGyyYnA1BhtihyiZHLTXm", img: "https://lh3.googleusercontent.com/d/19655j2RpgSBnnEYH2OjC2XA7YWwMcwOh",
+url: "https://sites.google.com/view/peach-orange/trips/trip-morocco" },
+  { id: "20",  region: "EUROPE",   regionName:  "欧洲",        year: 2022.04	,  label: "UK Tour",           title:  "伦敦·牛津·剑桥 ", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1TMosrul3cTQi76SR9dRvNY9ZUOekBHk8", img: "https://lh3.googleusercontent.com/d/1TMosrul3cTQi76SR9dRvNY9ZUOekBHk8",
+url: "" },
+  { id: "21",  region: "EUROPE",   regionName:  "欧洲",        year: 2022.06	,  label: "Birmingham",        title:  "伯明翰", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/124Jw2hToXlVgO2qxVcfBIpRvjonk9ckH", img: "https://lh3.googleusercontent.com/d/124Jw2hToXlVgO2qxVcfBIpRvjonk9ckH",
+url: "" },
+  { id: "22",  region: "EUROPE",   regionName:  "欧洲",        year: 2022.07	,  label: "London",            title:  "伦敦", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1QRj6zVVGt7IwpIeaCdhtEnWDcB7En6Pl", img: "https://lh3.googleusercontent.com/d/1QRj6zVVGt7IwpIeaCdhtEnWDcB7En6Pl",
+url: "https://sites.google.com/view/peach-orange/trips/trip-London2022" },
+  { id: "23",  region: "EUROPE",   regionName:  "欧洲	",       year: 2022.10	,  label: "Frankfurt",         title:  "法兰克福·波恩·科隆", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1LeOAc40T48wcZRzpXjp9x-4l5LE35Fs1", img: "https://lh3.googleusercontent.com/d/1LeOAc40T48wcZRzpXjp9x-4l5LE35Fs1",
+url: "" },
+  { id: "24",  region: "EUROPE",   regionName:  "欧洲	",       year: 2022.12	,  label: "Amsterdam",         title:  "阿姆斯特丹", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1sOp12RUqlUaA1WYSqfgET-iobaTiX5vu", img: "https://lh3.googleusercontent.com/d/1sOp12RUqlUaA1WYSqfgET-iobaTiX5vu",
+url: "" },
+  { id: "25",  region: "EUROPE",   regionName:  "欧洲	",       year: 2023.12	,  label: "London",            title:  "伦敦", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/18akXKP9EK4EM1u7FZYSXNozFAOITA_ph", img: "https://lh3.googleusercontent.com/d/18akXKP9EK4EM1u7FZYSXNozFAOITA_ph",
+url: "" },
+  { id: "26",  region: "EUROPE",   regionName:  "欧洲	",       year: 2023.04	,  label: "Germany·Austria",   title:  "慕尼黑·阿尔施塔特·萨尔斯堡", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1--89YlZh8tW2gKCLMclbF0Y7Y-n6Vofu", img: "https://lh3.googleusercontent.com/d/1SALf3wwYsEKvjqqwJ4bnfZktVrgLzLJe",
+url: "https://sites.google.com/view/peach-orange/trips/trip-23-M-A" },
+  { id: "27",  region: "ASIA",     regionName:  "亚洲	",       year: 2023.06	,  label: "Beijing",           title:  "北京", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1jDxbe2Cwt1qvFsbUosrekJeChVEbKVIG", img: "https://lh3.googleusercontent.com/d/1jDxbe2Cwt1qvFsbUosrekJeChVEbKVIG",
+url: "" },
+  { id: "28",  region: "MENA",     regionName:  "中东和北非",   year: 2023.07,   label: "Qatar",             title:  "卡塔尔·多哈", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1909uAkb3l-GVMWOlvjH8A6IPIlTBUfcd", img: "https://lh3.googleusercontent.com/d/1909uAkb3l-GVMWOlvjH8A6IPIlTBUfcd",
+url: "" },
+  { id: "29",  region: "EUROPE",   regionName:  "欧洲",        year: 2023.08	,  label: "Italy",             title:  "罗马·佛罗伦萨", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1U188188_eJZRiHJZUk2T1u37nZuk9H7k", img: "https://lh3.googleusercontent.com/d/1U188188_eJZRiHJZUk2T1u37nZuk9H7k",
+url: "https://sites.google.com/view/peach-orange/trips/trip-Italy" },
+  { id: "30",  region: "ASIA",     regionName:  "亚洲",        year: 2024.06	,  label: "Disneyland",        title:  "上海·迪士尼乐园	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1Ihf0v-1jXTC4BtQECZOVF08l-ztr4pfk", img: "https://lh3.googleusercontent.com/d/1Ihf0v-1jXTC4BtQECZOVF08l-ztr4pfk",
+url: "" },
+  { id: "31",  region: "EUROPE",   regionName:  "欧洲",        year: 2024.07	,  label: "Paris",             title:  "巴黎	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1v0K1dL0tQxJRXf9GzmXbczBWT8OCdNyO", img: "https://lh3.googleusercontent.com/d/1v0K1dL0tQxJRXf9GzmXbczBWT8OCdNyO",
+url: "" },
+  { id: "32",  region: "EUROPE",   regionName:  "欧洲",        year: 2024.08	,  label: "Europe Tour",       title:  "德国·瑞士·意大利·法国	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/16QapWESJ8GcRcJbTVkyLqtO_lcaobjBL", img: "https://lh3.googleusercontent.com/d/1wBkrD41uuLuQ_ZL73njFsaqla_FnAGuJ",
+url: "" },
+  { id: "33",  region: "EUROPE",   regionName:  "欧洲",        year: 2025.02	,  label: "Iceland",           title:  "冰岛	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1Y4hvYC5ZVrmwMPeTAe_NsoXKN68Ir6gd", img: "https://lh3.googleusercontent.com/d/1Y4hvYC5ZVrmwMPeTAe_NsoXKN68Ir6gd",
+url: "" },
+  { id: "34",  region: "EUROPE",   regionName:  "欧洲",        year: 2025.03	,  label: "Stockholm",         title:  "斯德哥尔摩	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1sCXIfIP3JlmHqBNL9Za1Niu592G_9Toi", img: "https://lh3.googleusercontent.com/d/1sCXIfIP3JlmHqBNL9Za1Niu592G_9Toi",
+url: "" },
+  { id: "35",  region: "ASIA",     regionName:  "亚洲",        year: 2025.06	,  label: "Xi'an",             title:  "西安	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1bSSuGNSnxGtJquY_gwUmWSChyrFTg6fG", img: "https://lh3.googleusercontent.com/d/1bSSuGNSnxGtJquY_gwUmWSChyrFTg6fG",
+url: "" },
+  { id: "36",  region: "ASIA",     regionName:  "亚洲",        year: 2025.07	,  label: "Kansai",            title:  "首尔·大阪·神户·京都	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1Cu11OjbogWwSrTbHyx8-8cynX0jBMpax", img: "https://lh3.googleusercontent.com/d/1Cu11OjbogWwSrTbHyx8-8cynX0jBMpax",
+url: "" },
+  { id: "37",  region: "EUROPE",   regionName:  "欧洲",        year: 2025.08	,  label: "Belgium",           title:  "布鲁塞尔·布鲁日·安特卫普	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1hUcAVXHaQ7uz_FmnVOl8SnzjRnbyZR54", img: "https://lh3.googleusercontent.com/d/1MmHVMD9GDpWQwcdpZh_WxvvG5-PQp4UH",
+url: "" },
+  { id: "38",  region: "EUROPE",   regionName:  "欧洲",        year: 2025.10	,  label: "Barcelona",         title:  "巴塞罗那	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1XmMYVApmCTtGk0NIds9oUPfgPyivVmr6", img: "https://lh3.googleusercontent.com/d/1XmMYVApmCTtGk0NIds9oUPfgPyivVmr6",
+url: "" },
+  { id: "39",  region: "ASIA",     regionName:  "亚洲",        year: 2026.01	,  label: "Kantou",            title:  "东京·富士山·长野·群马	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1xiZdUePR7t0oFJkqdDrkkHI6oIr28HdV", img: "https://lh3.googleusercontent.com/d/1xiZdUePR7t0oFJkqdDrkkHI6oIr28HdV",
+url: "" },
+  { id: "40",  region: "EUROPE",   regionName:  "欧洲",        year: 2026.02	,  label: "Paris",             title:  "巴黎	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1TNFYLI4TjoW3OFrOfzFeK1PlpTxOHHPP", img: "https://lh3.googleusercontent.com/d/1-mT21jKcn-YlRy731lF156uzLe9-s3xa",
+url: "" },
+  { id: "41",  region: "MENA",     regionName:  "中东和北非",   year: 2026.05 ,  label: "Turkey",            title:  "伊斯坦布尔·格莱梅·安卡拉	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1FR536V0MI5DXbWGZwNBHX9O-LG7cKO-W", img: "https://lh3.googleusercontent.com/d/1FR536V0MI5DXbWGZwNBHX9O-LG7cKO-W",
+url: "" },
+  { id: "42",  region: "ASIA",     regionName:  "亚洲",        year: 2026.06	,  label: "Hangzhou",          title:  "杭州·乌镇	", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1jgy39YquG7lseM2xSoUSqVYbn71htOSm", img: "https://lh3.googleusercontent.com/d/1jgy39YquG7lseM2xSoUSqVYbn71htOSm",
+url: "" },
+  { id: "43",  region: "EUROPE",   regionName:  "欧洲",        year: 2026.07	,  label: "Russia",            title:  "莫斯科·圣彼得堡", sub: "这里需要一个装逼的描述", 
+bg: "https://lh3.googleusercontent.com/d/1BCbMwWTozwTLTn4pQ9Mbdd2ho5vjMv5H", img: "https://lh3.googleusercontent.com/d/1rWJTVXCT1VJx8gjG4xjkQDn_ah-7Z6fT",
+url: "" }
+];
+
+    // 2. 分类规则定义
+    const TIME_GROUPS = [
+      { key: "before_2012", badge: "2014年之前", title: "早年探索 · - 2014", filter: card => card.year < 2013.12 },
+      { key: "2012_2020", badge: "2012 - 2020", title: "甜蜜的磨合 · 2014 - 2016", filter: card => card.year >= 2013.12 && card.year <= 2016.05 },
+      { key: "2020_2026", badge: "2020 - 2026", title: "忙里偷闲 · 2016 - 2020", filter: card => card.year > 2016.05 && card.year <= 2020 },
+      { key: "2020_2026", badge: "2020 - 2026", title: "扩大的队伍 · 2020-2024", filter: card => card.year > 2020 && card.year <= 2024.10 },
+      { key: "2020_2026", badge: "2020 - 2026", title: "新生之后 · 2024 - ", filter: card => card.year > 2024.10  }
+    ];
+
+    const GEO_GROUPS = [
+      { key: "EUROPE", badge: "EUROPE · 欧洲地区", title: "欧洲专区", filter: card => card.region === "EUROPE" },
+      { key: "ASIA", badge: "ASIA · 亚洲地区", title: "亚洲专区", filter: card => card.region === "ASIA" },
+      { key: "USA", badge: "USA · 美国", title: "美国专区", filter: card => card.region === "USA" },
+      { key: "MENA", badge: "Middle East & North Africa · 中东和北非", title: "中东北非", filter: card => card.region === "MENA" }  
+    ];
+
+    const TYPE_GROUPS = [
+      { key: "GrandTour", badge: "Grand Tours · 深度自驾游", title: "欧洲专区", filter: card => card.region === "GrandTour" },
+      { key: "CityHopping", badge: " City Hopping · 城市串联", title: "亚洲专区", filter: card => card.region === "CityHopping" },
+      { key: "HubSpoke", badge: " Hub-Spoke · 城市辐射游 ", title: "美国专区", filter: card => card.region === "HubSpoke" },
+      { key: "CityBreak", badge: "City Break · 微度假", title: "中东北非", filter: card => card.region === "CityBreak" },
+      { key: "Flyover", badge: "Fly-over · 过境游", title: "中东北非", filter: card => card.region === "Flyover" }   
+    ];
+
+    // 3. 构建 Session DOM 结构
+    function buildSessionHTML(group, cards) {
+      const cardsHTML = cards.map(c => `
+        <div class="option-card" data-id="${c.id}" data-title="${c.title}" data-year="${c.year}" data-sub="${c.sub}" data-bg="${c.bg}" data-url="${c.url}">
+          <span class="card-label">${c.label}</span>
+          <img src="${c.img}" alt="${c.label}">
+        </div>
+      `).join('');
+
+      return `
+        <span class="region-badge">${group.badge}</span>
+        <section class="region-session">
+          
+          <div class="session-bg"></div>
+          <div class="session-overlay"></div>
+
+          <div class="session-progress-bar">
+            <div class="node-track"></div>
+          </div>
+          
+          <div class="session-container">
+            <div class="left-content">
+              
+              <h2 class="article-title">加载中...</h2>
+              <p class="article-subtitle">加载中...</p>
+              <div class="action-controls-wrapper">
+                <a href="#" class="explore-btn">
+                  Explore 探索文章
+                  <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+
+                <div class="slider-controls">
+                  <button class="control-btn prev-btn">&#10094;</button>
+                  <button class="control-btn next-btn">&#10095;</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="right-slider-wrapper">
+              <div class="cards-track">
+                ${cardsHTML}
+              </div>
+            </div>
+
+            
+          </div>
+        </section>
+      `;
+    }
+
+    // 4. 渲染页面模式
+    function renderMode(mode) {
+      const appContainer = document.getElementById('app-sessions-container');
+      const GROUP_MAP = {
+        time: TIME_GROUPS,
+        geo: GEO_GROUPS,
+        type: TYPE_GROUPS, // Your new mode and dataset
+      };
+
+const groups = GROUP_MAP[mode] ?? GEO_GROUPS; // Fallback default if needed
+      
+      appContainer.innerHTML = '';
+
+      groups.forEach(group => {
+        const matchedCards = ALL_CARDS.filter(group.filter);
+        if (matchedCards.length > 0) {
+          appContainer.insertAdjacentHTML('beforeend', buildSessionHTML(group, matchedCards));
+        }
+      });
+
+      // 初始化所有 Session 的滑动效果
+      initSliders();
+    }
+
+    // 5. 还原原版的滑动逻辑与视差动画效果
+    function initSliders() {
+      document.querySelectorAll('.region-session').forEach(session => {
+        const bgElement = session.querySelector('.session-bg');
+        const track = session.querySelector('.cards-track');
+        const nodeTrack = session.querySelector('.node-track');
+        const titleElem = session.querySelector('.article-title');
+        const subElem = session.querySelector('.article-subtitle');
+        const exploreBtn = session.querySelector('.explore-btn'); // ◄ 获取 Explore 按钮
+        const prevBtn = session.querySelector('.prev-btn');
+        const nextBtn = session.querySelector('.next-btn');
+
+        const cards = Array.from(track.querySelectorAll('.option-card'));
+        const count = cards.length;
+        
+        // 当前高亮/位于最左侧的卡片索引指针
+        let currentIndex = 0;
+
+        // 生成点状进度条 node-dot
+        const dots = [];
+        nodeTrack.innerHTML = ''; 
+        cards.forEach((_, idx) => {
+          const dot = document.createElement('div');
+          dot.classList.add('node-dot');
+          if (idx === 0) dot.classList.add('active');
+          nodeTrack.appendChild(dot);
+          dots.push(dot);
+        });
+
+        // 更新卡片激活状态、背景图、标题和指示点
+        const updateState = () => {
+          // 1. 更新卡片高亮类名 (跟随当前指针)
+          cards.forEach((card, index) => {
+            card.classList.toggle('active', index === currentIndex);
+          });
+
+          // 2. 更新指示点
+          dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+          });
+
+          const activeCard = cards[currentIndex];
+
+          // 3. 切换背景图
+          bgElement.style.backgroundImage = `url('${activeCard.dataset.bg}')`;
+
+          // 4. 左侧文字平滑淡入淡出切换
+          titleElem.style.opacity = '0';
+          subElem.style.opacity = '0';
+
+          setTimeout(() => {
+            titleElem.innerHTML = `${activeCard.dataset.title} <span style="font-size: 0.6em; font-weight: normal; margin-left: 8px; color: var(--accent-soft);">${activeCard.dataset.year}</span>`;
+            subElem.textContent = activeCard.dataset.sub;
+
+            // 获取当前高亮卡片的 url
+            const targetUrl = activeCard.dataset.url;
+            const isValidUrl = targetUrl && targetUrl.trim() !== '' && targetUrl.trim() !== '#';
+
+            if (isValidUrl) {
+              // 1. 如果 URL 有效：设置跳转链接，恢复按钮样式和点击响应
+              exploreBtn.href = targetUrl;
+              exploreBtn.style.opacity = '1';
+              exploreBtn.style.cursor = 'pointer';
+              exploreBtn.onclick = null; // 清除阻止默认事件的逻辑
+            } else {
+              // 2. 如果 URL 为空：取消 href，降低透明度，禁用点击效果
+              exploreBtn.removeAttribute('href');
+              exploreBtn.style.opacity = '0.4';
+              exploreBtn.style.cursor = 'not-allowed'; // 或设为 'default'
+              
+              // 拦截点击，防止浏览器刷新页面或追加 # 锚点
+              exploreBtn.onclick = (e) => {
+                e.preventDefault();
+                return false;
+              };
+            }
+
+            titleElem.style.opacity = '1';
+            subElem.style.opacity = '1';
+          }, 120);
+
+          // 5. 控制左右箭头的可用/禁用视觉状态
+          prevBtn.style.opacity = currentIndex === 0 ? '0.3' : '1';
+          //prevBtn.style.cursor = currentIndex === 0 ? 'not-allowed' : 'pointer';
+
+          nextBtn.style.opacity = currentIndex === count - 1 ? '0.3' : '1';
+          //nextBtn.style.cursor = currentIndex === count - 1 ? 'not-allowed' : 'pointer';
+        };
+
+        // 首次加载初始化
+        updateState();
+
+        // 动态计算单张卡片加间距的迈步距离
+        const getStepWidth = () => {
+          const style = window.getComputedStyle(track);
+          const gap = parseFloat(style.gap) || 28.8;
+          return 250 + gap;
+        };
+
+        // 执行滑动位移与更新
+        const slideTo = (index) => {
+          // 边界校验：不能小于 0，也不能超过最大数量
+          if (index < 0 || index >= count) return;
+
+          currentIndex = index;
+          const step = getStepWidth();
+
+          // 使用 CSS 变量/平滑过渡控制 translateX 位移
+          track.classList.add('is-animating');
+          track.style.transform = `translateX(-${currentIndex * step}px)`;
+
+          // 同步更新高亮、背景与文字
+          updateState();
+        };
+
+        // 点击右侧箭头：向右滑动（下一个）
+        nextBtn.addEventListener('click', () => {
+          if (currentIndex < count - 1) {
+            slideTo(currentIndex + 1);
+          }
+        });
+
+        // 点击左侧箭头：向左滑动（上一个）
+        prevBtn.addEventListener('click', () => {
+          if (currentIndex > 0) {
+            slideTo(currentIndex - 1);
+          }
+        });
+
+        // 点击任意卡片直接切换滑动到该卡片
+        cards.forEach((card, index) => {
+          card.addEventListener('click', () => {
+            if (index !== currentIndex) {
+              // 1. 如果点击的是【非高亮】卡片，正常滑动切换
+              slideTo(index);
+            } else {
+              // 2. 如果点击的是【已高亮】卡片，检查 url 是否有效
+              const targetUrl = card.dataset.url;
+              
+              // 只有当 url 存在、且不为空字符串或 '#' 时才进行跳转
+              if (targetUrl && targetUrl.trim() !== '' && targetUrl.trim() !== '#') {
+                window.location.href = targetUrl; // 执行跳转
+                // 如果想在【新标签页】打开，使用：window.open(targetUrl, '_blank');
+              } else {
+                console.log("当前高亮卡片未配置跳转 URL，无跳转动作");
+                // 链接为空时，没有任何效果（直接 return，不执行任何操作）
+              }
+            }
+          });
+        });
+      });
+    }
+
+    // 6. 绑定 Header 模式切换按钮事件
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        const mode = e.target.dataset.mode;
+        renderMode(mode);
+      });
+    });
+
+    // 默认进入页面渲染地理分类
+    renderMode('geo');
+  </script>
+</body>
+</html>
