@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1eD9KpJWNun6TSby8Bf9hBC1LJwlPOPJ0") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1>港岛三日浮生三世—</h1>
+        <p class="cover-description">香港油麻地/星光大道/中环/太平山/庙街/铜锣湾逛吃攻略</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+      
+      <h2 class="title">前言</h2>
+      <p class="text">想去 香港 的念头由来已久，可惜近些年一直住在地球另一边，大老远飞过去实在是不划算。正好这次回国过年多出两三天假期，又因为在香港转机7天内去第三国不用办什么签证港澳通行证，一本护照加转机机票就能入境，所以跟国内的闺蜜一拍即合，两个人打算去香港逛一圈！</p>
+      <p class="text">有人说在香港呆一两天就够，有人说去香港一个月都未必看尽其百态。对于去线下实体店找名牌大牌血拼购物相对无感的我来说，购物这一环节可以压缩不少。另觉得香港的自然风光也并没有太大的特色，那么剩下的就只有人文风情了。</p>
+      <p class="text">按照这个思路开始选择要去的景点，当然还是留了大半天的购物时间（主要是陪闺蜜）。然后，在娃高烧了几天折腾的快灵魂出窍之后，终于要回国啦！</p>
+      
+      <h2 class="title">准备篇</h2>
+
+      <h3 class="subtitle">机票</h3>
+      <p class="text">机票携程入手，看的时候已经是11月了，单程去香港1200多人民币。闺蜜往返1900多人民币，都是可以接受的范围。过一个月再看单程已经2000+，临走的时候已经3000+了。</p>
+      <h3 class="subtitle">酒店</h3>
+      <p class="text">酒店的选择过程甚是纠结，香港这么寸土寸金的地方，每每看到一个价格都能刷新三观。对于是住的好一点但远些，还是凑合着住近一点，最后还是我替闺蜜下了决心，住在 油麻地 地铁站出来步行两分钟的一个酒店。严格说来应该是青旅，只不过我们住的是自带浴室厕所的双人独立间。这样既避免外人打扰，自己洗浴也方便。而且，特地要了上下铺！</p>
+      <p class="text">因为在选酒店过程中发现基本各个地方房间都超小，两张单人床放下就连坐的地方都没有，开行李箱找东西都不方便。在相同房间面积的前提下，上下铺无疑是留出空间的最好选择。事实证明，在一个大约只有6平左右的小房间里，这个选择是多么的正确！</p>
+      <h3 class="subtitle">交通</h3>
+      <p class="text">看了攻略知道买八达通卡坐公交坐船坐机场大巴都比较方便，所以打算到香港机场买。</p>
+      <h3 class="subtitle">通讯</h3>
+      <p class="text">从支付宝“出境”版块买了 中国 移动的香港3天特惠流量包，一共24人民币，每天流量不限，但貌似用到一定额度后降速（反正我没被降速过，一直是4G）。到香港产生流量后自动激活，所以可以提前买好放着（提前不能早于90天购买）。不过是按照自然日的3天计算，最后一天晚上24点失效，所以在香港呆的时间长的话记得再买一个。特惠包有1/2/3天的套餐，不过好像这个优惠活动不是长期的。</p>
+      <p class="text">最好的就是google map不再被屏蔽，可以使用！真是救命了。我之前做攻略的时候好吃的好玩的都标注在google map上了，如果真不能用就太麻烦了。</p>
+      <p class="text">照例上个图：</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1jg1wRlUbJ0FELlwMzeqKpbvQHS1J01T7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1A4F0s4wbbWHl9TZ-3YE_W1XGgeBadGyg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hD2GcZFSwFy518aM4ey1kqM9uVK31p_g"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nXjOSfmxMS5jSepEg0uAMXa6gde6wSMr"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1eBZZDnWgPADzl4o7rrhDbGtEZHJmICqv"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 1 初识香港</h2>
+
+      <p class="text">一大早跟闺蜜汇合准备去机场，上车随口问了一句你签注了吗？闺蜜说了三个字让我惊出一身冷汗。</p>
+      <p class="text">她说，啥签注？</p>
+      <p class="text">然后我们就发现她只有港澳通行证但没签注……我记得订机票的时候提醒过她，翻出微信记录来一看，确实说过，那时候她也回了我三个字：咋签注？</p>
+      <p class="text">哭笑不得的到机场，问了边检，没签注果然不能放行。于是，就这样，闺蜜回去出入境大厅办签注，我不得不一个人踏上了去往香港的旅程。。。</p>
+      <p class="text">结果进去候机的时候就接到闺蜜的咆哮微信：自助服务器上两分钟就办完了！但很明显赶回机场是不可能了，我们所在的城市去香港的直航班机每天只一班，所以闺蜜只能白白浪费一天等明天出发。不过看到有在上海转机到香港的航班让我灵光一闪，既然距离北京不算远，那就直接高铁到北京然后飞香港呗！</p>
+      <p class="text">网上一查果然北京很多班次飞香港，而且就算加上高铁票钱出租车钱也比明天从我们这直飞香港便宜，闺蜜果断执行，所以晚上就能在香港见啦！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1yixqOc6mTXlaAqe4g8lYwL_ry_W1l2do"></figure>
+      <p class="text">镜头再转到我这边。</p>
+      <p class="text">我在飞机上睡了一觉吃了个饭，到香港已经是下午一点了。拿了行李出来，找到港铁售票柜台买了八达通卡，风风火火找到机场大巴的地方，排队坐上A21的时候，已经是满身大汗。香港比起春节前后的内地北方城市，20度+的气温真的是太热了！</p>
+      <p class="text">坐在双层大巴上看香港，似乎是近距离的上帝视角。看着前面排成一排等红灯的出租车，看着路口急匆匆过马路的大批人群，看着两旁高楼逼仄而出的那一缕天空。而你只是个初识香港的看客。混乱又迷茫。你既无法走到他们中间，也无法抽身离去。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1VznQVJVNAeZSkqygmPw-DKAGL7Tzg28J"></figure>' 
+      <p class="text">用google map很容易的定位在 油麻地 下车，跟着导航不过两三分钟就走到了住的地方。港币现金只有一张1000的纸钞，酒店不收，所以房费只能支付宝支付（固定汇率1.1）。虽然在汇率上吃了点亏，但也无可奈何，支付了三晚的房费加押金。</p>
+      <p class="text">听前台说楼下的货币兑换没有上班，估计是春节假期的缘故，而路口就有一家 中国 银行可以换零钱。于是去房间放下行李简单收拾了一下，出门到中国银行排队换零钱。结果，这一排队就搭进去40多分钟。龟速处理业务的窗口让好多人排到一半就自动放弃了，我咬着牙排到最后换到了零钱出来，在街上没走两步就看到了另一家货币兑换店，真是想哭死。</p>
+      <p class="text">香港历史博物馆</p>
+      <p class="text">看看已经是下午4点多，想来想去到哪里玩似乎都来不及，所以直接搜了公交准备去香港历史博物馆，因为那附近区域我感兴趣的地方就这么一个博物馆，如果不是闺蜜今天没跟我一起到达香港，应该之后是没时间去的。</p>
+      <p class="text">其实坐公交会顺着 弥敦道 一路下去，在 尖沙咀 星光大道 那里拐个弯绕过去，并不是很省时间。况且我又坐过了站，一直到 红磡 站才下车，所以走到香港历史博物馆真是费了不少劲。主要是，感觉香港有些地方真的是“步行不友好”（pedestrian-unfriendly），你明明就只是想过个马路，但是要走天桥，天桥还分一层两层，通往不同的地方，指示也不清楚，在这N岔路的路口还找不到上天桥的入口；又或者是要走地下通道，但是也没表明地面步道不能走，要拐半天才发现原来步道被栏杆围起来没办法过马路，或者走着走着步道变没了。</p>
+      <p class="text">当然，作为一名老江湖至少是不会找不到路的，就是需要多走两步去看指示牌或者绕个小半圈才能搞明白的程度罢了。走到香港历史博物馆已经是下午5点了，博物馆6点关门。暗暗觉得时间会不会不够，一进门就发现有名为“香港故事”的免费展览，正是我想看的内容！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/15vUcfhyQ9Xv8rXovkNRaeUKUUCEMARkp"></figure>' 
+      <p class="text">“香港故事”展区不小，内容也很丰富，分为很多大板块，从香港的自然地貌、史前生态一直讲到香港的风俗民俗、回归后的经济社会状态。前面几个我都不是很感兴趣，最感兴趣的自然是香港民俗这个板块啦！从早期的渔民生活到各种宗祠、庙堂、粤剧，还有麦兜里提到的抢包山！各种民俗都依次做了介绍，还有各种短片小剧场可以看。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/15p8IOuefnONrcaB5HwkWdbLJINbUumYU"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Y4Fm2mnbDzQe-klkxbWy517JRlXm3J_Z"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_OKE7psNQHlQjAXQFgY9fzKRtAU0Iuei"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/19xY4acC4abcVbXpap_LKmqL8kx4C1CgW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PMA5I5qpfBc2Uof13ISk2KLNy5e8_dB7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1AmO0Wf6XUqvQmq087vlWHzIA52NUctA3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1iW81MfsxwO3nBGqW8o5tSOhMNybpEDhD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1SRwL_f8lCmpKI27_rI1nnG3PZnxZUbpP"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">再往前走还可以看到清末的《南京条约》复制版、各种历史珍藏和旧时香港老街的完全还原：银行、药铺、当铺、裁缝铺、理发店、凉茶铺、叮叮车……尤其是老式叮叮车，还可以上车参观，真是让人大呼过瘾！</p>
+      <p class="text">之后就是香港现代史，包括回归前后的社会经济等等，我对这部分也是兴趣寥寥，所以留到最后才走马观花的逛了一圈。一直到六点闭馆才恋恋不舍的从里面出来，想来真的是值得花更多的时间慢慢参观的好地方。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1pIbDfFzwmRbZy_rICJu-KMHDLyqnD1qu"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LxzCAKPTH4hlOJzJA8FsUzT2dc71fzXU"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hEO1wFa5MVWHdIDbVhAS8M6HXGvbhb3R"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1DhCiOEB9Sz1UD04YDWEVi_RQCU_vgFeh"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ES8CUYtZqXHdW0fjiKrbsiD9OQtvy8vC"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1YwLWoiyWEzIKo_7UyTbD4jAmOvvuSrYW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_KrKDv55Qlqx66okk-CRmOpqTW_2rdW-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1zGfYX8zcoqKkyGf1_mdhjF6ZJn4H4xk-"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">此时天色渐晚，不想再坐公交车，一是有点绕，这时间又赶上堵车，二是公交车也真的是…太贵了！单程要7.2港币！就不过四五站而已。于是决定腿儿回去。</p>
+      <p class="text">正好附近有个肥仔小食店，据说是很好吃，七拐八拐找过去，还路过了一条老鼠横行的窄巷，把我吓个半死。结果到跟前一看，才发现春节休假明天才开门….就差一天！恨。</p>
+      <p class="text">还好顺着弥敦道一路走回去会路过十八座狗仔粉，就在离主路拐个弯的地方，于是顺路就过去买了。一碗招牌狗仔粉30港币，只收现金，外带就是加个塑料盖子，但要再加1港币。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1K_69VzR-FL2fZJo7ZzcoJhO1SW-G0HCb"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17ByPOkP35UyzcoWy2C_YH05pw1ZXeyF0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1GCb2tlkZ0OZdxJTIa932xSoLqH5_-vUa"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">拎着我的狗仔粉外卖回到住的地方，吃完也没觉得有多惊艳，感觉就是变短了的乌冬面？歇了一下发现窗户开关不好用，门卡刷卡机似乎也没电了，于是下楼叫了前台来修，我自己则是下楼买水去。</p>
+      <p class="text">楼下就是不少小吃店，还有N个便利店，所以生活上甚是方便。便利店都可以刷八达通付款，也可以充值，所以买个水不用几分钟就搞定了。回来发现所有地方都修好了，速度非常满意。此时闺蜜已经在北京飞往香港的飞机上，大概再过一小时就落地了。把怎么买八达通、怎么坐大巴、怎么找到酒店给她复述一遍留了言，心满意足的洗了个澡躺等她到来。</p>
+      <p class="text">过了将近两个小时这货下了机场大巴绕了两圈。。。果然找不到酒店。于是穿上衣服出去接。。。不过好在是顺利会师，至于过程有多曲折就可以按下不表了。毕竟近几年也是分居两地不常见面，聊了许久意犹未尽，但因为太过劳累，居然在她洗澡的时候我就迷迷糊糊的睡着了。</p>
+      
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.在机场购买八达通卡是在港铁售票柜台，但是在柜台是需要用港币现金购买，柜台后面的自助售票机上可以用支付宝或者刷卡购买八达通卡，建议使用。初次购买成人八达通卡200港币，其中50港币是押金，其余150港币是可使用额度。用不完的余额可以在离开机场时退款，不过会收取9港币的卡费。
+        <br>2.如果支付时，剩余的可支付额度不足以支付你最后一次刷八达通需要支付的金额，就会从这50港币中扣除一些。举个栗子，八达通卡余额5港币，公交车票7港币，那么你刷过八达通后会显示余额为“-2港币”，那么退押金的时候就只会退给你50-2-9（卡费）=39港币。
+        <br>3.油麻地附近有很多货币兑换店，但部分要500人民币以上起兑，如果500以下汇率就是1比1，也就是说人民币和港币等值，不太划算。
+        <br>4.一般香港的餐饮店和商店初三以后就会上班了，我们这次大部分行程都没遇到什么问题，毕竟香港好吃的很多嘛！偶尔一些比较小的店铺要到初八甚至初十以后才开业，比如肥仔小食店、巧佳小巴用品店、一乐烧鹅 中环 店。所以如果很介意这一点的小伙伴最好在初十之后再去。况且，网上貌似是查不到他们春节放假到什么时候的。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 2 旧时香港</h2>
+
+      <p class="text">早上醒来已经快7点了，本来急急火火要去 中环 莲香楼 吃早点，结果我和闺蜜磨磨蹭蹭快一小时才出门。出门走了两步就看到忠记粥铺，两个饥肠辘辘的人立即决定早饭就这里解决吧！</p>
+      <p class="text">油麻地 这家忠记粥铺里此时已经满座，几乎都是上班上学的当地人在匆匆吃早饭，所以我们很快就找到座位跟一个中学生拼了一个四人桌。点了鱼片粥、皮蛋粥、叉烧肠粉、咸蛋黄粽。印象里他家的粥根据不同种类价格在15-35港币之间不等，肠粉也大概是这个价格。但是粽子！16港币结结实实一大个（味道一般）！粥也很大碗，以至于最后粽子和粥都没吃完。。。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1u50nxMROS4pF19bVIe3v-yiFQEItYa86"></figure>' 
+      
+      <h3 class="subtitle">油麻地</h3>
+      <p class="text">吃完满意的出来，正好因为没有去中环的莲香楼，所以可以从 尖沙咀 这边逛起，下午去中环，晚上去 太平山 。由于吃的很撑，两人决定一路往 星光大道 那边走，边走边消消食。</p>
+      <p class="text">顺着 弥敦道 边聊边走，突然发现已经到了该拐到 油麻地警署 的甘肃街，差点就因为聊的太嗨错过了。到油麻地警署发现已经有人在拍照，于是我们自然也是在这个无数TVB电视剧里出现的地标建筑前咔嚓了一通。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1CcXtTsdlz9yOa0jO2Bbm4rPbfmV-4Yod">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1NerP8ZctzjEehrSfnZA4oZBFcPT6aVtP">
+        </div></figure>
+      </div>
+      <p class="text">继续往南走到 庙街 附近，早上冷冷清清只看到地上画出的摊位数字，几乎连个人影都不见。隔壁不到两条街则是一个红火的早市，新鲜的水果、蔬菜、鸡鸭鱼肉，人头攒动好不热闹，路口还有一面“北螳螂”的大旗，似乎是功夫班在招兵买马。抬头则是老旧的房屋，斑驳的窗棂，还有晾晒的五颜六色的衣服。在这里，时光似乎是停滞的。十年前、二十年前电影里看到的香港如今似乎一成未变，甚至这面目上一丝皱纹也没，空气里新鲜的蔬果味和油腻的小吃味混在一起，让我发现了这个充满着烟火气的香港。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1AXddJwb7GHMHBpZc5TiOiXR8c4B5irTc"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1iXHDTwgl3FuTuMiVruo10lQ0re26EVSj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1sO5EWfmmNfvJ9XC0Jy8LAGB_7Zwv3XBH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1TbVO8BugJpxNYVh0Fq9MmUZGkHLAWCmG"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">本来想去这附近的巧佳小巴用品买点香港特色的小巴牌，结果好不容易晃到9点开门过去一看，春节休假初十才开！无奈只能遗憾的走啦。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1NSjPB9sjvwcAQSCo6sH7v5p_trsPWcEz"></figure>' 
+      <p class="text">从庙街南口出来不远就是 九龙公园 ，本想着从公园中心穿过，结果进入公园没走多远就发现一角有叫“ 香港漫画星光大道 ”的地方，过去一看，果然是各种本土漫画形象的展示区，大朋友小朋友都来合影留念。无奈我们对香港漫画不甚了解，只能认出一个老夫子。但麦兜还是超级喜欢的！况且这个麦兜不知道多可爱啊啊啊！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1zu3mJ4I1r-T-Tts_8ju4RcTvbSqlWl8u"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1XOJXTEzHr2ceigugpjUdideXkZ7nj8_3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14j-qY9SXi9Rlac9uzxzpq7JXy6Ao--H7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1p_shUV0D8D0bXBQi0NWGSOTBaNZDA8jb"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      
+      <h3 class="subtitle">香港星光大道</h3>
+      <p class="text">在九龙公园里坐了一会儿，就继续出发往星光大道走。过了尖沙咀地铁站快到梳士巴利道的时候，会有地下通道，指示你要去星光大道的话要走这个地下通道。应该是整修的缘故，通往星光大道的J2出口暂时关闭了，我们从J3出口上来，回头就看到海啦！</p>
+      <p class="text">从这个托球少女的雕塑开始往东走，一路沿着海边步道过去，先注意到的自然是海对面中环的高楼林立。天朗气清，碧波荡漾，偶尔远远经过的天星小轮，真是再美好不过的维港风景。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1s0Dm680JuGKUNFoAkpVJg884xr1SI995">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1dJVjjAnSvu_3nBG0_2LEcKCnY9g0TWyU">
+        </div></figure>
+      </div>
+      <p class="text">大概走到一多半的时候感觉不太对劲，说好的星光大道呢？因为之前去过好莱坞的那一个，所以一直以为香港的星光大道也是印在地上的星星。但完全没见到星星的影子啊？！掏出手机来查了半天，原来都是在栏杆上！</p>
+      <p class="text">于是又原路走回去。基本认识的香港明星都榜上有名，每一个都很惊喜。闺蜜找到了梁朝伟的手印，把自己的手放进去不知道有多兴奋（这大概是她距离梁朝伟最近的一次）。我没有特别爱的港星，倒不如说每一个我都很喜欢，所以并没有什么大起大落的心情，一路看过去都很开心。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/143oA7J-sDJpu14a_5FkC8Znp4m2FD2zc">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1yAwy8i9NgeIjlDgmA5SP3ybVvmBe8X4I">
+        </div></figure>
+      </div>
+      <p class="text">顺着沿海步道一直走到 尖沙咀钟楼 ，下面就是天星小轮的码头。八达通卡一刷即可进站，有一班去中环的刚刚离开，反倒是有时间让我们在这个年代久远的码头里细细品味一番。</p>
+      <p class="text">大概不消 十分 钟，又一班渡轮靠岸，我们也上了船。船上的一切都是旧时的样式，连长椅的椅背都可以调整方向。途中海风阵阵，离岸渐远，正是悠哉悠哉摇摇晃晃享受的好时光，然而距离中环却是越来越近，甚至还没好好发个呆就到了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1FikOBlgdEnGdvQqwryx_zmruKjK8Z_6o"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Ng5EE0AXCXKsuHKtCZEfuqB8DyAQ2HzZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13TlcVkc0gmK752s292uREZaEbyhP9oFf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1P1cQuiwoWUP-p9-jmE2mhcURJDwIxrKa"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+      <h3 class="subtitle">中环</h3>
+      <p class="text">看看到了午饭的时间，从中环码头出来直接上天桥沿着一直走，本来想去吃一乐烧鹅，到门口发现又是春节休业。好在中环好吃的太多，不远就是 沾仔记 ，直接杀了过去。虽然堂食的位子满员，但门口还没有等位的人，所以只等了一两分钟就有了座位。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1dheOJHmova7qlAiEFzfEsAerqls90N9O"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/143suHQhNaMaKLtYljoZTZ9QZJ3OuQgf0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15ZRXDYmo_YWtDpmwcL3urm1Zs-ksyuzV"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Ov2OhzQTbkbQntap6ltyY4M2miHn6BQr"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1zMSWYEykhGclmLyYlPSEeqh6Xb8YuiQo"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">点了一碗云吞面，一碗鱼丸面坐定。对面这时候也坐下了两个拼桌的上班族小哥，各叫了一碗面。上菜速度很快，鱼丸超大，云吞里面每一个都是大虾仁，而且面很弹牙，整体来说非常好吃！</p>
+      <p class="text">面刚上来的时候很烫，于是我跟闺蜜两个人都是左吹右吹都吃不到嘴里。让人震惊的是，就在我们刚开始吃还不到三分之一的时候，坐对面的一个小哥已经吃完结账了！我跟闺蜜面面相觑，满眼里都是“我靠什么情况？！”“不知道啊这么快就吃完了好恐怖！”……的无声对话。另一个小哥也是一边看手机一边吃面，基本上在我们吃到三分之二的时候，也吃完结账走了……</p>
+      <p class="text">我俩一边震惊着香港人吃饭的速度，一边疑惑着这么烫是怎么吃下去的，一边又不能停嘴，因为门口已经大排长队，每耽误一秒钟吃完就感觉对不起店家对不起门口的人。。。尤其是当你身边的人比你先来的后来的都吃完了走了的时候，这种罪恶感就更加严重了。。。</p>
+      <p class="text">终于吃完了结账出来，我和闺蜜扶着墙站定，同时表示需要“先缓缓”，刚才吃的太急了好噎！</p>
+      <p class="text">彼此看着各自窘迫的样子都忍不住笑了出来，然后就开始吐槽“怎么能吃这么快！”于是决定去兰芳园买个奶茶顺顺。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1BFNklC2xeGTUhtPKrnvLe9rZh57J92ur">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Bru3mWyfLV61T-l9bjfcVzh4MZCZeS3C">
+        </div></figure>
+      </div>
+      <p class="text">到兰芳园门口一看果然是长队，也没多想就加入到排队的行列中。排到一半才发现为什么前面的人都进去店里了？！研究了一下发现排错了队，于是到外卖的那一边点了丝袜奶茶外带。不过看起来似乎没什么用，外带虽然没人排队，但也是好久才拿到奶茶。</p>
+      <p class="text">这一杯丝袜奶茶要26港币（冰的），感觉茶比较浓郁，甜度比较小，是我喜欢的类型，但可能喝惯了内地或 台湾 奶茶的人会觉得有点苦。一边喝一边往公利真料竹蔗水店走，到那正好喝完手里的奶茶。</p>
+      <p class="text">竹蔗水分为杯装（14港币）和瓶装（38港币），我买了杯装，闺蜜因为还没喝完奶茶所以买了瓶装。真的是很好喝！尤其是走了半天（又穿多了），浑身燥热的时候，喝一杯凉凉甜甜的竹蔗水超级美好！另外这家还卖其他像是鸡骨草、茅根竹蔗水、龟苓膏一类的，可以根据自己的喜好买。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1flZtpLXnn5mmzSDy_aJDvZPNLVR3ez1E"></figure>' 
+      <p class="text">之后想去中华嘉咸街涂鸦看看。其实从公利竹蔗水店走过去很近的，但无奈嘉咸街很长，google给我定位的嘉咸街又恰好是跟结志街交叉的地方，所以就顺着往回走了，一路穿过市集走回了皇后大道这边。</p>
+      <p class="text">正好中环半山自动扶梯的上下口在附近，所以先上去体验了一下。结果因为嘉咸街那个网红涂鸦的位置没什么头绪，来回在这几条路绕了一圈之后只好坐在中环中心上场前面的石凳上拿出手机研究起来。反正是走的累了，就算是好好休息一下。</p>
+      <p class="text">看了N个帖子终于定位到了准确地址：48 Hollywood Rd。定位一下真要哭死，原来还要原路返回到竹蔗水那附近，顿时就没了动力。</p>
+      <p class="text">歇够了想想来都来了，既然能找到为什么不去呢。于是又上了中环半山自动扶梯，一路找到了那个网红涂鸦。果不其然，不到十米的涂鸦墙一堆人在拍照，而且有部分墙面已经褪色了。打卡即走。倒是旁边Peel St.上的这一幅深得我心。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1FgejWm_c_IM_tK3l38TrzmaOL6dYey-m"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-RDXJgldw0BHskNEK-KOrTLYCmD4iHLO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1IGGmxfABxDgplETmR29TeUPowhCHa_l6"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1HhztvfztpBTGgTLrr0BFv3K13Ce_N4Fq"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">其实走走还有不少很不错的涂鸦画，但我们确实逛累了，正好去 都爹利街 的星巴克坐坐。一路走过去的时候还经过了 兰桂坊 ，不过下午没什么人，看起来不怎么光鲜。</p>
+      <p class="text">到都爹利街煤气灯这里发现本来六个煤气灯一大部分在整修，剩下只有一个完好的供参观。至于石阶就更是被围起了大半，港剧feel就消失不见了。于是直接进去旁边的星巴克，往里走的内厅才是旧式装潢，确实是很有港味，但座位也很紧张，几乎一有人起身就被另外的人占了座。我们在内厅随便找了个位置坐下，排了半天队买了一杯雪梨茶，瘫坐着希望时光永恒再也不起来了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1WU0h9r8SzJSPUrLXXI8JN-N-VdK6tHcD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1IUWUNmIp6KiI31my9Fv5o8GWM-UupHDx"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Khkl4EKrYQJkedFYN7razPaVsxYrFnF4"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1T96cHgLZqv-KmD0q6IPezXrEP5xhDPO2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mvqvAgVPM5f-PEqqdkEL2X8cmsh_gu_i"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+      <h3 class="subtitle">太平山</h3>
+      <p class="text">刷刷手机喝喝茶，到4点多的时候不断说服自己要起来了，带会儿还要去太平山顶 看日落 ，据说上山的缆车要排好久的队。从都爹利街走路十分钟左右就能到缆车站，结果我们一看这阵势，好家伙！大概排两个小时也不一定能排到，果断放弃！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1l1JnFDG2P1VnQvQLaNPueZlFWQ-t1inl">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/104b11Z2w2-YbO47GbYuh9plt6YZyqnFk">
+        </div></figure>
+      </div>
+      <p class="text">立刻搜了公交车，在一位好心大爷的指导下步行到 金钟 地铁站附近坐上了15路上太平山的公交车。公交车上也是人挤人，我们就站在靠近前门司机的位置，一路站到了太平山顶。</p>
+      <p class="text">google上说公交车要50分钟车程，其实远没有这么久，大概不到30分钟就到了。下车绕过停车场就是 凌霄阁 ，如果订了票的同学就可以直接进楼上 观景台 了。我们没订票，当然也不想现场买，本来攻略里说的凌霄阁旁边有个叫山顶广场的商场，有免费二楼楼顶花园可以观景，结果发现整个楼都在整修。不过却发现了狮子亭观景台这么个好地方，就是人太多了，毕竟景色好又是免费的嘛！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1VMz-uAkzfEdfLo78sRamLbpIcwW2cs0l"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1goqckpLQjDtQc3ckv0dU8rsYzlNcCLEK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1dycCtnTxsdhasrtzAq9IWnXaOzlmcfr3"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">狮子亭观景台正好俯瞰 维多利亚 港，比凌霄阁矮了这么一丢丢，但视线无遮挡，应该是比较不错的观景点，好多长枪短炮的也都架着三脚架等日落。我们拍了一圈出来发现才5点半，而今天的日落时间是6点20分，于是回到凌霄阁找了个咖啡馆坐等天黑。</p>
+      <p class="text">排队在凌霄阁上了个厕所，发现杜莎夫人蜡像馆就在厕所旁边，也是异常火爆。6点半左右看着天色慢慢暗下来，赶紧回到观景台，看着最后一抹天光消失，夜幕拉开，远处由华灯初上，渐渐变成万千灯火，维港的风情在这一瞬间达到了顶峰。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1DB_UBp-LLgd_hoRw0U1jHwvf-taDo8tc"></figure>' 
+      <p class="text">曾以为泰山压顶的艰难人生，此刻也不过夜色中的一个小光点。</p>
+      <p class="text">而已。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1zyQ1whAcfnejy3L_3dmWtQwimfvlIi5B"></figure>' 
+      <p class="text">看完夜景已经是7点半，想想回中环再吃饭不太现实，索性在Burger King把晚饭解决了。不知道是香港物价本来就高还是山顶又特别高，一个 汉堡 套餐要67港币。倒不是心疼，就是觉得，花67吃个汉堡这件事，真的是太不值了。。。毕竟，在米其林一星的添好运点心店吃撑也只要人均70港币左右。当然，这是后话了。</p>
+      <p class="text">肚子也填饱了夜景也看了，准备打道回府。缆车站那边依旧是人山人海，所以依旧是决定坐公交。没想到的是，公交居然也是大排长队，这队伍都快绕建筑物一周了！但有什么办法呢，硬着头皮也要排！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/12_oiUH4Kho3W2t4FEDNq91a_y3uOAQWb"></figure>' 
+      <p class="text">在长达一小时的排队等候之后，终于！坐上了回程的公交。期间还发生了因为队首有人插队差点打起来的惊魂一刻，搞得我们这帮后面排队的都人心惶惶。15路坐到中环地铁站附近下来倒地铁到油麻地，出站两分钟就回到自己住的地方了。看了看步数，居然是破天荒的两万四千步！怪不得脚都要断了！</p>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.兰芳园中环店外卖和堂食是排两个队，只要奶茶外带的话看清楚再排队。然而堂食的队伍虽然比较长但前进速度不慢，跟外卖比可能外卖只有微弱的时间优势。
+        <br>2.上太平山的缆车一定要买免排队的，我们本以为过了春节假期，又不是周末，应该不会这么多人，结果还是人山人海根本看不到队尾！至于为什么明明这么多人排队还有人要加入这排队的行列，我跟闺蜜分析应该是很多都在网上买了缆车+摩天台的套票，不得不来排队；至于为什么下山缆车还是这么多人排队，当然是因为他们都买的往返票啦！买的时候谁知道回程还是这么多人！
+      </div>
+      
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">Day 3 现世香港</h2>
+
+      <p class="text">半夜十二点半被热醒，被子实在太热了！不盖觉得冷盖了觉得热，就这么折腾到快3点才睡着，结果7点多就醒了，欲哭无泪。</p>
+      <p class="text">紧接着闺蜜也醒了，赖了一会儿床，我俩陆续起来洗漱。因为我是晚上半夜的飞机，所以这天早上就提前收拾好了箱子。看看表快9点了，出发去吃早点。</p>
+      
+      <h3 class="subtitle">添好运点心店（北角）</h3>
+      <p class="text">两步路走到 弥敦道 ，花了七块钱坐102路公交车走海底隧道到炮台山，打算去添好运北角店吃港式点心，因为之前看帖说貌似只有北角和深水涉的店是米其林一星。结果到店门口发现才9点45分，人家10点才开门，门口只有一个老奶奶在排队。于是我跟闺蜜就继续在附近晃了晃，9点55分的时候回来，门口已经快20个人在排队了！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1cibIJLVYy3a2q92e_BWujq6v8mE7M3y-">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1NCV1uycLkqTHw1BvMzpvLLmaYgJLz1Yl">
+        </div></figure>
+      </div>
+      <p class="text">慌忙加入排队大军中，顺便拿了个点菜单盘算一下待会儿吃什么。开店之后大家鱼贯而入，我们找了个长桌坐下，很快点好了黄沙猪润肠粉、鲜虾烧卖皇、豉汁风爪、萝卜糕、陈皮牛肉球、鲜虾腐皮卷。茶水每位3港币。</p>
+      <p class="text">上菜速度其实不慢，但可能因为我们太饿，反而是等的焦急。风卷残云之后，本来闺蜜还说点的不够，结果妥妥的撑到最后萝卜糕都没吃完（下图是已经开吃了一部分照的）。总结下来只有三个字：很好吃！牛肉球很松软；鲜虾腐皮卷又脆又香，但貌似上的太着急控油不太好，略油腻；豉汁风爪没得挑；萝卜糕完全超出预期，用料很足软硬正好又不散；烧麦很鲜，但略有一丢丢咸；最好吃的是肠粉，里面貌似有点韭菜，很提味！</p>
+      <p class="text">结账的时候发现人均才70多港币，想起昨晚吃的那个67港币的 汉堡 套餐，心里颇为遗憾。心满意足的出来，走回英皇道就是叮叮车的站台。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1nuBeDYfjj-iRckHVe_wNHOVIa7kM2ltl">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1C430sbS96ZvAlAe6Fq6czmQWoorvyNpx">
+        </div></figure>
+      </div>
+      
+      <h3 class="subtitle">铜锣湾</h3>
+      <p class="text">来香港自然是不能放过做叮叮车的机会。进入车厢上到二层，就像坐在天星小轮里一样，时光静止在小时候看过的电影电视剧中的香港，窗外温暖的风，悠忽而过的绿色树木，道路两边一排排的楼窗，以及云层间隙中漏出的阳光，都让人整个放松下来，甚至有点昏昏欲睡的感觉。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/14wB_IqdmfUOmDupMZd2xj5co2ie5rbKb"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1DbKalht3A0ZIgKRM_abtsDMgZvzn6RTa"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1O_FIw8WHgS4CGQZNiNoHDJzn8rg5xiJd"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">没多久就到了我们的目的地： 时代广场 。意味着在铜锣湾开启了我们逛逛逛买买买的一天。我自然是没什么特别想买的，因为我毕竟是转机，也带不走太多东西，所以主要是陪闺蜜。到时代广场里面逛了一圈，闺蜜买了个兰蔻的睫毛膏，200多，感觉还好啊，直到上到二楼，随手翻到一条牛仔裤的标价牌：5398港币……我们才真正摆正自己的位置。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/139Pbi2c-RYQ6bqZabFIyzgcARM0r_J_1">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1UaQWBCqKXc_Jj0-PkPWc7YRsqWxbyIVW">
+        </div></figure>
+      </div>
+      <p class="text">地下一层正好赶上log-on的限时专门店：哆啦A梦 邮政局 ！简直心水的不要不要的！各种周边产品，还可以寄明信片！不过就是明信片也不便宜，但都是特殊制作的（塑料的45港币；木头的55港币），所以也算是值得！据说开到2月底就不开啦，喜欢的小伙伴们抓紧去！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1O5Rdu0QpfQZOpiwE6FRaL2hRj2F9691e"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PeHx1g874AUbG3byYRltzbSPkthjLcJq"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZVpaQvHRsNWBZr3Xwu7GTiwJQxjuKxXj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JE4gJUhqqgFr9zvfYnnMcaMakhuGxTyE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1MGDIS9pPKFmPlocak9XbuZdu1XLzReqc"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">旁边店也有卖各种卡通手办、八音盒，真是深得我心，久久舍不得离去。看看时间已经是12点多了，午饭肯定是吃不下，就到旁边的聪嫂甜品吃点东西吧。</p>
+      <p class="text">跟着地图走过去不用五分钟，店里还有刘德华大大的签名。我点了芒果冰沙，闺蜜点了核桃芝麻糊，味道都不错，感觉芒果这个味道更浓郁些。歇了一会儿直奔下一个目标： 崇光百货 ！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1l0SXOuUUbz_yDFazmtZoZ3sqEfcEwy_2">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1zsoEBonGXcN8vUmPAsf2peY4nGDRVufb">
+        </div></figure>
+      </div>
+      <p class="text">我们一路逛过去，还路过了 义顺牛奶公司 ，只是刚吃完甜品出来，实在是吃不下了，看着一橱窗的双皮奶只能作罢。铜锣湾不只是大百货商场，一路上都有很多连锁药妆店，喜欢的小伙伴可能一天时间都要花在这里。崇光百货进去我们也只逛了一楼，问了几个想询价的品牌，感觉价格都是一样的，不想拎着走一下午，所以也没买就出来了。</p>
+      <p class="text">因为晚上要逛 庙街夜市 ，反正都要回 尖沙咀 那边，索性决定去 海港城 那边，闺蜜去帮那些亲戚朋友询价采购，我则是想去诚品书店看看。往 湾仔 码头走的时候路过一兰拉面，本来想尝尝的也因为排队的人太多而作罢了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/14_qC8CUGqaF8JRY_6Gw3ELQsS56m1Ukm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1oDQuHtNjH8cHf9mUcJU_8THZxtuB9kIe"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13TA4G_0ZRp9BqqNYAv5DOrt8HVMLQ7Ar"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">烈日当头，已经25度的香港对于还穿着薄毛衫的我们来说，实在太热了！走到湾仔码头两个人已经是热到崩溃，好在上了天星小轮海风一吹顿时就凉快了下来。到海港城里面一看，老天爷，真是熙熙攘攘摩肩擦踵，就跟都不要钱一样？！陪着闺蜜逛了一圈，实在是不想挤也不想排队了，跟她约好搞定了来诚品书店找我。</p>
+      <p class="text">在诚品书店逛了一圈，确实是有不少感兴趣的书，但无奈要不就是繁体，要不就是从右向左翻页，读起来都比较别扭，所以遗憾的一本都没买成。索性坐等闺蜜来汇合。之后又陪她逛了个药妆店，我们的海港城之旅到此结束了。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1UGtmi02tBGgTDoAfUHXRG8Oa5x9eC5n1">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1bFuor_Gq_lU--PzzbnyXmL4hLi5Zfwby">
+        </div></figure>
+      </div>
+      
+      <h3 class="subtitle">庙街夜市</h3>
+      <p class="text">出门一看已经是4点半，坐上1路车直奔佐敦，下来先找绝味鸭脖店买了鸭脖打算在长途飞机上吃（是的你没看错，我去买了绝味鸭脖）。在去庙街的路上看到翠华餐厅，因为我俩也不想饿着肚子逛夜市，所以就直接进去吃晚饭啦！</p>
+      <p class="text">正好有个两人桌客人吃完，所以我们这是两天来第一次在没有跟人家拼桌的前提下吃正餐。点了招牌的至潮鱼蛋河下午茶套餐（河粉加奶茶共41港币），又单点了一个沙嗲肥牛河（36港币），两个人吃的酣畅淋漓，尤其是不用着急吃完的感觉真是太舒服了！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/19u5TU5Fy323TrfeemIq_vxiOP3vKKb9N">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1KL7nM2GJBUUTIhVQtCYnP5_iusrLBD7C">
+        </div></figure>
+      </div>
+      <p class="text">吃完出来还不到6点，晃到庙街夜市开始逛，想买点纪念品回去。冰箱贴和明信片是一定要的，还淘了几个香港特色的小镜子和帆布包。一定要杀价。一款冰箱贴我随手拿起来看了一下，要价25，因为我也不怎么喜欢就转身走了，身后老板娘一路喊降价到10块……说实话要不是我真看不上这款，我肯定就买了。</p>
+      <p class="text">杀价结果：要价20一个的小镜子最后40买了3个，25一个的帆布包35买了2个，冰箱贴49一个最后66买了2个。有些是真的杀不下来，看质量能看出来，比如这个冰箱贴，整个庙街我们逛了两遍就这一家在卖，其他冰箱贴都25，就这个要价49，跟我们讲整个街上都不敢进这个货因为成本太贵。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1xZOrfNSGwwD3iiMoX4lpUWsCSCD3x49z">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/14LP3ja4A2htx9j7eq2sxnM6vo-RVqv8K">
+        </div></figure>
+      </div>
+      <p class="text">逛完庙街一路走回酒店才7点半，歇了一会儿8点左右我就拎着箱子准备去机场了。下楼先充了个八达通卡准备刷车票，反正用不了的余额机场可以退。走到弥敦道没两分钟A21就来了，跟闺蜜简单道别（她第二天下午的飞机），肩负着去机场商店给她询价的任务登上了大巴。</p>
+      <p class="text">不到一小时的时间就到了机场，进门先到到达大厅的港铁柜台退了八达通卡，除去9块的卡费拿回了40多港币。上去办了行李托运和登机牌，在大厅逛了许久的小店才进安检。一进去就看到了Lady M，心心念念就等着这一刻了。</p>
+      <p class="text">到柜台一看，抹茶的已经卖完了！哭。。。剩下的几种口味就原味的我还感兴趣一些，所以要了一块坐下慢慢吃。遗憾的是支付只能用一种方式，所以这块68港币的蛋糕没办法把我剩下的现金花完，就只能用支付宝支付了。加上服务费一共75港币。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/16q1kLf878RIkli3vFnnRdwz3e-gFUtiA"></figure>' 
+      <p class="text">吃完已经10点半多，赶紧去各种店里给闺蜜询价某香水，发现价格跟市区一致，还没有限量版。到登机口坐定已然将近半夜。昏昏沉沉中有点恍惚，似乎这港岛三日如黄粱一梦，真实又虚幻，居然就这么一瞬间到达了尾声。</p>
+      <p class="text">一上飞机就昏睡了过去，自然也是无心发什么感慨。直到一觉醒来看着窗外漆黑的夜，才觉得真是意犹未尽。下一次不知道什么时候才能成行了。静待来日方长吧！</p>
+      
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.闺蜜想买的一款Tom Ford的香水，从时代广场到崇光百货到海港城到机场，价格都是一样的，所以小伙伴们可以不用纠结价格差价，哪个商场的活动划算就在哪个商场买，因为有的商场支付宝满1500减50，有的满2500减150，仔细询问一下就好。而且机场还没有限量版，所以在市里买未必不是个好选择。
+        <br>2.绝味鸭脖的佐敦店在地铁通道里，要下去找。而且最近貌似支付宝满38减10，很划算！
+        <br>3.避免吃饭排长队等位的最好方法就是打时间差，尤其是宜早不宜晚，比如10点开门你就10点吃个早午餐，然后下午4点去吃个下午茶什么的。每次我们吃完出来就发现门口的队已经长到让人不忍直视了。
+        <br>4.叮叮车可以刷八达通，大概2.3港币单程，是下车的时候才刷。
+      </div>
+
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>

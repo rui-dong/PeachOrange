@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1dXvssRawoddtBN54Fs-E5LpBwgmFFO-k") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1></h1>
+        <p class="cover-description"></p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+      <h2 class="title">前言</h2>
+
+      <div class="divider"><span>✦</span></div>
+
+      <p class="text">要说 华盛顿 最美的季节，当然是春天樱花绽放的时候啦！自从 日本 给了 美国 三千株樱花作为礼物种在了华盛顿，每年大概浩浩荡荡人最多的时候就是樱花节期间了。眼看今年的樱花节就要到啦，楼主把去年的经历写出来给大家做个参考，方便大家的行程安排哈。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1l5W6EB2ECeL6kUTbSOF0Gj4ctz6a-gZx">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/raw(0)">
+        </div></figure>
+      </div>
+      <p class="text">关于樱花节</p>
+      <p class="text">华盛顿樱花节是官方主办大概为期20天庆祝樱花绽放的节日，每年的时间可能有细微的调整，但是一般都是在3月末4月初，根据樱花的开放程度进行预测来规划具体日期。 2015年的樱花节的时间已经出来了，是在3月20日到4月12 日。 樱花节期间华盛顿有各种各样的花式游行，以及与日本或者樱花相关的表演、文化交流和美食活动，比如赛船啊，演唱会啊，日本和服穿搭啊，樱花甜点品尝啊。当然有些是免费的，那些看起来很有意思或者高大上的是要交钱买票的。樱花节的具体庆祝活动安排可以查询官网，请戳： http://www.nationalcherryblossomfestival.org/</p>
+      <p class="text">但是！要注意的就是今年樱花节的时间是在上一年下半年就预测花期决定了的，相关节庆项目的准备也就开始了，这就意味着如果天气气候有变化，樱花节的日期不能变动，却并不一定会覆盖樱花整个花期。比如2014年3月樱花节都开幕了好几天，枝头的樱花还只有花骨朵。所以楼主建议大家如果不是贪图热闹去参加各种活动的话，最好能根据樱花的花期安排旅行。比如说去年樱花盛开最繁茂的日期是4月10日，而樱花节已经过了大半的，到4月12日就结束了。</p>
+      <p class="text">具体花期的预测大概在每年樱花盛开高峰（peak bloom）前10天左右官网才会做出准确的预测，一般盛开会维持几天的时间，有条件的同学可以相对灵活的安排一下时间。去年的时候National Park Service在两处樱花密集地安放了网络摄像机，所以大家可以从网上实时看到樱花开放的情况。今年的链接楼主没有搜到（不知道是不是还没有出来），等搜到的话就更新上来。下面是历年樱花盛开高峰的日期：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1K8a0cyIcdX3B0XS-ABo_mG9w1GnTH3EC"></figure>' 
+      <p class="text">同时大家也要做好心理准备，樱花节固然热闹，而且也极大地方便了游人，比如说有活动封路就形成了专门的步行街，平时不让停餐车的地方都可以看到有餐车在卖吃的等等。但是弊端就是不管是看樱花的地方或者各个著名景点都是人山人海啊人山人海啊！说真的比如你要跟某个博物馆里的展品合影，如果它是在大厅展出，你等上10分钟都不可能照到一张没有别人的照片的，楼主去年进到自然 历史博物馆 的大厅里的时候基本把手臂前平举或者侧平举都没空间。当然也可能是楼主赶的时候不好，是樱花节的最后一天，有闭幕游行。估计往前几天的话人流会被分散一些。</p>
+      <p class="text">另外有一点特别要注意，就是大家去华盛顿的那几天一定要看好天气预报！尤其是盛开期间，基本上一场大风或者一场雨樱花就全没了，前两年也出现过花期提前结束的情况，就是天气恶劣导致的。楼主去年去的时候已经是4月12日了（盛开高峰是10日），正好赶上盛开末期，樱花全部绽放枝头而且已经有落英缤纷的感觉，尤其是一阵微风吹过来，樱花瓣像是雪花一样的飘落，别提多有感觉了！可是一天过后楼主路过相同的地方，发现前一天夜里的风雨几乎已经让大部分的樱花都没有了！好险！所以如果在华盛顿呆2-3天而又赶上樱花盛开高峰的话，天气好就早点去赏樱吧。如果还没到高峰期而天气预报又一直晴朗，等个1-2天也不是问题。</p>
+      <p class="text">官网上注明的三处赏樱地是：around the Tidal Basin in West Potomac Park, in East Potomac Park (Hains Point), and on the grounds of the Washington Monument. 楼主通过去年的直播的网络摄像大概扫了几眼，觉得 潮汐湖 （Tidal Basin）附近的樱花更密集更好看（Hains Point那边貌似樱花种类更多？），而且离另一个景点杰弗逊纪念堂也近，于是决定去这一处赏樱（下图标号1、2、3的区域）。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1IYGQDx-F0tRuy6WhE6p2ncgjq4xQL3po"></figure>' 
+      <p class="text">关于酒店</p>
+      <p class="text">如果是樱花节期间来华盛顿，一定要提前预定酒店，楼主上次提前一个月订，选择就很有限了。不过楼主因为是 自驾 ，所以对于酒店位置没有特别的要求，反倒是希望住在离市中心远一点的地方，一来是价格便宜，二来是基本上不在市中心的酒店免费停车的概率较大。3月初在priceline上bid到的 希尔顿 酒店，华盛顿市中心南边20分钟车程的地方，不含税58刀一晚。</p>
+      <p class="text">关于停车</p>
+      <p class="text">楼主是 自驾 去华盛顿的，停车一直是用parkme.com这个网站提前搜好的。这样既可以做到心中有数以便安排行程，而且能进行价格比对找到性价比最高的停车地点，另一方面也省去了找停车场的烦恼节省了时间。关于这个网站的用法介绍楼主简单的写在了另一篇帖子的准备篇里： http://bbs.qyer.com/thread-1057087-1.html</p>
+      <p class="text">今日Tips：</p>
+      <p class="text">1. 樱花节期间不管是酒店还是机票都要早订，尤其是想参加樱花节各项活动的同学，很多活动是限票的，比如说茶道或者樱花甜点制作，想参加就早买。不过像是那种小吃街或者特色集市的门票应该都是不限的，不用担心。订票都在官网。</p>
+      <p class="text">2. 如果是为了赏樱，要时刻留意樱花开放的实时报告。一般从盛开日前10天开始官网就会有准确的预报，结合天气预报就能完美把握赏樱的时机了。很多同学跟我说一共呆两三天，樱花很多还没有开怎么办。天气好的话可以放在最后一天赏樱，尤其是快盛开的那几日，每日樱花开放的程度变化都很大，能更接近盛开日去赏樱就要接近，不要觉得早一天晚一天没区别。但是一定要留意天气！</p>
+      <p class="text">3. 盛开高峰日之后2天左右樱花就开始陆续凋谢了，天气好的话最多维持不到5-6天，天气不好刮风下雨的话基本3天花瓣就掉光了。楼主亲历。建议大家最好能在盛开高峰日或者提前1-2天去赏樱。</p>
+      <p class="text">4. 停车位一定要提前找好。现在网上都可以预定，不放心的话就直接订了。楼主制定的计划时间比较灵活所以没有订停车位。樱花节期间很多地方即使交钱都会满车位，要早点去。</p>
+
+      <p class="text">Day 1 华盛顿</p>
+      <p class="text">早上起了个大早，7点多的时候就从家里出发啦！一路上朝霞漫天，较为僻静几段高速上甚至前后就只有两三辆车。快到华盛顿的时候就开始堵车了，而且高速路口非常交错复杂，即便是有导航还是要非常注意，一不小心就会开错。中午时分终于到了 国家广场 附近，车停在了600 13th St NW, Washington, DC 20005, 周六是7刀一天（貌似是5pm之前）。步行大概10分钟到了著名的Luke's Lobster来吃龙虾卷，记得是16刀一个，地址是624E St NW, Washington, DC 20004。</p>
+      <p class="text">由于正好是樱花节最后一天，上午10点在国家广场附近有游行，楼主本来就没打算来看，不过到的时候貌似结束不久，所以各种店里都是人！劝大家樱花节期间，尤其是开幕式闭幕式这种有大活动的日子，尽量避开饭点吃东西，或者避开热门景点附近找饭吃，不然就等着排长队没座位人挤人吧。。。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1rEzrbFP3FCQ_lTBSYZHpcsQrF-bPTR-W"></figure>' 
+      <p class="text">填饱肚子之后就朝着国家广场附近前进，路上会路过FBI大楼。楼主没有进去，不过想来也不是这么轻易就能进去的吧。老邮局附近的路都变成了步行街，整个都封起来在搞活动，里面有搭建的舞台和小吃摊什么的，不过进去这片区域是要买票的。楼主看了半天貌似走到入口要到街的另一头，于是作罢，直接往国家自然 历史博物馆 前进。</p>
+      <p class="text">国家自然历史博物馆是免费参观，楼主是从Constitution Ave那边的入口进去的。没进门就看到排队的了，还以为是安检有点慢，进去之后惊呆了。。。全是人。。。记得大厅里的那个大象吗，它是迄今为止人类发现最大的非洲野象。想拍个合影等了N久终于拍到一张楼主在照片上是“最大”的人。。。</p>
+      <p class="text">具体博物馆的参观线路在“华盛顿博物馆”的锦囊里都概括了，当然不能错过的是希望蓝钻石（Hope Blue Diamond），其他的大家就各取所需。不过因为当天实在是人太多了，逛了一会儿就完全没有兴致了只好出来。这个博物馆大家预留半天的时间是正好的，可以有重点有略过的浏览下来。一般是在下午5点关门，夏天或者节假日的时候会延迟关门，比如楼主去的那天就延迟到7点才关门，注意门口的告示标志。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1BnKmrbhhcYhI1l1CBIEXWeYp7mf3icPk"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1QEzD1Mp1tsAVTNCb-FNShpR_JDhka1y1"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JH4_tqmNmQoyYJdUwMbFSTwOqELc7aw5"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">从另一边的出口出来，左手边是 国家美术馆 的雕塑花园。花园并不大，天气晴好的时候很适合休息一下晒晒太阳，也正好穿过花园去国家美术馆。国家美术馆分为东馆和西馆，大部分我们耳熟能详的古典艺术家的作品都在西馆，包括梵高啊莫奈啊伦勃朗啊。东馆主要是现代艺术，楼主参观的并不多。这里有免费的语音导览可以租借，不过因为实在是人，太，多，了，楼主想说还不如自己看。事实证明两天之后楼主在周一回来这个国家美术馆的时候人就少了，可能也跟樱花节结束了有关系吧。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1VY6xZCGdL7WaicFQ-okU1hAu23Cby6G_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1r20z6ktDk8Dit6SFQxRH8rpb1ueU9VlF"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1dobsPmEm4IhyV8_hLRrFpUm2_lASc6vl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1xDfwL2JakYJgt0Y_Z5JdmAecLgOvWD6e"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">因为也快到了关门的时刻，艺术馆之旅只是走走马观花，于是决定第三天再来。这是后话。从国家艺术馆出来远远就看到了 国会山 ，咔嚓一张照片后立刻往反方向的白宫走。这一段路真是不短啊，大概20多分钟才到。当时楼主夫妇想从南边看白宫，正打算穿过离白宫很近的William Tecumseh Sherman 纪念碑的时候不知道为啥开始戒严了，警察叔叔们来到这个小公园把大家都轰出来了。按理说都夕阳西下了不能有什么活动了吧，可能是总统先生回来了也说不定。所以南边的路是走不通了，楼主就走到白宫的北边在Pennsylvania Ave NW路上看了眼白宫。后来发现地图上也指示只能在白宫北边经过，南边的路不通。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1mRh3heH3FmFgOZBLZERRx4cn82AtpoAi"></figure>' 
+      <p class="text">看看太阳也落山了，楼主的肚子也开始叫了。很明显国家广场附近的餐馆肯定是人满为患，就不考虑了。幸亏提前搜到这里有一家麻辣烫还不错，于是开车直奔目的地。这家餐厅的位置离市中心有点远，地址是3434 Washington Blvd. Arlington, VA 22201，不过免费停车。到了那里都7点多了，发现这家店不要太火啊完全没位置。而且因为是每人一个小锅涮，很多外国人也来吃。很幸运的有个订了两人桌的客人晚了半小时还没来，经理决定先让我们坐下了。整体感觉还不错，我们点的荤素搭配的套餐，另外又加了点自己爱吃的。东西虽然就是那些，味道中规中矩，但蘸料相当好吃。走了大半天也是累了，胃口大开的撑破肚皮才出来。开车15分钟左右就到了酒店入住，除了感觉这一天到处都是人山人海之外，第一天算是圆满结束。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1--apeyoN0UibixcP3Xq0PbGiyytI23Dv"></figure>' 
+      <p class="text">今日Tips：</p>
+      <p class="text">1.      提前网上找好停车场，而且停车要趁早。樱花节期间车位爆满的情况是会出现的。楼主第一选择的停车场就是满了，到第二选择的停车场才停下。</p>
+      <p class="text">2.      樱花节期间很多活动是封路的，最好能提前了解一下以免绕路。如果碰上封路，可以问工作人员哪里可以穿行。比如楼主那天走过一条封了的路，就连到马路对面这么简单的事情都要走好几百米才能实现。</p>
+      <p class="text">3.      博物馆都是免费，建议大家避开周末或节假日，真心人太多，会让你的体验大打折扣。还有如果要去吃那一家麻辣烫，最好能提前预定座位，周末尤其人多。</p>
+      <p class="text">Day 2 华盛顿</p>
+      <p class="text">因为想着早点去看樱花可能人比较少，所以7点多就从酒店出发了。到达 潮汐湖 停好车（停车地址901 Water St SW）还不到8点，但是已经人，山，人，海，了。不过比起国内十一假期来还是差一些。绕湖一周全是樱花，不过楼主觉得比较密集又开得好的是在接近Maine Ave SW这边。楼主从Ohio Dr SW与Maine Ave SW交界处的往西北方向，一直走到Kutz Bridge。一路沿湖走过来，沐浴在照阳中边赏樱边拍照，还在樱花树下吃了个早餐，风吹过的时候落英缤纷似是飘雪一般，真是好不惬意！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1l5W6EB2ECeL6kUTbSOF0Gj4ctz6a-gZx">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1r-JJTnQDZ7_A28cxQHC8lH9VGaqj7sgD">
+        </div></figure>
+      </div>
+      <p class="text">顺着这个方向继续往前（楼主觉得桥那边人更多，决定就不沿湖走一圈了），就到了 国家广场 最 西端 的 林肯纪念堂 。途径两个超大的玉兰树，花瓣落了满地，就像是铺了一层地毯一样好浪漫！林肯纪念堂确实没有太多好逛的，反倒是前面的 反思池 ，犹记得当年在《阿甘正传》里看到珍妮趟着水向他跑过来的时候激动死了。不过现实的版本是，水有点脏。。。算是到此一游吧。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1v2smzDm1qMTXbJhgV4N-nIicLHmF0qNt">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Sj2NE1R3DuV81y57-sg4FqLMT2IgPpCh">
+        </div></figure>
+      </div>
+      <p class="text">沿反思池向东边的国家广场中心地带走的话，一路上会经过 越南 战争纪念碑， 朝鲜 战争纪念碑等等，最后到第二次世界大战各种纪念广场。国家广场的最中心是 华盛顿纪念碑 ，本来是可以登顶的，不过楼主去的时候不知为何关闭登顶了，所以只能在外面看看。说起来在这里碰到一个好心的 中国 大妈要给楼主夫妇照相，那时候楼主还没有三脚架不能自拍，于是很开心的说谢谢。照完了之后大妈走了，楼主点开照片一看都要哭了。。。。大妈很贴心的把楼主夫妇放在了照片的正中心，脚下是半张照片的 草坪 ，上半张照片是被拦腰截断只拍到一半的华盛顿纪念碑。。。。于是楼主充满感激的默默收起相机飘走了而且边飘边45度角仰望天空内牛满面。。。大家想看的话楼主再传上来供大家一乐。。。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1ZljP-jmfD696q0ihDJ9EX0ymTQHGkbZj">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Igcg1m96xzd2abWZKcBjmDXH6OSmG8CU">
+        </div></figure>
+      </div>
+      <p class="text">这时候已经是中午了，国家广场附近的主干道上其实有很多餐车，卖烤肉夹饼的，冰淇淋的，华夫饼的， 汉堡 三明治的都有。楼主买了 土耳其 烤肉夹饼和冰淇淋在街边就吃饱了。下午主要是附近的博物馆，先去了 美国 历史博物馆 ，里面是各种展示美国历史的文化遗物或者科技发明，包括第一个灯泡、第一部电话等等。当然还有理解总统的展品和第一夫人的晚礼服们。之后路过史密森协会的本部，外观像是一个砖红色的城堡，很有范儿。然后是航空航天博物馆。人依然是很多，不过比前一天好了不少。这里比较适合航天迷，不仅是各种火箭啊空间探测器啊，还有从月球带回来的石头，大家都想要摸一摸。有些展品的参观还要排队，比如波音的驾驶舱展示。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1xaebSCFcRxbLirNrXX2sJyF9gAtvREF_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rzYWdmPvVyR_YzdlA21ee2q0vauYDIAh"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Lss4kmkckukZfbZiisL2Iu2mtmnf0ssA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/11731Xre-vJ8YW9LDa125FCHvEdgnCiXZ"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">从博物馆出来才4点左右，晚饭的话太早，于是决定去 五角大楼 看看。之前就知道五角大楼不让接近，网上说在旁边的空军纪念碑那里可以登高，勉强能看出五角形来。结果还没到空军基地，不知道是下错了高速口还是走错了岔路，晕晕乎乎就转到五角大楼前面的停车场去了！而且要沿着箭头一直开不能调头。楼主心想这可坏了，别被当做间谍抓起来啊！果然是警匪片看太多么。。。没两步就看到一辆停在前面的警车里警察摇下窗户示意我们开到他旁边，问我们要干吗？楼主立刻无辜的说我们要去空军纪念碑，结果绕来绕去就迷路了不知道怎么出去在这个停车场。警察叔叔一脸冷酷的给我们指了路，于是楼主就颤颤的出来了。找到空军纪念碑（有几个车位是免费给visitor停的），是很小很小的一个纪念园，远远从那里向五角大楼看去真的只能勉强看出是五角形啊，大概是还不够高的缘故吧。不过空军纪念碑本身倒是很震撼。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1xQHnvTEX8OpyicYHWfcLiJpfIvWTb22V"></figure>' 
+      <p class="text">因为下午在航空航天博物馆的麦当劳吃了个汉堡，导致都傍晚了还完全不饿。看看离着阿灵顿公墓很近，就顺便开过去了。夏天的阿灵顿公墓会看情况适当延长开放时间，楼主去的当日是开放到7点半。进去之后可以乘坐观光小车（貌似是要票）到达各处，不过因为楼主想看的主要就是肯尼迪墓，所以就一路走过去顺便逛逛周边。整个行程其实并没有多久，走走停停大概1小时左右就结束了。想好好逛阿灵顿公墓的同学大概要小半天，毕竟这里占地面积还是很大的，包括 无名烈士墓 等。阿灵顿本身 有停车场，前3小时每小时1.75刀，后面每小时2.5刀。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1VFoHO48BjAXqCh0kBtQH_W7JvP-KQGla">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1csAD_U4mznj1uQZaqnHjQYGjd3qVZz6x">
+        </div></figure>
+      </div>
+      <p class="text">由于夏天落日比较晚，真正太阳落山的时候已经7点半了。Yelp上搜了一家 韩国 餐馆去吃饭，结果发现也是爆火，饿得不行了还是在门口等了20分钟才有座位。本来想吃的韩式烤肉也因为实在太饿等不及烤而改成了其他料理。味道还是很值得夸赞的，不仅是口感比较扎实，各种腌制的小菜也很到位。吃饱出来发现等位子的队伍已经排到店外还拐了弯，立刻觉得自己好幸运。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1584YbVFVYE8Qjl1EHu44d36t0om0vEOM">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1vHav6o6xrJ9QthnBx283ncdgLrWXHO4j">
+        </div></figure>
+      </div>
+      <p class="text">今日Tips：</p>
+      <p class="text">1.      周日很多停车场是免费停车的，大家可以在网上搜搜看，楼主找到的这一家就是。但是缺点就是离国家广场有些远，步行的话大概20分钟。不过因为整个国家广场很大，景点间的距离本身就比较远，比较便宜的停车场都不在很近的地方，因此楼主觉得也不差这一点了。</p>
+      <p class="text">2.      国家广场上各景点距离都比较远，至少每两个之间要走15分钟左右，一天下来很消耗体力，建议穿舒适的鞋子和衣服。</p>
+      <p class="text">3.      想俯瞰五角大楼的话，空军纪念碑那里只能勉强看个形状。不过鉴于这个景点门票免费停车免费，有时间的话顺路去看看也不错。</p>
+      <p class="text">Day 3   华盛顿</p>
+      <p class="text">由于国会山周末没有tour，所以只能预约了周一来参观。参观内部是免费的，不过并不是都能参观，只是给公众开放部分而已。一般工作日国会山tour都是运行的，偶尔会因为活动安排或者天气原因关闭，所以建议大家冬天来的话也要看好天气预报什么的，比如今年3月5日就是因为下雪关闭tour了。预定之后是可以修改或者取消，都是免费，不过旺季的时候一定要提前预定，有时候提前一个月就被预订完了。网上预定门票请戳： http://www.visitthecapitol.gov/plan-visit/book-tour-capitol#.VPi7xy7KOVE 。</p>
+      <p class="text">楼主当时订的是早上10点的，睡了个懒觉吃了个早午餐，提前在国家广场附近停好车（停车地址553S Capitol St SW, Washington, DC 20003，全天10刀）一路走走逛逛就到了国会山的游客中心。入口在国会山东侧，也就是不靠近国家广场的那一侧。不得不说这游客中心的大堂就很气派，除了各种任务雕像以外，还有一个纪念品商店。先拿预订单登记换票，然后在纪念品商店买了些东西，看时间差不多了就去排队。先是看一个类似纪录片的东西，结束之后按照引导路线进去参观一圈。说实话感觉比想象的要快一些，貌似有一个大厅在整修所以暂时不让进。没办法，留有遗憾才有再来的动力嘛。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1YVGZ3j3-fI8KDQSKytyu21bWL3_EUgIv"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1MkYHVxg8ath4G4vRiuTwvDfBIEGVMwSK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JlPHlDlur1RH1ulPIxH4bxnp1yORfDUE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/10sinNhSaBvQw-jMubsFCTpON2U6ByB8K"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Fi2uK9At_-YHJMYIgKg1wiXlyJjsdzZ9"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">出来之后绕过国会山往国家广场的方向走，经过前方的雕塑和喷泉，还颇有欧式的感觉。远观国会山很是大气，不管从建筑风格还是色彩上似乎都是这个国家的象征。由于第一天很匆忙的看了国家美术馆，于是决定再次去逛逛。路过美术馆旁边的时候发现第一天看到开满樱花的樱花树已经在昨夜风雨的摧残下全部掉光了！光秃秃的几乎什么都没剩下。楼主心里又庆幸又惋惜，看来这一年的樱花也提早结束绽放了。</p>
+      <p class="text">国家美术馆有两处比较大的纪念品销售区，分别在东西两馆的地下一层，楼主在这里买到了很多樱花节的纪念品，比如樱花颜色和形状的一对小碗，又萌又粉，别提多开心啦！逛完出来已经是下午了，找了家粤式点心店吃了午餐已经是3点多。由于开回家还要4-5个小时，所以就决定打道回府了。真心觉得这三天也还是不够啊，下次再来吧！看看自己做的攻略上该去的地方都去了该吃的东西也都吃了，华盛顿的樱花节之行也算是圆满结束啦！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1xwS2kbk6nUrZJwGw4Sa2tv1cgfSIv5pl"></figure>' 
+      <p class="text">今日Tips：</p>
+      <p class="text">1.      华盛顿的景点安排很有学问，比如说赏樱之类的安排在晴天，阴雨天就尽情的逛博物馆吧！国会山的参观也是室内，所以也可以安排在室内。不过樱花节有很多活动是室外的，注意留意天气哦。</p>
+      <p class="text">2.      樱花节的开幕和闭幕游行路线官网提前就会发出来，大家研究好路线可以早点去，因为热门地点人真的很多。楼主到达的那天游行刚结束散场，别提那个人流量。。。</p>
+      <p class="text">3.      国会山最近一年来都是一部分一部分的在整修，楼主去的时候有个大厅不让看，貌似现在在修外面的金顶，所以预定票的时候要看好那一部分不让参观，有没有补偿的参观路线。如果看到补偿路线不感兴趣就没必要再等着排队进去了，反正楼主感觉有点浪费时间。</p>        
+
+
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>

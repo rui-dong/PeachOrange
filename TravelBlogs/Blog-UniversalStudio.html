@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1K2CdmNFZwQt2JVyQg378iCq4MQ_G0x0M") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1>南方夏日的意外之旅</h1>
+        <p class="cover-description">查尔斯顿和奥兰多环球影城</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    <section class="itinerary">
+      <div class="itinerary-header">
+        <h2 class="itinerary-title">行程单</h2>
+        <span class="itinerary-subtitle"></span>
+      </div>
+
+      <ol class="itinerary-list">
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>1</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">查尔斯顿</h3>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>2</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">查尔斯顿 - 奥兰多</h3>
+            <div class="day-route">
+              <span class="route-place">奥兰多环球影城</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">冒险岛</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">哈利·波特魔法乐园</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>3</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">奥兰多</h3>
+            <div class="day-route">
+              <span class="route-place">奥兰多环球影城</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">冒险岛</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>4</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">奥兰多 - 杰克逊维尔</h3>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>5</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">杰克逊维尔</h3>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+      <h2 class="title">前言</h2>
+
+      <p class="text">在另一篇游记中写过，不知道大家还记不记得，去年感恩节的时候，芝麻兄把手摔了。</p>
+      <p class="text">于是我们打着石膏按照原定计划去了邮轮和 奥兰多 的主题公园，倒是没觉得有多大影响。但是因为石膏的原因，芝麻兄在环球影城那些刺激的过山车门前被纷纷拦下，说带着石膏的不能坐。当时他一脸愤慨又委屈的样子至今还历历在目。</p>
+      <p class="text">然后在某个夏日炎炎的假日早上，我睁开眼听见他说的第一句话就是，我想坐过山车。</p>
+      <p class="text">我说，我想去环球影城那个新开的哈利波特 对角巷 。</p>
+      <p class="text">他说，我也想去。</p>
+      <p class="text">所以我们大概花了5分钟的时间躺在床上讨论了一下行程，就这样一拍即合的准备出发了。</p>
+      <p class="text">我一骨碌翻身起来看看表已经快10点了，打开电脑 租车 订票订酒店，因为整个行程都是计划外所以当然是尽可能bid酒店，环球影城的门票也是找到了买两天赠一天的park to park，最后竟然跟平时按计划出行的整体价格持平。下午2点芝麻兄去 拿车 我在家收拾东西，3点半的时候我们就已经开在了南下的高速上了。</p>
+      <p class="text">这大概是我们这辈子最突如其来的一场旅行了。</p>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 0 & Day 1</h2>
+      
+      <h3 class="subtitle">查尔斯顿</h3>
+      
+      <p class="text">四个半小时之后，大概晚上8点的时候我们到达了南方小镇查尔斯顿。因为之前就听说这里是 美国 南北战争第一枪打响的地方，第一个美国海关也建在这里，还有很多吸引人的历史遗迹，所以早就心心念念想来一趟。不过代表美国南部风情的种植园我们是没时间去了，据说《乱世佳人》的原型就是这里的某个种植园，电影也在这里取过景。</p>
+      <p class="text">大概是早上起来的时候还在想这周末做什么，完全没有心理准备晚上就要睡在远在几百英里之外，这一夜我和芝麻兄都睡得并不很安稳。迷迷糊糊到了早上，知道在查尔斯顿能停留的时间有限，一刻也不敢耽误的起床收拾东西退房。到麦当劳吃早餐的时候惊讶的发现小黄人的玩具居然是可以单卖的！一直以为只有Happy Meal会送玩具，既然可以单买的话我跟芝麻兄都被勾起了收集齐一套12个不同小黄人的欲望。结果就是因为芝麻兄的这一句“可以只买小黄人的玩具吗？”我们这一路都执着于看到麦当劳就要停下来问一问有没有不同款的小黄人。。。就算碰不到也会每到一个地方就附近搜一下哪里有麦当劳，然后顺便过去问问。。。当然，这是后话了。</p>
+      <p class="text">几分钟车程就到了查尔斯顿 老城区 中心，找了个停车场停好车走出来才7点左右。清晨时分，朝阳透过点点的雾气，把石子路洒满了金色的光芒。再加上周末的早晨行人稀少，这座小镇似乎还没从晨光中苏醒，只有路旁枝桠上传来的清脆鸟鸣和小屋窗口花瓣上的点点露水，衬托着这一片的宁静与祥和。我和芝麻兄一路牵着手从一条街逛到另一条街，途径无数风格各异的教堂和庭院，或沉静雅致一身素白，或繁花似锦五彩点缀，心情也在海风中跟着变得清新起来。</p>
+      <p class="text">一路南行经过具有250年历史的Dock Street Theatre是全美洲第一座专门建造用作剧院的建筑，门廊和立柱上镂空的雕花，闪闪发亮的吊灯和楼梯，似乎都在诉说着当年第一场歌剧上演的盛况。明信片上常出现的Rainbow Row是街边连在一起的几栋彩色房子，正对面不远处就是大海，在阳光下泛起的海浪发出耀眼的光芒。转身往回走的时候会路过旧奴隶贩卖市场，现在已经变成了一个博物馆，只有头顶石墙上斑驳的“Old Slave Market”几个字还留下一些时代的印记。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1z3RX_DFvqMD9r2xxUojVTnTZIFUYnl1C"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1GpbqjGQTM_jQRyl6sBM9AAUvdC_jYDvp"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1jE2fIgGKVwK9kD_cGUhCEQNyeJSbhjUz"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1DkjCLtN4UxegGIKDb2sJ5ylZIKq3U4Xi"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wmOIRvrXJpXE6bbiJ6SjbVMMqPAsdvXa"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1X8eg3cvfMbMgLsalL0X9V7qHP12-qOqa"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LrnmLxo1WTOclMPSbknKxEXMWbkAkVwp"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1J2CrmIcVDr5DwV18Pr8yn0mxWg3LcNH-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rZRa8vjabkRjRjQUQ-bmogfLmL1B_XnZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wUYKqbJBdPpUirWwBxRz-QGLkkdv1WNS"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">往北一直走到city market的时候，集市上的小店才刚刚开始出摊。顺着阳光的方向一路走到集市尽头的美国最早 海关大楼 ，远远望去自然也是恢宏的门廊立柱，透着浓浓的欧式风情。从长长的city market一路逛回来，各种小工艺品，饮料小吃也是让人心里痒痒的，要不是因为实在是被蚊子咬了满腿包，真想多逛一圈。</p>
+      <p class="text">快十点的时候我们开车到查尔斯顿的游客中心逛了逛，大概是著名的南方旅游小镇，里面居然做的异常精致，空间宽敞明亮不说，各种城区模型啊风光简介电影啊展览啊一应俱全。本来想等到午饭时间在这里吃海鲜的，但是想了想还是觉得到环球影城玩才是此行的重头戏，再说买了三天的票如果不用完岂不是遗憾！于是照例买了冰箱贴和明信片之后我们就开车直奔奥兰多了！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Zurf84XbIBpxFA283EvAksZ19IY0Tzfj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12mBPiJldpO-XdzU3uMLvR2NKV68yhJnN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1F8-gUI4MidufPPaKkoGgWYaSbd7bbAPU"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/154dDeGsh4SlNsWeUV6NmbJgjlMBTJRqS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PWpx1hziR8g9XUH7e6I4BYFMHBv6jFok"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1aee7eMx0OoqNGSs129PCqLA7lx-JUeix"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1kUuJmkSEaiFFf8BjVXu_nhNMrFy_Assb"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      
+      <h3 class="subtitle">奥兰多 冒险岛</h3>
+      
+      <p class="text">当然，自从知道了小黄人可以在麦当劳单买之后，我们这一路每次停车加油上厕所，甚至吃午饭都必然要找一个有麦当劳的高速口下来。然而这一套小黄人一共12个，但每家麦当劳只有其中的一两种，也很可能会跟之前买到的小黄人重复，再加上马上小黄人的活动就要下架了，甚至有的麦当来已经换上了一套蝙蝠侠的新玩具！所以一路下来只买到了5个各不相同的小黄人。。。哭。。。越到后面重复的概率就越高，越来越难买。。。</p>
+      <p class="text">大概下午4点左右的时候到达 奥兰多环球影城 附近，先去订票的网站实体店换了订票单（ticket2go），柜台的老爷爷很耐心的给我讲如何拿这个订票单到位于环球影城外面的city walk去换票，然后又好心跟我们说如果只是去换票的话停车费只要5刀哦！因为我们之前来过一次了所以对他说的将信将疑。后来到环球影城停车收费闸口发现他说的也不是完全错，不管是去哪个园，6pm之后停车就是5刀。看看表此时才刚5点，心想为了停车费再等一个小时也不值得，只能乖乖交了全价停车费进来了。</p>
+      <p class="text">事实表明不在环球影城的官网上订票就是会稍微麻烦一点，因为要先拿着邮件打印的确认单换取订票单，再到环球影城city walk的客服来换门票。但是也是有好处，一来是两个人能省大概40多刀的门票费，二来就是进出刷小门票比刷自己在家打印出来的票方便不少，也避免折到条形码扫不出来什么的。</p>
+      <p class="text">马不停蹄的换了票看看天气有点多云就直接去了环球的冒险岛，心想着既然说不定会下雨就直接把所有水上项目都坐了吧！来之前我可是坐了万全的准备，带了一次性雨衣不说，还带了专门装包的大塑料袋，装手机等小物件的密封塑料袋，也跟芝麻兄换上了专门的海滩速干短裤等等。大概是我们进园的时候刚停了一场骤雨没多久，大力水手Popeye & Bluto's Bilge-Rat Barges的那个项目的排队时间居然只有10分钟，当然是二话没说就去排队了。排队途中也是各种闷热，加上我们之前的一路小跑，两个人都是满头大汗，芝麻兄整个上衣都几乎湿透了。就在我犹豫到底要不要穿一次性雨衣的挣扎过程中，芝麻兄下定了决心要全身湿透凉快凉快。其实作为一个女生如果内衣湿了一直穿着会很难受啊！不像男生一下扒光了上衣还是一条好汉啊！于是我在“湿透了凉快”和“湿透了内衣裤都很难受”的艰难抉择中，一边排队一边把一次性雨衣穿了脱脱了穿，被芝麻兄各种内心鄙视和嘲笑（不要否认我都看到了你不屑的眼神！）。最终还是理性占了上风，最后时刻还是毅然决定穿上雨衣上阵。</p>
+      <p class="text">这个项目有点像 漂流 ，只不过船换成了圆型，大概每船8个人左右，大家靠着船壁围坐一圈，中间有放包的地方，还会用塑料布盖上所以基本不会湿。整个过程中会穿过小瀑布和一群用水枪攻击你们的人（这其实是另一个项目，就是拿水枪打经过的船上的人。。。），河水也是时而湍急时而平缓，全程下来没穿雨衣的几乎都是上下全部湿透了。坐在我对面的是个瘦瘦的戴眼镜老爷爷，上来的时候还一副莫名其妙的样子，大概是不知道这个项目是干啥的，结果一路上他每被打湿一次就一声哀嚎，下船的时候一脸无奈的看着自己全身滴水。。。关键是他穿的是一双休闲鞋不是凉鞋。。。据他说感觉鞋里面好像有条小河（原话是，you know, it’s like a river inside…）。。。。</p>
+      <p class="text">我自然是腰部以下全部湿透，毕竟一次性雨衣也不可能挡住全身，能保住上身是干爽的我就很庆幸了。芝麻兄下来甩甩头发小声喊了一句，爽！回头看他的时候发现他已然全身湿透。一路走出来休整一下收好雨衣，看看手机app上显示的园内各项目等待时间，发现绿巨人也只要10分钟，我就建议芝麻兄先去把这个过山车坐了。芝麻兄自然是一脸兴奋说好啊好啊你去吗？我这么一听吓得稍稍退了半步故作镇定的说，我就不去了吧。其实当时心里的OS是：我靠我不要啊我不要啊打死我都不要坐啊！</p>
+      <p class="text">我从来就对这些东西不太擅长，记得初中的时候我们某个公园里修了一个叫“流星锤”的东西，就是人坐在锤子头一样的车里，然后以锤子柄的另一端为轴心转动。刚开始还有点像海盗船，我就已经说不出话来了，到后来直接180度倒转过来，头顶朝地屁股朝天的停在半空中！当时真是度秒如年啊。。。关键是我跟我妈一起坐的，下来之后我都快疯了我妈还很兴奋的说真好玩啊我们再坐一次吧！。。。。我真是欲哭无泪。。。。</p>
+      <p class="text">其实每次说到过山车我心里都痒痒的，但是闭上眼一模拟过山车的感觉手心脚心就吓出一层汗，最后都是怂。当年在 巴黎 迪士尼的时候玩了个过山车和跳楼机，还是跟室友一起去的，排队的时候我完全不知道是在排什么，等到上去了才发现我靠居然是跳楼机！然后也不能逃跑了！那种惊恐至今都无法忘怀。。。所以我就决定了！绝对不花钱找罪受！既然这么痛苦我就再也不坐过山车了！</p>
+      <p class="text">但是芝麻兄不一样啊，想来他这种男人冒险的天性，对吧，再加上，他从来没坐过过山车，对吧，他就是一定要去试试的啊！我何必拦着呢哈哈哈！当初因为手上打石膏不让他坐过山车的那股怨恨的小火苗到现在还在心里燃烧，我当然是支持他抓紧时间去过把瘾的啦！</p>
+      <p class="text">就这样我们一路走回超级英雄园区，身上沙滩裤都差不多干了，芝麻兄就准备存包然后去做绿巨人，我正好可以去走单人通道坐一次上次体验过的蜘蛛侠的ride。况且绿巨人也有单人通道，我们两个坐完出来的时间应该差不多。我这边单人通道几乎都没有人，所以立刻就坐上了。再次体验蜘蛛侠我还是紧张的两手都是汗，但是总归是一种愉悦的紧张感，在这之上的话大概就会有些不舒服了。出来后觉得芝麻兄还要存包取包应该没这么快，逛了逛商店就打算到绿巨人门口等他。</p>
+      <p class="text">话说我刚走到绿巨人门口就看到他出来往存包的方向大步迈去，我在他几米之外的背后一路叫着“老公老公老公老公~”他居然完全听不到。。。然后我就实在不好意思喊了因为听起来简直就像救护车经过。。。。紧赶慢赶好不容易拉住了他，他回头才看到是我就冲我笑了一下。怎么说呢。。。。</p>
+      <p class="text">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈！他的笑容好僵硬！哈哈哈哈哈哈哈！我当时心里都快笑死了，然后强忍着问他，感觉如何？芝麻兄意味深长的说，还好。。。。我也轻描淡写的说，是吗？那就好。然后等我们取包出来他才说了实话，他说，老婆我跟你说啊，刺激倒是很刺激，我排队的时候啊各兴奋啊得瑟啊，心想着，嘿，要坐过山车了！然后上去开始之后就。。。心中真是一万只XXX奔过。。。下来的时候腿还是颤抖的。。。</p>
+      <p class="text">此时我真是再也憋不住了哈哈哈哈哈都快笑到地上去了。后来回来看到他写的游记那一段我还是忍不住笑个不停。我笑够了问他，那还坐吗？他仔细想了想说，其他的过山车还可以再体验一下，毕竟来都来了，这个绿巨人嘛，就算了。</p>
+      <p class="text">于是我一路“嘲笑”他一路往水上项目这边走，趁着身上还没完全干就把其他水上了也一并都玩了。激流勇进Dudley Do-Right's Ripsaw Falls当时排队要40分钟，我们心一横就排吧！事实上感觉并没有很多人，只不过这个是4个人一个小船所以前进的比较慢。当时在外面看这个激流勇进的时候没有觉得多惊险，而且有水缓冲我觉得应该还好，谁知道一坐上去就后悔了，因为感觉爬了很久的坡。。。。所以可想而知待会儿冲下来的高度落差也是不小。一边爬坡的时候我一边跟坐在我后面的芝麻兄喊，怎么办啊怎么办啊我后悔啦！这次轮到芝麻兄嘲笑我了，他一边哈哈哈笑着一边说现在晚啦！刚说完就开始一阵俯冲入水。。。心有余悸的睁开眼，发现因为高速俯冲我雨衣的帽子也掉了，所以整个头发都在滴水。。。</p>
+      <p class="text">下来之后芝麻兄摆出一副傲娇脸跟我白活说比起绿巨人来这都不叫事儿，我心里还咚咚咚直跳也懒得理他，灰着一张菜色的脸跟在他后面缓缓向侏罗纪公园那边走。其实说实话也还好，就是忍不住一边走一边不住的嘀咕妈蛋老娘再也不来了。。。</p>
+      <p class="text">刚到侏罗纪公园就发现一个承载着好多人的气垫船从巨大的厂房里冲出来，伴随着大家欢快的叫声。芝麻兄说要不要坐这个？我说好啊！看起来一个船上人这么多，又只有一点坡度，应该挺欢乐的吧。到入口处几乎没有等待就坐上船了，然后，事实证明，我，想，错，了。大部分的坡度都是隐藏在厂房里，所以看到他们俯冲到水面的只是最后的一小段而已。但是总体来讲前半程都还算平稳，大概是建造的比较早，恐龙啊公园啊什么的都是实景，最后几乎要被恐龙吃到嘴里然后一路俯冲下来（妈蛋！）就结束了。</p>
+      
+      <h3 class="subtitle">奥兰多环球影城</h3>
+      <p class="text">至此我们已经玩遍了所有的水上项目，所以就打算直接乘坐霍格沃茨特快到环球影城园区哈利波特那边新开的 对角巷 去看看。此时我和芝麻兄都是饥肠辘辘，于是先在三把扫帚餐厅各自点了一份Fish & Chips，感觉完全不如上次的鸡腿好吃。吃完抹抹嘴巴就来到火车站台，看看等待时间只需要15分钟左右。上次因为只买了冒险岛的票，而没有park to park的门票是不能乘坐霍格沃茨特快的，所以一直觉得很遗憾。每一辆火车的载客率都很高，所以没一会儿就上了车。进去之后发现是8个人一个包厢，各种陈设啊壁灯啊行李架啊都跟电影里一模一样。从霍格沃茨出发到 伦敦 King’s Cross火车站总共也就是几分钟的时间，窗外的屏幕模拟风景显示海格在站台上送行，然后通过禁林，告别一群马人，经过风雨飘摇的原野和远处的城堡等等，最后缓缓经过伦敦的街道，到达国王十字车站。包厢这一边门的玻璃上偶尔会经过哈利、赫敏和罗恩的影子还有对话，就好像他们真的在你身边一样。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1PyO3eStZqNxuVaR4oypKAoQBeDbYxsJQ">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1CNyCqh2gjb9dfqhFxYXJEI1H-p7zKkMd">
+        </div></figure>
+      </div>
+      <p class="text">从车站出来已经是夜色阑珊，引入眼帘的是一副再平凡不过的 伦敦街 景，红色的电话亭，欧式的喷泉，甚至完全复制了街边的地铁站入口。不远处就是哈利波特第三部出现的Knight Bus，当然也有惟妙惟肖的售票员小哥在一边合影。Knight Bus正对面就是对角巷，一开始我们还很疑惑看不到入口，结果发现是隐藏在一面墙后面，跟电影里一样做成了砖墙打开的样子，感觉很有诚意的还原了书和电影里的描写。</p>
+      <p class="text">进来之后我和芝麻兄都震惊了，真正是神还原啊，就想走在电影里一样！不管是对角巷的结构还是两边的店铺展示橱窗里的灯光和商品，都是让人惊喜连连！右手边最先看到的就是韦斯莱兄弟开的笑话商店，当然大门上的巨大木偶也是一直在戴帽脱帽的动，里面骑着单轮的坩埚天平在空中走来走去，同时还原了各种小说里的商品，就连Love Potion也有售！我因为太好奇到底这个是什么，偷偷的打开一小瓶试用的闻了一下，感觉像是香草的香味，看起来是透明的液体，不知道是一种饮料还是香水（如果是饮料的话就太小瓶了，大概不到手掌这么大）？</p>
+      <p class="text">其他的商店也是各种逼真，包括 奥利 凡德魔杖店，卖猫头鹰的商店，书店，魁地奇用品商店等等，虽然大部分实际都是售卖各种哈利波特周边纪念品的，但是不管是橱窗摆设或者室内装潢和装饰，都跟电影里一模一样！太让人兴奋了！比如说书店的橱窗里还有第二部里那个傻教授吉德罗的签名书，封面上就是一副会动的亮瞎眼的傲娇照片。主路的尽头就是歪歪斜斜的古灵阁银行，屋顶盘踞着一条巨龙。因为听说每隔一段时间就会喷火，我心想着晚上看起来肯定更震撼，就一直举着相机等啊等，每次受不了想走的时候都是不甘心的再多等一会儿，结果等了大概半个多小时也没有喷，不知道是那天晚上出了什么问题还是早早把一天的配额喷完了。。。</p>
+      <p class="text">在古灵阁左转就是一家专门卖黄油啤酒的店铺，里面柜台后面的硕大酒桶看起来就让人精神振奋。再往里就是翻倒巷，也就是某次哈利波特误闯的地方。这里到处都是阴森恐怖的气氛，人造天空漆黑一片，温度也立刻低了下来，路边的灯也是昏暗飘摇，感觉一不小心就要熄灭。这里的标志当然是博金博克，电影里的消失柜也安静的立在收银台后面一个小角落里，还有受诅咒的项链等等。翻倒巷里面的另外几家店都是只有橱窗不能进去，不过我也不太想在这么恐怖的地方多呆就是了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1nX442y2WIJlBB5CkvsDt3vGsrxtIFxWw"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ITcz-hUJeIBc4A1MadFjNWuAngWrZH0N"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14Eusep8k-OBnx8qugEDUsiWrGw4SWeB8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1beQZVIc4mtl0rAnb92osTbiqvxGqwMrj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_eer4Wpb0wlAcNZhJ_4iCTd0imz6z_sJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/11g8kYaiZHtrrcodWypG7zcsK2kunYc6w"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Hd6KgZE5lV8HzpvCedSfLMWYgZ_CB_o2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hIr4nGoZk8zHjhDtaERtgR4yx3dAOS4S"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1P9gaYO5FTnSn-J7UzMEt9NcOxCSs81Az"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-HR52XYdxOMwJvid5YOIAXcbUrGJ72tF"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JrPFOBlU5-Hh9gP73PTrYeyfLKm9pfNg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1zk_02viRiY7ZzfLS1OEMb26p4PJg-8Fv"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1zJyeYHzyLx8c0F1CdCCvIyblFwOASsq2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JpMIQ3kl06sxvI8JiqKmaPGJTmbwjPqD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Xl24Nb5N4AZBVxSkta0-Dbvw2_cGYmfo"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1uLN_9R2DT93hXdUFHpbx1HhpGXfazSQR"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UNjKIxt5uDWN3of-IWw_Ay2CrEzWkKe7"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">出来之后感觉身上暖和了一些，看看古灵阁的ride等待时间从刚才的30分钟下降到20分钟，决定先体验一把看看，反正明天后天可以慢慢逛对角巷（其实我们本来就是想来坐这个的，结果一进对角巷就各种被吸引逛起来没完了）。存包后进入古灵阁先是经过妖精们工作的大厅，不必说也是还原了赫敏化装成 贝拉 来偷魂器时的大厅装潢，三盏巨大的水晶灯在半空悬着，映在锃亮的大理石地面上，好一派金碧辉煌。两旁和正前方柜台后面的妖精都在安静的默默工作，偶尔抬起头来看看我们这些排队的人，那神情简直不能让人分辨真假。然后大家分批进入一个巨大的电梯，感觉上是深入地下好多层，出来之后会经过一个给你拍照的地方，紧接着是两边都是办公室门的走廊。当然中间穿插着 比尔 韦斯莱的3D短片，还有一路上各种巫师报纸啊细节陈列的地方。</p>
+      <p class="text">又排了一会儿终于到了入口，跟霍格沃茨那边城堡的ride不同，这边不是四人一个悬挂，而是大概两排每排四人的小车，以两个小车为一组前行。至于ride本身，不知道为什么感觉情节有点拖沓，观看的对话稍多，不少时间都是坐在那里看主人公演，所以出来之后我和芝麻兄感觉都是有点失望。但是很奇怪的是等我们第二天还是第三天又坐了一遍的时候居然感觉比第一次好很多，也很刺激很有料，大概是一开始我们的期待过高了或者太累了才会觉得有些失望的吧。</p>
+      <p class="text">取了包看看表已经是十点多了，心里大惊应该已经要关园了，果然看大家都是呼呼的往外走。对角巷门口的工作人员夹道欢送游客，或古装或巫师的扮相，唱歌跳舞的也颇为有趣。越往外走汇集的出园的人越多，走出大门的时候甚至一度差点被挤散。好不容易回到了车上，因为酒店离得近路线也很顺，大概5分钟就到了。顺利入住之后我和芝麻兄都是意犹未尽，打算明天起个大早继续疯！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1ZKyekMSlH1Km5Iurn4PCjKz0c2dowVW_"></figure>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 2</h2>
+      
+      <h3 class="subtitle">奥兰多环球影城 及 冒险岛</h3>
+      
+      <p class="text">6点40分左右的时候被闹钟叫醒，可能是昨天玩的太晚，这一夜睡得昏天暗地，以至于闹钟响的时候连眼睛都沉的睁不开。想到如果现在不起床就要在环球影城里排队等好久就很有动力了。下楼美美的吃了个早餐，我们就开车向环球影城出发了！</p>
+      <p class="text">虽然整个路程也就3分钟左右，不过经过长长的 city walk 到达环球影城门口的时候已经是7点半了。本来想像上次一样排在队伍前端，谁知已经看到人们陆陆续续进园，心里咯噔一下大喊不好，一路小跑冲进去。进去之后发现在小黄人ride门口的主路上设置了一个关卡，只有住在环球旗下的酒店或者买提前进园的pass之类的才能再进这一道关卡（比正常进园的游客可以提前一小时进入），不然就只能自己在旁边兜兜装转等着8点一到这个关卡撤走。就在我跑去上厕所的功夫小黄人开放排队了，芝麻兄就眼疾手快的先排上了，等我回来的时候发现那个关卡也撤走了，找到了排队的芝麻兄，几乎是马上就进入了《卑鄙的我》电影中Gru的房子。</p>
+      <p class="text">这里提醒大家一下如果早来排队的话最好是能先把小黄人的ride坐了，后面 对角巷 的哈利波特ride虽然很火，但是轮转率比较高，我们只是很偶尔的看到过排队60分钟的时候，大部分时候都是45分钟或者30分钟甚至20分钟，所以不需要一早就冲进去（当然我能理解大家的心情啦，所以昨天我跟布先生才先睹为快了，不然心里痒痒的）。相反小黄人的ride我们全天监控下来等待时间基本都是110分钟，最好的时候也要90分钟，至于要等135分钟的时候我们也看到过，而且基本全天持平，甚至晚上快关园的时候也是要等待100分钟以上。而且小黄人的ride是离大门最近的，一进来就排这个准没错。</p>
+      <p class="text">进入房间之后会看一个动画短片，基本就是告诉你些注意事项然后发3D眼镜，尤其是眼镜如何发明出来的那一段还挺搞笑的。后面会再进入一个房间等待，在这个房间里是个大屏幕上演另一部动画短片，大意就是Gru要把大家都变成小黄人然后进行入职培训。后面的房间就是ride了，像个大剧场一样，但是四人一组坐在小车上，虽然不是像变形金刚那样非常惊险刺激但是也足够 了，感觉还是很符合期待的。主要是小黄人都太萌了！</p>
+      <p class="text">玩完出来还是兴奋不已，旁边就是Rockit的过山车，90度垂直爬坡一路上去然后再速降的那个。看看等待时间只有5分钟，我问芝麻兄要去吗？芝麻兄揉了揉脖子跟我说，我不知道是落枕了还是昨天的过山车晃着脖子了，现在脖子超级痛，今天还是算了吧。后来芝麻兄跟我说其实还有一点原因就是他被第一次的过山车惊到了，第二天要“稍微缓一缓”。哈哈哈哈哈哈！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1AkvGcsDckJCic_w81STIMI-4crbc0PCu"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1J_SFMbEn6eIkpyG0aWUKmpjrkze2HfCk"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1SBfu1M7VdS-xh6LCTanhe92WAs7NANE_"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">于是我们就又一路走到了对角巷，今天有大把的时间可以慢慢逛。白天的对角巷不比夜景更像在电影里，但是好处就是很容易就看到古灵阁上的巨龙喷火，我们逛了一圈大概就能看到两三次。古灵阁右边有个小广场，然后是另一半两边布满商铺的街道，其中就有兑换货币的地方，里面也是妖精在办公服务，游客可以用10美元兑换10金币（貌似是纸币），而这10金币是可以在对角巷等哈利波特园区的商店里当做钱使用的。另外也有店里卖邓布利多给赫敏的那个时空转换项链，感觉真是超级心水！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1f8aZNNXtY9otgBOv8zgk1ZJ2MuGcz9gZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1t1CeOIx22xGcpTpS-3hyX63D573R9_wm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Ou0qlfuvl0CDs4fyNvvrA69hofAc511X"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/11q5b36KoUH3tgSfdMSH0IiJKzcEX2GfS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1kS7abIM6ubQ-Wr2500ESYYYqsMxSPPO3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14GLDqS37QZAsUs4kWAQGOklK8DjbpqIE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1xnk3vA3bWAhW3KSprdfvUWhAX-q4yL1q"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VwPMLdbMZqhCyJYF402iwXquFLETenBr"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1XJOQ42GGXaMhs0tX6IkJ1v00BDa-i7GN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1X9QeuRojtEjCCmMaOh8bHUULZf0LyX8O"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1i-D9FeWcOQZio2ZKI1xX4IQSR26tm5rt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1b-v9g3ps6mtb161Tr8UzDsy3-YyNvF5J"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LIg-Zxl1pLIEz3zj6atLDtBp-7-f2Sri"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Q6asvK97JVI-6_xBVgTv5R8ko0p2fU21"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1jZIO1fl7TeS8I3CSNutp0qum3fIHqK3w"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1NiewxSkfwyA1Z6_bQn11oTqQbdN942Cd"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">本来想看看人少的话再去坐一次古灵阁的ride，结果不巧还要排队40分钟，我们就跟工作人员说了一下只进去大厅拍了照片（前一晚都存包了，进来排队的时候什么也没拍）。然后一路逛出对角巷往左走，就是凤凰社的房子大门在另外两个正常颜色的楼房之间夹着，稍微等一下的话会看到克列切在上面的窗户里掀起一点窗帘偷窥外面。再往逆时针的方向走，本来想去坐的Man in Black不明原因的延迟开放了，所以我们就直接去了辛普森坐ride。本来在加州的环球影城里面已经玩过了，印象很深刻，也觉得好玩，所以一看排队时间只有10分钟就一头扎了进去。</p>
+      <p class="text">事实上没到10分钟就坐上了，可能早上的时候人也比较少吧。继续沿着湖边逆时针走走逛逛就来到儿童园区，体验了一把怀旧的ET外星人。看的出这个项目运行的时间比较久远，整个都是骑着可以飞的自行车在实景中穿梭，虽然感觉项目比较旧，但是听芝麻兄说其他地方的环球影城已经几乎都把这个项目取缔了，这一次就算是怀旧了吧。</p>
+      <p class="text">儿童园区的过山车当然是不能错过！（此处应有布先生隐忍的嘲笑）用芝麻兄的话说，这算是我唯一能够在欢乐范围内承受的过山车了。同时也说明其他的过山车我并不是不能做，只不过人生苦短，既然不enjoy为什么还要花钱找罪受咧？~~</p>
+      <p class="text">从儿童园区出来我一路跟各种雕塑拍各种稀奇古怪的合影，在好莱坞恐怖化妆秀那里停下的时候发现这个show要到中午才开始，所以直接去了旁边看终结者的show。本来地图上写的是ride，结果一进去看到这么多人，我就开始很困惑的怀疑是不是show。芝麻兄还安慰我说不能吧，昨天看到地图上写的确实是ride啊。结果越来越怀疑越来越怀疑，最后我们进入大厅发现确实是个3D和真人相结合的show。。。。而且不知道是不是这个项目成立时间早，感觉整个都好无聊。。。</p>
+      <p class="text">出来之后走了几步就发现又走到了小黄人ride那里，也就是说我们已经在不知不觉中绕园一周了。此时小黄人的等待时间已经变成了130分钟，我心里一边庆幸一边跟这个等待时间的计时牌合了张影，同时我们两个人都暗暗下定决心明天一早还是来坐小黄人的ride以节约时间。</p>
+      <p class="text">小黄人的对面就是史瑞克4D的show，我们之前在 洛杉矶 的环球影城玩过，感觉意思不大，两人一致决定不坐了。再往前走就是一个叫Twister的show，进去之后先看一些短片告诉你《龙卷风》这部电影是怎么制作的，以及龙卷风在真实生活中带来的灾难。然后就是一个小型舞台，模拟龙卷风来临的时候各种电光火石。观众都是站在观众席上看的，所以总体来说我和芝麻兄都感觉非常一般没什么意思。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1XU2ie5bY4WtjTasZ7lvvuVkMFSGfo0Ao"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15HAYf8FXQu581XT6uMV5vr7Ry852dQSA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1yE75G_c-Ka5kaTDVhUkbdm744l8dZeQy"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看看表已经快到中午了，于是我跟芝麻兄就回到了哈利波特园区的对角巷，打算在Leaky Cauldron破釜酒吧吃饭，毕竟都在三把扫帚吃过了，破釜酒吧怎么能错过！</p>
+      <p class="text">进门之后的点餐程序跟三把扫帚一样，但是室内陈设都是还原了破釜酒吧的内饰，尤其是桌子的摆放，有很大一部分就是长条桌摆在一起一路通下来的那一种，细节控的神还原！而且菜单跟三把扫帚的不太一样，我们点了一种下面是各种海鲜上面是土豆泥的pie（这个忘记叫什么了），还有一份Beef, Lamb and Guinness Stew。不得不说两个都超好吃！感觉这边的整体食物水平比三把扫帚高那么一丢丢，即使开始排队看菜单的时候不知道这几道菜里都是什么食物的同学也不要紧，在你点餐的收银台那里还有更详细的菜单，会把每一道菜里面包含什么材料都写清楚，可以花点时间根据那个菜单点。</p>
+      <p class="text">除此之外芝麻兄在点餐的时候很作的问我要不要喝南瓜汁，我仔细考虑了一下觉得既然没尝过到底要不要试试看呢，但是 保险 起见我还是皱了一下眉头说要不算了吧。结果芝麻兄两眼放光的说我想尝尝啊！于是我也经不住诱惑的同意了。幸亏是只点了一大杯，等我们点完单端着这一大杯南瓜汁坐在座位上左拍右拍上拍下拍的玩儿够了之后，我一口下去瞬间就要吐了。然后我隐忍着隐忍着细声细语的跟芝麻兄说，你尝尝吧。然后芝麻兄喝了一口，那表情真是。。。哈哈哈哈哈不能再酸爽！主要不是南瓜汁的问题，是南瓜汁里面加了好多肉桂，那一股浓浓的味道，简直就跟肉桂煮的汤似的。。。我和芝麻兄都表示没这个口福。。。</p>
+      <p class="text">吃饱喝足之后（自那一口之后对于南瓜汁我都是拒绝的），我和芝麻兄又绕着对角巷逛了一圈，主要是拍了几张合影，就进去旁边的Kings Cross车站准备坐霍格沃茨特快到哈利波特城堡那边去了。由于这个车站建的比另一个园的车站晚，所以车站里都是有空调的！这一点我们此时不觉得，可是到下午从霍格沃茨车站返回的时候发现那边车站热的要死，就开始想念这边的美好了。毕竟等车还是需要一段时间，自然是有空调的比较舒服，不然一大群人堵在一起，虽然是在建筑物里面，却也够热的。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1aguFJ0zofnBdHJxdVeSTQYbCtLXpqRgc"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ziZ9cOv5kIY7zbtWEbhyLUx7bUq1AuWg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1SazeNXH0xD2Sc96Q-ZyIOpcpZdke5Ym2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rdJ7-hFT1GCR0Lqj_svEKnJ9YzXw56XD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-3OqEvC6o9gU1-zn_5mkaMG3BRGU-My3"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">早就听说这边的车站有个神奇的景象就是可以看到自己像是电影中描述的一样，穿过9又3/4车站的砖墙然后身影消失，于是一路都注意看着生怕错过。大概走了很久到了一些拐来拐去的地方，就会看到左手边有一个类似门框的东西，门框背后就是9又3/4站台的入口墙壁，不知道是用了全息投影还是别的什么，真的看到大家一个个消失在墙壁中！只不过要是想拍照的话要留一个人在门框前，另一个人往前走一段才能走到墙壁那里，后面排队的人很多，让他们先过也无妨。</p>
+      <p class="text">站台上等了没多久我们就上车了，从 伦敦 开往霍格沃茨的这一趟窗外的风景和回来时有些不同，有海格骑着他那辆状况频出的摩托车从窗口飞过，也会看到罗恩的那辆无人驾驶的汽车在禁林里横冲直撞。包厢门这边会有短暂的时间出现摄魂怪的影子（真的很短的时间，还没等拿出照相机来就结束了），依旧是哈利波特他们的身影来来回回。总的来说感觉依然很不错，很有实感。</p>
+      <p class="text">出了火车站就是冒险岛园区里面的霍格莫德村，感觉对角巷新开了这边也没有少很多人，仍然是人山人海。因为去年来过这里，我和芝麻兄就直接存包去坐霍格沃茨城堡里面的ride了，走的单人通道居然还排了大概半小时的队！</p>
+      <p class="text">下来之后觉得不过瘾，就趁着一次存包的机会又走了单人通道玩了一次（依然是排了很久，不过比起普通队伍来就小巫见大巫了），结果这次下来我和芝麻兄都感到了一丢丢的头晕不舒服，不知道是连着玩了两次的原因还是因为昨天太累又没睡够。取了包我们就往侏罗纪公园那边走，正好天气也阴的厉害，有雾蒙蒙的小水珠打在脸上，我们也有点累有点晕，就决定去Jurassic Park Discovery Center里面休息一下。其实这里面是各种展览，有时候还有活动（比如说工作人员展览恐龙蛋啊什么的，也不知道是真是假），带着小朋友的话逛一逛也是很不错的。可惜我和芝麻兄都没什么兴趣，又困得很，就坐在长凳上休息。期间芝麻兄还因为长凳没有靠背，不爽，看到旁边很多人坐在地上，他也去找了个靠柱子的地方坐到地上去了。。。</p>
+      <p class="text">大概20分钟之后我们觉得充电完毕，可以继续出发了，出门一看发现阳光灿烂，地上却很多积水，应该是刚才有一阵骤雨，幸亏我们进来休整，居然一点也没有赶上。本来要去坐侏罗纪公园上空的那个吊着走的小缆车，结果被告知是给孩子玩的，如果大人要上去的话必须带一个孩子。。。。默默地忍受着芝麻兄内心的嘲笑，只能作罢。顺着逆时针方向走回昨天坐大力水手 漂流 的那个园区，买了心心念念的Dipping Dots冰淇淋。这种一个一个小豆豆似的冰淇淋，可以两种口味混合成一杯，如果买彩虹糖口味的拍出来就会很好看，但是味道很一般，还不如全白色的香蕉味的好吃。</p>
+      <p class="text">芝麻兄对这种卖相好看口感一般的东西完全不感兴趣，所以看到我吃的津津有味，走到英雄园区的时候就按捺不住去买了一个华夫饼做杯托的巨大甜筒。当然，他的这个甜筒我也没少吃嘿嘿嘿。。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1cPaYvI_gVxCEDla2eOMZ0EaC0vGmkqxR"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1KsyN64ujpSl854PKpi-D5qp4mpMCMVFz"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1T-eZXlAvDaKT_VIzQnCxT4nXotgytihE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1NGgaEeQ0nfWoORWEBOWMVOyG78SUBXXj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1sTRnCwsMIOOlYoAp2aMHy66FyfC0YBzD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PKO3cQdqpIGGpmyWZ40GVpeNem07d9vt"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">鉴于我们之前来的时候冒险岛大部分项目已经玩过了，所以都一路走走逛逛没有特意停留。本来想直接坐火车回另一个园区，谁知被告知霍格沃茨特快的等待时间居然要60分钟！于是我们正好掉头回来赶上辛巴达的那一场show，也算是弥补了上次没看成的遗憾。整个剧场是半开放式的，不知道是不是因为外面有点下雨，大家都纷纷进来看表演，结果这个剧场超级能装，观众大概坐满了三分之二的地方，散场的时候完全拥堵。</p>
+      <p class="text">总体来说舞台背景布置得不错，故事有点老套，就是辛巴达救公主，不过表演的都是所谓的武打特技什么的，也算是有趣。散场之后我和芝麻兄匆匆赶到霍格沃茨火车站，此时等待时间变成了40分钟。因为看到地图上说另一个园区下午3-5点的时候小黄人会出来表演，所以想赶紧过去，心想着等就等吧，总比徒步走到另一个园区强啊。</p>
+      <p class="text">于是即便是风扇呼呼的吹着，墙上的小孔喷着轻轻的水雾，整个车站大厅里还是 十分 闷热，此时也显现出在Kings Cross车站的空调是多么重要！等了真真的40分钟才坐上车，跟六个 印度 兄弟姐妹同一个包厢，那滋味，岂一个酸爽了得。。。。不过好在这些印度兄弟都很健谈，又特别幽默，一路笑得肚子痛。其中一个搞笑的兄弟问芝麻兄，这是你女朋友？芝麻兄说，是我老婆。然后这兄弟就眯起眼睛用“我懂我懂”的目光盯着芝麻兄，接着问，合法的？顿时我们就绷不住笑了起来，其他人一副嫌弃他的样子跟我们说，请原谅，我们不认识他，你们可以把他赶下车！</p>
+      <p class="text">回到环球影城的园区我们出了车站就直奔地图上标志的小黄人表演的区域，结果到了那里发现啥也没有，又问了工作人员才知道，原来是芝麻兄看错了说明，不是3点到5点有表演，是3点和5点的时候有表演！看看表还不到4点半，果断走到快到园区门口的那一家大的纪念品店逛了逛，大概不到5点的时候又走回来原地待命。</p>
+      <p class="text">果然5点一到，从对面的大铁门里先是出来一些穿着黄色衣服的工作人员，后面紧跟着载着两个小黄人的mini车（装扮上是一对小黄人夫妇，很搞笑），它们会缓缓转动脖子用贱贱的眼神扫视大家。在后面就是游行用的那种稍大一些的表演车，上面有Gru和他那三个娃，当然还有一群小黄人，大家都跟着音乐跳舞啊表演啊，好不热闹。期间还有一个跳舞的工作人员走过来专门跟我合影了一张，受宠若惊。表演大概就在这个大铁门口的丁字路口这个范围内，并没有走远，唱唱跳跳的10分钟左右就结束啦！之后就是大家排队跟Gru或者其他小黄人们合影了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1afs9vnaYqxxVyXMPPuGonQ6CS1d1-8pN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1abl2RDQmJ40qIWolRzKeO-ONFqcnXEJj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1RKD8cH3yqc_ypbNYxSHOrrcGUKPo_dDY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gTh32h_QCWYoPMpUIlZ-3NueNcYIqiTf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Wy0v9yBSHwB174osE4C8Ev0FJvA2Rb4J"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">我和芝麻兄都兴趣不大所以想直接去找吃的，好赶在晚上7点之前回来看游行。一路逛出园区到了city walk区域，想来想去还是决定去吃Panda Express。长了一个 中国 胃的结果就是两三天没有中餐就会出现以下症状：肚子饿，但是对啥都没胃口。只有看到炒菜和米饭的时候才有胃口，所以也顾不上是美式中餐还是地道中餐，只要好吃就可以。</p>
+      <p class="text">在Panda Express一顿猛吃之后终于觉得活过来了，心满意足的走回环球影城园区，看看时间才不到6点半，于是我说，要不我们去把那个木乃伊玩了吧。结果就是这样的一句话让我在接下来的半个多小时的时间里后悔不已。。。</p>
+      <p class="text">上次去洛杉矶的时候没有坐木乃伊的项目，一是觉得时间有点不够，二是觉得可能会有些恐怖。这次我想了想，反正我也没看过原版电影，很多恐怖的镜头都不明就里，应该不会觉得很吓人。然后我们就存包，排队，等着玩。排队的过程中都是一片昏暗的灯光，飘飘幽幽的影子，还有把手放上去会发出诅咒的镜子什么的，我都没什么恐怖的感觉，因为毕竟没看过原版的电影。就这样我们大概排了20分钟的队，正当我觉得可能现在游行已经开始了的时候，终于排到了我们。</p>
+      <p class="text">坐上车的那一刹那我就心里一抖，不过想想应该都是些木乃伊啊古墓啊什么的吓人场景，就也还算释怀。结果！开出去没几秒我就暗暗叫一声：不好！然后果不其然的就开始各种俯冲失重啊，根本就是在黑暗中的过山车！直接把我吓傻了，紧紧闭着眼睛不敢睁开！心中一万只哔哔哔奔过我就省略5000字不表了！妈蛋早不告诉我这是过山车！我还以为是那种穿过各种恐怖场景的巡游，哪知道这么坑！</p>
+      <p class="text">甩来甩去甩上甩下的我只能一直闭着眼，后来停下了一会儿，我睁开眼一看，到了一个四周全部在喷火的屋子，几乎热的喘不过气来，大概是到了地狱之火什么的场景。然后接着就又开始呼呼的过山车！于是心里暗骂一声接着又闭上了眼，两只手紧紧抓着安全杠不敢松手啊。。。。</p>
+      <p class="text">好不容易结束的时候我整个人都不好了，颤抖着走出了小车车，心里那一万只已经不知道来来回回跑了多少遍的哔哔哔此时还在奔腾着。我和芝麻兄一路走出去的时候我都在嘀嘀咕咕的说靠我后悔死了太坑了啊早知道绝对不进来啊妈蛋啊我要死了啊，并且两只腿都是颤抖的，而芝麻兄一路笑到不行，还问我感觉如何，发现我就只有翻白眼的力气了。</p>
+      <p class="text">走出木乃伊这边还没来得及取包，发现大家已经被拦在马路两旁，说明游行已经开始了。我们拿好相机刚找到位置，恰好游行队伍的先锋正向我们走来。打头的依然是小黄人的车，跟下午看到的一样。而后面海绵宝宝啊兔子啊各种花车一个比一个繁华又五彩斑斓。不得不说我们这次运气超级好，本来看游行已经迟了十多分钟，结果正巧碰上游行队伍刚走到我们这条街，然后又在队伍正中段走到我们面前的时候，他们停下了，开始唱歌跳舞的表演了好长时间，真是好不热闹！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/18Hxi42O7vt9k9CmVK5bZ0XFvcnxj5vIt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1E4mNoH_ZMK2oJWQg0XBbHI78xqKk_DU6"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rgzIDKm-xYU05lOQ1mOBYslFAYYfpIwH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1echJLl-rvaz0Af4l2vP2XxT0V0xn2LuJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15JNgef8mhc3FKkCGNQZo-uP8FnSwT4EL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1qhFTyzmQ5RXspF8qrb9PdvoWukeVF3Kr"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">等表演结束他们再次上车游行的时候，我们等全部队伍通过之后就跟在后面向大门的方向走去，远远看去工作人员横拉着一条丝带慢慢向前走，丝带后面是密密麻麻的游客，跟在嘉年华的花车后面，不明就里的还以为是要举行抗议游行呢。一直走到最后发现花车们再也没有停下表演了，想来也很庆幸刚才自己居然稀里糊涂的就占了一个好位置。</p>
+      <p class="text">趁着大家还在园里流连忘返的时候我和芝麻兄一溜烟跑了出来，直接到停车场取车回酒店，省的待会儿人多了堵车。此时已经是晚上八点多了，天边仅有的一丝光亮也慢慢变暗。掰着指头算一算我和芝麻兄整整在外面浪了快14个小时，除了吃饭的时间基本上不是站着就是在走，现在感觉两只腿都已经不是自己的了。于是一边感慨着自己快散架的身体，一边想不知道该说年轻就是好啊还是该说已经经不起这样折腾了啊，回到酒店赖在床上就沉沉的睡过去了。</p>
+      <p class="text">你就揭我的短吧。。。。</p>
+     
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 3</h2>
+      
+      <h3 class="subtitle">奥兰多环球影城 及 冒险岛</h3>
+
+      <p class="text">同样是一早起床，不过因为今天要退房，就开始急急火火的收拾东西。因为昨天暴走的缘故两个人都是浑身酸痛，不过经过一夜安睡也算是恢复了不少。问芝麻兄今天要不要坐过山车，芝麻兄说要啊来都来了不然就没机会了啊！</p>
+      <p class="text">在这里插播一句，前几天我和芝麻兄后知后觉的听了一首改编自《小苹果》的新年打脸歌，感觉乐得不行不行的，歌词又贱又深入人心，于是就默默的记下了几句，尤其是那一句“昨日重现！”让我俩爆笑半天（在此附上链接： http://www.tudou.com/albumplay/kUAI2Hfh3p8/b-1cuKH0Acw.html ）。另外我们两个都很受不了美帝的某些咖啡和面包 里加 大量肉桂粉的那种味道，就像我们在破釜酒吧喝的那一杯南瓜汁一样，感觉跟肉桂汤似的，真的难以下咽。以上为背景。</p>
+      <p class="text">收拾好东西下楼退房吃早餐。今天早餐的某个gravy超级好吃，里面的香肠碎又香又有嚼劲，感觉单独吃这个gravy都很好吃啊。同时我顺便还拿了一个跟苹果派差不多的果酱面包，芝麻兄看到后问我这是啥，我说果酱面包。然后我第一口下去之后惊恐的看了芝麻兄一眼。芝麻兄说怎么了。我痛苦的嚼了几下把这一口咽了，还没咽完芝麻兄就问，肉桂？顿时我就一边眼含泪光一边猛点头。然后芝麻兄灵光一闪，大喝一声：昨！日！重！现！</p>
+      <p class="text">大概愣了一秒之后我们俩都差点笑得喷出来，想到昨天喝的南瓜汁还真是一模一样的味道！然后就看到餐厅里的大家都奇怪的看着我们这两个低着头趴在桌子上全身颤抖的人，久久不能恢复正常。真心说嘴里含着东西不能呛着还要忍者尽量不笑出声来简直就是一种折磨，到最后整个桌子都跟着我俩颤抖起来。好在是早饭已经吃的差不多了，不然之后每每想到都感觉要笑喷出来。</p>
+      <p class="text">吃完早饭装上行李我们就再一次朝环球影城出发了。今天到达园区门口依然是和昨天差不多的时间，稍稍晚了个10分钟，不过有了昨天的经验，我们就直接站在小黄人的ride门口开始等待排队了。大概5分钟左右我们就进入到Gru的房子里开始看短片坐ride，再次玩过还是觉得很有趣，尤其是那一群小黄人简直太萌了！出来之后往前走就是这两天芝麻兄一直跃跃欲试又鼓不起勇气来的Rockit过山车，90度垂直仰着爬坡然后俯冲，光在旁边看着就要吓死了。芝麻兄一副大义凛然的样子把包甩给我，说：我去了！然后我一拱手说兄台后会有期，就眼睁睁的看着他微笑着走了进去。</p>
+      <p class="text">说实话等待的时间大概连5分钟都不到，就看到芝麻兄已经坐完下来了，依旧是一脸微笑的样子，问他如何？他长舒一口气才说，吓死老子了。接着跟我详细的描述了整个过山车的过程，听得我一头冷汗。不过芝麻兄依旧是很兴奋的说到底是体验过了就不遗憾啦。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1cWhbjBNeQxS2rIa5eJaUAgbLWWuN2lVr"></figure>
+      <p class="text">顺着东西方向走到变形金刚附近，趁着早上人少跟大黄蜂合了影，又进去坐了一遍ride跟着变形金刚打怪，出来之后就去之前一直没机会玩的Men in Black打外星人的游戏。到了之后发现跟昨天早上一样也写着delay，所以我们就又跑去辛普森那里坐了一遍ride。回来的时候刚好赶上Men in Black开门。我个人觉得就是实景巡逻打枪游戏嘛，但是芝麻兄玩的津津有味，大概男生都喜欢这种打怪的游戏吧。</p>
+      <p class="text">之后我们折返到Disaster那里，正好又赶上刚开门，第一批就进去了大厅里。先是跟各种show一样，在观众中找到时候互动的volunteer演员。选了大概6-7个人，进入到下个剧场里的时候会让他们在绿幕前做各种动作，然后通过后期制作变成电影里的经历灾难的场面，比如说跌下大楼啊，被洪水冲走啊什么的。小剧场结束之后会游客们会被带上半开放式的观光车，然后顺着轨道往前开一点到一个类似地铁站的场景里，实景模拟灾难来临时的状态，包括地震啊火灾啊和洪水。跟 洛杉矶 的那个环球影城里的差不多。</p>
+      <p class="text">从这里出来我们就又进去旁边的 对角巷 逛，本来想着大部分园里的项目我们都做过了，买一个有魔力的魔杖玩吧（就是按照说明在某些地方挥动会有特效的那种）。但是想想时间也不多，而且玩的几乎都是小朋友啊于是我挣扎了半天还是没好意思买。芝麻兄极力怂恿我买来着，后来看我下定决心不买了，也是悻悻的不开心。</p>
+      <p class="text">拐到对角巷另一边的时候发现我们错过了一场小舞台表演，问了工作人员说是11点会再开始，于是我和芝麻兄就坐在台阶上等。没一会儿就准备开始了，结果这时候开始淅淅沥沥的下小雨，于是表演的工作人员说，因为下雨这一场可能推迟或者取消啦！我和芝麻兄不死心，打着伞在那里等了一阵子，结果越下越大，看样子这一场是没戏了。好在对角巷的这一边街道都有透明的顶棚，除了边边角角漏雨的地方，站在街上不打伞也没关系。过了一会儿雨几乎停了，我俩一合计，还不如直接去吃饭然后去赶12点整的好莱坞恐怖化妆秀。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1t-DYj70aEOp0JNSzLhbNVKNSMB-QnVPd"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1YUtQAe5ZfbbuPLn_xn6l6_SU4vTxpQDH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1HM53r4oyUgODufuq0NST8pQyHQidgTqq"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/19cbr-H1RfUFI58V0pfsD5KE-kdNvrVpl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1oWLxm8zsYqb_1qQHDtz1nQR6gkYeTifq"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看时间也来不及排队点餐了，直接在半路上找了一家pizza店就进去了，要了三块pizza我吃了一块芝麻兄吃了剩下的，然后匆忙赶到剧场那边恰好在队伍最末尾进去了。坐定之后show就开始了，照例，先从观众里找volunteer协助演出。我呢，一向是不爱这个热闹，更怕麻烦，所以都是能躲多远躲多远。结果主持人就说，我就找那些避免跟我眼神接触的人。我一听，立刻盯着她一刻也不敢放松。后来看到她慢慢走到剧场另一边去了，刚送了一口气，又看她走了回来，指着我说，you, the super cute one, come here!</p>
+      <p class="text">当，时，我，就，震，惊，了。在我脸上的表情僵硬的那几秒钟里主持人一直示意我“对对对就是你快来吧”。我一边心里飞快的想着你这个骗子你不是说找那些avoid eye contact的人吗为啥我都看着你了还找我！一边微笑着慢慢跟她走到了台上。还好是从小就不怎么怯场，此时此刻也只能硬着头皮上了。</p>
+      <p class="text">刚上台，主持人给我握了个手说你好，然后我转头，另一个打扮成不知道是研究员还是博士的胖叔叔也来跟我握手说你好，我一握，他的手就断了鲜血淋漓的从袖子里掉了出来。顿时我嗷的一声就往后跳了一步，然后观众们就笑了。。。。。我觉得主持人就是故意挑那些不愿意上来的人专门吓唬的。。。。</p>
+      <p class="text">然后这个胖博士介绍了电影里那些恐怖化妆用的假断肢，有胳膊有腿，各个都做得很逼真有血有肉，关键是还都让我抱着。于是我抱着七八个血污模糊的断肢被主持人引领到一个也是放着类似假肢的台子前，说你放到这上面就行了。然后正当我把怀里这些不明物体往上放的时候，这堆乱肢中间突然伸出一只活的假肢挥舞！于是我又嗷的一声往后蹿。于是观众又笑了。。。。</p>
+      <p class="text">从此我深深的觉得我整个就是个悲催的受害者。不知道是他们良心发现还是吓人的环节就这么多，他们打算终止吓唬我拿我的胳膊演示电影里是如何拍摄拿刀切胳膊的。为了还原真实度还让我先惊声尖叫一声试试看，我就堵上自己的耳朵好好的尖叫了一回。后面就是让我伸出胳膊他来切，中间有些小机关可以让大家看起来是真的切下去了，再配上血袋什么的就很逼真。切之前我还想着万一那些红颜料擦不掉怎么办，问他们能不能换成左胳膊被切，结果被拒绝了。。。。</p>
+      <p class="text">胖博士一边切一边遥遥的问芝麻兄“你拍照了没？在拍照吗？哦你在录视频啊！那我多切几刀！”然后就是左切右切关键是我还得配合着显得很恐怖的样子真是累觉不爱。切完之后胖博士给大家解释其中的机关，主持人很好心的给我用湿毛巾把胳膊上的红颜料擦得干干净净，终于放我回到座位上了。芝麻兄完全就是一副幸灾乐祸的表情啊喂！</p>
+      <p class="text">之后就是演示那些电影里的狼人啊怪物啊都是怎么话脸妆怎么贴毛发啊什么的。然后又跟我们说现在很先进了把机器套在人的身上，再把线连到狼人的模型身上，模型就会跟着人做动作，都可以控制的。正当我感慨好神奇的时候主持人说要一个volunteer上来带上这套机器看看旁边的狼人模型能不能做一样的动作。还没等我反应过来主持人连想都不想的就又叫了我的名字！！！</p>
+      <p class="text">心里的无奈此时已经不能用人类的语言形容。再次被拖上台，脑袋上带了一个类似于10年前电影里收发脑电波的那种装置，还穿了个通满电线的马甲，被胖博士指示着做些简单的动作。旁边的大型狼人模型就跟着做差不多的动作。正当我再次感慨好神奇的时候他们就不让我玩儿了（期间我还不听指示做了个摸头的动作结果胖博士说动作太快模型反应不过来）。下台之后胖博士把模型惹恼了，然后狼人就追着他跑了。。。。才发现原来他们说的都是假的，明明模型里面有人。。。</p>
+      <p class="text">总而言之这次经历到现在为止已经被芝麻兄笑了半个多月了。。。。</p>
+      <p class="text">从出剧场到一路走一路芝麻兄都在嘿嘿嘿呵呵呵的笑，顺便告诉我他都录下了视频也照了像，以后这些都是我出糗的铁证。我当然已经无语的不知道说什么好，心想着早知道不赶这一场说不定就没这事儿了。。。当然前提是我和芝麻兄都觉得能参与这场show很好玩很有趣，是一次不可多得的经历啊。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1z-aWHLTcfI7ux_Xkmnz2MycugMYluvMf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1l6ujk9tE5Ae1sQeJJPiBUhjLc0q50FUG"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1GPLYTaWnVQ_cDnmTZfuW1mUjazqIMRSQ"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">因为我们要看的下一场show一点半才开始，而且就在哈利波特园边上，所以我们就又晃晃悠悠的来到了对角巷。陪着芝麻兄仔细的逛了一遍阴森的翻倒巷，等到1点的时候赶上了上午我们没看成的小舞台。看了一会儿觉得就是唱歌跳舞好没劲，原以为旁边摆着装博格特的柜子还以为有类似哈利波特他们施魔法让博格特变化的这种表演，结果完全没有。于是我们就直接去了旁边的Fear Factor Live等着看show了。</p>
+      <p class="text">这个show有一点像竞赛类的节目，报名者挑战上一次的冠军，包括体能测试啊爬墙拿钥匙啊开枪打目标啊什么的，感觉那些竞赛项目有点像《碟中谍》简单版。当然中间还有一项极其恶心的就是把各种活虫子打碎成液体找人喝下去。。。。不说了我先去吐一会儿。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1rVFq89zKEEO6Z1Q32qOfO3VecSfXq_ns"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hI6qBkSjXWckVSspOUxSMhkR0JY37-Z4"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OqpTgDy-IpxcmTI-pKAbc_D-cHTYrQ_z"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bFxeD-tWkH3SQKasnqz-IR6Zmhi2IFJZ"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看完这个已经两点多了，我和芝麻兄再次去排队坐小火车到了冒险岛园区的霍格沃茨城堡。刚下火车就发现大雨倾盆，连车站都走不出去。等了一会儿感觉雨小了这么一丢丢，于是我和芝麻兄撑着一把飘摇的雨伞打算去城堡室内再坐一次ride，因为反正芝麻兄想坐的冰龙火龙的过山车因为下雨关闭了。依旧是走单人通道，依旧是排了很久的队，出来的时候发现还是在下雨。无奈我和芝麻兄都憋不住了只能冒雨去上厕所。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1WibTy5YStNv7eJ9dB34jV_oZyv4-2efZ">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Nx2ikzGpWjUGChK_QoMiqJazBKgY98Jf">
+        </div></figure>
+      </div>
+      <p class="text">路过海格的小屋的时候发现很多人已经在门口排队，估计这个小过山车要开了，我们一想大概冰龙火龙也要开了。赶紧取了包芝麻兄就慷慨激昂的进去了，因为这个也要存包所以我拿着包在外面的棚子下面坐着休息等他出来。没一会儿芝麻兄就顶着蒙蒙细雨的水汽一脸兴奋的回来了，说这个比较不难受，是头贴着轨道脚丫子甩出去的那种过山车。我极力怂恿他坐过冰龙再去坐一次火龙，结果他说比较没劲也不愿意留下我一个人在外面等，拉着我往外走。</p>
+      <p class="text">此时已经是接近晚饭的时刻，我们出了冒险岛，想想即将要驱车两小时到Jacksonville入住，决定还是先填饱肚子再说。记得从去年我们到Santa Monica的时候就在 码头栈桥 上看到了Bubba Gump Shrimp这家店，一直想吃，结果几次出去旅行都阴差阳错的因为更好吃的东西错过了。这次正好我们也懒得去找别的，就在City Walk的这一家吃虾去了。因为是阿甘粉所以进去也是各种拍啊喜欢呀，当然这家店味道也是说得过去的不只是卖名堂而已。</p>
+      <p class="text">饱餐一顿之后我和芝麻兄就正式开车离开了奥兰多环球影城和冒险岛区域。从出发开始就一会儿晴一会儿雨，我也是累得透透的迷迷糊糊了一路。快到Jacksonville的时候还专门跑了个麦当劳继续收集我们的小黄人，又去了沃尔玛买了明天的早饭（就是微波食品一些中式炒饭）。大概8点半的时候到了酒店入住，累得不行，洗澡倒头就睡。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1b4E332rs3G1I8jGJYJGmEbp4YCVDbjES"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1pymGKW4YwSD4GQ5Kazb9BZXkd3D2Juav"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_gPPErQdfJmOzMmZciWxkTodLP1qFKdb"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1YXkoJSIVAcRpJQJ7fEkoJrVr7DnFjm_h"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1i63HX8daTq8AeXURQzuq63aQVYu2fuUX"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 4</h2>
+    
+      <h3 class="subtitle">集齐12个小黄人召唤恶魔！</h3>
+      <p class="text">因为只租了4天的车所以下午两点半之前一定要还车，于是早上天还黑着的时候我和芝麻兄就收拾好行李出发了。一路加油吃饭上厕所，每次我们都一定要找有麦当劳的高速口下，就这样一直到回家才只收集到7个小黄人！因为虽然麦当劳不少，但每家店的小黄人不是已经跟我们手里的重复了就是没有了要换新玩具，每次我和芝麻兄都是两眼放光的走进去又灰头土脸的走出来。</p>
+      <p class="text">下午两点多我们赶上了还车的时间，芝麻兄把我送到家里自己就去学校了。我自然是累得妥妥的（虽然开车的全都是芝麻兄，再次手动点赞！），躺在床上什么也不想动。晚饭过后我们想着按麦当劳店员的说法过两天小黄人的活动就结束了，他们会换一批新的玩具，顿时觉得再不集齐就来不及了，于是两个人跟打了鸡血一样又出门了。</p>
+      <p class="text">从晚上快7点到9点一直在麦当劳之间奔波，一晚上跑了10家麦当劳之后又收集到两个跟之前不一样的。这样我们就还差3个小黄人就集齐啦！累到虚脱。。。。回家睡觉。</p>
+      <p class="text">第二天趁着吃午饭的时间我们跑到了离家比较远的一家麦当劳，结果！这里居然有好几种小黄人！关键是我们缺的那3个都有！！！瞬间就集齐了！</p>
+      <p class="text">我和芝麻兄本来都以为今天还要继续跑好多麦当劳，结果真是喜从天降！顿时我俩都有点蒙，嘴都笑得合不上，傻傻的买了两个甜筒算是庆祝（之前吃的太饱，不然一定来吃个套餐庆祝）。在麦当劳买小黄人一个才1刀多，最贵不过两刀，每家麦当劳貌似价格都有微妙的差异。其实虽然从网上买会贵好几倍，但是也没多少钱，主要是自己一路辛苦收集起来的，感觉特别开心。尤其是跑了10家麦当劳的那个晚上，我和芝麻兄一家家找过去，找到了最想要的一个小黄人（网上说橘红色那个会说WTF），牵手从店里出来，晚霞还在天边，微风吹过，感觉别提多幸福了。我想大概一辈子都会记得这个画面吧。</p>
+      <p class="text">至此，我们的奥兰多之旅就以这12个萌萌的小黄人为句号，圆满的结束啦！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1EpxFqTPpIkQcusiLswYv2fRhLLiW1e8t">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1niQbsdukjX_3CWbMXTqbVlmAPZDwueHK">
+        </div></figure>
+      </div>
+      
+
+
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>

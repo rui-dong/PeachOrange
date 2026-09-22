@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1AOQNxrRH6updBw9TlFpJSu3WJ4982MKU") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1>北欧童话旧时光</h1>
+        <p class="cover-description">丹麦哥本哈根/欧登塞</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    <section class="itinerary">
+      <div class="itinerary-header">
+        <h2 class="itinerary-title">行程单</h2>
+        <span class="itinerary-subtitle"></span>
+      </div>
+
+      <ol class="itinerary-list">
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>1</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">哥本哈根 - 欧登塞</h3>
+            <div class="day-route">
+              <span class="route-place">哥本哈根市政厅广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">小美人鱼雕塑</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">吉菲昂喷泉</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">“五角星要塞”卡斯特雷特</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">哥本哈根中央火车站</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">安徒生故居博物馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">欧登塞中央广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Sankt Knuds教堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">安徒生公园</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>2</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">哥本哈根</h3>
+            <div class="day-route">
+              <span class="route-place">新港</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">阿美琳堡王宫</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">“玫瑰堡”罗森堡宫</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">“大理石教堂”腓特烈教堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">克里斯蒂安堡宫</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Ida Davidsen餐厅</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">“自由城”克里斯蒂安尼亚</span>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+      <h2 class="title">准备篇</h2>
+
+      <p class="text">很久没有独自旅行，又赶上瑞安航空 特价机票 飞 哥本哈根 往返不到40欧，于是就圆了自己一个去 丹麦 这个安徒生之乡的童话梦， 签证 也正好赶在 申根 签过期的最后两天用掉。由于芝麻兄这次工作走不开，我自己一个人住也有点心虚，索性订了城区的青旅，算是重温一下当年独自旅行的情怀吧。</p>
+      <p class="text">哥本哈根到 欧登塞 是坐DSB的火车，往返大概70欧，居然比去丹麦的机票还贵（肉疼）！本来做大巴能稍微省一些，但一来是耗时较多，二来上车的车站不在市区，还要坐个火车或地铁才能到，如果早班车的话，我一个女生天不亮来来回回的折腾不太方便，于是作罢，老老实实花钱坐火车去了。至于市内交通，后面有24小时city center pass交通票的详述。</p>
+      <p class="text">哦对了，一个人出游，还背了一个巨沉的三脚架（没摄影师的命却搞了个颇专业的三脚架我也不知道抽什么风），准备给自己拍个照。</p>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第零日 哥本哈根</h2>
+      <p class="text">下午三点到机场准备出发，一路上坐机场大巴坐的快吐了，进了安检去Burgerking 买了吃的准备带上飞机吃，毕竟降落到哥本哈根都已经快晚上8 点了。一路顺利，居然提前15分钟就到了，以至于出来我还在纠结时间充裕是否要去坐地铁。在机场货币兑换的地方换了100欧的丹麦克朗，汇率真心是坑到不能再坑，才6.6，还说换300欧会有5%的折扣。然而此时我还天真的认为先换一点救急也不会坑到哪里去。事实证明幸亏没换300欧，不然第二天要哭死。</p>
+      <p class="text">换完钱想了想，自己一个女生，下了地铁还要走15分钟才能到青旅，安全至上的原则是芝麻兄临走前再三交代给我的，咬咬牙去打了出租车。果然是贵到心在滴血，到市区居然折合35欧左右。。。</p>
+      <p class="text">到了青旅居然找不到入口，问了人才知道原来青旅的前台就在面前这个酒吧的吧台旁边。于是一路穿过各种已经high了或者正在变high的目光，穿过各种红酒啤酒鸡尾酒，穿过花花绿绿的男青年女青年以及搞不清楚是男是女的青年们，来到吧台旁边的小柜台，扯着嗓子才压过了酒吧里的动感音乐，大吼一声“check-in！”</p>
+      <p class="text">从酒吧后门的楼梯上到二楼来到房间，发现其实还是挺正规的一青旅，但Hostel World和 Booking 上近乎9分的评分大概是虚高了。不过鉴于评分大部分还是西方青年们给的，想必单是楼下自营的酒吧以及买酒还能打折这一项，就能加上不少分数。女生四人间，非常干净整洁，还是很满意的，况且今晚貌似只有我一人入住。室内有洗脸池，但厕所和淋浴都要去外面的共用间。</p>
+      <p class="text">洗漱完毕确定了一下明天的行程我就准备睡了，心里还做好了半夜还有人check-in推门进来的准备。尽管中间隔了一层楼，酒吧的音乐和鼓点还是隐约能听见的，除此之外，再无不妥。可能潜意识里还是有些不安，居然断断续续过了半夜才睡着了。</p>
+      
+      <h2 class="title">第一日 哥本哈根-欧登赛-哥本哈根</h2>
+      <p class="text">早上7点半闹钟响起，迷迷糊糊睁开眼环顾了一下四周，果然只有我一个人。闭上眼睛眯了一会儿却是睡不着了，索性起来洗漱收拾好，出门往中央火车站走。</p>
+      <p class="text">不到五分钟就走到了安徒生大街， 市政厅 前面就是安徒生的雕像，经典的姿势被刻到了各种 丹麦 的冰箱贴上（这老爷爷确实不咋好看）。而他隔街望着的，就是号称世界第二古老的趣伏里游乐园。搬出三脚架开始自拍。由于刚好在路口旁边，各种等红灯的车里貌似有不少饶有兴趣的看着我的人。所以还是那句话，要拍出自己美美的照片，脸皮就要够厚。。。</p>
+      <p class="text">安徒生雕像旁边就是 市政厅广场 ，清晨的小雨使得地面到现在还湿湿的闪闪发亮。横穿过马路经过趣伏里游乐园旁边，貌似里面现在也在整修中。再往前一条街就是中央火车站，刚进去就听见鼓号乐声，原来是几个军人的小乐队在演奏，旁边还有摄像师。一曲过后路人纷纷鼓掌，我也意识到要赶紧买车票去了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1VU-heY5a0vlgFeUQDY8i9n0Hq7Dq6bK-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1SDbkLSrfK1jg_WSDoJXwOwOaTk1aBkpO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14AyDBgyfwxcxBFusWw5dthij-lkb9pEL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Smak9el8s0fGSu9qVxIDePr8pIh8htXB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PnQT-eH_PaLHYa2Fo5-XGaF33uDp0TlN"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">好在旁边就是自动售票机，无奈试了两次发现 美国 的信用卡不能用，问了旁边商店的工作人员，得知人工售票窗口还要使劲往后面走。七拐八拐找到售票亭，发现是售票亭和客服结合的办事处，一共两个窗口，还得按照业务类型先取号再排队。眼看着一时半会儿肯定买不上票，突然想起可以去自动售票机上再试试欧洲的储蓄卡，果然能出票，只不过278克朗单程的价格着实让人心疼。然后路过货币兑换窗口看到汇率，想到自己昨晚兑换的汇率，又心疼了一下。拿着车票赶紧去麦当劳买了 汉堡 和热茶，等找到站台，没几分钟火车就来了。</p>
+      <p class="text">火车正点出发一分不差。一路经过田野，经过村庄，经过海峡，时而阳光万丈时而蒙蒙细雨，我坐在窗边，吃完鸡蛋香肠的汉堡，手捧一杯热茶看窗外风景肆意而过，竟然莫名的感慨起来。一个人的旅行，少了些欢闹，却多了一点能让思绪沉淀下来的时间。距离上一次独自出行，已经整整五年的时间了。五年时间如白驹过隙，跳槽、辞职、结婚、生娃。想想过往，掂掂得失，偶尔自嘲，又有些骄傲。独自旅行于我而言，从来都不是找回自己，而是跳脱熟悉的日常，在陌生的环境里对之前一段时光的怀念和思考。如此，然后再次满心欢喜的向前迈进。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1R7J7Q40wqqCr5FTMXOyuGri8jU2kaJ8l"></figure>
+      <p class="text">刚把感慨收拾起来，火车就已经到达了 欧登塞 的站台。从火车站出来，地上画着的一连串暗红色脚印，就是去往 安徒生博物馆 的路线。我在手机上下载了H.C.Aderson Odense的APP，那个安徒生路线地图，大概跟地上的这个脚印的路线就是重合的。之所以说“大概”，就是因为我跟着脚印走着走着，就发现前面被一个建筑工地挡住截断了！</p>
+      <p class="text">大概是趁着春天未到赶紧把路面什么的修一修吧，反正这个建筑工地横亘在了去安徒生故居博古馆的路上，而且围挡颇高，也看不到博物馆在什么位置，只能从地图上看出来应该就在面前，却要绕好大一圈才能过去。按照建筑工地指示绕了一圈，踩了一脚泥水，才来到 安徒生故居博物馆 门前，好在才刚开门，还没几个人。买了95克朗的票，另包含去安徒生童年故居的门票。</p>
+      <p class="text">先到地下一层存好背包，趁着人少在大门口支上三脚架一遍一遍的拍到满意，就进入博物馆开始逛了。整个博物馆不大，只有一层，包括安徒生童话的各国语言版本展示，各种相关收藏，以及安徒生出生的故居和后期住在哥本哈根 新港 的房间陈设再现。能从各个角度了解一下这位闻名世界的童话大师，确实是让人兴趣盎然。除此之外，我还特地在各个版本童话中找到了中文版，顿时觉得亲切了起来。</p>
+      <p class="text">博物馆相连的另外一栋建筑是周末对儿童开放的，孩子们可以在这里装扮成童话里的人物进行场景再现或者故事演绎，可惜我已经完全不符合年龄标准了只能以后带娃再来了哈哈。转回博物馆的礼品店，买了冰箱贴和一本收集了80个故事的《安徒生童话集》，拿回去等娃长大了当礼物吧（暂时由我收藏先）！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1248x0qZXOnPV31MqVRz6vdAvlQgfY_W1"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wYsxbszTgXph0Ecit6DW-TnO5gHfBWie"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LYRMtymAIUYePPxOsdhvW_W_NPSKr3w0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1EwS3fGnb_KuyS1TT-tQZ6EWictByEiVY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UBobK0e8x8Sl1k1yjPd3rMluQT6-7vXf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1CmP5vPihe28CvviFkECACf5om0bjGhtx"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-nWnV1CcuaLmtH45f7Xg0zacTuG0UjSE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ozmLBBoTAc1TRBYfJz7sQYhh7WpX_Gw2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1d3JG7AC-EcXE8PiMviBsupNnausmndQO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wHYVY1qCSKi7VNv_l1Be3RKIv48BOWI-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1YJ_6wfaVTl-Ru_ypsBWAI1gPV2iJa1rh"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UhXTxRniZ1JrL4j24VJgSmMwSFmsVgVE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15q3GyWnT6Hcmtu8C7EFRWPb2bM61Wk7j"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">刚要从安徒生故居博物馆出来，外面就淅淅沥沥下起了一阵急雨，反正我也不赶时间，就坐在门口的长凳上看着窗外小湖被雨水打出层层水花，耐心等雨停。没多久这片乌云飘过了，出门顺着建筑工地的围栏走，发现没办法再顺着APP上的路线去Charity School，索性直接靠着另一边走到了欧登塞 老市政厅 ，前面就是St. Canute's Cathedral。</p>
+      <p class="text">此时已然是阳光灿烂，路灯上还挂着刚才下雨的水滴，在光线的作用下闪闪发亮。逛了一圈又走到教堂后面沿着小路绕到河边，就是 安徒生公园 了。安徒生的雕像也在这里，衬着背后的教堂和蓝天绿草，甚为美妙。其实顺着河走到下游就是安徒生母亲做洗衣妇时的Washing Site，但跟安徒生童年故居不是一个方向，所以就懒得往那边走啦。</p>
+      <p class="text">顺着公园走到头再前进一点，拐回来就是安徒生童年居住的黄色小房子。室内很小，大概只有两三间，还原了当时的家具陈设和一小部分展览。只有一个老奶奶工作人员，跟开心的跟我说今年花园里的花是新种上的，你猜猜是从哪里买的？为了不辜负她的热情，我作苦思冥想状5秒钟说不知道哎。老奶奶更开心的跟我说，我们从皇室的花园里买来的！可好看了！然后我又很兴奋的说是吗啥时候开花啊？她好遗憾的说要等到6月才开，可惜你来早了。于是我不得不又做出“太遗憾了”的表情，说那我就随便逛逛吧。</p>
+      <p class="text">整个安徒生童年故居自始至终只有我一个游客，看来这个时节确实是旅游淡季。按照老奶奶的交代从花园侧门出来再给她锁好门，又走回了老市政厅前面。正在思索想去的地方都去逛了，下一步还要去哪里的时候，又一片乌云上来，瞬时就下起雨了。在街边的小店躲了一会儿，雨过天晴，决定随便在城区逛逛一路走回火车站。</p>
+      <p class="text">走了小半天肯定是饿了，午饭的时间眼看就过了，路上遇到N个写着Thai xxx的牌子，都以为是 泰国 菜，想着去吃个炒粉，结果走进才发现全是 泰式按摩 店。就这样一直走到火车站，饿得不行，索性直接吃了 土耳其 烤肉套餐，量倒是很足，吃不完还兜着走了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1nu9-Min2LYOOXxRESBxDTwNpKTNSKjbP"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1e_PNeZrNi7TItO5tpLQPr6SHO40QXe2E"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VZKJz8wbfaNxxIGuTrkzPoQBHo5Ok_B9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/16OwNJdTSLXNfdhmLOaDPjim9HRxvWCY8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hPAKUpl4QS30Qc5hHfrzlCNeWXRlD4ge"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13tpidF7xsvSDwnnyEYTzrYhd3btn8RKs"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1cUXXVJhJyBcQu16Nrs_g7i1cZ8wdiYQz"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1IUED7k8Lni-_8I1Ca_q-E3A5UbZN266J"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">等了一会儿就直接坐上了回哥本哈根的火车，此时外面又是风又是雨，车厢里那叫一个温暖舒适。打开音乐戴上耳机闭上眼睛，一个多小时之后，火车准时在哥本哈根 中央车站 停靠了。</p>
+      <p class="text">看看手机里的地图， 洛森堡宫 与哥本哈根市区的其他景点距离较远，于是想趁着今天距离日落还有些时间先去逛了，这样明天就只靠步行游览即可。直接从中央车站坐了一站火车到Norreport下车，步行五分钟就是。结果！到门口一看大门紧闭，研究了半天不得其所，还以为走错了门，回头一看门口贴着的开放时间，10AM to 2PM！下午两点就早早关门了！</p>
+      <p class="text">大概是我做攻略的时候没注意，现在自己做攻略越来越懒了，感觉更随性，但也有像这样的突发状况让人很抓狂。没办法只能明天再来了。想想附近也没什么好逛的，就直接到距离青旅最远的小美人鱼雕像和 卡斯特雷特城堡 那边去吧。</p>
+      <p class="text">谁想到，感觉哥本哈根在地图上显示的一个block的大小跟 巴塞罗那 或者 里斯本 那里的根本不一样啊！也可能是以前两个人的缘故，感觉这次走了好久才走了一个block，大概走了一个世纪这么久才到！期间还因为阵雨随便拐进一个超市躲雨，顺便买了晚餐的沙拉和一小盒切好的水果，再加上中午剩下的土耳其烤肉，应该够了。</p>
+      <p class="text">结果后来在地图上看了看也就是走了不到半个小时。当然这是后话了。就在我跋山涉水终于看到St Alban's Church的时候真是有种守得云开见月明的迷之感动。绕过教堂就是 吉菲昂喷泉 ，此时教堂里的钟声敲响了，一声声的居然敲得是简单的乐曲，让人小着实惊喜了一下（虽然不知道是啥乐曲吧，可能人家也是随便敲的）。</p>
+      <p class="text">沿着海岸边的栈道一直走，便是小美人鱼雕像了。幸运的是此时夕阳居然在云层中露出了头，照在小美人鱼身上，也照在她身后波光粼粼的海面上，确有一点童话的感觉。然鹅，此时我又在众目睽睽之下支上了三脚架，不厌其烦的开始自拍。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1lWrnRXzVN05jwKppzVcykBgqBo_TRBXQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-4MOIqRBxryf6oEVeFkVoAHtMnPpJxTZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1p7eVK_S8GNHziH1QiJqaXZu3Vywu-Rwa"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1CuF4QRGflw5-iTtKyboR_2H9qhT-RO2Z"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">等旅行团大巴车走了人少了，我也拍够了，就顺着继续往前走，不一会儿就到卡斯特雷特城堡的入口了。虽然从空中看是个五角星形状的区域，但早就料到地面上完全看不出来，于是也不用纠结直接进去就好。天色渐晚，所以也并没有什么人，问了个跑步的大叔得知另一头能出去，就放心的一路往前逛了。红色的房子在暮色渐沉时分正是耀眼，到出口的地方正好是来时经过的St Alban's Church背后。</p>
+      <p class="text">鉴于来时走路走到虚脱，回程时绝对要坐公交车了。可惜的是小美人鱼雕像附近并没有什么直达青旅的公交线路，又走了一站多的路，才坐上了公交车。由于来时没有买24小时的公交票，只能交单程费用24克朗。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/10McxzDI9w6lURZfd9Q6dtW7OA14Db1kn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Pz7NzJZV0nyyl6cEj_eA8yuZ59Gm7F9b"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/159S3njALs1Ga1noNmvfb-cYTJH4FMTbS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1qD9L581ja5oSaX3aKxXYEDxtTrBl1Oao"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18_RMLoVPAJmN2N_VrisS1d2t81hhBCoV"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1YSmHQwyynUTfET4XEDhyREnXJ7gdbVbe"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">好不容易回到青旅，整个人像是虚脱了一样。四人宿舍的另两张床上已经有人在睡觉，我轻手轻脚爬到床上休息一下，没多久两人醒来，聊天得知是俩 比利时 姑娘，也是赶着廉价航空的机票来玩两天。另外一张床上也放着睡衣，应该也是有人入住了。</p>
+      <p class="text">等两个姑娘出门晚餐的功夫，洗了个澡，然后把买的沙拉水果和中午剩的烤肉拿出来吃了一些，不知道是不是太累的缘故，没吃多少便作罢了。跟芝麻兄视频腻歪了一会儿，刷刷手机看看地图就准备睡了。</p>
+      <p class="text">过了不久朦胧中听到两个比利时姑娘回来了一趟又走了，估计是去楼下泡吧了。前后脚回来的还有另外那张床的姑娘，洗漱了也睡了，我没睁眼所以也不知道长什么样子哪里人。直到大概凌晨三四点那俩姑娘才回来睡觉，我也是略微醒了一下，就又沉沉睡去了。</p>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.如果能确定行程的话，火车票要早订。DSB有个叫Orange Ticket的票种，提前在网上订的话会有比较好的折扣。而且预定后只要带着预订单和订票的银行卡就可以了，不必再在火车站取票或换票，车上查票只要拿出这两样即可。
+        <br>2.中央车站有不少货币兑换窗口，汇率比机场不要好太多啊，机场换欧元6.6，中央车站7.4，良心。
+        <br>3.洛森堡宫开放时间从早上10点到下午2点，周一不开，去的时候看好时间不要像我一样走冤枉路。
+      </div>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第二日 哥本哈根</h2>
+      <p class="text">早上被超大声闹钟惊醒，顿了两秒才意识到不是自己的闹钟！俩 比利时 姑娘昨晚跟我说她们不会早起，想必就是那位未谋面的舍友了。摸出手机来看，才7点30分，闭上眼睛小眯了一下，上铺还是毫无起床之意，想起自己定的闹钟也不过是再过10分钟罢了，于是先起身下床。</p>
+      <p class="text">想到还要进进出出的洗漱，干脆把昨晚就收拾好的行李一并带出去，这样直接去退房出门，尽可能的不打扰其他人睡觉。洗漱完毕存好行李，按照计划出门直接前往 克里斯蒂安堡宫 。才八点多肯定是不开门的，只不过去地铁站会经过，顺便打卡拍个照。地铁站旁边就是麦当劳，进去吃了个热乎乎的早餐。</p>
+      <p class="text">吃完早餐看看距离 洛森堡宫 10点开门还有一段时间，这里又距离 新港 不远，就直接过去了。清晨的新港自然是人烟稀少，平静的湖面衬着两边五彩斑斓的房屋，倒是在这阴霾的天气里让人眼前一亮，想必夏日来更是另一番景色。一路走到安徒生之前住过的新港18号和20号，搬出三脚架在岸边照了个够，就再次走回地铁站准备去洛森堡了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/12Si5PfwcsL4kx-lEbp5QOHKYU0xlx70F"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/111bek_aubX6vaE4QJeQhC4mA_UhfcJ5N"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UclTNE2VxFUFk5XNzL3wgk0aaRgg8XX7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1C03Tish8MX5qxzjSuvST1HdyzeVbivgE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1uPfT3jZnQyumyh9AxSotb-95BStxUqq0"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">之所以一定要做地铁，一是因为青旅本来就没有直达的公交，二是昨天走路走的我肝儿都颤了，吸取教训准备买一张24小时的交通票，随走随坐。然而24小时的交通票只能在地铁站或者机场买，公交车是不出售的。到了地铁站准备买票，需要80克朗，手里一个50的，一个20的，一个10的硬币正好。谁知道自动售票机居然不接受50的硬币？！我也是一脸懵，问了也是排队买票的乘客能否换零，纷纷说换不了。又问打扫卫生的小哥，小哥说哦对对，是不收50的，你想换？咋换？我又一脸懵，说换成零的，小哥摇头说不行不行。我还以为他没零钱，问有人工售票窗口吗？他说没有，但是有小超市。于是我就打算去那边看看。</p>
+      <p class="text">到了超市一问才明白原来不是没零钱，而是这个标着50的硬币是50分，不是50克朗！唉我真是疯了，可怪自己没看清楚，可是20克朗、10克朗、5克朗、2克朗、1克朗，然后看到标着数字50的硬币谁会想到居然不是50克朗呢？！标个0.5也行啊至少让人知道数量级不同。没办法拿着纸币换了零钱，又看到旁边的架子上超漂亮超大的透明球形棒棒糖，顺手买了一个打算带回去给芝麻兄当做小礼物吧！</p>
+      <p class="text">折腾了一通买好票，坐地铁到洛森堡宫，已经陆陆续续不少人来了，买票还要排队等一会儿。三脚架自然是不让带的，买好与阿美琳堡宫的联票145克朗，我先扛着三脚架在院子里拍了一通，又回来存好，才正式开始洛森堡宫的参观。</p>
+      <p class="text">一趟下来果然是没有让人失望，地上三层地下两层，除了众多的卧室客厅书房餐厅起居室，还展有皇室的各种登基宝座以及地下藏宝室中的皇冠和珠宝，大门走廊的墙上还画着皇室的Family Tree。很多物品现在皇室都还在使用，值得好好逛一遭。出来到院子里，早春万物尚未复苏，寒风猛烈，几排小鲜肉士兵正在列队被训话（啊好帅！但没我家芝麻兄帅），为表矜持没有拍正面，只在他们列队离开的时候拍了个背影。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1nLMl00GmJsSZQ2DLJa7ZfHb32GT3E3Hv"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1w6yMdua3C5GorOLxwh_Bjf8_Jcxy63z5"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1W2f6ei9kZr1n0GEvdtC3CNo6pxnKBAMr"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mcx_jhQndp6wnXZsmK5z04St7iWfUONf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JHj1hvG5u4-jIufS6SBSwhjLuK0LQkB-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1P6peKvULFB-PCT1CiWwJS7xUDKJu-pJU"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VMSxa95pniIfqul2-2vUAYhz4klVb3k5"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12IgeZZypqxvFzRJwg2al524O7EP0PzjX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/150FykasvaFKxPbZXAFSoiJxHdPpxtW8E"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Hw935L_O4K5QYmW4iINoq9Vdstf8I9rR"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1QBIZzhgzs1PfEUU6m6QgsuT5q-4t-s42"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/16byPnH6c4Y7DMcp4lO9YWFxHp5oSPjJ2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ndmRJNoY2qAjzVpVKgWWDrDeki3TnB4M"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Y1xOz2v8H-C4RKwwFQvzuomjGbQ28U_R"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1CnlUXjAtjAgkkkzk33UxJ5r94Ix8wupG"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OjuL0om_Ic-UKbE3P6J8RSmhilyF-fl1"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LH2PC6nZyktfBrNe3-zlygeNF2XdENSF"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">从洛森堡宫出来已经是临近中午，走到公交车站刚好悲催的错过一辆，好在间隔只有 十分 钟，也算顺利上车了。两三站就到了下车点，算了算如果直接去吃午餐再去阿美琳堡宫，再回来坐公交要走不少冤枉路，趁着还不饿，先去阿美琳堡宫。下车点距离阿美琳堡宫还有一段距离，只能靠步行了。</p>
+      <p class="text">一路走过去还没看到阿美琳堡宫，倒是先到了 腓特烈教堂 外面。在教堂前自拍的时候有个老爷爷正好在等红灯，伸着头在相机后面逗我笑，于是就有了笑得超级开心的一张自拍。你看，旅途有时候就是被无意中的人和事点亮了。</p>
+      <p class="text">再走到阿美琳堡宫附近的时候远远的就看到好多人围着，还有鼓号队的乐声，突然想起是卫兵换岗！然后人们就看到一个扛着未收起的三脚架呼呼跑的疯姑娘一溜烟朝那个方向过去。好在卫兵也是刚到，让我看到了换岗的全过程，顺便还趁着人群都集中精力在看换岗，赶紧在空旷的广场上咔嚓了几张。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1MDWXT9DAkHW-9Q9Bdh-W6NuL_Bh41lin"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nCPph68uzq5lwABQ8e7SeduHjtPezdk_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wnEyi34U7_3Uvnko2UILT4ZPg2qFOj7x"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1n0H_zORDjRJZFahfMM7bpBHNgmNB_AYg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gA4x9ZrD6oyrsBk0EIYW_BsZF1i-GElY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Qyd-rssqA-E2q0bMxKGk0IGO6QghIiOq"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1uQRW7_EjGaKVS5wSX8Vmq7T5eXh5dDV-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12miKVddR3K86xvJaG9HnbfeQZvwnw-1i"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1RMS9kDxCiOCgXbn7ItkJNTW4dx6liBPc"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1iVrlxm1FethHFY4dCUbd-gxltBAa6YBM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1u8aCHXnrdBIl4g9rp5Pi6U9QlbiU4JAO"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看完卫兵换岗，又看到一队年轻士兵列队离开，不知道今天是什么日子。绕了广场整整一圈才找到阿美琳堡宫入口，存包后进入，一共两层，一层是部分书房客厅，二层是皇室用品展示。开放的房间不多，且大多是用玻璃围着的，所以没用多久就看完了。出门走回到腓特烈 大教堂 ，进去发现没几个游客，日光从圆形穹顶倾泻下来，一旁的管风琴沉默的伫立着，整个空间显得安静而宏伟。</p>
+      <p class="text">在教堂里坐了一会儿出来，已经快下午两点了早就饿得不行，赶紧走到Ida Davidsen准备尝尝 丹麦 出名的开放式三明治。餐厅里没有菜单，全部到柜台看实物点餐。我点了一个烟熏三文鱼三明治和一杯热茶，狼吞虎咽的吃完，发现，不够吃！不知道是不是我太能吃的缘故。。。然后纠结半天，又点了一个烟熏鳗鱼的。。。</p>
+      <p class="text">吃到最后果真是吃不了，好不容易只剩了一口面包算是差不多吃干净了。吃饭期间一直在跟芝麻兄微信，倒也不算无聊。账单拿来的时候真真是心在滴血，两个三明治一个135克朗一个145克朗，再加上35克朗的一杯茶，这一顿算下来我一个人吃了将近40欧（真是不忍回顾）！但是我对灯发誓一个开放式三明治真的不够吃啊！不是我贪吃！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1NxrplpBeOgTRGXmLch2vtKuTQV2s2wnY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1HD2WBvbgxVDhynz_9Qqswt3slqdLo4O-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1aJ5xKCCnf8IbnpPGO50pWHrHUx9YuVlX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1k1IE92mgGICMOxUdvzeSjs9qowpntxIX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1I9iYiHf6qdwj-JIavTOa3y_LlkJm6IEd"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ka5kMfEvigQd6afzhDKSdApM9-qVJBH-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1loC5IQzmdekqxjeLTjnV6ssh5eNX58lH"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">带着这颗支离破碎的心从餐厅出来，想想今天想去的地方也去的差不多了，就是没看到合适的冰箱贴和明信片，所以打算到购物街附近看看。到那很容易的就找到了一家纪念品店也买到了想要的东西，大半天走的很累也不想再逛，就直接坐车回青旅拿行李。</p>
+      <p class="text">回到青旅整理好行李，在大厅的沙发床上好好歇了一会儿，看看地图，发现克里斯蒂娜自由城正好在去机场的路上，反正有24小时交通票，就下车在门口看一眼。谁想到出门坐车不但坐反了方向，又下车再坐，而且还坐过了一站，背着行李呼呼呼的走回来才到自由城门口。虽然人来人往，但我一个女生单独进去还是不太敢，所以也只是在门口看了几眼拍几张照就闪人了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1J_eyY597ZjzZdeijwFk3xTXONMfUn1B_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/11Xtg1ulQbmPFfSDf76Cin3xzyIcCnBzY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/194kMkxTaOlQDfj-BCPtSmYW6molt7pmD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VX-YN1PKxoK-Y0ebpbRaY_1jsuszoOaP"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">折腾到机场已经4点多了（谁想到从T3走到T2还要从航站楼出来走一大段路再进去，而且机场广播声也是在室外回荡），安检大排队，登机口又神远，走到登机口的时候已经快6点了。而且本来想碰到快餐店买点晚餐，结果这个偏远的登机口啥都没有就只有一个7-11的小店面。手里还有大概30克朗的硬币却是买啥都不正好，只能花20克朗买了个鸡肉串又刷卡买了一小盒 意大利 面（里面还有我最讨厌的青椒和白色硬块状奶酪）。</p>
+      <p class="text">让便利店小哥帮忙连上机场wifi，就瘫在椅子上刷微博吃东西了。鸡肉串味道实在太好，没忍住又去买了一根（我再次对灯发誓我吃的真的不多！）。飞机提前一个小时就开始检票了，正点起飞。一下飞机一路小跑满身大汗的扑到芝麻兄怀里，这次初进北欧的童话之旅也就圆满结束啦！</p>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1. 丹麦人普遍英语很好，车站、青旅、餐厅，甚至跑步的老大爷老大妈都一口流利英语，这普及率比 法国 西班牙 不知道好到哪里去！完全不用担心语言问题。
+        <br>2. 开放式三明治其实就是少了一块面包而已，尝一下就行了，不要像我一样可着劲儿当饭吃！
+        <br>3. 很多地铁站没有人工售票台。刷卡普及率很高各处都可以用。
+      </div>
+
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>

@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1ks09it9OvEjThMRVigsHkYLwBsnbihAQ") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1>这一春狂野西部</h1>
+        <p class="cover-description">拉斯维加斯/大峡谷/羚羊谷/波浪谷/黄石/大提顿攻略</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+      <h2 class="title">前言</h2>
+
+      <p class="text">说起芝麻兄这个别称，是有缘由的。</p>
+      <p class="text">怎么说在国内我也算半个女汉子，怎奈美帝的手动推门貌似都很沉，尤其是我们学校的。某次我从学校的gym出来，可能也是刚运动完累了的缘故，推了一下门愣是没推开，脚下一个没刹住，整个脸就撞在了玻璃门上。。。</p>
+      <p class="text">此时芝麻兄就站在我后面见证了所有的一切。</p>
+      <p class="text">于是他一边笑得直不起腰来，一边帮我把门推开。而我还在捂着被撞的鼻子和脸叫疼。</p>
+      <p class="text">自此之后芝麻兄即便是走在我后面也会很绅士的让我在门前等一下他来开门。</p>
+      <p class="text">然后某个夏天，太阳晒上几秒整个皮肤就有微微的灼痛。我从停车场出来一路小跑想赶紧进楼，芝麻兄在我后面几步追我。快跑到楼前的时候我一边大叫着“芝~麻~开~门~”一边拍了一下自动门的按钮，没反应。我愣了。芝麻兄这时跑到我前面一边哈哈哈的嘲笑我一边替我拉开门说，我来当你的芝麻吧。</p>
+      <p class="text">于是芝麻兄就这样形成了。</p>
+      <p class="text">哦顺便说，我真的不是肩不能挑手不能提，当年也是从超市大采购六个袋子自己扛回家的。要说的话，实在是美帝的力量等级较高？某次系里布置会场，三个男学生把橱子搬到墙边，还有几公分愣是推不进去了。然后系里小蜜（其实是个美国老大妈）来了，一巴掌呼进去了。。。呼进去了。。。去了。。。</p>
+      <p class="text">然而说起这次旅行，也是有缘由的。</p>
+      <p class="text">芝麻兄今年要毕业了（Let’s hope so?），所以我们计划着夏末秋初来一次毕业旅行。看看地图，东部几乎走遍，加州一号公路沿线也去过了。一拍手说，去西边那几个国家公园吧！而且早就听说了The Wave波浪谷的大名，网上抽签概率太低，于是决定去现场试试手气。翻开一看才知道，夏天那边多雨道路泥泞，很多情况开小车都是进不去波浪谷的。而我们又不想一路租越野车开，再加上夏天拉斯维加斯要热死，思前想后觉得，要不就提前把这事儿办了吧！</p>
+      <p class="text">于是就各种计划攻略开始了。</p>
+      <p class="text">返程的时候芝麻兄大呼：连毕业旅行都提前预支了，老板你可一定要让我毕业啊啊啊！</p>
+      <p class="text">照例先上图，后面随时补电梯：</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1bRvt91Fd83GIVRV38Of0T5PsfAWAkzvg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1oHlQtvzrNcRCF5fRViPtDJqF4lUj2cOC"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1lWxyQNT8hovs3n6H4Rww_px5ambUvkSx"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LRtEV2P6_j43k7q7377eeWWh3ufo90Ge"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1MBcucDVPZ9yiEeYGzfcw5qvjvsuuf_Gj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rE5TofDDnawGNQQF-90yLjKei6UCMoQE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/16WO_dGCaES8xmt5yvNzwYiJJ0HeY_0Sx"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1dnT-BMmZjtZBu_FLIyTehgUbyGx_pdx8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14COnt9XNjiWVacg8ixjWk-x6UEtDOCI8"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+      <h2 class="title">准备篇：</h2>
+      <p class="text">出门旅行了太多次，不管是自己还是帮别人策划，攻略写过太多都麻木了。这次看看行程，反而是国家公园较多，制定起来尤其简单。况且也想改改之前的作风，从事无巨细到期待惊喜。所以此次旅行虽然决定的比较突然，但是两天之内都订好了所有的机票酒店，行程攻略也在三天后就出炉了。 事实证明这一路真是喜忧参半，本来在家低烧结果一上飞机全好了，波浪谷居然抽中签，临时决定改路线去了 锡安国家公园 甚为惊喜，在 拉斯维加斯 丢了一双鞋，在黄石毁了一个三脚架，又被 租车 公司坑惨。但是每每想起来，都是一个奇妙的故事，我跟芝麻兄哈哈大笑过后，觉得这一路牵手走来真是太好了。</p>
+
+      <h3 class="subtitle">关于机票和酒店</h3>
+      <p class="text">本来想从拉斯维加斯往返，但是因为想去黄石，再开回拉斯维加斯实在太折腾，所以就定了拉斯维加斯出发 盐湖城 回来的路线。从盐湖城返回的票是里程换的，所以两个单程去拉斯维加斯的含税大概是400刀。</p>
+      <p class="text">在拉斯维加斯和其他地方基本都是在 Booking 预订的，外加priceline上bid到两三家。这里就不细说了，因为有专门的攻略教大家如何bid酒店。另外很多攻略都说拉斯维加斯有很多网站是有package的，住店加自助或者看show。大概google浏览了一下，package里的show都不怎么想看（那些传说中极热门的一般都没有），而想吃的那几家自助也不在package里。然后更没想到的是，赶上了Memorial Day的长周末最后一天，各大酒店都呼呼的涨价。于是决定不在strip上住，这样房价便宜一丢丢，反正开车也不怕路远。</p>
+      <p class="text">只有在Kanab的住宿，是第一次尝试 Airbnb 。因为实在是，Kanab太小了啊！在这个只有4400多人的小镇上，虽然酒店也不少，但是因为春季是去波浪谷的好季节，前来抽签的人多，各个Motel的价格早就已经不Motel了，想到花一大笔钱还要凑合着住心里就不爽的很。到 Airbnb 上搜了一下，发现有一家人的房子很不错，独立卧室独立淋浴洗手间，而且还有独立的沙发客厅。到了之后发现整个底层都是归我们用，只有一间工作室可能白天女主人会用一下。但是我们白天都不在家呀，完全没影响。</p>
+      <p class="text">于是我就写私信跟房主说了一下我们的情况，也把自己的作息和性格都介绍了一遍。很快房主就同意了，很高兴的说我们作息时间差不多的呀，都是晚上十点十一点睡，早上七八点起床。看到这里我真是松了一口气，就怕碰见一个折腾到半夜还不睡觉的房主我们真是也不好抱怨啊。</p>
+      <p class="text">至于大峡谷和黄石，因为预定的时候离出发大概只有两周多一点的时间，很明显公园里面的酒店基本都被订满了。没订满的那些也只剩三四百刀一晚的，实在是觉得不太值得。本来还打算露营的，结果一看帐篷不管是买还是租借，比起住店来都没划算多少，而且春末时节很多国家公园因为地理原因还是很冷的，所以就打消了这个念头。</p>
+      <p class="text">仗着年轻，我们把酒店订在了离国家公园大概一小时车程的地方。当然，大家能早下手的还是早下手，离公园近一点的话能省去不少时间和体力。实在不行像我们这样一小时车程也还好。特此感谢芝麻兄的无私奉献，一般我累得睡着的时候他还在聚精会神的在山路上开车，当真是非常辛苦。</p>
+
+      <h3 class="subtitle">关于租车</h3>
+      <p class="text">这个说来有点曲折。在网上订的FOX的车，一切都还顺利。我们都知道异地还车是要收比较高的手续费的，所以按照攻略写了邮件问客服能不能稍微减一点，学生党预算有限。客服很痛快的说给你减50刀吧。当时觉得很幸福。看订单算了下减价后总价大概10天325刀。</p>
+      <p class="text">到拉斯维加斯取车的时候就诡异了，前台看了一下说，你好总价是699刀。我一听眼都直了，说你说什么？他说699刀。我说不可能，我昨天才订的，总价是375刀，加上之前客服跟我说可以减50刀异地还车费，应该是325刀。他很无辜的说可是你看，我这里系统就是699刀啊，包括400刀的异地换车费。我当时真心是冒火了，问他说你们系统跟消费者订车的系统不是一个吗？我这订单都打印出来了，上面都有各项收费和总价啊。他说你看上面说是估算价格。我说你这实际价格比预定价格翻了一倍还多是闹哪样！</p>
+      <p class="text">后来他看了我的订单，说我也不知道为什么会显示不一样的价格，我只能手动给你减掉200刀的异地换车费。我看了看减掉之后还是比我预定的价格高一些，而且关键是因为有个税是基于原价算的，所以即便是他给我减价，还是硬生生单这一项就比原来多了至少30刀。我看总价是400刀左右，还是说不行，这跟我预定的时候还是差很多。前台那个小伙就说，我们没办法了，系统最多只允许每个销售点减掉200刀异地还车费，再减多了系统不允许这样输入。然后不管我怎么抗议，FOX的人都一口咬定系统不允许再减去更多的异地换车费了，但是他们保证说到盐湖城的还车的时候让我把情况说清楚，那边的人会给减价的。我一看表已经耗了半个多小时，加上之前排队等待的时候都快一个半小时了，想说既然如此就到盐湖城那边说吧。然后特地嘱托他们在系统里说明情况，到时候我好跟那边的工作人员讲。FOX的人说没问题都写进去了。然后楼主就交了钱 拿车 了。</p>
+      <p class="text">到最后一天盐湖城还车的时候，FOX的人说，我们不管啊，我们只是提供收据检查车辆的，价格什么的我们一概不管。我说不对啊，拉斯维加斯的人说已经在系统里写清楚了啊，说系统最多只能减200刀异地换车费，让我过来说明情况你们会给我refund啊。结果人家说不可能啊，系统里什么备注也没有，而且我们的系统可以减掉任意价格的费用啊，不受销售点和订单的限制。瞬间我就觉得简直不能再生气！</p>
+      <p class="text">盐湖城的工作人员说你看，合同上就是这个人给你下的单子，你打电话回去投诉或者打客服投诉的时候说这个名字就行。一般还车的时候是没有任何权限改费用的，只负责检查车辆退保证金。于是我还了车，拿着合同，到现在还在跟他们电子邮件“吵架”。。。</p>
+      <p class="text">主要是客服也很二，他说你看之前说好减50刀，可是我看了他们给你下的单子，异地换车费足足减了200刀啊！</p>
+      <p class="text">我说减了200刀还是比我订的原价贵不少啊亲！那是基于400刀的异地换车费减的，不是基于我订的价格减的啊亲！</p>
+      <p class="text">我觉得主要生气的点其实不在于钱，说实话真要是有正当理由我把这多收的80刀送给他们都可以。但是问题在于你不能骗我啊！我是因为相信他们公司，相信工作人员说的话才提的车，要不然价格谈不拢我是无论如何也不会提车的啊！你撒个谎把皮球踢给别人是觉得很成功？</p>
+      <p class="text">所以，楼主的教训告诉大家，即便是在美帝这个大部分地方都很讲诚信的地方，也有少数的情况是很让人糟心的。没有谈拢价格不管他们说的天花乱坠也不要提车！</p>
+
+      <h3 class="subtitle">关于停车</h3>
+      <p class="text">拉斯维加斯的酒店一般都是免费停车，所以大家逛strip或者去吃自助直接把车停在对应的酒店就可以了。只是逛的话建议停在某个酒店，逛周围的三四个酒店，然后开车到远一点的酒店停下，再逛周围的。因为整个strip的酒店逛下来真心好累好累，一路走回初始停车场简直就是折磨。而且每个酒店都停车显然不太现实，有的从酒店停车场走到strip就要好久。。。比如说MGM。一旦在酒店里迷路的话，就要更久更累。。。</p>
+      <p class="text">国家公园都是免费停在公园里面的， 大峡谷南缘 的红线是只能坐接驳车不能 自驾 的，所以把车停在游客中心是个不错的选择。南缘的东半部都可以 自驾 ，在各个观景点停车就可以。锡安国家公园有一半的路线也是只能坐接驳车的，停车在游客中心或者博物馆都可以。黄石和大提顿没有接驳车，只能 自驾 ，在各个观景点停车。</p>
+      <p class="text">盐湖城和 休斯敦 用的是parkme的软件找停车场。一路上总体来讲不像美东的 大城 市难找停车场，一般都很容易就停下车了。</p>
+
+      <h3 class="subtitle">关于行李</h3>
+      <p class="text">看起来此次徒步较多，每人带了双crocs还带了一双运动鞋。拉斯维加斯这么纸醉金迷的世界穿运动鞋不太搭啊，于是楼主自己又带了一双红色的休闲皮鞋。结果忘在了拉斯维加斯的酒店里。。。到现在都还没寄来。。。好担心。。。我好喜欢那双小红鞋啊！今年刚买的啊啊啊啊！</p>
+      <p class="text">衣服简直是带了四季的一点都不夸张。拉斯维加斯每天30多度，到了黄石直接零下。带了短袖短裤裙子长裤长褂毛衣羽绒服。买了两顶运动型的遮阳帽，事实证明这是多么正确！在波浪谷里的时候就靠这帽子遮阳，因为要减轻负重肯定不能带遮阳伞，然而里面又是暴晒。。。还有一个保温杯在黄石这种一旦云彩遮住太阳就冷的要死的地方是多么的让人感动。</p>
+      <p class="text">最后两个人总共托运了一个箱子背了两个小书包。当然也包括我们在这次旅行中英勇就义了的三脚架。</p>
+      <p class="text">妥妥的打印出订单和攻略之后，周日一大早天还没亮我们就奔赴机场了！</p>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第一日 拉斯维加斯</h2>
+
+      <p class="text">四点多就从床上挣扎着爬起来，为了赶上6点的飞机也是蛮拼的。在 华盛顿 有一小时的转机时间，到 达拉斯 维加斯是当地时间10点半左右（实际上飞行加转机大概7个小时）。因为想到时差问题所以带了两个 汉堡 上飞机算是小午餐。在飞机上补了一觉神清气爽，就算之前有微微的低烧这一落地也都好多了，蹦蹦跳跳的准备去FOX提车。</p>
+      <p class="text">虽然这家公司说是在机场有营销点，实际上离着机场真是十万八千里。首先要在机场坐接驳车到机场租车中心，在这个 租车 中心的terminal里有各个 租车 公司的柜台。要是你以为这就到了那就太天真了，预订单上好好的写着，要在这里的taxi候车区域坐FOX的接驳车到他们专属的柜台。于是拉着行李等来另一辆接驳车，然后就跟着车出了机场呼呼地开了至少10分钟才到了不知道在哪里的FOX 租车 中心。下来又是一阵排队，虽然有四个柜台，可是 租车 的人排的队伍已经拐了三拐，每个人又慢的让人心痛，于是在快一个小时之后终于轮到了我们。</p>
+      <p class="text">如前面 租车 部分所述，前台上来告诉我的价格比预定的翻了一倍还多，瞬间震惊了。于是各种摆事实讲道理，周旋砍价，最后FOX坚持说他们能做的都做了，让我到 盐湖城 再退钱。虽然后来事实证明这完全是谎话，但是当时气温30多度屋里空调也不怎么管用，再加上早上没睡够，一路折腾过来在这里已经argue了半个多小时，没力气了，就想着既然没办法了就先拿了车到盐湖城再说吧。多付了几十刀想着反正手里有订单以后还能要回来。我真是太天真了！到现在回来都一周多了客服还没有给我个说法！</p>
+      <p class="text">租车 过程的各种糟心省去5000字不表。除此之外不管是车况还是其他附加收费都很标准，所以一路上都很顺利。</p>
+      <p class="text">去停车场挑车我们主要是注意两个地方，一个是要浅色，因为要走的地方基本都是暴晒，深色的可能会比浅色的稍热一些。第二就是能用USB给手机充电，这样就不怕手机没电啦！最终挑了一辆银色的雪佛兰spark（大概是，我不太记得了），欢欢喜喜的上车向 拉斯维加斯大道 出发啦！</p>
+      <p class="text">十分 钟左右就开到大道附近了，看看表大概快12点了，本来想去MGM先看看然后找吃的，谁想到错过了转到MGM停车场的路口，于是决定直接掉头去The Cosmopolitan吃自助。原本楼主就想在拉斯维加斯好好吃一两顿自助，在网上搜了近两年Top 10的自助餐厅，结合性价比计划在Studio B尝试，结果没想到飞机途中发了两个小本子的coupon，一看是Cosmopolitan酒店的。本来都没打算去这个酒店，可是一看自助居然是Top 10里面的Wicked Spoon！而且还是2 for 1的offer！这样一来就相当于买一赠一了好划算！瞬间决定就是这里了！</p>
+      <p class="text">结果是排队的人真的很多。。。先是排队交钱，又排队等位子。等我们吃上的时候已经快两点了，饿得脸都绿了。当时正好是Weekend Brunch，东西还算是不少，从沙拉到烧烤到甜品都有，如果不是畅饮香槟的话定价是每人40刀（加香槟每人52刀）。所以我们两个人花了40刀吃了个下午饭，真是吃到撑。不过跟周围的人比起来感觉自己特别怂，也可能是早上折腾了一路胃口不好，吃了不到两盘就饱了再也吃不下了。可惜的是Brunch没有蟹腿什么的，所以第一顿没有很惊艳的感觉，顶多就是好评吧。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1QxuAMDwuCexX3d0tnWBLRe583G5fUAve"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1veaqH3RSkZUSYeBncCyaT9m7KOrXRG_p"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1DM0LXTXGst_EUWOyghKTJVJ6ZnL3o4UH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Vc9ZIzspjqy6XJkuRPK5zyNEDNA7Gi6D"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JSV43sHbm1ES9B-K2eIIZT40E4jPgGeo"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1MXJ5N1VoCGo0bMPncO-KbN43SEiWUqnn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1EtQjMfPy-YWMG9ySfBFNiJ_engpDCMyQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Jf5iAbfCdEoDc6n2B3WON7m8OMnaqMVd"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1AdYLOjHw1_8bST1IPe1guN7gmYLsXJQl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1G5KlJbqMKC62CMpqysCpUlTI0h-UCtBA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1NjFua4yNSrgvbXqgRT-Si6-STbuiW1l6"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">吃饱了发现已经3点多，两个人都有点累了，决定先check-in酒店休息一下再回来逛，毕竟拉斯维加斯的夜景很美。开车20分钟到酒店，进了房间洗了个澡一觉睡到6点多。醒来的时候一边想怎么一晃就两个小时过去了呢一边赶紧开回strip上。既然如此就从MGM开始逛起吧！</p>
+      <p class="text">停车到MGM的停车场之后想去传说中的玻璃狮园去看看，结果沿着标识走啊走啊不知道怎么就走到了看show的地方，熙熙攘攘超多人，各种安检各种检票，我们当然是莫名其妙的赶紧退出来了。转了半天也不知道玻璃狮园到底在哪里，于是作罢决定还是走到strip上去逛逛吧。然后。。。穿越整个MGM大厅就用了半个小时。。。其实我们也不知道是不是迷路了，看手机导航感觉是往正确的方向走的，一路上穿过各种赌场，商店，餐厅，大堂，终于精疲力尽的看到了通往strip的玻璃门。出门之后仰天长叹，再也不把车停在MGM了！实在是太远了！！！</p>
+      <p class="text">不得不说Google Map真是太好用了！居然在酒店内部还可以导航！会清晰的显示出内部各处餐厅啊赌场啊走廊和出入口，还能选择想看酒店第几层的地图！</p>
+      <p class="text">走到酒店门口是一个巨大的金色雄狮，开车在路上很远就能看到，尤其是下午的时候太阳光洒在上面金灿灿的好不威武。另一端的大厅里有一个小的米高梅的金色雄狮，是被栅栏圈起来的，貌似有拳击比赛？总而言之这过去的一个小时里我们把酒店内部几乎都走遍了，出门之后通过过街天桥到了对面的 new york new york 。</p>
+      <p class="text">在桥上拍了拍拉斯维加斯大道的夜景，过街天桥正对着就是位于 纽约纽约酒店 内部的好时巧克力专卖店的入口。一进门就会发现各种巧克力产品制成的 自由女神像 ，巧克力豆和好时相关产品。没有细逛直接顺着另一边的过街天桥到了各种城堡造型的石中剑，其实我们的目的是坐这里的接驳小火车到后面的金字塔型的 卢克索酒店 。 卢克索 在石中剑和 mandalay bay 酒店之间，谁知道就三个站点的小火车居然有两条线，而我们就华丽丽的坐错了上了Mandalay Bay Express，也就是从石中剑一直坐到了Mandalay Bay，中间不停卢克索。经过金字塔的我还纳闷怎么都快绕过去了还不停啊，直到看不见金字塔了我才意识到是不是该哭了。</p>
+      <p class="text">下车后欲哭无泪的又坐上另一线路回去的车到了卢克索。近看金字塔和 狮身人面像 真的是非常壮观，虽然知道是仿造的还是禁不住感慨真是厉害。更不用说那一束直冲天际的探照灯光，因为那一夜其实云还比较厚，灯光打在云层上穿过去，感觉更是看不到尽头。金字塔里面是中空的，所有的酒店房间都沿着金字塔内壁，所以整个大堂的吊顶大概是整个strip上我看过最高的了。各种仿古 埃及 石像和文字图画遍布在各处，很有时光倒流的感觉。</p>
+      <p class="text">走到这里即便是3点才吃完午饭的我们也饿了，又不想等着点菜，所以索性就在卢克索里面的food court买了汉堡和薯条解决了。这些酒店的food court除了这些东西很难有什么新花样的说。</p>
+      <p class="text">吃完看看已经不早了，不如说东部时间早就过了半夜，按理说要不是下午睡了一觉现在已经是倒在床上了。说话间就觉得困意袭来，外面也开始有点雨丝。决定第一天还是悠着点不要太累，回酒店休息吧。于是乎走回MGM 拿车 又是一通跋涉好不疲惫。回到酒店飞速洗澡睡觉了。</p>
+
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1j93zSIXLtjBtgR2_BnxUtT3fu3h6cFjd"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1plSFDa4qQn9PDNtJL3xu6z5macAVlmYX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1qvv5R0ofBV2V2YPyeVoWKyXR-Kb6dnW7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1qm9c_z74ETJ1m8qqXFFCHQQjDxRc6tAz"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/105YOvhQGv_f9YYcCle9UIWVx4yL3KziY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1TCytdkSjaDqCkCYhDB2Xa0Xdrf-D5BDl"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.像这种从东部飞到西部有3小时时差的飞行，大家一定带一点吃的上飞机。我们带了两个汉堡，就是那种吃一顿不会很饱，但又不是单纯的零食没多久就会饿的量。因为到了目的地已经是东部时间下午一点多了，早就过了午饭的时间，所以早在飞机上就已经是饥肠辘辘了。但是拉斯维加斯还只是上午10点多，有的午餐还不开，不吃东西等到12点的话会饿死的啊啊啊~
+        <br>2.建议大家看看各个酒店的停车场离strip有多远，比如我们吃饭的Cosmopolitan，停车场在地下，电梯上来一拐就走到了strip上，非常方便。但是MGM是在酒店后面的单独的停车楼，这就意味着要穿过酒店才能走到strip上，而他们酒店又非常大。。。实在是耗费体力。还有像百乐宫那种前面有个巨大的喷水池或者花园的。。。也要走好久。。。
+        <br>3.在拉斯维加斯吃自助，基本上都是大同小异，所以建议大家看食客评价的同时也注意一下性价比。美联航给了我们Cosmopolitan的Coupon，不知道是不是每个飞拉斯维加斯的航班都有，但是必须要说不管从哪里弄来的coupon对于自助餐来说都非！常！划！算！
+        <br>4.在酒店里是可以用google map的！把自己的位置放大再放大就会看到酒店的内部结构，包括赌场啊商店啊餐厅啊走廊和出入口都会清晰的显现出来，还可以选择你现在是在第几层楼，就会出现相应的地图。我们无数次就是这样导航找到酒店出口的！当然酒店内部也有指示牌，但是有的会隔很远才出现一个牌子，到最后根本没力气走过去看。。。
+        <br>5.MGM、 纽约 纽约和石中剑正好是在一个十字路口的三个角上，有过街天桥相连。石中剑和同一条街上的卢克索、Mandalay Bay有接驳小火车相通，但是要注意有两条线，一条是从石中剑出发停靠卢克索和Mandalay Bay的，一条是直接从石中剑到Mandalay Bay的Express。如果想去卢克索的话要看清楚车再坐。
+        <br>6.如果有时差的话不如下午睡上一两个小时。拉斯维加斯夜景确实很美，与其熬到晚上不如给身体充个电，这样晚上也不会很困很难受。酒店一般下午3-4点才能check-in，睡一觉正好起来吃晚饭。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第二日 拉斯维加斯</h2>
+      <p class="text">由于时差的关系早上5点多就醒了，翻来覆去到6点实在是很煎熬，还不如直接起床出去逛。早上的拉斯维加斯很清静，似乎是经历了一夜的狂欢之后繁华褪去的朴素。街上偶尔有打扫卫生的工作人员，或者前天晚上喝high了搀扶着往回走的小伙伴。因为前夜下过雨，地上还有些湿湿的，空气里也弥漫着清新的味道，再加上朝阳的光线柔和，气温宜人，简直是超级美妙的清晨！</p>
+      <p class="text">看看strip的地图决定先从另一头开始逛起，把车停在了 威尼斯人酒店 的停车场里。酒店的整个风格和主要商店街都是仿照 意大利 风，天花板上是人造的天空和光线， 十分 逼真。更不用提小河穿梭其中， 威尼斯 特有的贡多拉船都泊在岸边。我们去的太早，大概不到八点钟，所以整个贡多拉船的项目还没有开始载客。如果是下午或者晚上，是可以花钱让船夫带着漂一圈的。但此情此景，不管是否坐在贡多拉里，清晨昏暗的光线，潺潺的流水，缥缈的音乐声，都让人觉得仿佛真的回到了水城威尼斯，连呼吸都变得浪漫又迷人起来。</p>
+      <p class="text">一路走一路拍，虽然大部分店铺还没开门，只有零星几个面包店散发出温暖的香气，但也足足让我们流连了好一阵子，领略了一番意式风情。从酒店前门出来走到 拉斯维加斯大道 上，就能看见各种仿照威尼斯实景建造的廊桥和广场。对面就是 金银岛酒店 ，以前的海盗大战表演就是在这里举行，不过现在貌似是说没有了。</p>
+      <p class="text">这时候我还在转啊转拍啊拍的，芝麻兄苦着一张脸从相机后伸出头来说，媳妇儿，吃饭吧，我快不行了。我一看表才发现已经八点半多了，对于他这个每天醒来第一件事就是找东西吃的人来说简直是要了命了。本来是说从酒店开到strip的路上买早餐，岂料一路上的subway都还不开门，于是一边心疼他一边赶紧找能吃饭的地方。</p>
+      <p class="text">顺着strip往南走一点是几个连在一起的小赌场，由于是早晨所以只有零星的几个人。我们在这里顺便买了subway把早餐解决了。要说的是那一款Spicy Italian的三明治绝对是我吃过最油的，香肠切片一加热，呼呼的滴油。。。中间省略100字不表。所以我进洗手间局部的洗了一下裙子。。。哭。。。</p>
+      <p class="text">吃完早饭出来正对面就是Mirage酒店，里面的室内花园养着罕见的白虎和白狮，还有巨型水族箱。可惜的是好不容易找到了花园入口，门口贴着说10点半才开。然而我们并不想空等一个多小时，只好悻悻的离开了，准备晚上回来看火山喷发show的时候再说。</p>
+      <p class="text">之后就是火烈鸟酒店，我们一进去就直奔花园了。逛了几个酒店感觉都差不多的结构，一进门就是赌场，接下来就是商店啊什么的。果然这里的花园还是很让人惊艳的，小桥流水，绿树成荫，在很里面的地方还有一个超小的教堂可以让新人举行婚礼。看到网上说这个花园里应该有真的火烈鸟，找了半天也不知道在哪，无奈只好问了一个工作人员，这才找到了火烈鸟的栖息地。说是栖息地，实际上就是池塘里的一块小岛而已，不过上面大大小小停了十几只火烈鸟，粉红色的羽毛在朝阳的照耀下像是淡淡的火焰，超级漂亮！另外小池塘里面还有鸳鸯啊天鹅啊一些鸟禽，都很惹人爱。虽然是早上，但是大家已经三三两两的准备在花园里晒日光浴了，作为怕晒的我们还真是自愧不如只能赶紧撤了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/12WtajyhUOJORy6byZnJxeW1YVmXy0JqZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1sQbZCEQIvlEXmMDwSiEHoNmmOgvUi3D1"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Hh_pglIEi994M-6DONRc6Iv9ytMbW-du"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PBpaVA9Y9Dijr9kfz7qff9EDZ57LfdFj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1X3clZlm5xbAGmAA-pD5WOjYDm-91H0oF"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15k8-piShSIL2LrVKuHmclvTahkB9xZEr"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1KK4oAEgU2R1CLTRCh0Oq9yxAz3y4suId"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nAelHzZe0bUXhWpkKzygs6V_et4tgi5f"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13sVpCc0fKKZPyrlEBeh-74TA05pUezkP"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14xfrmmMFwCQz0suXoegC_TTCUCusUfCQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Ej-ajsoXs-UJCuuEevTCIZJNxlBZfYcs"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nBxijk0hmQkQGaAC9dW7QGV6jrm1B3fA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1dtcOBF-ho-8q554RJmT6oTCRvrpWrURu"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gWRILKqQK8VluH_Bts8eCWr0DvDDfMXn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1R9rVnNhjg9c7qrkL2S400s0lCoKrNsOZ"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">再往前走就是Paris酒店的 巴黎 铁塔，白天感觉没有灯光的装饰不如晚上漂亮。它脚下是个餐厅，露天的餐位早就已经人满为患，因为是Memorial Day长周末的最后一天，大家都赶来吃brunch了。我们没有进去，通过过街天桥直接到了街对面的百丽宫酒店。照样是穿过商店赌场等等才来到大厅，看到了天花板上吊着的那2000多个人工吹制的玻璃花。大堂后面有一个室内的小花园，里面各种彩色的海洋雕塑，贝壳啊章鱼啊美人鱼啊，估计是给小朋友开心的。</p>
+      <p class="text">往回走的时候又路过赌场，有些区域的比较热闹一些，问了一下可不可以拍照，答说可以，但是不可以对着有人游戏的桌子拍。于是这次拉斯维加斯之旅才有了第一张赌场的照片，之前都因为害怕被怀疑帮人作弊所以不敢拍赌场，看样子真是我们想的太多了。汗。</p>
+      <p class="text">这个时候已经快10点了。记得凯撒宫旁边的Forum Shops有失落的亚特兰蒂斯show是从10点开始，于是一路飞奔到Forum Shops。我们要找到Cheesecake Factory，因为show是在这家店前面的。没想到的是进去之后上了二楼，转来转去发现就这么一点点地方，根本没有看到喷水池啊。问了旁边的一个工作人员。他说你绕着边上走一圈（因为二楼中间是个天井状的分布），快转回来的时候直走就到了。听得我们一头雾水。饶了半圈看看前面不就绕回刚才上楼的地方了吗，于是下到一楼找了一圈，未果，又上来二楼。反正现在肯定是已经过了10点了，我们也就不急慢慢找。又问了一个工作人员之后发现，就在快绕回电梯口的地方，两家店中间是个走廊可以一直往前走！而这个走廊在一开始坐电梯上来的时候是看不到的，真心要围着天井走一圈才看的到！哭。。。</p>
+      <p class="text">就这样我们终于走上了康庄大道。这家商场里的很多牌子都非常不错，每家店的环境都很精致，有兴趣的话可以慢慢逛。尤其觉得看过欧洲 中国 美国 的H&M店，我觉得这里面的那一家是装修最好看的。Forum Shops纵深比较远，走了好一会儿才看到这个商店街的尽头，而那个show的喷水池就在那里。走近一看发现有个牌子说show要11点才开始，不知道是不是现在10点那一场取消了，因为实在是很少人。好在周围还有类似 海洋馆 的水族箱，里面各种稀奇古怪的鱼类，够玩一会儿的了。</p>
+      <p class="text">有预感中午可能不会按点吃饭，为了防止饿肚子，我们就找了个卖热狗和pizza的小店简单吃了一点（也不是很饿），果然在这种地方吃饭就不要想成是街边的热狗价格了，一个热狗大概10刀左右。匆匆吃完就是亚特兰蒂斯开场的时间了，喷水池周围聚集了很多人。其实这个show就是个小型的水火声光电的表演，没有真人参与，演出的其实都是同比例的“假人”或者说人偶。评价很一般，估计可能是看过环球影城的那个声光电的show之后，这个真的感觉小巫见大巫。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1CnsJa_x1-MiSmPNXHgCn1sQBPo8hUifs"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gdRORuy6hkSvew_KCNtF7o9YdTdCpPk3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VgEth4aZJjRAokRonSu8a-WtJIas0eip"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gEWYOJjJFcdZai9fktDTmVlWvjmzkJFM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1f2g2F8ldo7mFv-KDS9XBujDFMaa22xyN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gq40SeJS9G5aVAYGspdx1s3kSUshBmGc"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1MJ0bUD3qRhokioKa_G1bPwmiDIMmtFrn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18bi_TtsIyHTQrd2nZFHaIkkGTBp_yNss"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1anD0nepEsRkNcUZMo27PpMmpUNBad9y2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1G0hmFmsVN8IIS6C5_Oop1z9ZF2XHAIzA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1BfoTipIcrZhJElo9Nu5bNgb3NxQ9T0Qc"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/19bJAlpBGM233HBYVmMMCL9Gv86wLGRWG"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">结束后回到威尼斯人拿了车，因为之前看到有个strip的地图上画着Wynn酒店有法拉利的车展，芝麻兄一早就按捺不住一直嚷嚷着要去看。去了之后发现是收费的，门票10刀，车主免费。我们笑说要是车主把车贡献出来展览然而还要花钱看其他人的车才叫郁闷。芝麻兄从门口探着头看了一眼，发现展览并不大，而我又没什么兴趣，决定还是不进去了。不过旁边还有一个法拉利的纪念品店，感兴趣的同学可以找到些心仪的东西。我怂恿芝麻兄买个模型什么的，被他深深的鄙视了，我心想可见他也不是那么狂热的爱好者哈哈。</p>
+      <p class="text">一路沿着strip南下开到MGM旁边的 可口可乐世界 ，因为昨天就看到了半嵌入店墙的巨大透明可乐瓶，里面是商店的电梯。结果从strip上拐到可口可乐真是费了洋劲，因为不知道把车停在哪里，拐了一次拐早了路口，于是掉头重来。又拐了一次，发现是个什么剧场的停车场，貌似是每小时3刀的停车费而且不知道为什么strip上的入口不让进，又掉头重来。后来好不容易拐对了路口，越往里走越觉得熟悉，一拍大腿说这不是通往MGM的停车场吗？！悲剧！发誓再也不停MGM的我们一路开出来，停到了对面 纽约纽约酒店 后面的停车场里。虽然也是要走一段才能到strip上，但是鉴于前一天没有逛New York酒店内部，而且比起MGM来不知道要近多少，所以果断就停车了。</p>
+      <p class="text">纽约纽约酒店跟可口可乐世界和MM巧克力豆世界隔着一条strip，不过我们在马路这边走着发现有个墙上有个很大的招牌叫“百事可乐世界”，瞬间欣喜了一下开始找入口。找了半天只发现招牌下面有个星巴克，进去问了才知道百事可乐只放了个招牌而已，没有具体的店。感觉被坑的我们只好过马路去了那边的可口可乐世界。说是“世界”，其实就是个可口可乐的各种周边和纪念品商店，比起 亚特兰大 那个可以参观工厂的可口可乐世界差远了。旁边就是世界各地都分布着的MM巧克力豆世界，我就依照惯例跟各种巧克力人偶摆一样的pose合影，欢脱的玩了一会儿。</p>
+      <p class="text">在一旁有几家纪念品商店很大，品种也很齐全，满满一墙的冰箱贴简直不要太眼花缭乱啊！这里是买拉斯维加斯纪念品的好地方。我们买了冰箱贴和明信片就打算撤退了，想回酒店休息一下傍晚再出来晃。</p>
+      <p class="text">回去的时候从停车场出来，因为没有走strip上的出口，结果走着走着就不知道走到了什么高速上，一路南开还不能掉头。。。能掉头的时候发现已经往南走了好一段，我说正好那我们回去的路上就顺便去那个“欢迎来到美丽的拉斯维加斯”的标志去照相吧！</p>
+      <p class="text">由于这个标志在路的中间，而且自带一小块停车区域（大概十几个车位），所以正反向的车都可以进入到中间的停车场。不过人络绎不绝，所以可能要稍微等一会儿车位。停下车之后下来发现跟这牌子照相还要排队，瞬间就打退堂鼓，因为正好是下午2点多，实在是太热太晒了。好在队伍不长，大概十几分钟就排到了我们。有两个类似于“兜售拍照”的人充当了“工作人员”，其中有一个人拿自己的相机拍，觉得好或者没带相机的都可以买。另一个人则是无偿帮大家拍合照，毕竟不是每个人都有三脚架嘛。</p>
+      <p class="text">照完相开车回酒店已经是3点半了，因为早上醒得早，就倒在床上眯了一觉，大概不到下午5点的时候起床洗漱出发去吃饭。本来想去Studio B尝试一下，可是它离Strip的主要区域实在太远，从我们酒店开过去至少半小时，想到晚上主要还是在百乐宫和Mirage之间逛就决定还是去Wicked Spoon吃晚餐。事实证明这个决定多么正确！到那边5点多所以根本没有排队就进了餐厅，而且伙食比前一天的brunch真的要好少，至少什么蟹腿啊海鲜铁板烧啊都上来了。足足吃了大概一小时之后心满意足的拎包走人。这一顿由于是晚餐稍微贵一点，但是因为还是用了2 for 1的offer所以一共大概50刀。</p>
+
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1-jCyoQvjctk_dj15TM2lVm_wD8Wm_L9p"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1qFF_AxN9fcBUjOS0X58vasTUqyfy__kK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1DZL7vHa05_p3affeHcfG7dh568IC6bu9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gCW380f8vVTD0a2Qo5Gfe6g5bTSGwB6H"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1IZYHoAS-UQzy8iMPDZn6EOwcr-ZjHGk9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1cT77ZpwUSAz8UG6CptVc6MYDJgFt0_vn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/125kHYh5IMraL_B7rf2TGuRZ963CF4hRn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ljXWfhQ9_vBuSAPI1lrX9rlY1qS_8BN0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13DD0wPa3fKxH4rDTI02N3XavFVUupGcZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_INZgujf9UoK-cdURVEne_SbBl0agcnt"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+      <p class="text">之前的coupon还有一张是每人赠送25刀在赌场使用的，我和芝麻兄本来想吃完饭玩两把，结果挺着吃撑了的肚子出来，是无论如何也坐不下的。当即决定出去溜溜，顺便去旁边的百乐宫看音乐喷泉。此时天色已经渐渐昏暗下来，喷泉里的灯也点亮了，比白天显得更加华丽迷人。不过晚上7点之前貌似都是每隔半小时才喷一次，7点之后就是每15分钟喷一次了。在喷泉边上边拍照边聊天，很快音乐就响起来了，正是我们想听的《Time to Say Goodbye》！因为音乐都是随机的没想到就正好碰上！太开心了！</p>
+      <p class="text">整个歌曲下来感觉喷泉与灯光、旋律结合的完美无瑕，柔美而有力，再加上明天就要离开拉斯维加斯了，而这首曲子正应情应景，不禁心里感慨万千。乐曲结束我还对着湖面发呆，芝麻兄就在旁边看着我，直到我缓过神来看到他对我笑。好温暖。</p>
+      <p class="text">看看表距离Mirage酒店的火山喷发还有将近一个多小时，决定回到Cosmopolitan的赌场把那赠送的两人一共50刀用掉。因为使用是有限制的，凡是有真人发牌的都不可以玩，但是可以玩摇奖的和电子发牌的扑克。我们找到可以使用的机器，坐在前面一通研究。。。不会用。。。笑死。然后又换了两台，琢磨 半天，还是不会。此时我跟芝麻兄又尴尬又好笑，觉得想赌个钱怎么都这么难。后来又换了几次，芝麻兄果断去找了工作人员，被告知你要先花个一两刀赌一次，机器会出一张票，然后用这张票继续玩，就可以使用账户里预充的那25刀了。他跟我说完之后我们都想到刚才两个人满头大汗的在机器前面研究怎么赌钱还赌不了的样子，真心要笑到地上去。</p>
+      <p class="text">然而我们已经在赌场里呆了半天累觉不爱了。看了手表惊呼一声快到8点了！于是飞奔出去赶着到Mirage看火山喷发。不得不说strip真的是太长了！一路小跑还是跑了10分钟还要多，各种穿越人潮左挤右挤，好不容易赶着时间到了，两人都是汗水淋漓。刚站定，show就开始了。随着有力的鼓点，稍大一点的火山和各种小火山相继喷发，与铿锵的节奏配合的天衣无缝，感觉颇为震撼。</p>
+      <p class="text">大概不到几分钟之后火山喷发结束，我们也觉得比跑来的时候凉快了一点。本来还想去downtown看那个灯光show，可是因为在strip上走了一天，已经有点累了。再加上时差还没有完全倒过来，明早又要一早出发，还不如就此回酒店充分休息。可是想到还要一路走回Cosmopolitan 拿车 就觉得真是长途跋涉啊！奉劝各位千万不要小瞧了这条街的长度和各个酒店的规模，逛一天下来绝对会体力透支的。</p>
+      <p class="text">回去的路上又赶上一次音乐喷泉。此时夜幕降临，拉斯维加斯像是活过来一般，人潮涌动，霓虹闪烁，歌舞升平。芝麻兄一直紧紧拉着我的手，生怕被人潮挤散。拥挤的路上人们姿态万千，不管年轻年老都神采奕奕，像是这一天才刚刚开始。远远向 长街 尽头望去，威尼斯廊桥、巴黎铁塔、自由女神这些地标也因为灯光的装点变得生动起来。我们缓缓的往回走，似是向这些繁华告别，又想让这一刻多停留一会儿。赌城不夜，纸醉金迷。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Ur0pWItTV4q0_ZdlzhiJKkBNp-hx4-7w"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UpZ1B-RYm1xIyjlcq--mgLeGYTg6bucQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Cl0Ww-tunjB_5RsziPjFQuGpV4ETc8DM"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.不要低估拉斯维加斯大道的长度！不要低估！不要低估！重要的事情说三遍！
+        <br>2.如果有时间的话 老城区 的灯光秀据说也很好看，一般都是8点开始每整点一次。我们是因为低估了运动量结果耗尽了体力没去成。
+        <br>3.音乐喷泉可以多看几次，因为每次的歌曲和喷泉编排都不一样，每一首都很漂亮。
+        <br>4.如果是Mirage的秘密花园这一类的景点要看好时间，一般10点以前都是不开门的。各酒店里的商店更不要提，很多都是11点或中午以后才开门。当然这也要分是周末还是工作日。
+        <br>5.大道上不只是有各家酒店和昂贵的餐厅，也有很多快餐，酒店里有的也有food court，时间不够或者不想排队吃饭的同学不要担心。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第三日 胡佛水坝、66号公路和大峡谷国家公园</h2>
+      <p class="text">依旧是根据时差早早的醒来，不到7点的时候我们已经收拾完毕打算check-out了。芝麻兄先去车里放行李，我到酒店前台退房卡。不知道是不是因为太早的缘故，前台并没有人，而且也没有可以按铃的地方。于是我把手里拎着打算放在车里随时穿的一双红色小皮鞋放在了地上，打算去找其他的工作人员问问。旁边卖咖啡的小妹跟着我过来看了半天说她也不知道工作人员去了哪里，但是一般是应该有人的，建议我去赌场找保安问问。我屁颠屁颠跑去旁边的赌场找到保安，那大姐大手一指说那不是有人么，我一回头，发现不知道什么时候真的有个大妈在前台了。可是我发誓刚才真的是没有人的！</p>
+      <p class="text">就这样我一路小跑回前台去退房卡，就在我拿着收据核对信息的时候，芝麻兄跑进来急匆匆的说老婆我要去拉屎你等我一下。。。然后就像一阵风似的跑走了。。。核对完账单签了名没一会儿芝麻兄就出来了，脸上的微笑简直如沐春风。我一边嘲笑他一边跟他手拉手出门上车出发了。</p>
+      <p class="text">。。。</p>
+      <p class="text">。。。</p>
+      <p class="text">不知道各位发现什么不对没有。</p>
+      <p class="text">。。。</p>
+      <p class="text">是的！我那双放在前台地上的小红鞋！！！我那双四月份刚买的牛皮小红鞋！</p>
+      <p class="text">然而这是我们快到 大峡谷国家公园 才反应了过来，却不能耗一整天的时间再来一个往返了。这是后话下面详述。先哭一下。</p>
+      <p class="text">继续说我们蹦蹦跳跳的开车在沿途找了个Burger King吃了早饭，甚为满意，因为此时还完全没有丢了小红鞋的阴影。一路南下大概不到一小时就到了胡佛大坝。早就知道说不要沿着开到大坝上，开上去的话看不到大坝全景，要在大坝正对面的桥上才能看到大坝全景。由于我们并不知道要怎么上桥，只知道不要朝着胡佛大坝开就对了，结果从兴奋的喊“看到了看到了”到完全再看不到大坝的踪影，一路上都没有停车点，两个人心里又郁闷又疑惑：说好的观景桥呢？</p>
+      <p class="text">芝麻兄问我，不会不能停只能这样开车路过看一眼吧。我说不能这样吧，网上很多大坝全景照片啊，不可能都是这么呼呼开过去的时候照的。于是芝麻兄下高速，掉头，再上高速，按照去往胡佛大坝的指示牌开了过去。按照指示下高速之后没一会儿就有一个看起来像安检的地方，就是停一下车，保安往里看一眼，问几个问题。我们当然逮住机会问了前面是不是有观景桥？答曰，对。于是开心的想这回总是走对了路。</p>
+      <p class="text">往前开会有一个Memorial Plaza的停车场，里面只有一辆车，一大家子人正从车上下来。我们左看右看只看到停车场周围几个小山坡，觉得应该不是这里，所以继续往前。开着开着就发现离大坝越来越近了，可是都没有停车点。马上就要开到大坝上的时候路边有个停车场，收费10刀，但是不知道是不是因为太早的缘故（大概早上8点），入口处立了个三角牌挡着。我们只能想貌似这个停车场现在不开？于是接着往前开，沿着大坝顶端开了一路到了另一头，发现一个停车场，又是一块牌子挡着入口！鉴于里面也没有车，我们根本分不清是因为太早没有车还是因为不能停所以没有车。而此时能清楚的看到大坝对面的 观景台 ，而且隐约也看得到上面有人头晃动。反正无论如何站在大坝顶上都是看不到大坝整体的，还是先开下去再说吧。往前已经没有路了，我们只能一边困惑一边原路开回来。</p>
+      <p class="text">返回的途中我跟芝麻兄说貌似在经过安检前有个小路说是通往Lake View什么的，芝麻兄说你怎么不早说。于是再次经过安检的区域（不用经过保安，出口是入口旁边单独的一条道），再开一点就有一条小岔路，顺着上去就看到停车场了。我们下来一看这里还有几辆车，也是来观光的。然而并不是胡佛大坝的观景桥，只是大坝造就的人工湖Lake Mead的观景点而已。虽然还是没找到正确的观景桥，但是一下车不禁也是被碧蓝的湖水惊喜了一下。湖中被淹没的几个小岛都只露出一个小角，观景台上有指示图教大家怎么辨认他们。</p>
+      <p class="text">由于实在是在找路的崩溃边缘，芝麻兄直接上前去问了一个游客老爷爷。老爷爷也搞不太清楚，但是讨论了半天我们觉得貌似就是那个Memorial Plaza。可是怎么可能呢！那里只有一个停车场和几个小土坡啊，根本看不到大坝啊！</p>
+      <p class="text">就这样我们带着困惑和最后的希望又过了一次安检。好在此时保安大哥换了一个人，不然我们觉得要被嘲笑死了。依旧是问了观景桥怎么走，答曰，往前走。芝麻兄有点抓狂的问，往前面哪里走？答曰，往前走。我差点一口老血喷出来，抬眼看保安大哥有点不耐烦的房子，心想说那就自己找吧。但是芝麻兄不到黄河不死心，接着问，是那个Memorial Plaza吗？保安看都没看我们一眼，顿了两秒才幽幽的说，yes。然后再也不理我们了。关上车窗后的我们都是累觉不爱。。。</p>
+      <p class="text">于是我们就停在了第一次看到的那个Memorial Plaza的停车场里。此时刚才看到的那一家子人已经回来了，芝麻兄说肯定就是这里了，不然这几个小土坡有什么好玩这么久的。我们沿着阶梯爬上去，发现山坡上是个半开放式的小展览。但是！不要止步！一直往前走就发现突然你就来到了高速公路的边上，再往前走就是那个观景桥！这观景桥其实就是高速公路的人行道而已，但是由于公路比人行道要稍微高一点，而且两边都有半米高的石墙，所以如果人行道上没有人，在公路上开车是很难看到下面有人行道的。</p>
+      <p class="text">此时就已经正对着胡佛大坝了，你可以左拍右拍上拍下拍随便拍，但是只有一点就是要想人物和大坝合影的话需要自拍杆。三脚架什么的就别想了，因为人行道很窄而且外围栅栏比较高，大坝又是在稍低的位置，所以只能举起相机才能拍得到人物合影。</p>
+      <p class="text">这期间我说你看威震天就在下面，芝麻兄一脸鄙夷的说你们能不能不一说起胡佛大坝就说威震天，多俗啊！我很认真的想了想说，胡佛大坝是世界著名的水利工程blabla。。。这时芝麻兄打断我说不不不，我不是说这个，我是想说提起胡佛大坝不应该说是那个能量cube的所在地吗？！那个cube多牛啊！一切都是因为那个cube才有了变形金刚的故事啊！威震天算个毛啊！。。。我顿时满脸黑线的想你嘲笑了我半天原来就是6岁和7岁的区别啊。。。</p>
+      <p class="text">整个在桥上的时间都是被风吹的凌乱不堪，长发啪啪的往脸上呼。我们没有多呆，随便逛逛就回到了停车场，看看表还不如找路的时间长。。。掩面。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/17eLtUjqojXBb9NY1GNo7O3yVP5OSl5Bs"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1SoZmh1P0cxIR3AV5mOSv-N99x_49F6D-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ICInQD68zV_TtFhBxTVGWwTvHFh6XrbR"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">又开车开了大概一个半小时就到了Kingman，著名的 美国 “母亲之路”66号公路就是从这里经过的。整个20世纪30到50年代，66号公路因为人口西迁和西部旅游业的兴盛成为了最繁忙的公路，即便是现在已经废弃不用，很多美国人也以能在66号公路上 自驾 一段而自豪。另外在Kingman这里还有66号公路博物馆和一系列纪念物，以此纪念当年那一段令人难忘的美国历史。</p>
+      <p class="text">刚进Kingman就看到一个非常明亮的超大66号公路的壁画墙，我跟芝麻兄说就是这里就是这里了，然后停下一阵猛拍。拍完之后进去，一位银发老奶奶很缓慢很慈祥很热情的跟我们介绍了这里不是66号公路博物馆，博物馆在不远的另外一条街上，但是这里跟博物馆和另外一个纪念建筑是可以买联票的，你可以参观这个这个还有那个那个blablablabla。。。我们认真的听完了，抬头看了一眼，一共就一个房间的展览。。。于是抱歉的说，还是算了吧。。。然后又更抱歉的说，可以用一下洗手间吗。。。</p>
+      <p class="text">出来之后我们决定到那个66号公路博物馆看看，顺便想买点纪念品，毕竟要沿着过去的66号公路一路开到Williams。博物馆和游客中心还有一个纪念品商店都建在一个不大的厂房状的建筑里，果不其然进去之后发现博物馆也真的不大。随便逛了逛买了个冰箱贴我们就出来直奔沃尔玛进货了，因为未来两三天可能都没有大型的超市，再加上可能路上开车的时间相对较多，所以先把瓶装水、零食和各种水果备齐。午饭就在沃尔玛旁边的Panda Express解决了。这是我第一次吃传说中的Panda Express啊！久闻各种吐槽，之前去过的城市也有，可是机缘巧合总是有更好吃的东西在诱惑我，这次终于选择了它！没有吐槽中说的那么难吃，甚至还觉得真心不错啊，可能也是因为已经吃了两三天美式食物的关系，即便是看到伪中餐也是分外亲切。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1DQZZrVCIg0sBRcx3EngiOI9VIMr-lZuh">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1S9FFocaLuBTDdtm7Up5bw49CDpUjLnxi">
+        </div></figure>
+      </div>
+      <p class="text">然后直接上路沿着66号公路奔赴大峡谷国家公园南缘。晚上的住宿我们订在了Williams，就是离大峡谷南边入口大概一个小时车程的地方，所以其实下午是会先路过的。之所以订在这里是因为我们大概提前两周才确定行程，国家公园里面的lodge基本都订满了，还剩的不多几间和公园入口的小镇Tusayan的酒店都贵到觉得性价比实在不高。仗着我们还年轻不怕累就稍微往远处订了一点。但是要吐槽的就是从Tusayan到Williams这一个小时车程的路上居然都没有住的地方！所以只要不在Tusayan订酒店，基本就只能开一个小时到Williams了。</p>
+      <p class="text">从Kingman向东开到Williams，我们没有停直接向北拐上了64号公路。这里有个小插曲就是本来说先去Williams的酒店Check-in把行李放下然后上个厕所再走，然而一犯懒就说要不直接走吧。拐到64号公路的那个出口说前方有加油站，我们就想在加油站上厕所好了。然后。。。。开了8英里才看到一个加油站。。。我和芝麻兄都快憋死了。。。</p>
+      <p class="text">所以要告诉大家的就是从64号公路往北这一段大部分都是没有加油站没有出口没有酒店的，要上厕所的话提前解决。大概在这条路上开了半小时左右我突然意识到我的小红鞋呢？</p>
+      <p class="text">说实话我不太记得我是拿到车上了还是落在 拉斯维加斯 酒店了。我清晰的记得我把它放在了酒店前台的地上，但是不记得拿到车上还是没拿。于是一阵翻腾，没找到。心里开始有点慌。芝麻兄赶紧把车停在路边，我们两人下车把后备箱和前座都翻了个底朝天，还是没找到。顿时我觉得天都塌了，这可是我一个月之前刚从国内买的啊！为数不多的超级和我心意的鞋！美国哪有这么好看的平价鞋啊想买都买不到！心里一边骂自己一边觉得可惜，眼泪就不禁在眼眶里打转了。</p>
+      <p class="text">芝麻兄一看这架势不好，立刻安慰我说没关系我现在打电话回去，说不定他们能找到呢。因为当时已经是山里，手机信号不太好，费了半天事才打通，跟前台说明情况以后那边说确实捡到了一双鞋，瞬间我就觉得天又不塌了！芝麻兄解释了我们现在已经回不去了，可不可以给我们寄回家里去。酒店核对了物品的细节，确定是我们的没错，然后又核对了ID和邮寄地址，说没问题可以寄回去。此时我就差点欢呼出来了！</p>
+      <p class="text">在此提醒大家即便是已经收拾完东西退房，也千万注意不要落下东西在酒店大堂里。一般酒店都是很有信用的，但也不排除落在房间里的东西可能会被清洁人员黑了（我以前在欧洲就有过一次），而落在大堂里更是人来人往可能会被任何人拿走。我的鞋算是幸运了，可能真的是因为太早没什么人吧。酒店邮寄也只会邮寄到美国地址，国际邮寄是不可以的，从国内来的朋友除非你寄到美国的地址再转寄到国内，不然酒店不给寄（其实真要国际邮寄的话包裹费可能就够再买一双了）。</p>
+      <p class="text">总而言之这个问题是解决了，于是继续欢脱的开往大峡谷国家公园。在公园入口买了美国国家公园年票80刀，想到这一路还要再去几个公园，省的麻烦。入口处给了一张公园地图和报纸，之后还要开不短时间才到了Grand Canyan Visitor Center，从这里开始 大峡谷南缘 被分为了东部和西部两部分。由于明天我们会再次在南门进东门出，而东部大部分都是可以驾车的路线，所以今天的这半天我们就打算游览南缘的西半部。</p>
+      <p class="text">西半部几乎一半以上的观景点是不能 自驾 前往的，需要坐公园内部的接驳车。因为我们到的时候已经是下午两点左右了，游客中心前面的大停车场早就没有空位了。幸运的是陆陆续续有车出来，所以等了一会儿还是等到了一个车位。其实大家可以不用专门停在Grand Canyan Visitor Center，在往西一点Grand Canyan Village那边有很多lodge和餐厅，也有很多大停车场，可以直接停在那边。我们是因为想去游客中心了解一下公园的具体信息，所以赶着停在这里了，如果觉得手里的地图和报纸信息足够，是可以完全不来游客中心的。</p>
+      <p class="text">在这里说一下接驳车的线路。以Grand Canyan Visitor Center为中心，一共有四条线路，橙线是唯一通往东边一点的路线，红线则在最西部运行，蓝线在游客中心和Grand Canyan Village的酒店和餐厅间运行，紫线连接游客中心和公园南边的Tusayan小镇。如果是 自驾 ，只能到达图中黑色实线的部分，也就是说到达蓝线、橙线和紫线的大部分地方。其中蓝线、橙线和紫线都经过游客中心，但是西部的大部分景点都在不与游客中心相交，也不能 自驾 的红线沿线。结合下图可以对这些接驳车的线路有个大概的认识，详情请戳链接看大图： http://www.nps.gov/grca/learn/news/upload/SRsummer2015_guidemap.pdf</p>
+      <p class="text">还有就是要注意每个点都有标注接驳车的方向箭头，这是因为往返的接驳车并不是每一站都停，有双向箭头的表明去程和回程都会在此站停靠，如果只有单向箭头就说明此站只有一个方向的车，如果要回程的话，需要继续前进到一个可以坐回程方向接驳车的站才行。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1ZFuwsfsBJYyfS07WsLsPxwxuh4UizWHY"></figure>
+      <p class="text">在游客中心停车之后我们收拾好行装，涂好防晒，打算先到Grand Canyan Visitor Center里面去看看。进去之后会发现像是一个半开放的小展览，在这里你会看到很多关于大峡谷的地质形成和演变的知识。还有一个电影放映厅，循环播放关于大峡谷的介绍宣传片。因为正好赶上快开始，我们就坐下来一直看完。画面非常漂亮，再加上芝麻兄来之前几乎是对大峡谷一无所知，看完一直说感觉很震撼。</p>
+      <p class="text">出来游客中心就是接驳车的中转站，很大的一块区域，上面都有牌子画着这是哪条线的站点，在相应的地方等就可以。我们需要先坐蓝线到最 西端 的站，然后倒红线游览。大概是每辆车发车都有时间，我们坐在车上等了三五分钟，快出发的时候司机站起来在车厢里大声说，后面还有一班蓝线是Express，就是从游客中心这里直接到达蓝线最西端的转乘站，中间不停靠，在那里可以转红线。所以如果是要坐红线的人可以到后面那一辆车上去。</p>
+      <p class="text">我们一听当然是立刻下车去后面的车，因为中间还要经过好多站，后面这辆不停中间站按理说应该比前面那辆快不少。事实证明是个错误的决策，因为后面这辆蓝车还等了几分钟才出发，到达红线转乘站的时间还不如前面那辆快。然后就因为晚到了一点我们眼睁睁的看着前面那辆红线出发了没赶上。。。</p>
+      <p class="text">不过大家不用担心，这些接驳车周转都很快，每隔几分钟就一班。趁着等车的间隙我们在栏杆边真正第一次的见到了大峡谷的样子，虽然下午的光线还很强烈，不过也是颇为壮观。不一会儿红车就来了，因为很多人转乘所以几乎是全车都满了。芝麻兄后来跟我说很多在这里见到的人之后在Page的 马蹄湾 和羚羊谷都又见到了。大家还真是有缘呀。</p>
+      <p class="text">坐红线到最西端的Hermits Rest的时候已经快4点了。我们在这里逛了小纪念品商店，因为可能会留在大峡谷 看日落 ，不知道几点才能吃上晚饭，我们打算买点吃的。可惜这里的小卖部的巧克力能量棒卖没了，只能买了两个甜死人的曲奇饼干。沿途一边走一边欣赏着大峡谷的奇景，整个谷顶像是被拦腰截断一般平整，广阔无垠的视野范围内一道道裂缝穿梭在岩壁中间。虽然还看不到从谷底流过的科罗拉多河，但是经过漫长年代冲刷侵蚀，岩壁上一层一层不同色彩的地质结构清晰可见，难怪地质学家对它如此着迷，世界上没有任何其他地方能像大峡谷一样清晰地反映出地球表面的演变，也因此说它是“活的地质历史教科书”。</p>
+      <p class="text">之后坐回程的车到Powell Point，这里的有两个观景点，一个稍微高一点，一个是往前探出去的，因此也是拍全景的好地方。这时候风已经很厉害了，偶尔云彩把太阳遮住就感觉有点冷。芝麻兄此时已经把他的那一块曲奇饼干吃完了。我躲在通往其中一个观景点的楼梯背风处把外套穿上，还是觉得有丝丝的凉意。顺着trail往西走大概500米就到了Hopi Point，这里也是看日落的好地方。看看表还有大概一个小时才日落，我跟芝麻兄的意见产生了分歧。他要等着看日落，而我虽然也想看，但是觉得看完日落就快八点了，一路开车回宾馆不知道还要多久不值得。最终因为心里不想留遗憾还是留下来打算看日落，然后拿出我的那一块曲奇饼吃了一半，怕待会儿芝麻兄饿，就悄悄的收起另一半打算给他吃。</p>
+      <p class="text">随着时间的过去这里聚集的人也越来越多，一个人长枪短炮的也有，整个旅行团都来的也有。我跟芝麻兄站定位置就不打算离开，看这架势待会儿说不定就里三层外三层都是人了。太阳一点点的落下去，温度也越来越低，再加上大风一刮，即便是我又披上了一件披巾还是觉得不暖和。芝麻兄也是觉得有点冷，开始担心经过这一夜两个人万一感冒了之后的旅程可怎么办。于是决定背对着峡谷他从我身后抱着我取暖。不是矫情也不是秀恩爱，真心说因为受风面积减小了，这样一来绝对暖和了许多，我的双手双脚终于由冰凉慢慢变温暖。看着光线不错的时候我就转过身去赶紧咔嚓咔嚓几张，然后迅速回来继续抱着。才不到半分钟的功夫我刚暖过来的双手就又冰凉了，可见这冷风有多厉害。如果要看日落的同学不管什么天气最好都能带件厚点的衣服，尤其是帽子很重要，有时候气温不一定很低，就是那大风吹得实在是很冷！</p>
+      <p class="text">终于太阳沉沉的落下去，岩壁的顶端变得红彤彤的，而整个峡谷都浸润在暖暖的橙色光线中，充满了迷幻的光芒。带着凉意的风不断的从峡谷尽头吹过来，似乎是用尽力气献上夜晚来临前最后的喧嚣。有一对老年夫妻坐在我们后面高一点的石壁上，我跟芝麻兄背对着峡谷取暖的时候看到他们手拉着手看着远方的落日，那光线映在他们平静的脸上简直像是时光静止了一般，有种震撼人心的力量。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1FO1ZgGz1CBypE1JeVZlZvS27Jz-J3XsH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14u2jIBu0pmo-CvEvk7x7vFcuwD0lYLMe"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1kZSJ87lNiqdAAAx653kcoqWDra_VV7nI"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1H3QE_1T9la9lAz3cw2oNekCwHKPrSqTy"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14ECg3IeCJ9BJ4dMNrAqdfZWndt8JNcl3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-AIVEI3oFoCwy50KdQnqiL0er413Ix3N"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">待到光线变得昏暗，人们也开始纷纷离开观景台准备返回。虽然Hopi Point本来只有单向的接驳车，但是因为看日落的人太多，所以公园一般都会方便大家，直接从这里接游客返回转乘蓝线的地方。站了一个多小时我跟芝麻兄都又冷又累，谁想到坐接驳车也是僧多粥少没有座位，只能再一路站回去。到转乘蓝线的地方我们纠结了很久是现在公园里面的餐厅吃饭还是先出公园在找吃的，然后决定等蓝线的车坐到餐厅去吃饭。谁知道计划不如变化快，下一辆来的车居然是直达游客中心的蓝线Express，中途自然是不停靠各餐厅的。无奈我们也不想再等，就先拿了车打算开出公园再说。</p>
+      <p class="text">天已经完全黑了下来，我强打着精神坐在副驾的位子上，芝麻兄此时继续发挥坚实可靠的力量，聚精会神的在漆黑的山路上稳稳向前开。好在是此时出公园的车辆不少，大家都前前后后的依次排开，所以虽然没有路灯，但并不觉得很危险。开了好一阵子开出公园，我们在沿途的Tusayan小镇随便找了一家餐馆停下来，到门口一看是 墨西哥 菜，尚可接受，于是就推门进去了。</p>
+      <p class="text">点菜加吃饭一共大概40分钟，因为吃到一半的时候已经太累太困，我真的很想把自己的脸往盘子里一放就这么睡了。芝麻兄也因为劳累的缘故吃了不多，剩下的我们都打包作为明天的早饭了。其实这一家的菜应该算是我们吃过的墨西哥菜中非常好吃的，味道精致量又足，不管是牛肉还是鸡肉都腌制的很入味，可惜来的时机不对不能好好品尝。结账的时候发现账单里自动加了18%的小费，心里有点不爽。虽然说如果我们自己给可能会给的更多（因为芝麻兄拜托服务员给我们的小保温瓶装了一点热水），但是这样强行征收还是没怎么遇到过。因为我都睁不开眼了所以也懒得计较，交了钱就出来了。</p>
+      <p class="text">芝麻兄继续尽忠职守的朝Williams开，此时路上的车已经很少了，估计大部分人还是住在了Tusayan小镇。再加上又没有路灯漆黑一片，而他想赶快回到酒店又不敢开太快，其实还是有点危险的。本来一般这种时候我都会瞪大眼睛帮他看路，觉得多一双眼睛总归是好的，可是今天不知道为什么困得根本睁不开眼睛。大概是有点累又被冷风吹了很久，车上一暖和睡意就阵阵袭来，不知不觉就睡着了。醒来的时候已经开了大概三分之二的路程。看着芝麻兄依然聚精会神的盯着前面的路真是心里又感动又心疼。</p>
+      <p class="text">到达酒店的时候已经是晚上10点多点了。强打着精神进门简单收拾了一下就洗澡睡觉，现在想想居然全然没有什么印象了。大概当时已经是半睡眠状态了吧。</p>
+
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.胡佛大坝的观景桥没有什么指示的标识，就是要从那个Memorial Plaza爬上去才看的到。
+        <br>2.如果有东西忘在酒店里，可以打电话回去让他们帮你寄回家。当然前提是酒店愿意提供这项服务，而且有的酒店是免费寄送，有的是要收邮费的。国际邮寄不知道是不是有的酒店也允许，反正我们酒店说只寄送到美国本土地址。
+        <br>3.如果可能的话还是努力住在公园内或者公园入口，这样可以极大地节省时间和精力。当然这些地方性价比超低的时候除外，比如说便宜的都住满了，只剩下高级房间这种。
+        <br>4.大峡谷的日落绝对值得一看。不过要提前注意天气信息，很多人说要是西边阴天就根本看不到。而且一定要多带些衣服，傍晚的大风刮起来还是很冷的。
+      </div>
+      <p class="text">更新一下，我的小红鞋已经寄到了！！撒花！！！</p>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第四日 大峡谷国家公园</h2>
+      
+      <p class="text">一早起来阳光灿烂，加上昨晚睡得不错，精神十足的下楼吃了早饭准备出发。虽然还是要开一个小时的车，但是天朗气清，白云朵朵，再加上温度宜人，让人像是放飞了心情，也不禁哼起小调来。</p>
+      <p class="text">由于今天主要是想 自驾 游览，在进入 大峡谷国家公园 之后我们首先开去了Yavapai Point。在博物馆那里往西走有一条“时光之路”栈道，一步一步标出了从今年到一千万年前的石头。当然100年以上的就是每百年或者更久才标注一下，不然一千万步也是走不完的。感兴趣的同学可以像我一样找找自己出生那一年的石头是什么样子的。我跟芝麻兄的两只脚跟一千万年的那个标志合了张影，也是我们这两双运动鞋最后的特写镜头。本来就是两双很旧的鞋，后来因为这一趟饱经风霜我们都觉得已经回天乏力抢救不了他们了，就在旅程的最后一天留在了 盐湖城 。</p>
+      <p class="text">紧接着开车到了Grand Canyan Village逛逛，那里有个相当规模的超市和纪念品店，我跟芝麻兄看天气舒适，打算中午找个地方野餐，于是买了两个三明治和零食。再加上昨晚打包的剩饭（之前一直放在酒店冰箱里），已经是绰绰有余了。另外挑了冰箱贴和明信片，就继续开车向东门方向进发。</p>
+      <p class="text">大峡谷南缘 的东半部大部分都是可以 自驾 到达的景点，观景点之间距离比较远因此适合 自驾 游览。由于东半部的Yaki Point是橙线到达的最东端， 自驾 不能进去小路，所以我们只能沿着大路继续向前开到Grand View，这里也是拍全景的好地方，拿着手机相机咔嚓咔嚓转一圈。逛了一会儿没有选择走trail，因为实在是有点饿，但是这里没有野餐的地方，所以打算开到前面停车吃饭。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1DdGZH2_7pxfZzyfNBTXYglB-3iGC8wx7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mLlh1oAODztmi1x5IE4WH1B39bzuwTdf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1FPxGKCulOeCHHxR4dPIXdrCQL7MZYdwl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mMiF_IWL5aI3QQEYAJ5A5lK6oqvZ4HrJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1x2SQRPumC5SAxMjR9Gq-PqmxR85SwUwQ"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">谁知道开着开着就错过了有野餐标志的地方，直接到了Tusayan Ruin and Museum。于是我们先在博物馆里转了一圈，看了看各种古印第安的收藏品。其实真就一间屋而已。博物馆后面出去就是很久之前生活在这里的印第安民族一些房屋的遗迹，石头堆砌的墙壁都已经倒塌，都只剩到脚踝这么高还残存着，包括当时的住房和活动室等等。遗迹的范围比博物馆大不少，远处还包括当时的农场范围和作物，我们没有深入，只走了住宅区的地方。</p>
+      <p class="text">看到有野餐的区域我跟芝麻兄赶紧把吃的搬出来，因为早就已经饥肠辘辘了。没想到的是在超市买的三明治超级好吃！我的火鸡肉卷里面搭配的是牛油果酱，感觉真是停不下来。芝麻兄的芝士火腿三明治味道则比较普通，好在还有前天晚上打包的 墨西哥 风味烤牛肉。此时看到离我们不远的桌子是两张连在一起的，桌子上铺着厚厚的蓝色桌布，上面摆着各种瓶装调味料，一摞陶制的餐盘和用餐巾包好的一组组钢制刀叉。有位看起来像导游的人正在旁边切黄瓜西红柿等青菜，貌似正在准备一顿高大上的午餐。他旁边的中型面包车上有很多便携式大冰盒，大概里面都是午饭的食材。我跟芝麻兄一边享受着我们的午餐一边猜测应该是为某个小旅行团准备的午餐，只是不知道他们到底要吃什么高档的东西。</p>
+      <p class="text">我说一般这里旅行团包午餐都是一人一个三明治加一包薯片加一个水果，没想到也有这么舍得下血本的旅行社啊。芝麻兄不以为然，说你怎么知道他们要吃的不是三明治。我说不能啊，你看这盘子，你看这刀叉，你看他忙活的，怎么也得是个比三明治高档一点的菜吧。芝麻兄笑称，你别看不起三明治，做得好的三明治可能都比烤牛排高档。</p>
+      <p class="text">正说着的时候有两三个旅行团里的人已经先来了，貌似也是没想到野餐也能做的如此高雅，兴奋的惊呼“Oh this is really nice！”。随后领队的一句话让我跟芝麻兄深深叹了一口气，他问那几个团员说你们之前点的是什么三明治来着？然后按之前的点单给他们把每个三明治的包装拆开，放在陶瓷的盘子里递给他们。然后告诉他们桌子上有胡椒和盐，味道不足可以自己调。满足了好奇心的我和芝麻兄深深的觉得，看起来如此高大上的前奏结果真的只是三明治。。。还是拆了包装放在盘子里。。。</p>
+      <p class="text">不过好在他们的沙拉和水果稍稍弥补了一下，其实我们也觉得这些吃的算是很不错了，而且出门在外能以如此优雅的装备野餐也不是多少人能享受的到的。这期间另外一个团貌似也到了，另一位导游下车把另两张桌子拼起来铺上桌布也开始准备午餐。我跟芝麻兄差不多吃完了，也就赶紧收拾一下好给人家腾个地方。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1VgEs0UyVg13SFGVA1Kbfu4QO1s9D1ue5"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1W5Upmd-5ctC92Eur9H5P2wV2YzGpMiND"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12oSZHCZGmBLHFjkXaIuAxwdkMkMNURcg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1jEB9iLE1pFLP4JCL8NfCg7YmsjFRWdOj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1BM_5svHty-fT557m2CMPMPOIsjuwI5qI"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">又往东开了一小段就是Desert View观景点，在这里有一个外形像炮楼一样的 观景台 ，据说是仿古印第安的风格建的，而且全部是人工堆砌没有用任何大型机械。从停车场要步行一小段才能到塔楼，一共大概4层的样子，最底层是个小的纪念品商店，，因为就建在峡谷边缘，从周围的落地窗看出去也是非常壮丽的景色。往上的第二层是开放式观景台，最顶层则是封闭式的，只有几个小窗户可以看到外面。</p>
+      <p class="text">在这个观景塔楼附近可以清晰的看到远处的科罗拉多河，比想象中的纤细许多，白晃晃的日光下泛着泥土的颜色，很难想象就是这一条河冲刷出了如此让人惊叹的景致。同时这个观景点区域内各种服务都比较齐全，包括野餐区、加油站、小超市等等，因为它是从东门进入的第一个观景点。等我们逛完回到停车场已经是下午两点多了，不敢耽搁准备在傍晚开到kanab的 Airbnb 房主家 ，于是就赶紧出发了。出公园东门之后还停下来跟大峡谷国家公园的牌子合了个影，算是留做纪念吧！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1L98ZzN4SqSgfJAyysr8hIBSs_xUolkCH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ilUyIGoUOLpfGpl1MAwVUO0YiAUeuHXz"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1U2ICMYtAmunTKJ-WJM3wCMIpegNlcwOg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wyUDZeJWy_zJvpiHsRe03WM5tyhSlngI"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VkxEgVZ5SiE45QDulDnvUwyUG9eVzx6C"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">一路北上开了2个小时左右到达了Page，此时还是下午4点多的样子。这期间基本经过的都是荒凉的戈壁地带，除了土和沙子就是零星的矮灌木丛，基本看不到大片的绿色。芝麻兄问我如果把我放在这种地方做研究我会不会来，前提是气候适宜有吃有喝有网络有电视，但就是没有人没有商场没有电影院没有时不时发现的美味餐厅，当然也没有经常的朋友聚会。我想了想说还是算了吧，虽然不喜欢 大城 市但是真要独自生活大概会太寂寞。</p>
+      <p class="text">我们在Carl Hayden Visitor Center停了一下，看了看展览又在落地窗前近距离的参观了一下Glen Canyon Dam。说实话我觉得水坝都长一个样子，而且看完胡佛大坝之后对这个就没有什么感觉了。继续一路向西大概一个小时之后到达了Kanab，此时已经是当地时间6点了。因为连日来的三明治 汉堡 taco我很想吃点中餐，于是找到一家当地中餐馆，看看菜单觉得性价比低也忍了，谁想到没什么人的餐馆却告诉我们点菜大概要至少要15分钟才能做好。想到跟房主约好大概7点到她家，不想第一天就迟到，所以索性打消了吃中餐的念头，在马路对面的规模还算不小的超市里买了各种已经做好的海鲜沙拉和意面（就是超市里那种凉拌菜性质的，按斤称），打算先去主人家报道。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1UsCnox_cYFOn5uHI3TN_SqLMoF3avEv-">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1HZ7OEkI9KUMBGii9wfBdOZC_NP_uoWuj">
+        </div></figure>
+      </div>
+      <p class="text">Kanab是个风光绮丽的小镇，人口貌似只有4400多人，一条主干道之外就几乎都是住宅区。开车不到两分钟就从超市到了房主家，在一片安静的小区里，是一套淡蓝色的小别墅。给她打了电话确认了之后出门迎接了我们，一同见到的还有她老公和怀里可爱的小baby。</p>
+      <p class="text">第一次使用 Airbnb 上的个人房源作为旅行住宿，一切都是新鲜好奇，也不免有些紧张。好在房主很热情，给我们介绍了各个房间和洗漱用品，也告诉我们各种需要的东西在哪里可以找到，知道我们要去波浪谷也祝我们抽签好运。跟我们介绍洗衣房的使用方法的时候我们笑称可以省略这一步，我们不打算在这里大规模洗衣服。然后说起他们从来不锁门，午夜想起来的话可能会锁门这件事我们也笑说不用担心，我们绝对早就已经回来上床睡觉了。看得出房主也对这一点 十分 安心，大概是因为家里有小孩的缘故。</p>
+      <p class="text">聊了一会儿之后我们打算把行李搬进来大概收拾一下，于是大家就各自忙碌去了。仔细看看我们的可活动范围很大，独立卧室，独立洗手间和淋浴，独立的活动室（内含沙发电视）等等，相当于整个一层都是归我们使用（从大门进来一半楼梯向下通往一楼，一半楼梯向上通往二楼）。还有一个房主的工作室也在一楼，不过我们从来没见她使用，可能也是因为我们白天都不在家的缘故。</p>
+      <p class="text">厨房在二楼，房主跟我们讲可以随便使用。不过我们总是觉得在别人家做饭不太好，所以只是偶尔借用一下冰箱放水果或是微波炉热个早饭。我们卧室背对着街道，窗户外面是家里的微型篮球场，大概是给小孩子玩的。走出去的话不到几百米就是高山和树林，这个小区可能已经是在Kanab小镇的边缘了。不过小区内部的设施确实非常好，我们门口对面就是棒球场，有一天好像学校的孩子还在这里举行了比赛，整个家门前停满了车。不远处还有一个小公园，里面长廊啊喷泉啊野餐桌椅都是一应俱全。</p>
+      <p class="text">我和芝麻兄借了房主两个勺子，坐在楼下的我们的小客厅里把超市买来的晚饭解决了，觉得味道不错，打算明日继续这样晚餐。收拾了一下早早洗澡休息，为明日第一次波浪谷的抽签做准备。祈祷明日好运！</p>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.进入国家公园之前最好能买些吃的放在车上，一来是可能有很长一段路找不到任何餐厅，二来是天气好的话在外面野餐绝对是个好选择！湿巾和纸巾会派上大用场，因为有些国家公园里的观景点只有简易厕所，是没有洗手台的。
+        <br>2.如果从 Airbnb 上订房，在到达的前一两天最好能跟房主沟通一下到达的时间，让人家有个准备。
+        <br>3.有微波炉和冰箱的话，超市里其实有很多好吃的速冻食品，自己在酒店房间就能搞定一顿美味的晚餐。比如说我们买的微波食品里有照烧鸡盖饭，海鲜炒饭，肉酱意面等等。
+        <br>4.大峡谷国家公园和Page都在亚利桑那，没有夏令时，都是使用标准山地时间，所以和Kanab所在的犹他州夏天会有一个小时的时差，也就是说亚利桑那下午4点的时候是犹他州下午5点。冬天的话正好相反，亚利桑那和犹他州没有时差，但是与 拉斯维加斯 所在的内华达有一个小时的时差，也就是亚利桑那下午4点的时候内华达下午3点。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第五日 波浪谷抽签，马蹄湾和羚羊谷</h2>
+
+      <p class="text">早上醒来的时候天光已经大亮，一看表才7点半，楼上还是安安静静，可见都还没起床。我和芝麻兄轻手轻脚的洗漱，又微波了前一天超市买的速冻食品（照烧鸡盖饭），美美的吃了个早饭后就出发了。开车到Kanab Visitor Center正如房主说的那样都不用三分钟，而获得去波浪谷门票的BLM抽签办公室就在这里。</p>
+      <p class="text">我们到达的时候大概8点20分，此时大厅里已经有大概一二十人了。我因为知道春天是去波浪谷的好时节，所以并没有期待来抽签的人会特别少，倒是芝麻兄长吸一口气说才这么早怎么就有这么多人了。到8点半整的时候工作人员开始讲话，叙述了一下波浪谷大概的情况，一再强调这不是什么轻松的徒步旅行，会面临爬山趟沙、高温灼晒、缺水、没有手机信号、迷路等等困难。最困难的大概就是没有地方寻求帮助，所以一旦出问题不管是受伤还是迷路大部分只能靠自己解决。工作人员还强调如果以前没有过徒步经历强烈建议不要第一次就尝试波浪谷，这周围还有很多好玩的地方，他们可以推荐适合的景点代替波浪谷。虽然这是工作人员例行的说明，大概目的是吓退一些前来抽签的人。效果还是不错的，听着听着就连信心满满的我也稍微有点打退堂鼓的苗头，但是看看周围的人却都是丝毫没有动摇的样子。当然这其中也包括站在我旁边刚拉完屎回来的芝麻兄。</p>
+      <p class="text">用芝麻兄的话说，来都来了，怎么能还没抽签就撤退。工作人员例行说明结束，看看表8点半了，就把我们这一堆人带到了旁边的房间里准备抽签。首先每人先去领了报名表和笔，找了座位坐下开始填写。每一组人不管几个人只能填写一份表格，比如说芝麻兄和我两个人只能填一份。如果抽中的话是按照人头算的，也就是说我们会占据10个名额中的两个。填表就像工作人员说的一样，进门之前看好自己车的牌照号和车的型号很省事，不然就会像我一样眼巴巴的看着芝麻兄又出去确认了一次。看着大家呼呼的往上交填好了的表格我心里好着急，芝麻兄安慰我说交的早也不一定会被抽到啊！</p>
+      <p class="text">这时候旁边坐下一对小情侣，也开始慢悠悠的填表格。快到9点的时候基本上大家的表格都交上去了，这时候我旁边小情侣里的女生好像突然想起了什么，赶紧走到前面去找到自己的表格在右上角写了什么东西。工作人员看看就开心的笑了。我当时心里奔腾而过的OS是“需要写have a nice day什么的吗会加大抽中的几率吗应该不会吧？！”</p>
+      <p class="text">9点整的时候工作人员说停止接受表格，开始再次说明一下整个徒步的难度和抽签的注意事项。虽然刚经过一个稍微寒冷的春天，但是这几日气温已经上升了，大概三四天前有个大妈就差点挂在里面没出来。原因是老太太跟孩子们一起进去徒步的，走到一半说太热了不行了，孩子们就让她原地休息等他们回来的时候接她一起再走回停车场。结果因为高温灼晒再加上没有阴凉也缺水，老太太没能撑到他们回来就已经不行了。好在是有人经过发现了又找了帮手报了警，才急救出来，不然再晚一会儿可能就真不行了。工作人员还说即便是真的在里面报了警，由于不通车辆，救援也不会马上就到，你要做好至少在炎炎烈日下等待一小时的准备。</p>
+      <p class="text">瞬间大家的面色都凝重起来，可是也没有一个人愿意退出抽签。工作人员接着给我们介绍了至少每人要带一加仑水进去，为了让我们有个直观的印象搬出一个装满水的水桶。真心看起来就好沉啊，换算过来每个人至少要背3升的水。她说如果觉得背不动或者不想背的人我们也建议你退出，这些水是基本的量，少于这些的话你的身体在这种高温下很容易出问题。我转头看看周围，有些瘦弱的老头老太太我很担心他们到底能不能背动，但是又想说不定人家瘦弱的身体里蕴藏着巨大的力量呢唉，反正是没有人会在这个节骨眼上退出抽签的吧。</p>
+      <p class="text">之后工作人员就开始按照报名表上交的顺序叫名字说编号，每一份报名表对应一个编号，抽签的时候抽到你的号码就是中签了。叫名字的时候要举手示意或者回答一下，以便证明你在场。整个抽签的过程不需要全部组员都在场，只需要派一个代表来填表抽签就可以。叫到我旁边的小情侣的名字的时候他们举手示意了一下，工作人员笑着祝福了他们说恭喜你们刚刚订婚。我才恍然大悟说原来刚才是去写这个了呀，看样子也是希望带给自己好运吧！</p>
+      <p class="text">编号都宣布完了之后工作人员说你们今天很幸运啊，只有46组110个人，昨天可是有144人，前两天还有224人的时候呢。顿时大家就感慨110人也根本概率很小啊，也就是说不到 十分 之一的概率吧。接着就看他们拿出了一个小盘子，里面很多带编号的圆球，又拎出了一个类似给仓鼠跑步的那种转轮，把那些小圆球放进去开始滚动。</p>
+      <p class="text">此时屋子里的所有人都屏住呼吸眼睛盯着那个转动的轮子，期待着属于自己的小球掉出来。几圈过后终于掉出一个球来，工作人员说43号。我旁边的那对小情侣哇的一声就叫出来了，男的说居然真的就中了！两个人兴奋之情溢于言表又不敢再大声欢呼，只能一边拼命压低声音一边说真的中了啊真的中了啊！工作人员此时也笑着说看来他们订婚确实带来了好运啊，再次恭喜你们。坐在旁边的我也是替他们惊喜，居然有这么巧的事情！</p>
+      <p class="text">接下来抽出了两组两人的，一组三人的，都与我和芝麻兄无缘。眼看着一组组的抽出来大家的眼神也跟我们一样都黯淡了下去。最后还剩一个名额的时候工作人员解释说，因为我们不想让大家单独进去这种比较危险的地方徒步，希望大家结伴而行，因此我们最后一个名额如果抽出的是两人组的话，两个人都可以去。但是如果抽出的是三人组或以上，就要挑出两个人进去，其他人不能进。说完还开玩笑说考验友情爱情和亲情的时候到了哦。</p>
+      <p class="text">寄希望于最后这一组的我们也是失望了，开奖过后大家纷纷叹气起身准备离去，抽中的人留下来等着交钱拿门票听取注意事项。我和芝麻兄也有些垂头丧气，看看周围大家的脸上也都是黯然无光，全然没有刚进门时的期待和兴奋。虽然知道中奖概率很低，也早就有心里准备抽不中，但是真的发生了无论怎样心里还是会失落的。一直到出门上了车我们也还是默默无言，但是很快也开始相互安慰，我们结婚太早，不然刚结完婚来肯定就也抽中了。再说本来就打算今天去Page，如果抽中还要留下来听徒步说明会，说不定会来不及。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1LcMJvwP11LfllM_rXl1WjAaNTQba7W-2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1BSkc6QBscqiGbWSZ89n_rg5r6SSlyNnt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wYSuK2wMXcRC36xNIMjSzFWhcoFWfUoR"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">一路向东去往Page，两个人相互打趣一会儿心情也稍微好些了。昨天和今天都是走89号公路，我们本来想看看通往The Wave波浪谷的土路入口，谁知道两次想起来的时候都错过了，也不知道当时我们俩都在聊什么这么起劲。大概一个小时之后就到了Page，而 马蹄湾 就在Page南边不到10分钟车程的地方，顺着89号公路就能看到马蹄湾的指示牌。</p>
+      <p class="text">从公路上拐进去立刻就能看到沙土的停车场，车位很多，再加上大家都是有来有往，所以不难停车。从停车场往马蹄湾的方向走要先翻过一个土坡，所以开始是看不到马蹄湾的。翻过去之后会看到一个小凉亭，走到那里的时候大概就走了三分之一的路程了。然后再在沙地里走一阵子就会看到沙子慢慢变没，地上的岩石裸露出来，此时也就到了马蹄湾的悬崖边上。整个路程大概15分钟左右，没有树荫遮蔽，所以大家准备好防晒措施。我和芝麻兄都抹了防晒霜，本来我怕风大觉得打不住遮阳伞就不带了，芝麻兄坚持给我带上，结果一路我都打着，少挨了很多毒辣的阳光。</p>
+      <p class="text">夏天的好处就是即使距离正午时分还有一段时间，马蹄湾也已经没有了崖壁的阴影，全然暴露在日光之下。站在悬崖边上还是很难拍到马蹄湾全景，脚下的岩石会遮挡一部分河湾。更不要提还要把人照进去，连三脚架用上都白搭，因为实在太矮。看到旁边很多人趴在地上将相机探出崖边，我跟芝麻兄仔细考虑了一下，觉得阳光晒的岩石实在是太烫了，要是这样趴上去估计会受不了。但是我们急中生智，把三脚架拿出来伸长，然后三只脚合起来握在一起当做杆子使用，效果出奇的好！</p>
+      <p class="text">于是就看到芝麻兄调好了10秒拍摄，然后蹲在崖边握着三脚架支撑杆的后半段慢慢把相机探出去，我蹲在后面悄悄的扯着他衣服一角的场景。芝麻兄又好气又好笑的一遍遍跟我说不用拉他，蹲在这里重心很低不会掉下去的。可是我就是不放心只能偷偷攥着他衣角，一边担心他失足一边担心他发现我拉着他。。。感觉真是用生命在拍照。。。</p>
+      <p class="text">就这样总算是拍到了马蹄湾的全景吧。之后与马蹄湾的合影我们也是把三脚架当做自拍杆用了，也是各种合适，两个人都为发现了三脚架的新用途而倍感自豪。沿着崖壁走了一趟欣赏了各种角度，各种探讨要怎么才能到对面马蹄湾中间的那个大柱子一样的土地上去。后来两个人觉得晒得也差不多了，游客也比刚才突然多了不少，就打算不在这挤还是往回走吧。中途因为比来时太阳更晒更热的缘故在凉亭休息了一下。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Dy97q0AprdIU_yhmElkfmo2JRmQcUYhM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1sfEn1bk9Icg_aPYY6bzgub04NuiWcbaS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1pNKQE-MG6AMrKrZrFcSAKIqRyDMBCB0C"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">回到已经晒得像是桑拿一样的车上的时候我跟芝麻兄觉得浑身都在冒火，看看表已经快11点半了就决定还是先去找地方吃饭休息一下再去羚羊谷。在这里隆重向大家推荐一家叫Mandarin Gourmet的中餐馆（地址683 S Lake Powell Blvd），中文名叫一品香。我们也是误打误撞找到了，本来都懒得找想直接去吃subway，结果一拐弯忽然就看见了这家中餐馆。之前也说了吃了几天的 汉堡 薯条真的很想吃顿中餐，就算不是中餐只要是亚洲菜都可以，接着就这么巧的碰到了一家中餐馆。进去之后更惊喜，原来weekday的午餐是自助，7.99刀一个人。菜品味道都很不错，鱼香肉丝、干煸豆角和炸春卷尤其好吃。另外还有煎饺啊酸辣汤啊和甜品水果。说实话如果要跟 拉斯维加斯 的自助当然是没法比，但是已经算是我们吃过的性价比较高的中餐自助了，再加上是在一路都如此荒凉的地方，简直像是我们的救星。</p>
+      <p class="text">风卷残云之后我跟芝麻兄都觉得这一餐相当满意，虽然后来看到yelp上给这家的评分不高，芝麻兄一直嚷嚷着要注册一个账号去给个五颗星，但是我们都觉得难道8刀的价格大家都期望龙虾随便吃吗？已经很不错了啊！吃饭期间碰到一个 中国 的迷你旅行团大概四五个人的样子，看样子也都觉得很好吃。更不要提我和芝麻兄大爱的西瓜啊哈密瓜啊，炎炎夏日也是让人甚为开心。</p>
+      <p class="text">从餐厅出来我跟芝麻兄都觉得今天真是赚到了，看样子波浪谷没抽中的运气都用在了碰见这个中餐馆上。事实证明接下来也是个很正确的选择，我们没有去大家趋之若鹜的上羚羊谷，而是选择了较少人去的 下羚羊谷 。之前我跟芝麻兄在网上详细比较了一下，发现上羚羊谷的tour报名点都是在Page镇中心，有很多旅行社都做，然后整个tour历时一个半小时左右，最便宜的45刀。而 下羚羊谷 的报名信息则非常少，只有两家，都在下羚羊谷入口处，也是一个半小时的tour，28刀。这就意味着要自己开车到离page大概15分钟路程的下羚羊谷地区，当然因为都是走公路所以对于我们来说没有什么问题。</p>
+      <p class="text">芝麻兄对于上下两个羚羊谷的选择有点迟疑。说白了就是上羚羊谷在地上，尤其是中午时分会有一道光柱照进谷内，据说非常漂亮，但是tour的时间包括往返Page镇中心的时间，所以在谷内实际上并没有呆很久。而且发团有具体时刻，赶不好的话可能还要等一阵子。下羚羊谷在地下，要爬梯子上下，没有光柱，而且如果上游有山洪的话会变得有些危险（貌似以前有十几个人被冲走了？），但是每20分钟一团，发团频繁，而且游客相对上羚羊谷要少很多。我对于这些都不怎么在意，因为之前看攻略说下羚羊谷比上羚羊谷好看，又看到一张照片是游客从地面的大缝隙里钻出来的（因为下羚羊谷在地下），所以一直心心念念的要去下羚羊谷。最后芝麻兄放弃了光柱从了我，我们就一路开到了下羚羊谷的入口区域。</p>
+      <p class="text">依旧是沙土的停车场，旁边有简易厕所。这里一共有两家“旅行社”负责导游的工作，在搭起来的办公室前面有售票窗口，大家需要在这里买票。因为没有导游是不能自己进谷的，而且每个团有人数限制，防止一个团太多的人留在谷内影响别的团参观，因此如果一个团满了或者过了发团的时间，都是只能买到20分钟后下一个团的票。我跟芝麻兄排队买票的时候一个团刚走，所以等我们交完钱又到另一个窗口签好字，正好有几分钟的时间让我们大概收拾准备一下。</p>
+      <p class="text">每天中午11点半到1点半会有一两批摄影团，因为这是谷内光线最好最出片子的时刻。不过我跟芝麻兄因为没有报名摄影团所以不能带三脚架入内，但是我们到达那里的时间正好是12点左右，所以也相当于是赶在光线最好的时候游览了下羚羊谷。到点集合导游清点了人数看了每个人缴费的收据之后就出发了。给我们带队的是个年轻的姑娘，活泼健谈，同时也很可靠，告诉我们需要走大概半英里才会到下羚羊谷的入口，因为很晒很热让我们加油。另外还嘱咐我们下到谷内一些需要注意的地方，比如说碰到太陡的楼梯可以反过身来像爬梯子一样手脚并用比较安全，还有就是岩壁最好不要碰，因为都是沙子形成的很容易被毁坏。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1cvT9lh_md9bWhv9kkqdEHn5RKNbssyIy">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1fte7A6Rb-xOWnFiTueKQaK_37X61uTCq">
+        </div></figure>
+      </div>
+      <p class="text">大概5分钟之后我们走到了入口处，其实就是通往地下的一些铁制的梯子，下去的时候尤其要小心，有一段相当陡峭，需要反过身来手脚并用。到底部的时候真心整个都震撼了，一条窄窄的峡谷，大部分都是只有一人多宽，两边的岩壁由于各种侵蚀作用呈现出一条条不易察觉的纹理，随着岩石边缘的变换成等距的波浪状。此时由于太阳的光线从正上方照射下来，应该说是一天中峡谷最明亮的时刻，然而由于羚羊谷十分狭窄，两边的悬崖并没有全部被阳光直射，而这种渐变的光线使得岩壁从上到下呈现出不同色彩，从最上面的明黄，到橙色，到酒红，再到微微的暗紫。这些多样而和谐的色彩使得整个羚羊谷显得变幻莫测，散发出迷人的光泽。</p>
+      <p class="text">就这样一路走走停停，时快时慢，每一步都有新的惊喜。有时候觉得已经是尽头，谁知道拐过岩石或者登上两级台阶就又是另一番天地。导游一边在我们中间介绍羚羊谷的知识，一边指给我们各种有趣的岩石形状，并帮忙寻找最好的角度拍摄照片。期间还碰到一两个架着三脚架拍摄的专业摄影师，大家只得小心翼翼从旁边逐个挤过去。也碰上过一两个印第安装扮的导游，手里拿着独特的乐器吹奏。一开始我跟芝麻兄还以为是卖艺的，心想这么狭窄的地方卖艺岂不是挡着别人的路，后来才知道是摄影团的导游，因为羚羊谷曲折蜿蜒，不能看到很远的距离，貌似一吹起乐曲就是让分布在前前后后的定点摄影师们准备向前移动，以免延误后面的游客。</p>
+      <p class="text">其中导游还找了个空隙较大的地方把我们这不到10个人集中起来，讲解了羚羊谷的形成。只见她先从地上堆起一个小沙丘，然后拿出水瓶，往沙丘顶端倒了一些，等水分被沙子完全吸收，她用手轻轻拂去沙丘下部没有浸湿的部分，此时沙丘顶端那些吸收了水分的沙子就牢牢的站立在那里，并没有因为少了下面沙子的支撑而倒塌下来。正当我们带着疑惑啧啧称奇的时候，她解释说这种两边的岩壁都是这种沙子经过亿万年慢慢形成的，然后因为地震的缘故裂开了这条峡谷，而又因为风和水的侵蚀行程里岩壁上的纹路。</p>
+      <p class="text">继续向前走，这种一步一景的惊喜足足持续了一个小时，等我们顺着金属楼梯往上爬，从地面巨大的裂缝中露出头来的时候，赫然发现自己已经在停车场附近，自然也是不用导游再带路了。这一路走来真是觉得奇景连连，一直到回到车上我和芝麻兄还难掩兴奋。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1JTGEG-Svcnn6wO0KxHqk4s07V_HRwuW1"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15AAGQLp0JYPZxgRM9BJsuh-yra3KsrmZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1aG1xLYzWOZI1ywsqvtMseqzQ_aE3rz1P"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1s9GYn2wSPX1I3Phjlvx4jKME1rcZenEq"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1jVuqoeKjbwo_Hy3tikRxTCmdPg3B72W4"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17w9bhlTTbI8dxVD8Wt8jKrEFLMECRzxZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1lfiD-CyUZlfDAkj38sj0Rp4hRLP2h--L"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1lNKCxMFNTnR5qfJS2XbjLejCoB81XPZk"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看看表才两点多，于是开车去Page镇中心找了一家纪念品商店买了几张明信片，又到附近的沃尔玛买了些水果蔬菜，还有做好的炸鸡翅和沙拉意面，打算早点回家就不用出来找晚饭吃了。开车一小时到Kanab的时候算上时差已经是当地时间快5点了，房主一家貌似在对面的棒球场玩的正开心。我跟芝麻兄洗去一身的疲惫，在家里舒舒服服的吃了个晚餐上了会儿网就准备睡了。毕竟明早还要再战波浪谷的抽签！</p>
+
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1去羚羊谷尽量不要背大包，因为很多地方都只有一人宽左右，背大包的话只能用手拿着或者勉强挤过去，这样很容易损坏岩壁。带上一两瓶水拿着相机就足够了。
+        <br>2从羚羊谷出来，如果你也觉得导游很尽责又很专业的话，可以给些小费以示感谢。
+        <br>3都说马蹄湾没有崖壁阴影的最佳拍摄时间是正午，其实夏天的话从10点多就可以了。从马蹄湾的停车场到崖边大概要步行十五分钟，没有遮蔽，所以尽可能做好防晒。
+        <br>4如果报名上羚羊谷的tour注意看好时间，因为亚利桑那和犹他州夏天有一个小时的时差不要算错，也就是说Kanab所在的犹他州早上10点的时候，Page所在的亚利桑那已经11点了。
+        <br>5不管是上羚羊谷或者下羚羊谷，摄影团都必须人手一个三脚架。同理普通团是不允许带三脚架的。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第六日 波浪谷继续抽签和锡安国家公园</h2>
+      
+      <p class="text">早上醒来的时候才7点半，看来我们的 时差是倒不过来了。本来想着今天不用特别早起想睡个懒觉来着，结果闹钟还没响两个人就都醒了。轻手轻脚的洗漱吃饭，8点一刻左右我们就出门了。</p>
+      <p class="text">由于每天抽签的报名表会自动保存24小时，这就意味着如果今天还去抽签的话就不用填写报名表，只需要跟工作人员说一下昨天的编号，他们就会帮你吧昨天填好的表格抽出来，给你一个新的编号以便今天继续抽签。但是必须要亲自告诉工作人员旧编号，也就是意味着你在抽签开始之前要到场，不然的话是没有用的，你昨天的表格也不会放进今天的抽签候选中去。</p>
+      <p class="text">所以我跟芝麻兄今天只要9点以前到抽签办公室就可以，不用再提前去填写表格了。我们看看时间还早，而且朝阳的光线恰到好处，天气也很凉爽，索性就在小镇上随便走走。 主街 上有很多风格迥异的小店和餐厅，虽然还都没有开门营业，但是我跟门口的各种装饰雕塑也玩的超开心。我招呼芝麻兄一起来high，换来了他满脸的鄙视，一边给我拍照一边无奈的笑，说人家都是天上掉下个林妹妹，被砸到的都很幸福，我这是天上掉下个女神经病，让我情何以堪。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1iKMcdaM_X9qsHVCG9TSot5z91XREzQmW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Lt9w0jVKrnV3JNEBPWn3n_qwNuN7auD4"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OZ45KwrXIlYrRn9glw69-JJCizOVpTb3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nzwFxVZHWBm9QBg_1N4nulPmx8Oz1g4f"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">想到今天也是大概会抽不中，我跟芝麻兄就商量着等抽完签回来这些小店看看有没有什么波浪谷的明信片，好歹买上一两张，也算是留个纪念了。看看时间差不多了我们就驱车前往抽签办公室，跟工作人员说了一声帮我们写了一个新的编号。就这样我们还算是早的，其他人看样子都是刚听完例行说明进来这间屋子，还在填表格，因此我们今天排在了2号。前面还有一张表格也是继续抽签的，不过我瞥了一眼发现那一张的号码已经被划掉重新写了三次了，应该是已经抽过三次签了吧。不禁心中一阵唏嘘。</p>
+      <p class="text">想到明天我们就要离开Kanab了，所以不论结果如何这都是我们最后一次抽签了。为了给别人腾出座位填表格，我跟芝麻兄起身离开了办公室，想等开始抽签的时候再回来。出了大门我突然想给这次抽签留个纪念，毕竟走了这么一遭，尽管没抽中，也是个宝贵的经历。于是拿来三脚架，我们指着抽签办公室大门上方的名牌合了一张影，脸上尽是悲愤。此时我们虽然对于抽签还是有点小紧张，但是已然感觉自己是大多数抽不中的分母了，所以倒是比昨天轻松了许多。</p>
+      <p class="text">即将九点的时候我们回到抽签处，发现已经满屋子都是人，过道也占满了，于是我们只能插空钻进去站在墙边。依旧是先叫名字对号码，总共有45组166个人参加。工作人员说到这里的时候我长叹一口气悄声跟芝麻兄说这样岂不是比昨天还没戏。芝麻兄也无奈的点点头，说今天貌似都是大组啊，抽到一两个四人组这些名额就差不多用光了。</p>
+      <p class="text">然后就是小滚轮转啊转，第一组摇出来的是一个三人组，在现场的是个 中国 姑娘，就站在我旁边挨着我！看到她惊呼的时候我更确定自己抽不中了，因为抽中同一国籍还靠着站在一起的这种小概率事件是多么不可能发生。于是正在我垂头丧气都没留意什么时候又开始转小滚轮的时候，听到工作人员说了声，2号。</p>
+      <p class="text">芝麻兄几乎是立刻就惊喜的脱口而出了一句“Oh！”声音不大却立刻把我的思绪拉回来了。又顿了一两秒我才意识到我们中签了！像是被吓到了一样倒抽一口气！</p>
+      <p class="text">这一抽气倒是把大家的目光都集中过来了。我赶紧捂住嘴巴，惊喜的心脏几乎要跳出来！因为刚才真的在神游，不能肯定确实是听见了2号，于是迅速看看在场的其他人没有欢呼的，确定果然是我们中签了！我跟芝麻兄拉着的手握得紧紧的，努力不让自己欢呼出来。这种天上就掉了几块块馅饼还正好砸到自己头上的震惊和狂喜真的无与伦比！</p>
+      <p class="text">于是不可避免的接下来的抽签我完全不知道都抽了谁有几个人。貌似之后还抽出一对 韩国 夫妇，女的还挺着大肚子。芝麻兄惊讶的小声问我孕妇可以进去徒步吗不危险吗？而我则完全听不进去他说了什么，脑子里全都是“我靠真的抽中了是我们吗不会搞错了吧好像真的是我们啊我们真的抽中了天啊怎么可能是我们呢可是我们就是抽中了啊太难以相信了”循环往复，除了像上了发条似的小声跟芝麻兄说我们抽中了啊我们抽中了啊，就真的什么也没有印象了。</p>
+      <p class="text">很快抽签就全部结束了，大部分人还是像我们昨天一样悻悻的离开。我们和其他中签的游客则需要留下来领取进入波浪谷的许可证，并且听取详细的注意事项和徒步说明。每个人需要交7刀的费用，必须是现金，不能使用信用卡。每组一张许可证，上面包括两张停车许可和一张徒步许可，外加人手一张地图（需要的话可以要求要中文的）。因为并没有具体的徒步道路，所以地图并不具体，只有大概的路线标注和十来张照片，路线上有大概十几个编号点，也就是说每一个编号的标注点都对应一张实景照片，方便大家确定前进方向。</p>
+      <p class="text">工作人员详细的说明了如何从89号公路上找到土路的拐点，土路的路况，明天的天气状况，需要的装备和地图的使用方法。由于天气越来越热，她建议我们早进早出，因为一旦太阳升高，不只是因为被阳光灼晒会觉得闷热流汗，光线照射到沙地和岩石上造成升温，热气会反过来从地面向上“蒸腾”，让中暑的几率大大上升。另外说明的是如果意外发生如何获得救援，包括爬到高处可能有手机信号，或者即使没有信号打911等等。还有要求每一组进去波浪谷之前，都要让自己的紧急联络人或者某个熟悉的亲友知道徒步的事情，并说明如果几点还没有出来联络他们请帮助报警。</p>
+      <p class="text">就这样整个说明会结束已经10点多了。我依然是按捺不住兴奋，怂恿着芝麻兄一起跟手里得来不易的许可证合了个影。旁边的中国姑娘是要跟爸妈一起徒步，想跟我们小两口搭个伙有个照应，我们也觉得不错就互留了联系方式约好明天 日出 之前集合一起开往波浪谷。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1FaBiIDkosQ1NmcTSmUX22H7Xa6aE15R2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17sjPv-d5CAs5l6YqPbSIQCwDB2WgP9l-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1xgm_qyQZZR2-Hl4uuyUigJhlaA-GnGMw"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-hVjfsVrHcA744UWm-yFInNu4u6r28qV"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">从抽签办公室出来，我有点犹豫今天否要在家休整，以备明日的徒步。而且要去超市买些食物和装备，如果可能的话可以去89号公路到土路的拐点看看，因为几次我们都错过了，明天如果天亮之前出发，可能更容易错过。而芝麻兄则不以为然，觉得还是按照原定计划去锡安（Zion）国家公园，回来再去超市，而且详细研究过地图应该不会找不到明天的路。对于我来说中签的喜悦微微褪去，更多的是担心明天能不能顺利走完整个路线。虽然如此，在芝麻兄的坚持下还是放弃了挣扎，跟他一起走在了去往锡安国家公园的阳光大道上。</p>
+      <p class="text">从Kanab开车到锡安国家公园的东门大概只需要40分钟，但是进入东门之后还要开半小时左右的山路才能到主景区。期间还要过一个狭长的隧道，每次只能单方向通车，反方向的车需要排队等待，因此也是耗费了一点时间。由于我们两个都还沉浸在抽签的兴奋中，这一路自然是欢欢喜喜的一点也不嫌路远。</p>
+      <p class="text">Zion的景区主线的大部分也是不开放给私人汽车的，只能停车之后借由园区内的接驳车在景点间往返。途中绿色的就是接驳车的线路和站点，每隔几分钟就发一辆车 十分 频繁，因为线路只有一条，就在南北向的主路上往返循环。我跟芝麻兄一合计，打算先去Zion Human History Museum参观，然后把车停在最南边的游客中心再乘坐接驳车。公园地图详情请戳： http://www.nps.gov/zion/planyourvisit/upload/Zion-Park-Map-Website.pdf</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1yg2VilurIvjXo4HZSxaoypUCvwUXUbA5"></figure>
+      <p class="text">博物馆周围的停车位十分有限，等了一会儿才看到有停车位空出来。展厅里有整个锡安国家公园的地形模型，还有一个放映厅在循环播放Zion的宣传片。我们照例是随便逛了逛，在纪念品商店买了两张明信片，又停下来看了一阵子影片，出来的时候已经是快12点了。想着去游客中心看看有没有可以吃的东西，谁知道开着开着就开出了公园南门！</p>
+      <p class="text">大概是游客中心离着南门很近，而拐弯的路口又不太显眼被我们错过了。不过既来之则安之，公园外面紧挨着就是很多小餐馆，选了一家看起来不错的先填饱肚子再说。公园南门外面比较热闹，餐馆啊lodge啊还有一个什么影院。一直到坐在餐厅里我们还都很困惑根本没看到什么游客中心啊，怎么就这么错过了呢，逮住餐厅服务员问了半天确定游客中心是在公园里面而不是外面。后来我们才发现其实从地图上看的话通向游客中心的小路是在南门的里面，但是建筑的位置已经几乎算是在公园外了。</p>
+      <p class="text">吃饱了继续掉转车头回到公园里，这次放慢车速缓缓前进，找对了拐弯的路口，来到一个大的停车场里。因为公园里面可以长时间停车去乘坐接驳车的地方不多，之前就有工作人员建议我们把车停在公园外的Springdale小镇上，然后坐接驳车进来。我跟芝麻兄也打算找不到停车位就再出去到镇上停车，反正离得特别近也没几步路，结果就很巧的有车要走给我们腾出一个车位。抹好防晒霜拿着三脚架我们就坐上了沿主路北上的接驳车。半天的时间步行把公园北部大体逛一遍是不太可能，于是我们决定主要去在明信片上看到的翡翠池Emerald Pools。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1j_aT8aCVXOjNCmxDijfieIq7-EtY3ZtO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Zk2C0XF6hpBFrkS4e_0XZiBCbW4VA0w8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LexMHoSrimeod6RqScoH9tyPATehrzAa"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">在这里镜头回放一下到昨天晚上，我和芝麻兄歪在沙发上上网，忽然芝麻兄说老婆你看这不就是我们在明信片上看到的翡翠池么。我探过头去一看，确实我们在Page买纪念品的时候在某个锡安国家公园的明信片上看到过一模一样的照片，上面还写着Emerald Pools，Zion National Park。不管是这张网上的还是那张明信片上的，池水都是散发着蓝绿色幽幽的迷人荧光，简直要惊为天池。当即我们就决定第二天去锡安的时候一定要去这个翡翠池看看。</p>
+      <p class="text">好了画面转回来我们已经坐在了公园的小接驳车上，一路上高耸的红色岩峰配着蓝天白云别提多像一幅画。本来打算坐到终点站看看再坐车去翡翠池，可是看了看徒步地图发现翡翠池也不是单纯的观景点，需要爬山徒步才可以。所以赶紧下车掉头坐车回到Zion Lodge这一站，开始向心中憧憬的翡翠池进发。</p>
+      <p class="text">从官方提供的地图和说明上看，翡翠池的徒步路线分为上下两部分。到达下翡翠池往返需要一小时，21米的高度落差。接下来从下翡翠池到上翡翠池往返又需要一小时，高度落差又增加了61米，应该是需要爬山了。我们开始走的时候觉得还比较轻松，trail清晰而且基本都是平路，又有部分树荫遮挡，虽然正是一天中最热的时候，也还不至于很痛苦。大概半小时之后感觉周围的岩壁突然变得陡峭且升高，trail把我们领到了一个三面环山的低谷地带，一条极细的瀑布从trail上方流下来洒到山谷里，相当于我们是从这条迷你瀑布的背面穿过，风一吹就有丝丝水珠落在身上，好不凉快。我和芝麻兄困惑的沿着trail绕了山谷一圈，心里的OS都是：说好的翡翠池呢？怎么连个水影都没见到啊！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/12GgLMwAqaGjbizDRWcIMonUsNumVolsV">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1xwJx7IvniybYValhcj-NFsWWJczuB4XH">
+        </div></figure>
+      </div>
+      <p class="text">不明所以的我们觉得相当震惊，不是说是pool吗好歹有个池子啊。眼看着下面的山谷只长着几棵树没有什么水，芝麻兄说可能pool太小被树挡住了。然后我们发现旁边有个牌子说再往前可以去Upper Emerald Pool，我跟芝麻兄想着明信片上应该画的是上面那一个翡翠池，可是就是不知道要走多久。正好一对老大爷老大妈从上面下来，芝麻兄问请问上去还有多远的路啊？十分钟？大妈想了想说不不不，十分钟不行，怎么也要二十分钟。芝麻兄回头看看我再看看时间，有点犹豫，又问上面的池子是很漂亮的那个吗？大妈又想了想说，虽然不知道你说的是哪一个，但是上面有个很漂亮的池子，绿色的。</p>
+      <p class="text">我和芝麻兄一拍大腿，就是它了！于是决定往上走。从这里开始就不再是平路了，好一点的地方会看到不规则的天然石阶，差一点的就只是远远跟着前面的人估摸着踩着石头往上走。每一层石阶的高度落差都不大，但是爬上爬下的非常累人。大概15分钟之后眼前突然一小块开阔地带，我和芝麻兄都在心里欢呼了一下说终于到了，正准备停下休息的时候，定睛一看只有一个绿色的小号水洼，又有点疑惑了。找到牌子的时候上面写着“中翡翠池（Middle Emerald Pool）”，旁边一个箭头说“Upper Emerald Pool”，然后指着蜿蜒而上的另一条石头路。</p>
+      <p class="text">此时我们已经微微的有种会被坑的感觉，毕竟接连两个美其名曰“翡翠池”的地方，一个根本看不到池，一个是小水洼。但是都爬到这里了，如果不看到那个上翡翠池实在是不甘心，万一那个池子就像明信片上画的那么好看呢！想了想一咬牙继续爬！</p>
+      <p class="text">这时候我跟芝麻兄还闹了个小别扭，因为我想早点回家准备明天的行程，但是现在貌似已经爬了很久而且还要爬很久，再加上回程，不管是体力消耗还是时间消耗感觉对明天的徒步都是只有坏处没有好处。但是芝麻兄一开始居然说要把这个徒步当做为明天的练习！我心想你什么时候练习不好非要今天练习，等耗尽了体力睡一晚上都不一定补得回来。而芝麻兄觉得自己也是好心要为明天做准备，就算真的累坏了睡一觉就好了没有那么脆弱，而且东西什么时候买不行啊非要这么早赶回去干什么。</p>
+      <p class="text">然后我们就各自闹别扭，别扭来别扭去就变成了芝麻兄觉得山高路远可能真的很耗体力，万一其中一个人扭到脚或者伤到了他要后悔死了，想就此返回但老婆不听所以郁闷。而我则变成了来都来了爬都爬了干脆就一直到底，你让我现在啥也没看到就返回是几个意思啊好郁闷。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1Beo-1du-fTNJEedpVZXXfYT2doHMbbFS"></figure>
+      <p class="text">然而这些别扭很快就被乱石沙路折磨得一点不剩了。正值下午两点烈日当头，又没有遮蔽的树荫，没一会儿我们两个都是大汗淋漓，加上爬山找路气喘吁吁，trail只有一人多宽，有些地方旁边就是山谷，而且部分石头不好落脚还有点危险，必须时刻紧绷着神经，因此这一路上山简直是好几重折磨。终于到了传说中的上翡翠池的时候我们都已经浑身湿透了。</p>
+      <p class="text">战战兢兢的踩过脚下乱石，拐过一个大岩石之后眼前豁然开朗，似乎像是到了一个宽广的露天洞穴，四面是高耸的峭壁。虽然外面日头正烈，然而这一小块秘密的山谷地里却在周围悬崖的阴影下清凉无比，况且里面绿树成荫，正是纳凉的好去处。再里面一点就是一个中号的绿色水洼，我和芝麻兄不禁心里一紧，难道这就是最后的翡翠池了吗？！几经确认，果不其然！立时三刻就想把背包甩在地上振臂大呼：坑死了啊！</p>
+      <p class="text">眼前的景象真是让人悲从中来。虽然这里空气湿润，上游的小溪汇聚下来使得此处常年积水，论起景色倒也真是沙漠地质中的一处绿洲奇景，但是跟我们见到的明信片比起来简直就是天壤之别啊！那翻来覆去的确认，我们不得不接受了这一残酷的事实：我们被PS的太厉害的明信片坑了。跟芝麻兄面面相觑了几秒钟，终于憋不住哈哈大笑起来，所有的别扭也都一扫而空了。接下来的十分钟的时间里我们彼此吐槽根本停不下来。即便如此，我们也还是觉得这个地方是值得一来的，相信没有看过明信片的朋友是断然不会像我们这么万念俱灰的，当然前提是在时间不那么赶的情况下。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/12SN71qkUNBnN-jx9dc7hsH_itLOazKtp"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JSQc5CWinK2QgGzXKxDgd1lP_1kDEBJJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rFiydmCL9h83No4_BooSQ2-iZJf1e4JS"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">接着我们坐在大青石上休息凉快了一会儿，觉得实在是巴掌大的地方，能逛的都逛了，不如趁着还不犯懒直接下山去吧。下山的路感觉比上山走的稍微快一些，可能是因为走过一遍熟悉了，也可能是太阳没有刚才那么晒的缘故。芝麻兄一直像上山的时候一样紧紧拽着我的胳膊怕我踩空或者跌倒。我一边跟着前面一对老爷爷老奶奶的步伐，一边感慨他们体力真是好，年纪轻轻的我们在后面一点都不会觉得他们走得慢，稍有不慎可能还跟不上呢。呼呼的来到一小块开阔地，我还以为是之前那个Middle Emerald Pool到了，抬头一看确实又有两处小水洼，但是都是用铁链子围起来的。而前面已经没路了。</p>
+      <p class="text">我们这才反应过来跟着老爷爷老奶奶走错了路，看样子他们也发觉了这不是他们来时的路，但是却悠闲的停下来休息了。我跟芝麻兄欲哭无泪的往回走，期待能找回到正确的下山路上去。好在岔路口距离并不远，虽然不明显但是我们没有错过，顺着石头一口气下来了。一路上不断碰到气喘吁吁上山的人问我们还有多远，我们也笑着学当时回答我们的人一样，对他们说不远了快到了再坚持一下！前面的美景在等着你呢！</p>
+      <p class="text">很多人表示听你们说不远了我就放心了。其实回答的人都是一个心理，就是想鼓励你爬上去，因为都走到这里放弃了就太可惜了。我和芝麻兄默默地看着擦身而过的人，心里暗暗祝他们好运希望他们看到翡翠池的时候不会太失望。</p>
+      <p class="text">到达Lower Emerald Pool之后路就变得很好走了，没多久我们就回到了接驳车的车站。在车站附近还遇到了一个不怕人的小松鼠，跟它玩了一小会儿，要不是公园规定不能喂食真想给它点什么吃的。一路坐车回到停车场的时候已经4点多了，以徒步景色出名的锡安国家公园我们也算是体验了一把，不算坐车的时间连走带攀爬整整两个半小时。回来之后我们才知道我们走的这一条trail比著名的Angles Landing Trail出过的事故还要多，想想当时也是好几次有惊无险，总算是不虚此行。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1EhGjtOTwtfb5KP6lu4vhkqjCoyE1H9HD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1CECgASvCUiJXDlQokk7a5QLOTsEHGxa7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1px1ResHTzK5tv_yhPcJTtHZk7ngLVvM4"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">开车去往东门的路上也有一些观景点，可以随时停下车来欣赏。走走停停，等我们回到Kanab的时候已经6点了，找了早上闲逛时看到的一家亚洲餐厅，点了日式咖喱牛肉面和日式咖喱鸡盖饭。吃完饭也不能闲着，赶着超市下班前准备明天徒步的口粮。芝麻兄因为一直觉得没能早回来休息而有愧与我，撅着嘴巴有点不开心。我在一边又好气又好笑，还要安慰他说没关系买完东西回家就睡不会晚了的。</p>
+      <p class="text">满满当当装了小半推车的纯净水、一瓶运动饮料、四个巧克力能量棒和一袋饼干作为明天进波浪谷的粮食。另外还买了明天的早饭和一个小铲子。说起这个小铲子，也是要带进波浪谷的，因为工作人员说所有的生活垃圾都不能丢在里面要带出来，而里面没有厕所，所以如果我们要生产“个人垃圾”的话，只能挖个坑，解决完之后自己埋起来。。。事实证明芝麻兄的肚子在波浪谷表现的特别好，小铲子没用上又带出来了。。。</p>
+      <p class="text">回到家里洗了澡收拾好第二天要带的两个背包，我们就坐在沙发上研究各种波浪谷的攻略和地图。看了一会儿芝麻兄说老婆我们要不要个指南针啊，我说这么晚了到哪买啊。芝麻兄起身说你别管了在家呆着我去买，能买到就买，买不到就算了好不好？我想想也好，万一手机没电连个指南针都没有怎么行。出去一会儿芝麻兄就拿着一个瓶盖大小的指南针回来了，一边叹气说就这么一个破破的指南针要了我12刀。</p>
+      <p class="text">想起工作人员的嘱托，联系了两个朋友并告知他们如果我们明天下午两点以前没有跟他们联络就帮我们报警，也给了他们所有的救援联络号码。跟另外那个中国小姑娘约好早上5点20在他们酒店门口见之后，不到9点的时候我们就准备躺下早点休息了。外面的天还没完全黑，而我们的房主一家也还没回来。因为要一早就走我还发短信问了能不能中午回来再收拾行李，结果也没有回复。为了避免他们没带钥匙我们也就凭感觉没锁大门，希望能睡个好觉明天精神满满的出发！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1JVw70peqy3pWePUdz0CFZ2KABkSUNzJ0"></figure>
+
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.抽中波浪谷的签之后一定不要一兴奋就跟着大批人马离开抽签办公室，因为要等着后面交钱拿许可证，还要听取注意事项和徒步说明，大概总共半小时左右。
+        <br>2.除了小铲子可带可不带，多带几个塑料袋把自己的生活垃圾带出来是必须的。波浪谷里不能留任何垃圾。
+        <br>3.锡安国家公园南门进入的话离主景区很近。东门进入要开很久才会到主景区，但是沿途有很多观景点可以停靠。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第七日 波浪谷和盐湖城</h2>
+
+      <p class="text">大概凌晨3点半的时候，芝麻兄就醒了，然后翻来覆去的睡不着。我要继续睡，他就悄悄去了外面客厅的沙发那里上网。大概4点多的时候我也睡不着了，大概是因为太担心今天的行程，于是也披上衣服起来了。问芝麻兄是不是也很担心所以才睡不着的，他很淡定的说，不是，我是兴奋的睡不着了。。。</p>
+      <p class="text">好吧好吧就当是他兴奋好了。上楼热早饭的时候我问芝麻兄昨晚听到房主一家回来了吗？芝麻兄说没有啊应该是我们睡着了没听到吧。我很怀疑的说不会吧，哪能一点声音也没有，我们昨晚没有睡得很死啊。芝麻兄说可是也不能现在去人家卧室确认啊。我转念一想，说你看看房主家的车在外面停着吗？再看看大门锁了吗？没锁的话就是没回来。芝麻兄过去一看说，还真让你说着了，貌似都没回来哎！</p>
+      <p class="text">我第一反应就是怪不得昨晚没回我短信，不会是去了旁边的国家公园里手机没信号吧。也不知道房主同不同意我们中午回来再收拾行李，但是看这样子应该不会耽误下一位房客的住宿，至少上午可能没人入住了。饱饱的吃了早饭，离出发时间还有 十分 钟。最后确认了一遍行装，纠结了半天要不要锁大门最后作罢，天还没亮就出发了。</p>
+      <p class="text">一直到小镇主路之前都是黑黢黢的，没一会儿就到了跟那位 中国 姑娘约好的酒店门口，打电话才知 道因 为客满所以昨天他们换了酒店，因为高速还要开半个小时，我们想了想自己的小破车的速度，于是商定我们先走他们去追我们。</p>
+      <p class="text">开在高速上的时候天空已经没有了浓重的黑色，开始微微发亮，我们也知道快到 日出 的时间了。一路上我们都卡在限速上开，但是却没有车从后面追过来。快到拐向土路的拐点的时候我跟芝麻兄都很紧张生怕错过了，好在仔细研究了一下就找到了。为了避免中国姑娘一家错过，我们就在拐点处的空地停下来等着他们。还没停稳就发现他们已经追上了我们，我很惊讶到底是哪里冒出来的？！芝麻兄倒是说可能是因为高速有点蜿蜒所以刚才后视镜看不到。</p>
+      <p class="text">于是就开始了“七上八下”的土路。由于土路上有很多小石子，不知道是因为我们的小破车悬挂调的不好还是别的原因，总感觉出奇的颠簸，整个车都快跳起来了。无奈只能把速度放的慢之又慢，坚持着开到了停车场，一看表已经六点半多了，太阳也已经升了起来。因为此时温度大概还在18度怕冻着，我跟芝麻兄一人穿了一件从 曼谷 买的那种宽松肥大的长裤（我们叫它“泰式扯裆裤”），里面还都套了一层短裤，是想着长裤防晒，而且如果热的话可以很方便的伸进手去把短裤脱下来。芝麻兄把抽到的波浪谷许可证沿线撕开，停车证放在前窗内部，徒步许可按照要求绑在背包上。整理好东西之后我们一行五个人就出发了，其实在停车场有个签到表，应该是签上名字和日期再开始徒步的，可是我们五个人居然都忘的无影无踪，只顾着兴奋的往里冲了！</p>
+      <p class="text">开始的一小段是沿着河床走，所以暂时不用看地图找路什么的，再加上刚进来很兴奋，就一直聊天说笑。过了河床U型的拐弯，就会看到从河床向右手边的山坡上分出一条小岔路，大概只有一人宽，有一个指示牌立在这里写着Coyote Buttes North，也就是波浪谷的所在地，前方需要许可证方可进入（虽然没有围栏什么的）。此时就到了地图上的标注点1。我们也按照工作人员的嘱咐不时回头看看周围的景色，并且把返程方向的景色拍下来，以免回来时迷路。顺着小路翻过山坡就是一片较开阔的沙地，沿着依稀可见的众人的脚步印就可以，并且要不时对照地图上标注点2的照片避免走错方向。走了一小段的时候我和芝麻兄都已经觉得热了，索性把里面的短裤都脱了下来。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/10DL4cMILnLSw2enqYK7-pVAwzfreVM9e"></figure>
+      <p class="text">此时由于太阳还没有完全升高，角度还很斜，即便是戴着棒球帽脸上还是被晒得有点烫。穿过这片开阔地带的时候对照标注点3的照片，找到Small Saddle的方向就不会错了。不得不说这些照片跟实景对比起来还是很靠谱的，辨识力不错的同学都应该不会走错。翻过Small Saddle所在的山丘就要转向差不多正南方向了，此时不要下到左手边的河床里，而要沿着右手边山坡的半山腰向南走。从这里之后的很长一段路都是较平缓的岩石，说实话比沙地不知道要好走到哪里去，最起码不用走一段就停下把鞋里的沙子倒出来。</p>
+      <p class="text">另外要注意的是要随时补充水分，即使是不觉得很渴也要每20分钟左右喝一点水以免不知不觉脱水。但是要知道如果是清晨开始徒步的话，去程最好不要喝超过总水量的一半，控制在三分之一就可以。因为返程的时候会更热出汗更多，此时需要大量的水分，如果前面都把水喝光了后面就会很痛苦。至于上厕所，我们都很默契的会告知其他人一声，然后默默且快速的跑到某个灌木丛后面悄悄解决。其他人停下来等但是自然是很识趣的不往有人的那个灌木丛方向看啊哈哈。</p>
+      <p class="text">走到标注点4的时候就看到了著名的地标Twin Buttes，也就是连起来的两个白顶的岩丘，而之前由于种种遮挡是看不到的。我们在这两个小丘旁边休息了一下，因为像这样放眼望去都找不到几棵树的地方找个大到能让人凉快的阴影非常不容易。后来想趁着还不是特别热的时候赶紧赶到波浪谷，所以没有多呆就又出发了。非常佩服的是那位中国姑娘的老爸，基本没看过地图，凭大概的印象和方向感居然一直都走在我们前面正确的道路上，而我们跟他闺女还不时的一起研究地图，然后抬起头来的时候就看到她爸爸正走在我们认为对的那个方向。而且有时候我跟芝麻兄走着走着就走到沙地里去了，她爸爸还很好心的跟我们说上来沿着岩石走没有这么难走，等我们上来之后发现刚才确实是偏离了正确路线一点点才走到沙地里去的。我一路走一路都觉得他超级神奇，只有芝麻兄不服气说没有他我也能找对路啊。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/15OvZuClEBkijxxVIqSD4q0yfGimHxKBF">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1yQNne8zEcQRqjwz4DjFQYwjpz8Mn_mRH">
+        </div></figure>
+      </div>
+      <p class="text">大概一共走了两个小时左右的时候终于到了波浪谷The Wave的入口处。顺着一条小道拐进去就看到了红色岩壁，顿时所有人都是一阵惊呼“好美啊”！上面一条条泛白的波浪似是将这几座山丘都画上了红白相间的条纹，而这些线条温和蜿蜒，置身其中就像是在红色的海洋里一样，绝对是让人不敢相信的大自然的奇迹。摸上去会发现每一条浅色痕迹都是微微突出岩壁，有些地方会有点脆弱，有小块的碎口。再往前居然是一汪积水，倒映着前面的山丘上的波浪，像是在画里一般，让我们在感慨运气太好的同时止不住的按下快门。早就听说如果前一天有雨可能会拍到波浪谷的倒影，但是由于气候炎热或者水量不够，很可能在看到之前就蒸发了。没想到真让我们碰到了这番奇景，拍出来的照片感觉比微软默认桌面的那张波浪谷还要好看啊！</p>
+      <p class="text">整个波浪谷大概一英亩左右，但是就是这一英亩却怎么也看不够。这几座山丘底部相连，也是这样的地质结构，一步步走在上面像是随着红色波浪在晃，配上头顶的蓝天白云，甚至让人感觉有些不太真实。各种惊叹各种欣赏各种拍照之后发现由于才刚9点钟，波浪谷的一部分还在山丘的阴影里，据说要等到中午时分太阳的高度才会把阴影全部抹去。即便如此，由于几个山丘间隔不远，有些阴影部分却被旁边山丘壁上的反光照的红彤彤的，反倒是增添许多特殊的效果，置身其中整个视野都变得如梦如幻，充满了温暖迷人的色彩。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1n8fTCOKcaae3rwuy72u0w7h_h1HPkU3n"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1le5oDAKUP_PrufX0F90fsqqEQaswa8oe"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1po-yyR68o7-2E1GTugqaej8YnBvM1F0d"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1pbhxv39vEiWYlDkDUI0ypvvZfn2hHu7-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gpFaYitJvo5qYnWbwMOAbWuQjE5LTKDx"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1IpxUVdSTBmeI4QfmeVJobgohBvBaHous"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/19HjUhr5aGQieFUGVeZbre8pSyVZaL195"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1y_JxN6P2tKZDzdVV4fHFCZq5BrJAWQTx"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/10l9NQip48Ru8AEwlqhq64gejAojpyawr"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">我们跟中国姑娘一家打算各自在谷里逛逛，于是分开行动。晃了一会儿还碰见了两个刚到达的白胡子老爷爷，很开心的问要不要帮我和芝麻兄拍合照。我们当然说好。然后等我们问他要不要帮他拍的时候发现他的伙伴已经不见踪影了，于是只能作罢。芝麻兄此时肚子有点饿吃了一个能量棒，棒球帽也都湿透了，因为他坚持要背全部的六升水还有一瓶运动饮料，在我的一再要求下才留给我两升水来背，而且一路上还以喝我包里的水为优先减轻我的负担，因此非常辛苦。我们虽然不想等到中午，但是看看波浪谷一半还在阴影里，打算先往前走走再逛逛周围，等到回来的时候说不定就会好一些了。谨慎掂量了一下还有不少体力，返程应该没问题，于是我和芝麻兄决定按照商量好的决定往前走走去找The Second Wave第二波浪谷。</p>
+      <p class="text">波浪谷的入口是在北边，往里走顺着两个小山丘相连的底部往南边的山坡往上爬，会看到山顶有一个明显的石拱门。按照前人的攻略，这座山貌似就是叫Top Rock的那一座了。要去Second Wave的话不要朝着石拱门爬，而是应该在半山腰平缓的地方向右拐。此时已经差不多离开了波浪谷主要区域（就是最好看的那片区域），岩石的波纹和颜色都有很大变化。没多久就会看到右手边有一些巨大的奇形怪状的石头，像人类大脑表面一样，被称作Brain Rocks。继续向前走不往右拐去看这些石头的话，大概不要两三分钟就会看到很多像菠萝包一样的面包状巨石，相当的诱人！走过这些巨石不远就是Second Wave了，要真算起来的话，Second Wave与波浪谷直线距离不过400米左右，所以并不会很累。由于波浪的方向跟你来时相同，所以可能比较疑惑到底是不是，但是如果下到底部向上看的话就很明显。我跟芝麻兄都是一眼就看到了，因为这里的一条条 波浪岩 石比刚才在波浪谷的那些更突出石壁表面，所以觉得很容易辨认。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/14VgqUXVEvHRnGRuWa6g9uWJWzolDC3yy"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1SWslTLRc6Fv33ak-evdm4j5Iof0S0zp7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JpCH3iHoc_hqsCtob0wtuhO2xM6GBuqS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fY2_qc4eCTmi9qDEwci9u2zdrFnsnrUE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17kxQf-crg50xCm_3XH8sWWHZEq83Uptc"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/16fGRM6T__IzzUjNSpwgM5wGuC5mnV_o1"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1djxKwtz0Bm1ANA0T5x9r5DrQLFhCfXmB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1IPxaG1UvS_aqMKwKP2lp7bvW85U6TlWe"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">路上有很多小水洼里都能清晰的看到成群的小蝌蚪，让人不禁担心这点水一会儿就晒干了它们可怎么办啊。翻过小山丘就能看到Second Wave全貌了。最好的拍摄时间貌似是日落前，因为整个Second Wave会被夕阳照亮，而我们到达的时候并不是最美的时刻。但是无奈也等不到日落，所以就直接掉头往波浪谷主区走。这时候已经早早快爬到山顶的那位姑娘和老爸也开始往回走了，我们在快回到波浪谷的时候汇合，集体在一块大石头下面仅有的阴凉里休息了一下。姑娘一家都相当热情，带了苹果和砂糖橘要分给我们吃，推脱了半天我和芝麻兄吃了人家两个小砂糖橘，满怀感恩的翻了半天自己的包就只有饼干和水可以招待人家，愧疚难当。</p>
+      <p class="text">休息过后我们一行人就回到了波浪谷，此时太阳已然升高，阴影也只有一点点了。这时候又见到了刚到达的一家三口，其中爸爸也是带着长枪短炮三脚架看样子打算大干一场。像他们一样有的人喜欢等到中午阴影全部消失再拍，可是我和芝麻兄都觉得正如工作人员说的，有一点阴影反而是种点缀。于是我们继续欢脱的各种跳各种拍，又把波浪谷逛了一圈。看看时间已经10点多了，决定开始往回走，争取在正午时分之前走出去。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1prvjeLm_C0AgS0S71f-DdPXZn0QZt6V6"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1eYpgEN8Okri9cHerXL8plD6rwu1ByUm1"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1IV6QhFZyEThxPgbCEwlCHKf86e0CJN_S"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/10Ex_mbMqC1vCLhibFsYRgoqKBwqSr46O"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1sfrBwjHTEm5kxw7Fsetw7-zMi8E67v4r"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">那位姑娘一家人还要再呆一会儿，于是商定我们先走去找路，他们可以慢慢来，如果他们走的时候还能远远的看到我们也算是给他们指个方向。刚开始回程的时候因为还有大家的脚印，所以并不难找路，就是一路踩着沙子下坡，每一脚都戳在沙堆里，没几步就觉得好像光脚踩在沙滩上一样，鞋里全是沙子。而且要注意的就是可能会有好几条脚印踩出的路，应该是从不同方向的人走过来的，要一边对照地图辨别方向，一边选出自己来时的那条路，以免被脚印引领到错误的方向上去（难保他们来的时候走错路线绕了很远才到达波浪谷）。</p>
+      <p class="text">走着走着就爬到了岩石的山坡上，继续跟来时一样顺着半山腰往回走。这时候心情相对轻松了一点，沿途欣赏远处的山丘，发现也都是波浪状的表层，连绵不绝。接着也陆陆续续遇到了三组还在向波浪谷前进的人，其中包括那对怀孕的 韩国 夫妇，他们才走到Twin Buttes，也就意味着还有一半的路程。我跟芝麻兄都很佩服他们，忍受着渐渐升高的温度，挺着大肚子还能爬上爬下的一点都不含糊，不知道两人的性格是大大咧咧还是一点都不在乎的勇敢。</p>
+      <p class="text">由于阳光强烈气温升高，再加上脚下的岩石也开始向上蒸腾微微的热度，我们俩还没走到Twin Buttes的时候就热的不行了，身上也湿透了，恨不得走两步就要喝口水。好在一路上都拿着地图按照返程的标注点照片适时对照，没有走冤枉路。因为一上午的体力消耗我们本来打算在Twin Buttes找个阴凉停下休息吃点东西，谁知道到那里一看早就没有了来时的阴凉，看了半天也只有旁边一个稍微高一点的小灌木下面有大概一人空的阴影。我俩让来让去最后还是我坐到了阴影里，芝麻兄在我旁边，一起吃了能量棒和饼干，又喝了些运动饮料和水，感觉给身体充了些电之后就继续出发了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1x1KSCGgoXmn0fR0mE1h8BjKi9y5WsJlD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1vOmUrlFMgCBPSEf7w_bxvuXTIuObLIKZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gpHW0Y4kSRqJXBzympS9JpBhLRI7f_7r"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">刚走两步就看到一个金头发小哥正慢慢悠悠的往波浪谷走，我还跟芝麻兄小声说他好悠闲啊，这个时间进来岂不是要热死啊，返程的时候会更热的啊。刚说着就看到他跟我们打招呼，问我们去过波浪谷了吗，好看吗，感觉怎么样啊。我们说去过了很好看啊，觉得很惊艳，非常开心。他笑了笑说那就好那就好，把你们的许可证拿出来我看一下吧。我和芝麻兄一愣，没反应过来。他又笑着说，我是巡逻员，现在要查你们的票啦。我们恍然大悟，转过身来把书包上的许可证给他看。他核对了一下许可证编号和名字日期，说可以了，你们知道接下来怎么走吗？我们抬头看看地形又看看地图，正好有些不确定，就问他是不是远方几个小山丘的方向。他说对，但是不要上去，沿着左边的谷底走，到山丘下面的时候左拐就是你们来的时候那个Small Saddle，顺着左拐下坡就可以了。一边指给我们看一边解释路线。然后又问我们有没有足够的水，得到肯定的回答后就跟我们说拜拜祝好运！</p>
+      <p class="text">跟巡逻员分开之后我们按照他的指示很顺利的就找到了Small Saddle的向左的拐点。需要注意的是工作人员曾经告诉我们这一段是很容易迷路的，很多人都拐早了导致迷路，这时候如果拐过去发现不对劲之后，尽量再找回原来的路继续向北走，找到正确的Small Saddle那里再拐。翻过Small Saddle就是来的时候经过的那片开阔地带，此时标注的照片上有两条路，一条建议路线，一条备选路线。我们一门心思想按照建议路线走，心想着可别走到备选路线上会稍微绕一点，但是由于这片沙地长得都一个样子，而且向前一直缓缓的上坡，所以也看不到山坡那边的景色，无法判断方向。无奈只能估算着大概的方向一鼓作气向前走，等到走到坡顶的时候看到远处的山峰，方知自己果然还是在不知不觉走了备选路线。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/19jcCq2b-7wINdaNRw4z6wKdiKlvVK6MV">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1grrxmbZFqKxvASUQzGb-5XxQZYxPgF7A">
+        </div></figure>
+      </div>
+      <p class="text">到这里之后如果来时仔细辨认过身后的景色，就会发现已经有些眼熟了。而且地上也依稀可辨踩出的小径，所以基本来说是不会迷路了。沿路下到河床里，看到了又走了好一阵子才隐约看到出口，让我们都怀疑是否走错了路。可能是因为进来的时候天气凉爽，又一边走一边聊天才完全不晓得居然这一段河床走了这么久。眼看着马路对面就是停车场，我和芝麻兄还是没走到出口，这时候我们都有点心急了，生怕错过了出口，就在一堆稀疏的灌木丛中横着插了过去。过去之后才发现刚才多往前面走一点点就看到出口了。</p>
+      <p class="text">12点左右回到停车场我们才想起来进去的时候居然忘了签到！左顾右盼也没发现签到本，只有一个铁盒子在旁边。我把盖子掀起来一看，果然签到本正好好的躺在里面。把大名和日期写上，再在备注那一栏里签上“Returned”，摆个傲娇的脸合张影，我们的波浪谷之旅就顺利完成了！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1UH4u-vNvhD_iC0jxzuJWNzBGPnrpVSxF">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1RPFIZwqi-dfWZOt_JFYf1CEUwmC6Jzyi">
+        </div></figure>
+      </div>
+      <p class="text">回到车上稍事休整我们就向Kanab返回了。那条充满小石子的土路又虐了我们一次，期间还因为石子蹦到底盘上发出的巨大声响吓了我们一大跳，停车确保一切无恙才继续上路。回到家里发现房主一家居然还是没有回来，这样就给我们留出了充足的时间洗澡收拾行李。可是由于实在是太饿了，我们俩分别趁对方洗澡的时各自吃了半个能量棒垫垫肚子。一切整顿完毕我们把房间和客厅浴室都收拾好，勺子杯子都清洗干净，垃圾带走，然后在厨房的桌子上给房主留了一张纸写上谢谢他们的款待，希望以后有缘能再见面！</p>
+      <p class="text">饥肠辘辘的我们觉得昨天吃的那个日式咖喱很不错，今天打算接着吃。到餐厅的时候已经差不多一点半多了，结果很神奇的碰见了跟我们一起去波浪谷的中国姑娘一家人！这之前几分钟我们还在互发短信问对方是否顺利出来，没想到就这样碰上了，可见Kanab真的是个小镇子。我和芝麻兄很没出息的又点了昨天的那两样咖喱饭和咖喱面，舒舒服服的吃了一顿。</p>
+      <p class="text">之后跟他们一家人分别，我们两个就向盐湖城进发了。一路上我和芝麻兄都在谈论上午的见闻，依然觉得从昨天开始波浪谷的一切就像梦一样，整个经历让人感觉有点恍惚有点难以置信。我自己不知道为什么觉得不是特别累，可能是因为芝麻兄承担了大部分装备的负重，所以他是累坏了。看着他还要开几个小时的车，我也是干着急又心疼，却帮不上什么忙，只能端茶递水喂点零食。</p>
+      <p class="text">一般在 美国 东部高速都是限速到70英里或者65英里以下的，如果遇上修路的工程区域会限速更低。因此并到15号公路上之后看到“修路工程区域限速70英里”的牌子的时候，我和芝麻兄都觉得一定是我们看错了或者写错了。过了修路的区域我们瞪大眼睛等着看限速牌，当“限速80英里”出现在我们面前的时候我们就真的震惊了。这样的限速以我们这辆经济型的小破车来说，想超速都很困难。于是芝麻兄瞬间来了精神，跟着周围的车压在限速上呼呼的往前跑，我则是一边担心一边又不敢说话只能警觉的盯着周围的车和前面的路生怕有什么闪失。</p>
+      <p class="text">车上的GPS不断估算着到达盐湖城的时间，随着距离的拉近，显示的到达时间也慢慢提前了几分钟。不知道是不是因为上午体力消耗太大出汗太多，我们俩一下午都觉得口渴难耐，频繁的喝水，却又频繁的上厕所。我跟芝麻兄笑称他有先见之明，路上开车节省出来的那几分钟时间都用来上厕所了。</p>
+      <p class="text">大概晚上7点多的时候我们终于进入了盐湖城的范围。直接导航到达“世界第一家肯德基”的时候芝麻兄一直都在吐槽为什么肯塔基州的炸鸡要在犹他州开第一家餐厅啊！后来才知道：很久很久以前在肯塔基有一个老爷爷发明了一种炸鸡的秘密配方，他家的炸鸡很受欢迎。但是后来貌似原来的餐厅要拆迁，于是肯德基老爷爷带着自己的炸鸡配方走啊走啊，一路到犹他州，终于有人慧眼识英雄，愿意买下配方和他一起在炸鸡界奋斗！这个世界第一家肯德基的餐厅门口就有两人并肩而立的雕像，我站在雕像前感慨真是好基友一辈子啊！</p>
+      <p class="text">餐厅内部跟普通的肯德基并没有什么特别大的区别，除了零星的放置了不少展品，包括高压锅啊（这个我也是不明所以，难道最初是用高压锅炸鸡的？），当年肯德基上新闻的剪报啊，还有好多旧照片和纪念物。另一边是一个类似自助食品台，上面的托盘里分别放着各种青菜沙拉以及炸鸡，我跟芝麻兄都很好奇难道这里有炸鸡自助餐？看了半天也没看出个所以然。</p>
+      <p class="text">本来在来的路上看到了不远处的中国城，但是一进肯德基的大门，香香的炸鸡味道扑面而来，实在是懒得折腾索性就在这里吃了。点了经典套餐和一个叫Famous Bowl的东西（底层土豆泥，中层鸡米花，最上面浇酱汁和芝士，，安慰了一下我们俩已经准备“不给粮食就闹革命”的胃。吃完出来发现天还没有黑，想到明天一早就北上黄石了，想抓紧这最后的时间逛逛盐湖城。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1rM_kU0bJ_zi_XXAZnjfwvK-JpaFQ4EfE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Oc4Gpqs_yDmAY8IVsCISidAXr_KHihZI"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_eB54_cdu4h8Gd7W8SIqmamkWSrNOJDq"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1d9_K8MD9QAEaQnjpGbn79v0Idq0gSlGV"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1btf9zdmQXscbfDiSkKA5X5qe3f-pOa02"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZrXQbx0jbcxmLQmdMCJRmEWW2lPXJOzO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1EVUZDV4YgidHQmG0f7mmWFxiAiPXlkcB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1vlkChUM6N4RH6JsFoAfXu8FIQddCBsCl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hQ6fQ4xsdW0ywDVRK7Ev6s9IomSU6y4-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rOY9jkKiEjcENlZQgSC-gI3FTyFWDZ4O"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">在圣殿广场旁边找了个街趴停车，到缴费机那里发现周末免费。没两步就走到了 摩门圣殿 的庭院里，作为盐湖城的标志性建筑和摩门教总部，圣殿的尖顶圆柱哥德式风格十分明显，精美而恢宏大气。早就知道这个圣殿跟一般的教堂不同，即使是信徒也不能进去，只有高级长老以及信徒结婚的时候才能入内，所以我们也没有奢望与它近距离接触。庭院的另一边则是游客中心，里面还有圣殿的建筑模型。我们隔着玻璃窗向里看了看模型，想着回来的时候再进去仔细欣赏，谁知道因为回来的太晚关门了，甚为遗憾。</p>
+      <p class="text">从庭院的另一个门出去就是圣殿广场，也叫做 摩门教会广场 。其实感觉更像是一个小型公园，人们围坐在大型喷水池旁边乘凉，孩子们疯跑着嬉笑打闹。鉴于每次到达一个州的首府都要去州政府的大楼看看，虽然这次没机会进去参观，我们还是想趁着日落前最后一点光线去 犹他州政府 拍个纪念照。看看表还有十五分钟就日落了，我和芝麻兄甩开大步快走，没想到短短十分钟的路程一路上坡走到最后都要虚脱了。</p>
+      <p class="text">此时夜幕缓缓降临，政府大楼周围的点点射灯也亮了起来。赶着最后的光亮在州政府大楼周边逛了一圈，我跟芝麻兄手拉着手沿着下坡往回走。盐湖城给我的印象非常特别，远处宏大的教堂和身旁一幢幢错落精致的小宅形成鲜明的对比，街道纤尘不染，身处市中心附近却安静的像是睡着了一般。然而在我们悠闲的步伐中，空气的热度悄然褪去，天边还有一丝的光线，晚霞的紫色晕染开来，似乎是给眼前的一切都披上了一层浪漫的薄纱，让我觉得要这样一直走到地老天荒去。</p>
+      <p class="text">回到圣殿广场的时候正碰上身着正装的人们从里面往外走，猜想可能是婚礼刚刚结束，找了半天却没看到新郎新娘。游客中心的展览已经关门了，但此时整个摩门圣殿却被灯光装点了起来，在夜幕中散发着神秘而优雅的银色光芒。晚风吹拂，树影摇动，我们在盐湖城的这个傍晚因为迟来的日落变得惬意而悠长。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1lYG3dZ-Pv5epUPRNGXkT-wSF-QZjLE1R"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gFwSHAE7ZB19A9WlRhX-x4JJkN9EB_TU"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1G0X9EcRGfwty_z6iSDLJwAQK8QK_58gX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14JoUkOFq6TnrBV73QbhL3sR2CK3fwF6k"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hAGNgg73FW_VECPGOC3AWyt5-MNiWB25"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1X9KGlCovzR2LunsO2dIax8O7k9EL-wip"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17yvDEC89jN8wz4LyzBiPhhv6ErU9pvto"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1QkGtKI5o1TH5urH-jh1uW0jE7eqSU5TE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1AoJa9bau8yxBHgymxLqeYHOqWcD6r6AE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1eyLpoa-dvmHWiUjM4-Mf0NH1cVBdedQK"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">经过了一日的奔波芝麻兄俨然是疲惫不堪，我们驱车到达距离市中心以北30分钟的酒店时已经过了晚上10点。房间内设施齐全整洁干净，唯一让人不放心的就是前台的小哥貌似磕了药，按了半天铃才出来不说，给过我们的房间居然又给了别人同一间！幸亏是因为WiFi密码没有告知而前台电话又打不通，无奈芝麻兄只能亲自去问，结果回来的时候就发现另外一对母子正试图插卡进入我们的房间！好在我在里面锁了门，不然她们就直接进来了！然而她们也不知道发生了什么事情，正在纳闷为什么进不去的时候遇到芝麻兄回来，才知道原来前台给了我们两家人同一个房间，而前后check-in不到10分钟！</p>
+      <p class="text">事后想一想都觉得很惶恐，如果当时不是我在屋内上了锁，或者芝麻兄没有及时回来，又或者试图开门的不是什么好人，后果真是不堪设想！那对母子重新回到前台换房间去了，芝麻兄一进来就把门整个锁好又上了安全栓，我才稍微安心了一点。劝大家不管到哪里住酒店进门第一件事就是把里面锁好然后挂上安全栓，以免相似的情况发生。</p>
+      <p class="text">芝麻兄一直到洗完澡躺到床上都还在嘟囔一回去就要给这家酒店差评，结果说完没半分钟就又秒睡了，看样子真是累了。我把相机里波浪谷的照片倒出来又翻了几遍，却是迟迟睡不着，兴奋感还没有完全褪去，满心里想的都是分享给家人朋友。外面偶尔能远远听到高速上汽车经过的声音，带着沉沉的睡意一起袭来，似乎是给这一天写下了一个完美的句号。</p>
+
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.The Wave波浪谷所在的地方叫Coyote Buttes North，是一片比较广泛的区域，抽签的许可证发放的就是进入Coyote Buttes North的许可，所以并没有波浪谷许可证这一说。只不过这里面最让人惊艳的，或者说最出名的是波浪谷，所以大家才都说是抽的波浪谷的许可证。
+        <br>2.官方发的地图上每一个标注点都有相应的经纬度坐标，所以如果有户外用的GPS的话，是个很不错的导航。但是工作人员说车载GPS是没什么用的，必须是户外徒步用的那种才可以。
+        <br>3.工作人员和地图上都强调了，不要试图坚持往返都沿着地图标注的正确路线走，因为这个路线并没有在现实中的trail，只是书面参考，很可能有更方便你自己的路线，或者某一段你绕了点路，这都是很正常的，不要惊慌，也不要担心，大多数人经过自己的努力还是能够找到返程路线的。
+        <br>4.如果到达波浪谷的时候体力有很多富余，建议可以到周边爬爬看看，有很多景色官方是没有地图和说明的，但是网上攻略有些会提到，比如说Top Rock、Brain Rocks和Second Wave。需要注意的是估算体力的时候要把返程也算在内，不要想着反正也不累就随便耗费体力，因为返程的时候气温升高会更容易出汗和疲惫。
+        <br>5.从波浪谷返程的时候，开始的一段一定要看好，会有很多条脚印较多的路，因为很多人是从其他方向过来的（比如说顺着河床过来的），可能他们来的时候就迷过路了。如果自己来的时候没有迷路，尽量找到自己走过的来时的路，不要盲目跟着大家的脚印走。
+        <br>6.工作人员说徒步初始大概不到一半左右陆续会有4个很小的指示牌（其实上面就只有一个箭头而已），如果没有看到的话千万不要慌张，因为实在是太不明显了，很多人 都表示一个都没看到也成功走出来了。我们一路感觉都是按照地图的最佳路线走的，进去的时候看到了两个，返程的时候又多看到一个，所以也只是看到三个指示而已。看到路标最好，说明走对了路，看不到也不要紧，因为很可能就在离你十步开外的地方，只不过挡住没看到而已。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第八日 黄石国家公园</h2>
+
+      <p class="text">清晨的时候就能听到窗外高速上的远远传来的车流声，可见睡得不是很踏实。起床收拾好出门，到前台看了一眼提供的早餐，果然只是几片面包和甜点，也不知道是不是从昨晚开始就对这家酒店印象大打折扣，完全不想吃这里的早餐。跟芝麻兄一合计决定去马路对面的麦当劳，点了两个 汉堡 吃下去感觉好多了。又因为睡得不好担心路上困，去星巴克要了杯冰咖啡。趁着做咖啡的功夫芝麻兄又是一句“老婆我要拉屎”就一溜烟跑了，留下我看着前台大姐莫名其妙的眼神只能说了句今天天气真不错啊。</p>
+      <p class="text">一路向北，按着80英里的限速狂飙4个多小时，经过爱达荷州之后进入蒙大拿州不久就到达了西黄石小镇。已经到了午饭的时间，担心公园里面不好找餐厅，我们就打算在小镇上先吃了午饭。找来找去不是汉堡就是薯条，突然看到一家叫“火车头牛肉粉”的中餐店，喜出望外。进去看了菜单，发现牛肉粉一碗16刀左右，一份宫保鸡丁14刀左右，想了想既然如此还不如点两个菜吃。小店总体来说还不错，干净整洁分量适中，想到偏远山区又是景点周围稍微贵一点也能理解，两个菜一素一荤加小费一共不到38刀。</p>
+      <p class="text">填饱肚子之后我们就向黄石国家公园西门进发了，照例是先跟公园门口的牌子合影留念。黄石是个地质地貌非常丰富的国家公园，在这里可以看到火山泥浆，硫化温泉，峡谷瀑布，雪山森林，蒸汽喷泉，以及广阔的湖水和丰富的野生动物。其中与其他国家公园最大的区别就是它位于落基山脉之间的熔岩高原上，蕴含着大量的地热能量，从而形成了包括间歇泉在内等与众不容的地貌特征。</p>
+      <p class="text">黄石的景点大部分都分布在“8”字形公路沿线，由于我们住宿的地方在东门以东大概一小时车程的地方，因此这一天我们主要在地图上“8”字中间的一横及其左右游览。地图链接： http://www.nps.gov/yell/planyourvisit/upload/2014TearOffMap.pdf</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1fmaAqx-Z6zLDXOssCTlj2SMCOaAcQp23">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1h1wqx8PNPXec0oiqqzgdn26Quhingly4">
+        </div></figure>
+      </div>
+      <p class="text">在西门入口处拿到地图和公园报纸之后顺着Madison River一直向东开，据说会沿途遇见很多动物，不过不知道是不是正值中午的缘故，居然一路上都没看到。于是决定去Madison那里的游客中心问问工作人员何时何地见到何种动物的几率较大。到那里才发现我们没仔细看地图，这里不是Information Center而是Information Station，区别就是这里只有一个小木屋，里面只有一个工作人员，而且有一位大妈一直在问问题。我们等啊等啊小木屋里的纪念品看了三遍，又等了将近五分钟的时候我放弃了，无力的看了一眼芝麻兄示意“咱还是走吧”。</p>
+      <p class="text">由 Madison北上，经过Gibbon Falls不久就会到达地图上的Beryl Spring和Monument Geyser Basin。其实是一个非常小的观景点，靠边停车走上栈道就能两个一起看到。前面咕嘟咕嘟冒水泡的是温泉，后面那个喷白色蒸汽的是间歇喷泉。开车再往前一点就是Artists Paintpots，停车后沿着trail走一段才能看到栈道。本来我们都很期待，觉得能叫做Artists Paintpots的地方该是一种怎样的五彩斑斓啊。走到栈道的时候我们看到的只是一滩滩冒着热气的小水洼而已。顺着栈道往山上爬一段再往下看才能勉强体会Artists Paintpots名字的由来，山脚下零星分布的各种间歇喷泉和温泉显现出墨绿和棕黄等不同的色彩。由于栈道是在半山腰，要想人景合影的话三脚架可能比较困难。我跟芝麻兄与一对老夫妇在一处白色冒泡泡的泥温泉前换着为对方照了合照。这个泥温泉是我们第一次闻到如此浓烈的臭气的地方，说不定正是这个奠定了我们的鼻子在这一天经过残酷的洗礼浴火重生的基础。虽然对这个地方整体有点失望，但是这对老夫妇告诉我们说这个泥泡泡的温泉可能是园内最好的泥温泉了，即使看起来就像一堆正在融化的石灰。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1rH82KaiJiYQSJh_iuRWXhH-pw9pa6PHU"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1BFrc3zqtfdB5136_eqsfvXfB7JeoJfMN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1axIcW0uS25A8UzdMBYhCj9qcdzL0lID2"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">接着赶在下午3点之前来到了Norris Geyser Basin，顾不上看这里的博物馆，紧赶慢赶的在栈道上一路小跑到Steamboat Geyser蒸汽船间歇喷泉，因为看到公园的报纸上说3点的时候在这里有个20分钟的讲解，而每天只有2-3次的讲解，其他大部分时间都是游客自己游览。果然刚走到就看到已经一堆人围着工作人员了，还没喘匀气儿工作人员就开始了讲解。蒸汽船间歇喷泉是现在仍然活跃的喷发高度最高的间歇泉，在大喷发的时候水柱高达90-120米，是老忠实间歇泉的两到三倍。但是由于喷发时间的间歇长度不可预估（4天到50年），所以看到它大喷发的人很少，不怎么出名。</p>
+      <p class="text">黄石公园的地下水由于地热的作用会形成三种不同特征的景观：一种是Spring温泉，是在地下水量较多且压力较小的情况下形成，一般都是咕嘟咕嘟在水里冒气泡或者水泡；另一种是Geyser间歇喷泉，这种泉喷出来的大部分是水蒸气，是由于地下水量较小而且压力较高形成的；还有一种就是泥温泉，跟温泉的形成基本一致，但是由于地下水中带有硫，会将岩石的一部分腐蚀后溶到水里，因此这样的温泉看起来会像泥浆一样。</p>
+      <p class="text">讲解结束之后我们才近距离的看了看蒸汽船间歇喷泉，果然如工作人员所说，即使不是大喷发，咆哮而出的泉水和蒸汽还是能看出它的气势。如果时间合适的话推荐大家看看公园报纸上的时间表，多听听这样的讲解，15分钟的时间感觉比自己看半天还能更深层次的认识黄石和它特有的地质地貌。Norris间歇泉群很大，其中有很多非常漂亮的淡蓝色淡绿色晶莹剔透的温泉，比如Cistern Spring和Pearl Geyser等等，值得花一小时的时间慢慢欣赏。我和芝麻兄大概看了三分之二的时候就急着要上厕所，可惜回到停车场才有，所以剩下的三分之一部分我们只能匆匆略过。建议大家进去之前最好去一下洗手间，不然的话走到一半内急要走出来也是个大工程啊哭。。。</p>
+      <p class="text">从厕所出来我跟芝麻兄都是浑身舒爽，于是决定回去看看Norris这里的小博物馆。进去一看果然好小，大概两间屋子，也是介绍了一些关于热泉和间歇喷泉的知识，我们因为已经了解过了就没有多呆。小博物馆前面是远眺间歇泉群的好地方，因为地势稍微高一点。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1jbIGJVyug3sDkx_b92VSdJnyX22wfsgE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1J2gbnJbUdnlXqE6K-jXVu33mc3qm4svD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hgLNw0AN6gSE9usL1Cn6ZS38wwFvKaD-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Cf44hOpvM8wpLgo5lE2n7md3QfNqNwzH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1G23Lbkj1KZkenR5fMGX9mar7zvNa7AtY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1P4RsvAQhM-E04QU3G6tnBCYW3DbYhD9G"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18qbCMl4NBxVAaIFoxGxrrNtVzwymn5qg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JVpb9Xv1co2qL5ivrtxZuYHUjHqPF16F"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1TnMvfuX8mvmOVIOO9fmepTDjapsxypc-"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">上车继续往 黄石大峡谷 的方向前进，到达Canyon Village的时候已经4点半了。路上还碰到了两头牦牛不慌不忙的过马路，于是双向的车都只好停下来等。Canyon Village区域内有各种餐厅、住宿酒店、纪念品店、邮局、游客中心、加油站和户外营地，是个休整的好地方。我们因为手里还有两张明信片，本来打算去邮局买张邮票一起寄了，结果没想到像国家公园这种景点内的邮局也跟普通城镇一样，周日不开门。逛了一会儿商店买了冰箱贴一类的纪念品，想想今天可能会很晚才能到酒店，打算在旁边的快餐厅点东西的时候被告知周日6点关门现在快5点了后厨不接受点餐了。</p>
+      <p class="text">无奈我们只能回到车上吃了些饼干和水果一类的零食，算是加餐。看看地图发现黄石大峡谷和瀑布的游览路线有南北两条，而北面的这一条是单行线，必须先从我们目前的休息区域回到主路上，然后从另一个口进来，最终还是会绕回休息区。而南线则无需这么麻烦，并且在南线终点有我们想去的Artist Point。之前在这里的纪念品商店工作人员推荐看上瀑布比较好的观景点是Upper Falls View，看下瀑布的好位置就是Artist Point。于是果断决定直奔黄石峡谷南线的游览路线。</p>
+      <p class="text">开车到Uncle Tom's Point停车场，不用两步路就是Upper Falls View观景点，大概也是峡谷南缘离上瀑布最近的观景点了。Upper Falls高度差不是特别大但是河口较宽，此时正值黄石水量充沛的季节，整个瀑布水声隆隆，因为水流湍急汹涌而下，巨大的白色水花充斥在瀑布底部，颇为壮观。顺着峡谷边的小路凭记忆中的地图往Uncle Tom's Trail方向走，想近距离的接触一下Lower Falls，结果一路下坡走下去觉得是不是走错了路？心里慌慌的，只能再原路返回看地图。琢磨了半天觉得刚才应该没走错，但是一来二去的折腾累了，索性就直接开车去了Artist Point。</p>
+      <p class="text">Artist Point观景点的小桥正对着Lower Falls和下面湍急的河流，有绝佳的视野。下瀑布的高度落差较大，整条瀑布充斥在山涧，此时夕阳正浓，虽然由于光线角度的原因没能看到彩虹，缥缈的水雾还是将其蒙上了一层迷人的色彩。唯一的美中不足就是距离瀑布较远感觉不如近一些来的恢弘大气，但是脚下的河水汹涌的白色水花也算是弥补了一些遗憾。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1-WOl2toTKDf20CxiV8kRWUzCn9wMR41e">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/15eGGjqklCwjINojVnWjx-HZjD4Wy0GIy">
+        </div></figure>
+      </div>
+      <p class="text">从黄石大峡谷的南缘，我们一路南下逛了Sulphur Caldron后到达了Mud Volcano。刚到停车场就看到一群人围在一边，我经不住好奇伸着脖子看了半天发现是两头牦牛就在眼前！大喊一声老公快找地方停车！然后立刻背上相机跑过去一看，这两只牦牛就悠闲的站在那里斜眼暼着大家，眼神里满满的都是“哼你们这些愚蠢的人类”那种不屑感。路人纷纷相互帮忙拍合影留念，后来这两牛觉得有点不耐烦就默默走开了。我一边找厕所一边把相机递给芝麻兄，他二话没说又追着牛去自拍，让我不禁心惊胆战的想你离这么近别惹急了它们来顶你。</p>
+      <p class="text">泥火山这里也是一些冒泡泡的泥泉和间歇喷泉的集中点，因为水质里含有硫所以融化了岩石使得冒出来的温泉变成了泥浆。也因为这个原因正片地区都弥漫着一股淡淡的臭气，如果经过的是带有特殊物质的间歇喷泉简直就是浓浓的化不开的一股。。。。屁的味道。。。</p>
+      <p class="text">这时候大概已经7点了，夕阳的光线也收敛了些，我们沿着长长的栈道逛一圈路上很少遇到人，想到可能会碰到熊这件事我心里还是有点害怕的。芝麻兄一副老神在在的样子，说哪有这么大的概率遇到熊。虽然没有碰到熊但是看到一头牦牛把一半的身子都埋在温泉旁边的泥土里，大概是因为暖暖和和的很舒服。我跟芝麻兄一路上都捂着鼻子，后半圈实在受不了这些温泉的味道就尽可能快的走出来了，边走还边讨论这些牛啊鸟啊难道都闻不到吗会不会嫌臭啊而且怎么别人都这么淡定啊不明白啊。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1XfN7adDsrZrtzXVZimMKAVOFNL6TzXS-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Q4DSam-LE3f7DbG8XDVJAbu_F8KXLQO5"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12IzX7w1PQVfNoX2JvtFIDtN4STse-aAy"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17vi8k6M5L4nUVS6jbmPyppvFbpr2H44d"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1kPyQ2eVHQnQDzMIyio4aPFwi-0esCQ5p"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">从泥火山出来看看时间也不早了就准备往Cody方向开了，因为大概还需要一个半小时的车程，不想半夜才到酒店入住。之所以没有把酒店订在西黄石小镇，一是因为价格上涨的厉害，二是因为最后一天在黄石要从南门出去到 大提顿国家公园 ，但是老忠实间歇喷泉到南门的这一段路还没开通，从西门进的话要绕很大一圈才能从南门出去。不过Cody相对来说就有点远了，如果像我们一样都是年轻人来玩还好一些，带着爸妈或者小孩的话还是不要折腾直接住在公园里面比较方便。</p>
+      <p class="text">从Fish Bridge到东门这一段基本都是山路，曲折蜿蜒，一旦出了东门会好一点，但是貌似也是在某个State Park边上，所以还是山路多一些。一路上经过 黄石湖 的边缘和烧毁的森林，那广阔平静倒映着蓝天的湖面和一片片枯木矗立焦黑的残林形成了天然的对比，让人不禁感慨自然神奇的力量。出东门不久就看到好几辆车停在路边，人们纷纷下车往前赶，我和芝麻兄也不知道发生了什么，就追上一个大叔问，大叔说河对面有熊！ 于是我们立刻停车下来跑到人群的地方，顺着那些“长枪短炮”的方向仔细盯了半天也看不出所以然。另一个小哥大概看我们很困惑就指给我们看，果然看到了河岸另一边树林里一只棕熊带着两只小熊在靠近河边的区域觅食。说话的功夫它们就慢慢离开河边往林子深处去了，我们因为没有专业设备，拍了两张也看不太清，只能默默的把这些有趣的景象印在脑子里啦。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1XTUpmJ9hhBYQ3UpXsOzzGR1d1211sFbJ"></figure>
+      <p class="text">又往前开了半小时左右，光线已经完全昏暗下来，夜幕降临，路上的车已经很少了。我有点昏昏欲睡的时候芝麻兄突然说快看！吓了我一跳睁开眼，发现两只羚羊就在面前的斜坡上跑跑停停。它们盯着我们停车下来，隔着一条窄窄的公路跟我们相互对视。其中一只欢快的跳过旁边的围栏向远处跑去，剩下一只还呆呆的站在原地，芝麻兄笑说这一只可能太笨了跳不过去。话音刚落这只羚羊像是听见了似的蹦起来漂亮的跨过围栏也跑远了，只留下我笑岔气的声音和一脸悻然的芝麻兄。</p>
+      <p class="text">在夜色中前进，穿过一条长长的隧道就到了Cody这个小镇。跟其他国家公园旁边的小镇差不多，这里也是只有一条主路，餐厅酒店超市加油站全部都在这条路上。本来想去沃尔玛里面的subway凑合吃一点，发现已经9点了人家关门了。街对面还有一家Arby's快餐店，不过门上也是写着9点关门。正当我们远远的隔着玻璃看到工作人员已经在拖地了不知道要不要进去的时候，门口抽烟的店员姑娘冲我们喊“We're open！”于是大呼一声万岁一头冲进去，买了汉堡薯条总算是填饱了肚子。感觉Arby's真是热心肠的在关门之前救了我们一命。</p>
+      <p class="text">考虑到明天的午餐和晚餐不能再因为找不到餐厅饿着了，再次回到沃尔玛买了切好的生菜、Hummus酱、牛肉肠和一种近似于馕的面饼，准备走到哪里吃到哪里。沿着 主街 找到订的酒店的时候还闹了个乌龙，因为记错了酒店的名字，前台工作人员怎么找也找不到我们的预订，直到拿出预订单才发现是我们找错了地方。工作人员还很大度的说你看，这就是带着预订单的好处，好多人明明找错了酒店还非要说是在这里订了房间，劝都劝不走。</p>
+      <p class="text">等到洗完澡躺在软软的床上的时候已经是10点多了。这一天真是长途跋涉，而且最关键的是，据芝麻兄反映，一路上他鼻子里都是一股臭硫磺的味道挥之不去。我自己倒是已经缓过来了，订好闹钟准备睡觉的时候还听到芝麻兄在厕所里喊老婆怎么办啊我觉得自己拉的屎都是一股硫磺的臭味啊啊啊啊。真是一想到他的表情做梦都要笑出来。</p>
+
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.依然是说如果有空房且性价比不是很离谱的话，住在公园里绝对会省下一大部分时间和精力啊！
+        <br>2.黄石纬度比较靠北，日落时间一般在6月初就能到9点左右。如果想趁着日光多玩一会的话， 注意带好食物或者留意一下餐厅的关门时间，不然像我们一样找吃的就很绕路或者很麻烦。
+        <br>3.泥温泉或者一些间歇喷泉味道有些臭，如果不习惯的话最好快进快出，闻的时间长的话可能会有点难受，像我就是头痛。出来呼吸一些新鲜空气就会缓解很多。
+        <br>4.公园发放的报纸上有各景点的活动或者是讲解的时间，看好时刻表的话多参与一些会对游览整个公园很有帮助。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第九日 黄石国家公园</h2>
+
+      <p class="text">不知道是适应了时差还是昨天太累，一觉醒来已经快7点了（不要说太早啊，要知道刚到美西的那几天几乎天天都是5点多就醒了）。赶紧洗漱收拾好到前台那里看了看，早餐实在是不敢恭维，凉的白煮蛋和一些面包果酱牛奶而已，关键是都看起来不怎么好吃的样子。勉强吃了一些省的出门找早饭的麻烦了。回房间拿好背包和食物我们就准备出发了，打定主意与其如此明天还是出去吃早饭吧。</p>
+      <p class="text">过了隧道不久就发现居然因为修路封住了反向的车道，所以只能来回两个方向的车流轮流通过。排队等的时候我们想起来昨晚这一段路是很不平坦，可能因为工人都下班了所以整条路才开放通行。这一段修路的距离大概有几英里，所以一直是断断续续的停车，排队，缓缓通过，再停车排队通过。到达公园东门的时候已经过了8点半。</p>
+      <p class="text">进入蜿蜒的山路发现旁边的石壁上凭空多出好几条流淌的小河，有些哗哗的水量还不小，猜测大概是昨夜下了雨，但此时天气晴朗艳阳高照却是看不出一点痕迹了。路过一片湖水的时候被美景惊呆了，赶紧靠边停车。清晨的空气带有些许冷意，树林里积雪还没有全部融化，而此时平静的湖面像镜子一样精致的映出了对岸的景色，似乎让人有些分不清梦境和现实区别。</p>
+      <p class="text">途径Fish Bridge的时候停下来休整，趁上厕所的功夫逛了逛商店，然后一路北上到Tower Fall。这一段路是5月底才刚刚通车，路的两旁很多地方还是厚厚的积雪，能看到铲雪车将路清理出来的痕迹。因为地势慢慢变高，眼前的景色也由树林慢慢变成了一望无际的平原和草丘，是另一番的壮阔坦然。途中还遇到反向而来的一头牦牛在路上散步，对面的车只能跟在后面慢慢移动甚是可怜。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1udu2Z_GLXWj3FLR9bAPkgYmZDjEzc1sA">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1o7f7OPoEzNON3tSFBrgzHI5n7hTVdO0k">
+        </div></figure>
+      </div>
+      <p class="text">Tower Fall的观景点里停车场不远，水流较细落差较大，不过比起昨日的黄石峡谷瀑布来说稍逊一筹。这附近我们没有多做停留，直接开往猛犸热泉区域，结果路上碰到一群牦牛在路正中央散步！对面的车和我们这方向的车都没办法走只能等。但是牛速实在是太慢了啊啊啊！对面的车偶尔还能过来两三辆，因为牛看到了会让开，我们这方向压根就走不过去啊！对面的车道一旦没车了牦牛们就会自动填补过去，等对面来车再让开，合着我们就只能慢慢跟在后面别无他法。大概二 十分 钟之后芝麻兄崩溃了，因为这一群牛完全没有要离开公路的意思，也不能用喇叭吓他们，所以芝麻兄打算在对面没车的时候默默地外道超牛。。。我当然第一个反应就是反对！这一群少说也有一二十头牛，万一受惊了或者发怒了我们的生命都有危险啊！芝麻兄安慰我说你看对面的好多车都是这样开过来的啊都没事啊。我说不行啊对面的车牦牛都看得到能够避让，你这方向他们看不到啊。芝麻兄拍着胸脯说没问题我挑他们旁边的空车道走，没有空间我绝对不走行了吧。</p>
+      <p class="text">就这样芝麻兄看准了对面车刚过来反向车道还没被牦牛占领的空档缓缓准备超牛，我则是心惊胆战的死死盯着牛群生怕一个不小心他们就生气了什么的，简直是紧张的要跳起来。芝麻兄走走停停，牛群里的牦牛也是一会儿靠左一会儿靠右，连对面的车道也快要占领了，芝麻兄稍稍加速趁最后的空隙超了大半个牛群。刚开始的时候我还拿着相机拍两张，越来越觉得害怕手里相机都差点摔了。虽然之前对面的车开过来经过牛群也是离它们这么近，不过真的坐在车里看着近在咫尺的健硕牦牛，我嘴里心里碎碎念的都是“天哪天哪要碰到了怎么办怎么办就要碰到了啊啊啊没碰到啊不过你别生气啊牛大人我们就是想在您不走的地方走过去啊啊又要碰到了不行不行啊停下停下哎呀吓死我了天哪真的要碰到它们了啊它们在看我们盯着我们呢不会生气了吧顶到我们车可怎么办啊啊啊”。。。</p>
+      <p class="text">可能是因为牦牛们发现跟它们同方向的有个东西比他们快，不知道怎么回事他们也开始缓缓小跑起来。这一来更是把我吓死了，因为我们车速很慢，一边担心要是真是撞到我们怎么办，一边眼观六路耳听八方的留意着每一头牛的眼神和动作甚至心理状态，不住的大喊着警告芝麻兄说完蛋了我们右边这一头好像生气了怎么办！后面那一头眼神好凶狠是不是想撞我们啊！。。。好在是我们本来已经超了大半的牛群，剩下的一两头牛不怎么占道所以很快也就慢慢超过了。</p>
+      <p class="text">一直到芝麻兄甩开牛群开始加速我还惊魂未定，一颗心砰砰砰跳得不要不要的，手心脚心全是汗，完全不能相信刚才发生了什么。等我缓过来就开始义正言辞的批评芝麻兄！绝对不能再这么干了！你知道刚才多危险吗？！为啥别人都不超就你超！然后芝麻兄一脸委屈的辩白说对面的车开过来七八辆都是这样走的啊，而且我有好好注意周围情况啊觉得没事我才超的，要不是你一直大声说“撞了要撞了不行啊停车啊啊啊”我根本一点都不紧张，就是被你叫的才有点开始紧张的。</p>
+      <p class="text">我这吓的也没什么力气了，既然已经这样了也没发生危险就算了，下不为例就是。跟在我们后面的红色小跑车貌似超牛没有成功，超到一半因为对面有车就只能默默退了回去，估计要另找机会了。当然这都是后来芝麻兄告诉我的，当时我魂都吓飞了，眼里心里都是牛，哪还顾得上什么红色小跑车。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1FNT1rrqXLoJbAS1AIl9MYlODA2PiazNL">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1bNvzkmYaW_-VKd_h8hYtTyTIL6_691mh">
+        </div></figure>
+      </div>
+      <p class="text">猛犸热泉周围是一个功能比较齐全的休息区，像Canyon Village一样这里有餐厅、宾馆、加油站和纪念品商店等等。休息区旁边的猛犸热泉景区分为上下两部分，Lower Terraces Area遍布着步行的栈道，而Upper Terraces Area则是可以通小型汽车的单行环状路线。不过真正好看的都在Lower Terraces Area，所以我们现在主路上停了车步行了它的一段栈道，又开车到Upper Terraces Area的单行环状线，因为在那里的公路跟Lower Terraces Area的另一侧栈道有个交汇点，我们就又从那里步行了另外一段栈道，算是全部逛了一圈。</p>
+      <p class="text">猛犸热泉是是世界上最大的碳酸盐沉积温泉，由于几千年来泉水的沉淀和地震作用形成了台阶一样层叠的白色阶池，在阳光下被温润的泉水包围，闪烁着银色的光芒。周围很多小温泉也是颜色各异，有棕黄色或者墨绿色，再加上白色的袅袅蒸汽，让人不禁觉得置身仙境一般。不过很快我跟芝麻兄就回归了现实，因为地热作用这里实在是太！热！了！刚开始走栈道的时候还不觉得，越走到大一点的温泉周围这种热度就越明显，尤其是一阵蒸汽飘来，又热又闷，再加上因为早上冷我还穿了长袖长裤，简直是苦不堪言！</p>
+      <p class="text">走完栈道回到车上发现已经12点多了，合计了一下决定还是开回猛犸热泉的休息区野餐，毕竟我们带了很多好吃的嘛！到野餐区停车后发现一群小鹿在旁边吃草，有几张野餐用的桌子周围都被它们占领了，护林员又要护着小鹿不让游人太接近它们，又要护着野餐的游人不让小鹿因为饭香被吸引过来吃东西，就快忙不过来了。我们跟另一对老夫妇合用了一张桌子，拿出饼来搭配放上火腿肠生菜和鹰嘴豆酱，勉强算是卷了起来，然后就，开吃！</p>
+      <p class="text">看看别人都是带一些水果啊蛋黄派啊沙琪玛啊面包啊解决午饭，只有我俩这么正经的干粮蔬菜肉和酱料一个也不能少，可想而知“吃”这件事对于我们来说是多么重要。吃饱发现买的食物还剩下一半，留着万一晚上回去的晚，还能吃一点垫垫肚子。把垃圾清扫干净，又回到车上吃了点水果，心满意足的向南出发！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/13UUsYGTNdGK1yQS_oEi6-hqW_kkhzIza"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15nTHTjWkLhu_kZhRdWEYiwJq0naUZ1xu"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JiMzXqqniMQ4oOz0MYH4f7DSYBSyFd3Q"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/10ou57JGCva06zUiiXkQcB_NyHVxCnJXA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1oV_8H0jH0ph0_unTSCgH9jXmOynXUhmD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1a1x7E1xGZrFxZo0tRu9fSF0KpjvaX0Xx"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">大棱镜温泉在Midway Geyser Basin这个泉群内，顺着栈道要走到最里面。当然这里也是好热！不过看到大棱镜的那一刻就觉得其他都不重要了。从栈道上看不到大棱镜的全景，却是近距离观察这些晶莹剔透的蓝绿色泉水的好地方。温泉中心由于高温没有细菌生存呈现出本身的蓝绿色，周围则是慢慢向外蔓延出层层叠叠的五彩斑斓的色彩，蓝绿黄红依次出现在温热的地面上，每一层颜色的边缘都是如此清晰锋利，让人不得不感慨大自然的神奇。池面的白色蒸汽随风飘动，整个栈道都氤氲在雾色中，眼前色色彩也蒙上了一层水汽，当真是缥缈梦幻。</p>
+      <p class="text">Midway Geyser Basin除了大棱镜温泉之外还有几个其他的温泉，一圈走下来都能看到。比如说Excelsior Geyser和Oral Pool等等，虽然比不上大棱镜的五光十色，却也都是很舒服的奶蓝色或者蓝绿色。走在栈道上的时候我和芝麻兄就四下张望，想知道攻略上说能看到大棱镜全景的山坡到底是哪一个，结果远远模糊的看到隔着大棱镜对面的山坡上有几个人影，心想说大概就是那里了。</p>
+      <p class="text">芝麻兄之前听人家说那边的山坡要从Fairy Falls Trail走过去，而这个景点在地图上是没有的。从大棱镜的栈道回来开车到主路之后继续向南一点就会看到右手边有个标着Fairy Falls Trail的指示牌，按指示进去到停车场就会看到Trail的入口了。这里没有修好的栈道，只是土路的小径，有人说中午11点到3点之间大棱镜上的蒸汽最少，我们一看表已经快3点了，算是赶上了个尾巴。之前攻略说什么走15分钟啊向左拐啊再走5分钟啊我们都稀里糊涂的，发现最好的办法就是：朝着大棱镜温泉的方向（也就是沿着trail主路）一直走！只要看到右手边的大棱镜温泉了，留意左边就会发现正对着大棱镜有一条人为踩出来的上山的路。需要注意的是爬两步就会看到一个不许攀爬的牌子，因为其实山有点陡而且没有路，有很多地方需要手脚并用，为了安全起见公园是不允许爬上去的。但是因为实在是太多人从这里上去了，非常小心的话应该没问题，我们犹豫了一下也就跟着开始往上爬。</p>
+      <p class="text">在我们前面的是一个背着大相机的中年妇女，因为体型较胖所以每一步都找最容易的落脚点才爬。我们跟在后面也就循着她的路线一路跟着，爬到一个坡度相对较小树木不那么茂密的空地，感觉回头已经可以没什么遮挡物的看到大棱镜就停下了。同在这里的还有之前爬上来的一家四口，貌似是从 西班牙 来的年轻夫妇带了两个四五岁大的孩子。由于还是在半山腰并不很平坦，而孩子们都很好动，每次这俩孩子移动脚步都能感觉到脚下的沙土一滑，然后他们父母就赶紧伸手护住。</p>
+      <p class="text">转眼间之前那位中年妇女已经不知道哪里去了，我和芝麻兄觉得自己也不是什么专业摄影师，这个位置已经能把大棱镜的魅力尽收眼底，于是就在这里停下休息咔嚓了几张照片。确实从高处俯瞰更能体会大棱镜的独树一帜，大概在地球上其他地方很难找到这样色彩的温泉了。远处的天空白云朵朵，与地上彩色的泉眼形成了鲜明的对比，栈道上小小的行人此时全然变成了点缀，真是好一幅风景。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1OvD_whmvWrONxegoBgjiSkNgoxNrVN2u"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1EJKoCr50jKmehx_OInXmxe_ZFw31ob2a"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1dTJ91BH85hT_K7WW-DZ2IvOh9C7i8U1k"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1qWZbTVJBceUCUyMwbx0zxLT9Ohpo5bsr"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">呆了一会儿陆陆续续又有人爬上来，就这么一小块空地大家都在抢最佳位置，我们就打算撤了。上山容易下山难真是对极了，再加上坡度大沙土易滑，几乎每一步都要在芝麻兄的关照下才能安心一些。就这样一路走回停车场已经是4点了，想到老忠实间歇泉的喷发间隔大概是90分钟，搞不巧还要等，所以马不停蹄开车过去了。</p>
+      <p class="text">老忠实间歇泉附近也是餐厅酒店加油站邮局都很齐全，我们找到车位停好车，到游客中心一看，预报的下次喷发时间是4点42分（正负10分钟的误差），正好还有20分钟左右，于是到对面的邮局把昨天要买的邮票也都买了。大概4点半的时候我们就站在了老忠实泉前面等着喷发。此时长长的围了几圈的所有椅子都已经坐满了，站着的还没几个人。过了几分钟就连站着也已经围了两三层人了，这估计是我们这一路见过最多人的场面了，密密麻麻的。老忠实间歇泉此时会偶尔冒出一点水来，大部分时间还是白色的蒸汽。每次喷出一点水花旁边一个金发小男孩就问他爹说，That's it? Ok, let's go home. 我一边在这边偷笑一边看那小男孩在那边不耐烦又舍不得走，他爹还一直逗他说你要走我们就走啊，待会儿大喷发了你看不到可别后悔哦。笑得不行。</p>
+      <p class="text">比预报的时间过了大概两三分钟，就在一部分游客已经觉得等待变得有点难熬的时候，老忠实间歇泉终于喷发了。巨大的白色水柱突然喷薄而出，伴随着浓浓的蒸汽直冲天际，如果不是观景区离得远，应该会觉得更加震撼。说是会持续4分钟，但是实际上水量最大的时候也就1分钟左右，所以要拍照的话抓紧时间。喷发结束后大批人群开始慢慢散去，游客中心的下一场喷发预告变成了6点20分，我和芝麻兄庆幸自己无需等很久就看到了喷发。老忠实间歇喷泉的预告在公园里每个游客中心或者Information Station都有，如果想赶在正好的时间的过来，可以早早就留意一下。</p>
+      <p class="text">由于老忠实间歇泉和西拇指盆地之间的路过些日子才能通行，所以如果要从东门出去还是要先北上绕到Norris Geyser Basin和Canyon Village再南下。于是顺路我们就Firehole Lake Drive那里一路游览到Lower Geyser Basin，很多深不见底的黑色小温泉或者是形状奇特的小火山口也非常有趣，而且每个观景点都几乎是在路边，不需要走很久的栈道，十分方便游览。在Goose Lake附近我们还真的看到了雪白的天鹅。看看时间差不多了，以免堵车我们想赶在另一场老忠实间歇泉喷发结束大批游客返回之前开始回程，所以就上车往东门方向移动了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1vAvHfGKOjPnASjudlK_6vIpCzoER78YR"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JEE35L_8wrMb05LSU79TbJ54T8NXRRao"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1EGGFlaAhRDwJDKL6elj_w4vTAZfVYQfG"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1he2Fe56a6n02VqF8ZyeKwuiElu0-y8V7"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">此时天已经阴了下来，有零星的雨点打在车窗上。我和芝麻兄在车里得瑟说你看这老天爷就是等着我们把该游览的地方都游览完，一上车才开始下雨。谁知道得瑟了没多久这雨就有缓缓加大的趋势，从雨丝变成了淅淅沥沥再变成了豆大的雨点。正好也快到Canyon Village的休息区了，两个人又都有点饿，一合计决定在这里吃完晚饭再走，顺便等一等说不定这雨就停了。停车之后看看屋檐下面的野餐桌椅离车有点远，雨又有点大，索性就在车里拿出各种食物吃起了晚饭。</p>
+      <p class="text">把中午野餐留下的那一半东西吃完之后发现雨已经越下越大，完全没有要停止的意思，再加上阴天的缘故，很可能再等下去天都要黑了。我还在犹豫的时候芝麻兄已经毅然决然的发动了车子准备往回开了。一路上他开的十分小心翼翼，整个车顶被雨水打的噼里啪啦震耳欲聋，挡风玻璃上的雨刷只能用最快的速度来回刷着汩汩流下的雨水才不至于看不见前面的路，我也是一刻也不敢放松的盯着前方生怕有什么危险。路上不断有护林工程车来来往往，一直到过了Fish Bridge之后的好长一段路，我们都是在紧张的心情中缓缓前进，直到盘旋的山路开始，雨声才微微的小了一点，好歹是能看得清前方的路我也就不那么担心了。</p>
+      <p class="text">此时一颗心稍稍宽慰，再加上雨声撩人，不知道什么时候我居然沉沉的睡了过去。醒来时已经出了公园东门，雨声小了不少，天色也暗了下来。问芝麻兄我睡了多久，答曰二十分钟吧。再碰上那段修路的工程区已经是空无一人，所以也是不用等就顺利通过了。回到Cody小镇加油的时候雨已经停了，才发现风大的能把车子吹得摇晃不止，但好在一路上都是顺风行驶，居然一点知觉也没有。而这一晚的惊险，也在这呼啸的风声中落幕了。</p>
+
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.大概6月中旬道路就会全部畅通了，建议大家在道路黄石内部的公路都开放通行之后来游览，会省去很多绕路的时间，因为有时候一小段路不通就要绕“8”字半圈，如果碰上动物挡路就要花更久的时间在路上。
+        <br>2.进出公园多看看天气预报，如果开始下大雨的话最好是能停车躲避，尤其是山路段，曲曲折折的很容易出危险。停车的话最好在开阔地带的观景点停车，比如说草原周围的观景点，因为一路上很多由于狂风或者大雨倒塌的树木，感觉尽量避免停在树木旁边比较好。
+        <br>3.黄石公园很大，所以可能不能及时找到餐厅就餐，像我们一样自己带点材料现场做三明治，又营养好吃说不定还能跟小动物近距离接触，天气好的时候野餐尤其是一种好选择。
+      </div>
+
+
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">第十日 黄石、大提顿国家公园和杰克逊小镇</h2>
+
+      <p class="text">打定主意早点出发自己找早餐吃，6点半闹钟一响就起来了。看了看天气预报，黄石此时只有零下二度！瞬间决定把羽绒服拿出来放在后座上随时穿脱。收拾好行李退了房卡，想到中午还是不一定几点才能找得到餐厅，就又来到沃尔玛准备些食粮。旁边的subway还是没有开门，我们就在超市里买了些面包和沙拉解决了早饭（就算是这样也比旅馆里的早餐好吃多了！）。</p>
+      <p class="text">早晨的天空如此晴朗宁静，像是从未有过昨晚的狂风暴雨一般，只有黄石公园里路旁被移开的断枝似乎还留有一点风雨喧嚣的痕迹。看着路上偶尔的碎石和沙土，想必昨晚有不少树木横亘路间，护林员也肯定是一夜辛苦。山间流过的河水似乎甚是汹涌，想来上游也是因为昨夜骤雨的缘故水量增加了不少。进入东门之后一路在山林中盘绕都不时在白雾中穿梭，到 黄石湖 边停下才发现这些缓缓移动的白色水汽已经笼罩着整个湖面，水波若隐若现，像是冥冥之中有什么要从雾中扑面而来的感觉，既朦胧又神秘。然而这些连绵不绝的白雾随微风轻轻飘动，又缓缓向身后的山间荡去，浅吟低笑着在清晨的朝阳中变薄变淡，远远离开。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1LuW8Z9W2s1TRi-pJV-uCNP1TfgSrerEt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ikLI3STlmVyfjdzqnhOpk6qcqWsg62YB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1yE2AetBUfHeNx4aNL5TyybWXHqiOvs70"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">正当我们感慨着可能看不到黄石湖碧波万顷的身姿时，阳光似是听见了一般，竟然一丝丝的穿透了云层和朝雾，微弱的照在了我们身上。等到经过了Fish Bridge往南去的时候，湖面上的雾气已经悄然散去不见踪影，而金色的阳光更是将山林间的每一片叶子都镀上了温润的色彩。此时停靠岸边欣赏黄石湖，又是另一番美妙的景象。蔚蓝色的湖水深不见底，湖面浩荡，远岸雪山巍峨却是遥不可及。近处坚实的波浪一次次拍打在岸边，激起层层白色水花，让人有种已然来到海边的错觉。</p>
+      <p class="text">又开了一阵子到了 西拇指间歇泉盆地 ，下车的时候因为太冷我就颤颤巍巍的穿上了羽绒服（是的！终于穿上了！没有白拎一路！）。这里的栈道是个环状的，所以不用纠结在哪个口进去，最后都会走回到停车场来。依然是蒸汽弥漫，很多晶莹剔透的奶蓝色或墨绿色温泉，也有呲呲的喷着水汽的间歇泉。果然穿着羽绒服进去是稍微热了一点，因为完全忘记了地热这个因素。在这里还碰到了清晨出来吃早餐的小鹿，居然一点也不怕人，任凭大家走进拍照留念也不动弹。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1teHF8I7dDU6V0h9vamOD6e6UwN1A-IGW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/19zS2Yy5Yt5IC2LW5uXqAJQfP5ZH5648t"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ApuJG6d_omTQjOQRYnKKH8GRs_SVv3TX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1452GdpRbr3z8nPa0iKqBTCV3mvKUGQu9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1K1j1UsxG4yM9gprM3v9mfVLZ2uwrCWOe"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">回到停车场就立刻觉得还是凉凉的，所以还是裹上羽绒服上了车。看看车里的温度表显示只有几度而已，大概是昨天大风大雨降温的缘故吧。一路南下就到了公园的南门，出来没开多久我和芝麻兄还在纠结大提顿国家公园的入口在哪里的时候，貌似手机上就已经定位进到大提顿的范围内了。看到大提顿公园牌子的时候我们送了一口气，好歹是没有错过合影留念的地方。</p>
+      <p class="text">照完相看到路边有两个宣传栏，里面貌似是大提顿国家公园的地图，想到没有看到公园入口我们就想过去看看地图到底怎么回事。这时候一个白胡子老爷爷跟别人说完话走了过来，问我们是要进大提顿的吗？我们说是啊。他就给了我们一份公园详细地图和公园报纸，说有什么我可以帮你们的吗？我和芝麻兄这才反应过来貌似他就是传说中的公园工作人员！因为大提顿公园的门票和黄石的门票是一起的（也就是说一旦买了这两个公园任何一个的票，另一个公园都是包括在内的），而且从黄石南门出来到大提顿之间只有一条路，所以从北边进入大提顿国家公园并没有检票口。</p>
+      <p class="text">大提顿国家公园呈南北向条状分布，分为东西两个观景线路。东线是基于公路修建，开起车来相对快一些，观景点基本都在路边，是远眺雪山湖泊的好地方。西线相当于真正的公园内部，沿线分布的景点大多有纵深的步行栈道。我们看西线有点绕路，本来担心时间不够想走东线游览，问过老爷爷之后被告知如果西线不停的话也就1小时，这样看来时间完全不是问题，遂决定还是走西线。另外老爷爷还跟我们推荐说前面的Jackson Lake Lodge酒店大厅有一面超大的落地窗，坐在沙发上看窗外雪山景色堪称绝妙。末了还加上一句，那里的巧克力慕斯也超级好吃哟！</p>
+      <p class="text">于是我们一路南下边走边停，到达Jackson Lake Lodge停车进入酒店，看了一圈没看到落地窗，正想着不会听错了吧，发现貌似还没到真正的大厅，这里只是酒店check-in的地方。走上一段台阶之后眼前豁然开朗，整个大厅空间相当宽广，天花板至少有两三层楼这么高。虽然由于早上背阴的缘故厅内有些昏暗，却恰好的衬托着壁炉里燃烧的火焰和小桌上荧荧的灯光。正对着台阶的是一整面墙的落地窗，窗外阳光灿烂绿草如茵，一汪湖水遥遥相望，与远处的雪山一起像画一样嵌在窗框里。窗前错落的欧式长沙发正对着这幅景色，让人不知不觉的就能坐在这里一下午。</p>
+      <p class="text">我还在沙发上望着眼前的景色发呆，芝麻兄拉拉我说好像旁边可以出去落地窗外的露台上。于是我们俩穿过一个小餐厅走了出去，发现后面其实是个小院子。深吸一口带着凉意的空气，似乎是嗅到了雪山的味道，让人有些沉醉。眼前的这幅雪山风景画倒是不用再隔着玻璃观望了，细想我们都已经相当于走进画中了！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1ElzpNiXN9M0mYBzc5OLs7UWTcnlWHAN8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nCDbcpR1eaIcZqFp1YPPuHSUdQoytaKV"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WCkW50pS-PvgoTA-59MyIIFScsQ5qfWS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Thgw6jU4d29MLpRItb24U3rpNAOWZG2t"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">当然，我们也知道这只是个开始，从地图上看我们越往南就会离雪山越来越近。恋恋不舍的回到酒店里面，从纪念品商店买了一只小熊的大提顿冰箱贴，就继续开车南下了。从Jackson Lake Lodge开始就是东西线的分叉口，我们听了老爷爷的建议选择了西线。一路上雪山连绵起伏，再加上阳光时隐时现，几乎是每步一景，每景不同。我们在每个路边观景点几乎都会停车，更别提以雪山为背景的各种摆拍蹦跳（趁着没人也不用担心丢人的问题）。</p>
+      <p class="text">转眼间就已经下午1点了，我们开到Jenny Lake Lodge的时候芝麻兄已经饿得不行。发现这边有野餐的地方就找了过去，谁想到开始有雨点落下来了。山里的云虽然都是来得快去的也快，但是鉴于有人已经饿得前胸贴后背了，又不知道这雨会不会越下越大，我们就再次在车里拿出各种饼啊生菜啊酱料啊肉啊，开吃！</p>
+      <p class="text">吃完发现雨也停了，阳光又变得有点炽热，虽然刮的风还是凉凉的。顺着单行线往前开一点就是Jenny Lake Overlook，其实是可以沿着湖边的栈道从野餐的地方一直走过来的。如果湖面平静的话，这里是看雪山倒影的好地方，可惜我们那天风有点大，湖面上都刮起了白色波浪，所以虽然倒影是没有看成，天空的云却划出了风的痕迹，再加上雪山湖水，自是别有一番风味。盛夏旅游旺季湖上还会有摆渡船，可以直接到对面的雪山脚下近距离一赏风采。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1uyLoyfufn9H79-bFUJMJI4b9zEnjxHJU"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1MxH4OxEg2bqld6l9Xd-61e4JApWkaawt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/11zcU-OmLBeLeWfUAUyikr8jsZN37BTLm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1P9wsdORCqsupsGTSij6_W-QU8MZQOI1b"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">没待一会儿我和芝麻兄都被风吹得凌乱不堪，只得上车继续前行。逛到Craig Thomas Discovery and Visitor Center我们进去找厕所，发现这个游客中心做的又大又完备，还有整个公园的地理模型，因此我们也顺便逛了一圈室内的展览。大提顿的标志性动物是驼鹿，这个游客中心门口就有真实大小的驼鹿雕塑，里面展览也有很多与驼鹿相关的展品，包括它的头骨啊角啊毛皮啊，还有各种讲述其生活习性或者野生分布的知识影片。如果是从大提顿南门进的话，这个游客中心是个不错的停留选择，不但能让你对大提顿有个大致的了解，还能提供各种公园信息和指南。</p>
+      <p class="text">从游客中心出来就到了Moose Junction，也就是东西线在大提顿公园南端交汇的地方。在这里我们看到一个小的检票口，想必从南边进入公园的车辆是在这里买票的。大概经过20分钟左右我们就到了Jackson小镇，在鹿角公园（Town Square）旁边停了车。初看到这个鹿角做成的大门的时候还是觉得很震撼的，尤其是看到这个方形小广场四个角有三个都是这样的鹿角门就觉得更惊讶了。说是公园，其实就是一小块围起来的绿地而已，里面非常小，基本上全走遍都不用三五分钟。花园正中心是个牛仔骑马的雕塑喷泉，跟 美国 25分硬币怀俄明州那枚一模一样。</p>
+      <p class="text">Jackson小镇中心有很多有趣的纪念品店、衣帽店、家居店，而且都很精致，说实话有点让人不忍离开。此时已经由冬天的温度转为夏天，我们在鹿角公园旁边的星巴克买了杯抹茶星冰乐就再次向南出发。由于已经是下午3点多了，我们选择了借道34号公路再转到I-15公路，争取早点回 盐湖城 。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1m3LBWbs7INKgOl4vaU9DR0vy3ucZRb86"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/10TGZeABejDyAz-9gH4E7_u1WnvNpEkQ_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18yeFsUJTjMtUiJE9-0TreqZJQ_XB8Pub"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1I_wkmTCj7K-s_9H99Ve0pEmD3GzdofI4"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Z9W7_NAtVih4nsxE215TcxtE9yp09D61"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1FcW8Z5KZ8MTuhrfejfv8-R5Ib5gpjcYY"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">刚开始的一段都还好，前后还有有几辆车，后来走34号公路那一段简直是。。。。荒无人烟。。。虽然不时还能看到一两个住家的房子，却开了一个多小时一个人一辆车都没看到，只有偶尔成群的牛羊马在旁边的草丘上悠然自得，想来周围这大片的土地应该都是农场吧。甚至于看到一辆车从对面远远靠近的时候我跟芝麻兄心里居然都有点小激动，觉得在这里碰上真是缘分啊。不过这种在无人之境穿梭的感觉跟亚利桑那的有些不同，周围满满的都是绿色，至少不会觉得太过荒凉。</p>
+      <p class="text">慢慢的开始断断续续出现一些“超小镇”，又过了几个铜矿之后，终于是回到了大路上，然后一路驰骋，到达盐湖城的时候已经过了7点半。纠结了半天去哪里吃饭，快餐不想吃，但也不想再穿城而过去南边的 中国 城。眼看着时间越来越晚，幸运的在Yelp上搜了一家会在路上经过的中餐馆叫Boba World，黑椒干炒牛河、蟹黄小笼蒸包和宫保三样都意外的好吃，不愧是四星半的打分。吃完出门的时候快8点了，正有另外三个中国人往里走，只听见那女生说，有什么吃什么吧，做成啥样我都认了。我和芝麻兄偷偷一笑，感同身受的明白这也是赶路之后饿得不行了来找饭吃的。</p>
+      <p class="text">上车之后芝麻兄说既然明天就离开盐湖城了，我们去 大盐湖 那里 看日落 吧，免得留遗憾。我本来有点累，想想他说的也有道理，于是就欢脱的在地图上搜到了盐湖边一个叫Great Salt Lake State Marina的地方直奔而去。到那里发现门口有个牌子写着貌似是收费才能进，但是自助交钱的，门口有个放信封的地方，把现金三刀放进去就可以了。当然很多人都是不交钱直接进的，因为这个留钱的小盒子真的很隐蔽，我们也是进门的时候没找到，出门的时候又找了一遍才发现。幸亏是盐湖城这里9点才日落，停车在湖边的时候距离日落还有二 十分 钟的样子，我们就往 观景台 走，结果扑面而来的都是一股臭鱼烂虾的味道，直到到了观景台才完全没有了。彼时正值夕阳的光芒洒透湖面，波光粼粼，远处的小岛和近处的浅滩都沐浴在透红的光线中，带着一丝诗意和温柔。</p>
+      <p class="text">大盐湖在世界上盐度排名第二，仅次于死海，面积却比死海大了几倍，远远的看不到边际，在晚霞的映衬下像沉静的大海一般。我和芝麻兄走到下面的浅滩上，层层浪花拍打着岸边凌乱的石子，天边的夕阳在潮水声中正缓缓落入水里，偶尔飞过的水鸟发出叫声，在辽阔的湖面上回荡着。遗憾的是美妙的景色总是转瞬即逝，没一会儿的功夫，夕阳就被远方水平线上的小岛遮去了大半，我们也准备打道回府了。回去的路上光线慢慢变黯淡，夜幕渐渐笼罩上来。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1P83yjJsthc9ZHIxWVmJeUgnQ9yDO24jm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1HwIPxgkZ0JDNhWEox31wh-lFCItLGtX4"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1AqncLt42CEPTqLs2iJYx2Cjr_XKFC4us"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18Ko8PFDXJ_cNvsz-Dg8oYKORn-vp_If1"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">在酒店旁边的邮局投递出最后的几张明信片，想到明日即将踏上回程，不免有些感慨。大概9点多的时候到酒店check-in，还跟前台的服务员纠结了半天，因为她居然复印了我们的ID和银行卡并记下了卡背面的安全码？！住过这么多酒店没有一家是这样做的，而且订酒店的时候我们填过自己住址，任何人再有了银行卡正面的所有信息和背面的安全码不就都可以网购了吗？</p>
+      <p class="text">我忍不住提出了质疑，结果被告知是为了如果我们离开后酒店发现有损坏物品可以在银行卡里扣除相应的费用。我顿时也就不明白了，如果是这样的话，酒店作为一个诚信商家是在visa备注过的，也就是说有权限在没有我们银行卡背面安全码的情况下扣除费用，那么你记下安全码是几个意思？换句话说任何一个工作人员拿着这些记下的信息都可以给自己网购买东西？</p>
+      <p class="text">工作人员也说不出个所以然来，只说我们工作人员不会盗用你的卡的，而且复印银行卡和记下安全码都是规定，每个酒店规定都不一样，我们就是这样的，要不然你交200刀现金押金。我也有点火大，说订酒店的时候你们根本没说过交押金这回事，我在美国住过这么多酒店，碰见你们这么干的还是头一遭。就算我信任你们工作人员，难保有客人从你们桌子上拿了这张纸，也就有了所有的银行卡信息，我能信任你这里所有的客人都不会盗刷我银行卡？</p>
+      <p class="text">最后她说复印银行卡这张纸我们会放在抽屉里，你明天退房的时候会还给你的，所以信息不会泄露。我就笑了，心想要是较真的话，你拿这张纸去复印个一百张我怎么会知道？不过也不想为难她，看她说可以把安全码划掉盖住的时候我也就呵呵一下不想再计较了，说实话就三位数谁都记得住，划掉有个卵用。看她一副没好气的样子我就留了芝麻兄在那里办入住手续，自己也气呼呼的站在一边。说实话可能确实没有很多人就此行为提出质疑，可是关系到自己银行卡的安全问题我质疑一下你就给我甩脸色看？偏偏我就是“人不犯我我不犯人，人若犯我我必犯人”的类型，而且我怎么都觉得自己是在理的一方呀，要不是好心体恤夜班工作人员不容易我真想让她打电话把经理从家里叫过来！</p>
+      <p class="text">芝麻兄虽然没有我这么生气，却也是黑着一张脸办好了入住手续。酒店整体条件和硬件设置都很不错，是可以打高分的，但是经过前台这么一出，感觉也就大打折扣了。好在是只住一天，又长途跋涉累得不行，想到明天还要赶飞机就赶紧洗澡睡觉了。</p>
+
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.黄石国家公园 昼夜温差较大，就算是盛夏时节，夜晚温度也会降到只有几度，建议大家一定要带一件厚一点的衣服以备不时之需。
+        <br>2.大家都说大提顿公园是隐藏在黄石旁边的瑰宝，这倒是不夸张。风景秀丽如画，比起黄石特殊的地貌，这里的风景美得似乎更深入人心。但是客观说公园的景观并不多样，所以大概1-2天的时间就会审美疲劳。另外就是西线并不比东线慢，但是风景更胜一筹，所以有时间还是在西线慢慢逛比较好。
+        <br>3.如果发现酒店人员在刷卡或者其他环节有不轨行为，一定要质疑！前两天还看到新闻说有人眼睁睁看着服务员盗刷了自己银行卡提出质疑才被发现，之前都不知道盗刷了多少张卡了。之后我跟priceline的客服说了一下，客服说这问题有点严重建议我同时跟银行也说一下，剩下关于酒店为什么这样做他们会帮我查。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第十一日 盐湖城和休斯敦</h2>
+
+      <p class="text">早上10点的飞机，大概7点钟我们起来去酒店餐厅吃了早饭，不慌不忙的退了房卡，要回了昨天许诺返还给我们的银行卡复印纸，整理好行李就向机场出发了。本来15分钟的路程因为下错了高速口再加上早高峰堵车愣是走了半个多小时，到达租车公司的时候已经8点半多了。因为之前被 拉斯维加斯 的FOX 租车 前台骗来说这边可以把许诺的钱退回来，我就到前台排队准备解释一下情况。</p>
+      <p class="text">结果前台的大妈说他们只管收车退押金，其他的事一概都由出借车的地点负责。我一听这话有点着急，心想这不就是踢皮球吗你踢给我我踢给你，谁也不负责，反正知道我们不可能再返回拉斯维加斯理论去了。讲了半天大妈变得比我还激动，说你当时没谈好价钱就不应该签字！他们说不能输入200刀以上的discount那是在骗你！你让他们把经理叫来！经理可以输入任何输入来打折！他们骗你只是为了要把你们弄出去这样就不用负责了，为了这个目的他们可以随便编话说！（原话是“they just wanted to get you guys out of the line and they would say anything to do so.”）</p>
+      <p class="text">我想了想貌似也对，一旦签了字就说明同意了价格，现在说什么也白搭了。大妈还给我们指着合同上一个缩写说，这就是给你办理业务的那个人的名字缩写，你投诉的时候可以直接说名字！于是我憋着一口闷气还了车，一直到候机大厅了还是觉得被骗这件事好窝火。确实，那些钱当然是白白多花的，但更让我气愤的是当时在拉斯维加斯 租车 排队的人确实很多，每个营业员都有不同程度的不耐烦，但是不能因为这样就敷衍我们，为了让我们赶紧 拿车 走人就说谎！如果价格不合理我们有权利选择不 租车 ，但是谎称什么系统不能再减价啦，可以还车的时候退钱啦什么的是有违职业道德的啊！换句话说这就是欺骗消费者？</p>
+      <p class="text">我一回到家就写邮件给客服投诉了，直到现在还没有结果，期间拉斯维加斯的General Manager打过电话来询问事件始末，又要了原始订车的确认邮件，就没有下文了。而至此距离我们回来已经一个多月了。。。当然这是后话。</p>
+      <p class="text">彼时我们在候机大厅呆了将近3个小时（对！我们的飞机延误了2个小时！就是这样！），带着 汉堡 薯条在飞机上吃了一餐之后，终于在当地时间下午3点半降落在了休斯敦。本来有将近6个小时的转机时间，掐头去尾5小时的话也能逛一下Houston市里，于是前一天还订了Payless公司的 租车 ，谁想到这么一延误满打满算就只有不到4小时的时间了。纠结了一下觉得反正也是呆着不如出去逛逛，一咬牙还是到 租车 中心去取车了。前台的小姑娘问我们要不要高速收费的package，也就是买了这个之后就不用在高速收费站交零钱了可以直接过。我们问了问好像要6.99刀，心想着就去一趟市里应该不用这么贵还是自己到高速收费站交费吧。结果就是这样一个错误的决定导致了后面的各种麻烦啊啊啊！</p>
+      <p class="text">出机场就绕错了路又掉头重来了一遍，终于走上了去市里的高速，没几分钟就发现要收费（导航选择“避开收费路段”的话也是可以的，只不过要绕很远我们时间来不及），准备了零钱1.25刀，还庆幸你看果然不用交这么多钱。走了一会儿发现又有一个收费站，还在纳闷难道是下高速的闸机口？可是下高速为啥还要收费咧？结果发现是另一段高速的收费口，之前交费使用的那一段高速已经结束了。无奈又交了1.75刀，屁股还没坐热发现又到了一个收费站！我和芝麻兄此时心里是完全崩溃的，没想到50分钟的路程一步一闸机，还没到市里就已经交了近5刀的费用。想到回来的时候可能还要再交这么多，我们开始深深的后悔没有买那个高速费的package，那样既能省点钱又免去了排队交现金的麻烦，直接就可以通过收费站了。</p>
+      <p class="text">一路上芝麻兄都是压着限速开，结果旁边的车都呼呼的超过了我们，绝对比限速超了不止10迈，让我们震惊得不行不行的，感慨德州人民真是彪悍。好不容易到了Toyota Center，也就是火箭队的主场，发现之前网站上找的每小时1刀的停车场因为晚上有比赛直接涨到20刀。绕了一圈发现全部都是这个价钱，无奈也只能停在这里。在Toyota Center周围逛了一会儿觉得实在是善乏可陈，决定直奔 中国 城去找好吃的！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1RcGkc7H5KAi6bmlFmfhvBp-u3RcsAyrJ">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/19zkVTVng2RFwSvGgNycsxDusoFNk0IYX">
+        </div></figure>
+      </div>
+      <p class="text">休斯敦的中国城感觉跟 纽约 费城 那边的比较不一样，并不是一条条狭窄的巷子密密麻麻的店铺沿街而立。相反的，这里中国城区域的街道宽敞坦荡，店铺分布也是有点像outlets一样各自成群，围成一个个小广场用来停车。由于店面不挨着街道，所以没有拥挤的街趴，让人感觉清爽不少。我们找了一家点了两份凉皮，又在旁边的小吃店点了生煎包和煎饼果子，晚饭就绰绰有余了。由于午饭吃的晚，又担心晚上赶不及飞机，所以全部打包打算回到机场再吃。</p>
+      <p class="text">回去的时候正好赶上晚高峰，不过由于中国城的位置距离市中心稍有一段距离，所以堵车的情况并没有太多的影响路上时间。依旧是交了大概两次1.75刀的高速费（哭死），终于在7点左右的时候回到了机场还了车。于是，我和芝麻兄拎着两袋子外卖到处找过安检之前可以吃饭的地方，路过某柜台的时候工作人员还很兴奋的看着我们说，oh dinner！想来也是饿坏了。找了一圈实在是懒得再跑，我们就站在大厅玻璃窗前借着某个高台的位置有生以来第二次在机场吃了凉皮。各种酸爽按下1000字不表。总的来说这一餐还是相当满足的。</p>
+      <p class="text">怂如我们必然是要吃不了的，剩下一份凉皮决定还是带着免得半夜到家太饿。把汤汤水水都倒出来果然是可以带进安检的。飞机也总算是靠谱的按时起飞按时落地了。</p>
+      <p class="text">回到家里的时候已经过了午夜。多日未归甚为想念。开窗透风、洗澡、倒照片，到真正躺在柔软的床上时已经是凌晨两点了。我和芝麻兄眼睛都已经困得睁不开，心里却都是点点兴奋还未褪去。</p>
+      <p class="text">至此，我们的预毕业之旅也圆满的画上了句号。</p>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.如果是在 大城 市上午的飞机，建议大家早点出发，虽然大部分机场都不在市中心，但是路上还是会遇到早高峰可能稍微堵一下车，请预留出充足的时间。晚高峰同理。
+        <br>2.休斯顿有很多机场，其中乔治布什机场到市里打车或者做shuttle两个人都要将近100刀，与其如此还不如租辆车，一天只要30多刀。但是要经过一些收费路段很烦人，要准备好足够的零钱。因此如果嫌麻烦的话就直接在 租车 公司购买高速收费的package吧，感觉相当划算，去市里一趟往返自己交高速费的话也要大概8到10刀左右了，还很方便不用停车直接过。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">后记</h2>
+      <p class="text">从开始有想法到规划路线订机票酒店，再到实际出门，总共不到两周的时间，也算是说走就走的旅行了。那两周的时间里我还因为高烧躺了将近一周，芝麻兄又要工作又要照顾我，忙得不可开交，真是转眼间就到了收拾行李出发的时刻。直到回来两三天我们聊起来还觉得，真不敢相信我们这一路居然发生了这么多事，同时至今也还觉得去波浪谷这一趟像做梦一样。</p>
+      <p class="text">回想起来，一路上有惊喜有遗憾，跌跌撞撞却又意气风发，确实是一段让人欣慰的旅程。在旅途中的时间，开始的时候很漫长，总觉得还有好多地方没有探索，好多美食没有品尝，好多故事还没有发生，而真正结束的时候却又觉得一切太过短暂。在波浪谷中签时的兴奋和在黄石超牛时的紧张感还在胸口若隐若现的时候，我们已经拉着行李站在了家门口，宣告一切皆已成回忆。</p>
+      <p class="text">依稀记得多年前芝麻兄看赛车比赛归来，一路开车跨过美加边境，一直从入夜开到天亮，坐飞机回来正好赶着早上去上班。而彼时我在 都柏林 的健力士啤酒厂跟 波兰 姐喝到微醺，公交车上两个人把买来当手信的纪念版黑啤又拆开来干杯，后来醉酒找不到火车站，真是惊险的差二十秒就误了火车。而如今，我和芝麻兄都已经不再算是青春年少，旅行对于我们来说，那些曾经的疯狂和躁动，怯懦和不安，都在岁月中慢慢沉淀，变成了路途中更多的平和与感动。</p>
+      <p class="text">此时，在 拉斯维加斯 丢了的那一双小红鞋酒店已经给我们寄回来了，在犹他州寄出的明信片大家也陆续收到了。到了这时候才觉得，哦，这次旅行好像真的已经结束了。厚厚一打明信片和冰箱上多出来的那些冰箱贴，还有数据卡里满满的照片，算是我们这一次闯荡美西的见证吧。</p>
+      <p class="text">当然，真正的见证，我们都把它们变成了故事和回忆，放在了心里。</p>
+      
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>

@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1_Nq_FwkU88ItDK7_nybv7n9TH8f65zu2") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1>从地中海到大西洋的横穿之旅</h1>
+        <p class="cover-description">尼斯/巴塞罗那/马德里/塞戈维亚/里斯本/辛特拉</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    <section class="itinerary">
+      <div class="itinerary-header">
+        <h2 class="itinerary-title">行程单</h2>
+        <span class="itinerary-subtitle"></span>
+      </div>
+
+      <ol class="itinerary-list">
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>1</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">尼斯 - 巴塞罗那</h3>
+            <div class="day-route">
+              <span class="route-place">尼斯天使湾</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">尼斯英国人漫步大道</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">尼斯老城区</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">尼斯城堡山</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">古埃尔公园</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">加泰罗尼亚音乐宫</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">加泰罗尼亚广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">巴塞罗那主教堂</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>2</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">巴塞罗那</h3>
+            <div class="day-route">
+              <span class="route-place">巴塞罗那圣家堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">巴塞罗那波盖利亚市场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">哥伦布纪念塔</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">古埃尔宫</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">西班牙巴塞罗那凯旋门</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">皇家广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Escribà</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">La Paradeta Born</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>3</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">巴塞罗那</h3>
+            <div class="day-route">
+              <span class="route-place">巴特罗之家</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">米拉之家</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">巴塞罗那西班牙广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">圣十字圣保罗医院</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>4</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">里斯本</h3>
+            <div class="day-route">
+              <span class="route-place">贝伦区</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">贝伦塔</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">热罗尼姆修道院</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">商业广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">大发现纪念碑</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">奥古斯塔街凯旋门</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">国家马车博物馆</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>5</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">里斯本 - 辛特拉</h3>
+            <div class="day-route">
+              <span class="route-place">圣胡斯塔升降机</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">卡尔莫修道院</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">罗卡角</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">雷加莱拉庄园</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">辛特拉王宫</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>6</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">里斯本 - 马德里</h3>
+            <div class="day-route">
+              <span class="route-place">格洛丽亚升降机</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">比卡升降机</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">里斯本主教堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">贝伦蛋挞店</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">里斯本海事博物馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">马德里普拉多博物馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">皇家圣赫罗尼莫教堂</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>7</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">马德里 - 塞哥维亚</h3>
+            <div class="day-route">
+              <span class="route-place">马德里王宫</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">马德里太阳门广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">马德里马约尔广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">阿穆德纳圣母主教座堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">马德里圣米盖尔市场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">火腿博物馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">罗马大渡槽</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">塞哥维亚主教堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">塞哥维亚圣马丁广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">罗索亚高塔</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">塞哥维亚城堡</span>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+
+      <h2 class="title">前言</h2>
+
+      <p class="text">由于工作的缘故，芝麻兄要去 法国 南边开会，我则是要去 西班牙 ，然后拿到手的 申根 签居然只有一个月！于是心想着一不做二不休，干脆直接小玩一趟把本赚回来！（其实也不知道赚什么本，总归是自己花钱）</p>
+      <p class="text">一共两次出行，因为地理位置比较接近，时间间隔不长，季节也相同，所以放在一起写了。</p>
+      <p class="text">另外想说的是，整篇游记对景点背景知识介绍的会稍微少一些，一来网上不缺这些内容，都是理论性的东西大家一搜就能找到；二来对艺术的见解仁者见仁，没必要一味听信别人觉得好的“不可错过之处”；三来各个景点能拿到很详细的宣传册、地图、或者语音导览，边看边逛边了解就好，提前弄透彻反而会失去了一些惊喜。</p>
+      <p class="text">如此，我们的旅程就开始啦！</p>
+
+      <h3 class="subtitle">准备篇</h3>
+      <p class="text">机票没啥好说的，去程单位出，回程因为要拖几天所以自己掏腰包，所以没啥参考性。签证就更亏了，因为暂住证5月过期，因此就给到过期之前3个月，也就是长度正好大概一个月多一点的样子。</p>
+      <p class="text">租车 不现实，自动挡的车少且贵，而且欧洲跟 美国 不同，除非去小村小镇，否则 大城 市之间的公共交通比 自驾 省时省力，两个人也不贵，同一个国家坐火车，跨国直接坐廉航，有时候比火车还省。这次 尼斯 飞 巴塞罗那 飞机 是Vueling的，到 里斯本 是Ryanair，再到 马德里 是easyjet，都是大概20欧/每人。</p>
+      <p class="text">至于门票，按理说冬天这种旅游淡季是不需要提前买票的。但是恰好在春节假期附近，我们为求 保险 还是提前网上都买了打印出来。好处是可以稍微省一丢丢钱，坏处就是行程不能变动了。好在一切都很顺利，预定的 古埃尔公园 、圣家堂、 古埃尔宫 、 巴特罗之家 、 米拉之家 的票都圆满按照行程用上啦。</p>
+      <p class="text">住宿依旧是 Booking 上订的，提前订的都是可以取消的，最后几天如果看到更合适的更便宜的不可退订的，就直接下手，然后把之前订的取消掉。像我们这种早上7点就要退房存行李，有时候飞机半夜才到机场，懒得叠被子叠毛巾在外面又会矜持的不好意思的人，住 Airbnb 总归是有点……拘谨……</p>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第一日 尼斯-巴塞罗那</h2>
+      
+      <h3 class="subtitle">尼斯篇</h3>
+      
+      <p class="text">慌慌张张的飞到尼斯已经是半夜了。芝麻兄提前两天来南部开会，工作刚好结束来尼斯跟我汇合。酒店就订在了机场旁边走路五分钟不到的地方，方便休息。然而都各有不顺心的又累的要死的两人居然吵了个架到凌晨3点和好才睡。第二天各自肿着眼睛醒来，抱抱。</p>
+      <p class="text">虽然被闹钟叫醒，困到不行眼睛又肿到睁不开，但想到大老远飞来一趟不容易，也就强撑着起来洗漱，倒是一下子精神了。不想在酒店吃早餐，而机场附近又实在没有好吃的快餐店，于是决定节省时间打个Uber去滨海大道和 观景台 那边看看有没有café一类的地方。因为要避开早高峰堵车司机稍微在高速上多走了一段绕了一点路，20欧。正常路线的话15-18欧就能搞定。</p>
+      <p class="text">司机把我们送到 城堡山 的山脚下，我们看周围也没有什么吃的，就往回又走了两三分钟，找了个Café把早餐解决了。不得不说天下景区一般黑，一个可颂面包，一杯果汁，一杯茶，居然要每人10欧！每人啊！哦还有一块简装超薄小小小饼干。放眼望去这么早也没有别家开门，只能认栽。</p>
+      <p class="text">吃完早餐走回到山脚下，为了看到蔚蓝海岸全貌，开始爬坡。路遇 日本 大妈团从坡顶下来，更是坚定了我们“经过观景台爬到最顶上找个没人的地方照相”的决心。谁知道走到半山腰观景台就发现没人了！而我们也爬的气喘吁吁的决定认怂。既然这里风景如此之好，就不用再往上爬了吧！</p>
+      <p class="text">我们爬到城堡山的这个圆形观景台在google地图上叫Tower Bellanda，距离上面的Colline du Chateau观景点大概还有一半的距离，但是就街景地图来看，此处没有树木遮挡，而且半个圆形探出去，似乎视野更好些。远眺了蔚蓝海岸全貌咔嚓了几张照片又玩了一会儿观景台上的望远镜，我和芝麻兄就下山了。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1wiWsKF4M0HZw0ZSfOtVuSnADRuhzCLrd"></figure>
+      <p class="text">山脚下大马路靠海的拐角处，发现了超大的“I Love Nice”的标志，于是呼啦啦跑去合照。后面就是绵延海岸的一排石凳，阳光下坐在这里面朝大海发个呆也是超享受。顺着滨海大道，也就是 英国 人漫步大道走了一段，海鸥成群的飞过来又飞过去，阳光下海浪开出了晶莹的花。</p>
+      <p class="text">为了查询回机场的公交班次，手机没网的我们又走回早餐时候的café蹭个wifi。这时旁边的小集市也开了，工作日的早晨似乎有点冷清，逛了逛按照惯例买了冰箱贴。哦对了，早餐前在这里居然看到了手持步枪头戴钢盔的军警小分队！一人一枪拉开距离，按照队形缓缓前行，警觉地观察周围情况……啊不要太帅！大概是前一阵子恐怖袭击的关系，再加上没几天就是尼斯狂欢节，估计已经加强警备了。</p>
+      <p class="text">向北一路走走逛逛穿越 老城区 ，两边的小店也是各种吸引人。刚回到主路上就看到了回机场的98路机场快线，于是决定不等公交了直接坐机场快线回去。</p>
+      <p class="text">回酒店取了行李，在机场买了明信片，又看到了马卡龙，想着到现在还没吃上饭，于是打包了10个小的在飞机上先垫垫。飞出尼斯湾的时候，天空中的云薄薄一层，下面是蔚蓝的海水和深色的波纹。我和芝麻兄严重缺觉，于是一下就沉沉睡去了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1aNA92Nojir7CqP9rs8VoKIGodMIVG3kF"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/19ovtBqxUllrllU7v60E_VIiAKE7WosWA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1KDVczUDC90fH80RqbrTwlmSOxZtT20ix"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bamKYqQCbCawCDhcunWtncMZXynKFs-z"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12Hck-VrObCiIOqQrRL0VhlSdS1TGsMSU"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1e3MJHWYno0t-gAiC6tbC2YrFbSzQJaaP"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1lGrBMRnOxgmHpLNlwulG3vCRNZtoWRAM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1zKiWyI9Gp0eMnnlmF6ljlAR6n6E6T6mL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/11imnG3A2gU2E1pcBu6cXXRkdyglLl3G1"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1odh4ChmQR0e_BSs8oDv4nuMsflADcd8h"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1m9psVZechLJV5ZMzIDpmMn53GIyaVih8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Gwyn4rXKxQXJEjZzVfAj479fXB4WnJrt"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+      <h3 class="subtitle">巴塞罗那篇</h3>
+      <p class="text">一个小时多一点就降落在 巴塞罗那 机场，这里要夸一下Vueling， 起飞 时间一到，就真的已经在滑行起飞了，不像别的航空才刚刚登机完毕；降落后机舱门打开的那一刹那，刚好是行程单上写的到达时间，也不像别的航空，说好9点到达结果才刚降落，光是等滑行完毕走出机舱就会又耽误20多分钟。也可能我们这一班机比较幸运，不知道是不是Vueling都这么准时。</p>
+      <p class="text">睡了一觉精神大振，找到机场大巴上车点，每人6欧半小时直接送到市中心。然而按照导航走到预订的宾馆门口，找了半天才找到，原来在一幢apartment的三楼！房间一般，干净整洁设施齐全就好。然而令人惊艳的是这个复古的楼，木制楼梯就算了，电梯居然都是手动木制双拉门！也就是说要等电梯到了才能手动打开外面那个跟房间门一模一样的电梯门，然后在自己打开里面的玻璃门，再自己把两个门都关上，电梯才会走！</p>
+      <p class="text">研究了半天之后心里没底，按了按钮电梯又不来，我俩打算回来再研究，于是出门找吃的。眼看着都两点半了，我们早就饥肠辘辘，而 西班牙 人的午餐才开始，也算是赶了个正点。没多远就是Tapas 24，正好进去饱餐一顿。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1nquuwD6dcFMM67R15HCuDRUu5C6obxTY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hKGMQpl9ZY_bORjKGyg-NreAk5Gc0Tyd"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WrNg0Q4rwyd6gqXSnf-0GUa4Acw0fNAJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1t7dBotk8BF2gEAjf5gvAvnxqnErRzup6"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UqfDyeSFVG9wTY4PUibKXEgjUkEdX6WO"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">这一顿纯属瞎点菜，点的tapas上来看起来都不怎么像tapas，不过好在都很好吃，所以也就照单全收了。吃饱喝足两个人出来坐地铁黄线到Joanic站转116路公交到了 古埃尔公园 门口，一路太顺居然才3点40分左右。拿着4点的订票单问工作人员说是不到点不让进，正好有时间转转公园外围的免费区域。</p>
+      <p class="text">古埃尔公园正门是出口，如果想进去要从旁边的侧门进入。进门后的一段区域是免费参观，阶梯、回廊、还有高迪故居 博物馆 。在这里消磨了一段时间之后整点排队进入了收费区域，也就是俯瞰正门的小高台广场的后部进入，依次从上坡处往下走。傍晚时分的古埃尔公园光线正好，这也是第一站就来这里的原因。</p>
+      <p class="text">古埃尔公园的介绍网上太多了，在此就不赘述。色彩斑斓的长椅处俯拍正门的两座似糖果屋的建筑，再绕到旁边参观各种回廊，下阶梯后的立柱大厅，彩色 马赛 克的蜥蜴，一路走下来，时间也差不多过去了一个小时。到门口的礼品店逛了一圈，看看基本都逛遍了，就从正门出来了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1qgk-NV7x8PAePPISRw7IXmZYt585jXXg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1h_iVz4lUvUCHXCF7pxt5FZ41e3cg_yRY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Ve4M-TTb08u45TklsfyeAoqZVOdl3bmj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14_2MvYXRxZzt8wrXQTNJIGXJqzWW3btf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1kkzzvmEIKDudBvI2OTwfVNx9v_kYDvG9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-lYreDpTcUu6wLxTvYPTKaAy0alXw5mg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/19QbGwE9WdDQVNOMqT8f9WHzwLoBxjXoJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ezBF36Ifwfai5hBheGSZD3fwRJ55FuXT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1tsxSD7yaBXxPdpVOdTIUWqXGbWQJ9oLJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1K2UwQLzdIH-8GYsIQJ4kWga5eQwImXlJ"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">依旧是坐116路公交，只不过这公交线路是个环线，所以不再到地铁黄线沿线，而是七拐八拐的到了绿线的Lesseps站。反正我们两人买了一张地铁10次的通票一起用，到哪里都是一样的。看看离日落还有一段时间，于是决定把后面的行程提前，去巴塞罗那 大教堂 ，还能正好赶上免费参观时间。</p>
+      <p class="text">插播，这一班116公交的司机超级不靠谱啊！一个乘客老太太一直在大声给司机指路，虽然听不懂但是好像一直在说“该拐弯啦！”“这里走！”而且司机居然走错了路！然后在某个小路口开始倒车！拐进去了之前错过的一个路口！我也是震惊了。。。而且老太太下车时还不忘叮嘱司机用手指呀指，意思是“你朝这个方向一直开然后在那里右拐”之类的。。。好在后来有惊无险的把我们送到了地铁那一站。。。公交车司机不认路这件事我还是头一次见。。。要哭了。。。</p>
+      <p class="text">从Urquinaona站出来，没多远就是加泰罗尼亚音乐厅，于是顺便也一起参观了。本来还想找找买票的地方说不定晚点可以来听个音乐会什么的，结果找了一圈只看到了超级美的雕塑，没看到售票也没看到入口，就直接拍拍屁股走人了。（另外问一下，门口的柱子上只有一个小窗口类似是售票口，结果我们绕着柱子转了一圈没有发现门！请问如果是售票口，人是怎么进去的？！如下图，难道是从二楼掉下来吗？！）</p>
+      <p class="text">从 主街 上一拐，就看到了巴塞罗那大教堂的顶部沐浴在夕阳里。步行不过5分钟就到了正门口的小广场上。几个大叔正在那里吹拉弹唱，教堂繁复华美的尖顶被夕阳洒上了橙红的颜色，即便是冷风吹过，也觉得心里暖暖的。</p>
+      <p class="text">教堂门口的写着17.15分开始是免费时段，但是不知道为什么都过了半个多小时却依然大门紧闭。时不时有几个游客从里面走出来，保安却不让进去。估计是分批，或者要等收费参观的游客走的差不多了才能进。幸运的是我们到的时候等了大概5分钟左右就开放进入了。</p>
+      <p class="text">巴塞罗那大教堂确实是很震撼，一进去就有一种庄严肃穆的感觉油然而生。整个教堂很安静，整体色调也是教堂一贯的棕黄或青黑色。参观完一圈之后在里面坐一会儿体验一下氛围，又正好歇个脚。新鲜的是现在连忏悔室都有了预约叫号功能，电子屏上会显示XXX几点到X号忏悔室。。。真是个与时俱进的教堂。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/17_G96o4rD_6WrkvZ69ND7L81ZVtfqs0F"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LXKYR_joGmSk8WQHtoD1soQvGmcEgC-W"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1K6p3OJxR_Zd9Yym_Whau2HzvvfZWqT9j"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hSSbvXjjZn8FKM7meYGHrKaL5OgWF_b2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JrmE0PhTFMhqSXI0Ew82ehshx3L7TNof"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1KSvIWB83cysIFkqbQdPqHyzOhPUnwhtx"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1KJPEsuSYfW9KbCGT34JMzjMAmlCTxr4I"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JIvoxon9_VfwD6ZcmeIaVutN3Woin5QD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mOCEUW5uoedTD7XiQXGw07bC3Gb2BLis"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15nTSjfq9VHEoFkr2pDEB6_SZluZV708m"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ehyBuyp0jmzM8_uigZxqHWszIj7qLlIW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1kLWhZ3jd3Ylgondm3gsnH-Z9H0sPVhvx"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gQ2-TkyXKm4fJnqhwS6iaW75pZvbj0cv"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">出来的时候已经天黑了，正好教堂旁边就是颇有名气的tapas餐厅Bilbao Berria，本来就打算过来吃一顿的，提前完成了！这家tapas是自取的，吃完数竹签结账，另有special tapas的menu可以另点。吧台上自助的tapas都是大概1.8欧/个，每一个都超级好吃！另点的大概2.5欧/个，我们点了两个，又要了一扎500ml的西班牙国酒Sangria，吃的不要太爽！</p>
+      <p class="text">不过这家的sangria略冲，酒味稍浓，不喜欢的朋友可以像我一样多去几家别的餐馆试试，每一家味道都不太一样。但tapas确实是我此行最好吃的一家，吃的略high，以至于整晚都在跟芝麻兄表扬这家店。而芝麻兄因为不喜贝壳类和生鱼片类，tapas选择有限，所以评价略低于我。</p>
+      <p class="text">吃完饭出来也就八点左右，决定不坐地铁散步回去。路过Font de Santa Anna精美的瓷砖画，又在夜色中的 加泰罗尼亚广场 逛了一圈，回到酒店已经疲惫不堪。研究了半天电梯，终于成功坐了一次。到房间发现顶灯不亮了，前台小哥说要么半夜来修要么明天来。想想还是明天吧。洗漱完毕，借着还剩的那一点点酒意，一下子就进入了梦乡。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1u_gtoduP6tmLNza_JRNoDOb2Xs7lHAKM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fRmZywqYJDdgpg1MIOn5bEfZQSC7yDIJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1YjrKlWRZaWBdQQnyWy7Cdq1HSgjnllmv"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/184H4ArX_vxGDWxcckF-sWe0dmt1ilCq3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OahfiRisyCGfdc1VkjkxhZkkU6BPPPtk"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/10CLoz1YqxdnovePDQCwvgw1Ds4d_1XPV"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/19ISl67F9xQ80et5jOUmotJnrp7bFS19X"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1xRT-I-jhj3Nvw1BHk_TVLLYNWNNl-2GD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OrdDgls3ufGUGEllLOdxxuUvb0W4eBo-"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.跨国火车如果觉得太贵的话就去搜一下廉航，有时候会有意想不到的惊喜。
+        <br>2.古埃尔公园预订门票上写着几点进就几点才会放人，最迟可以迟到半小时。 古埃尔宫 也是正点才让进。其他像是圣家堂、 米拉之家 等都是提前一会儿也可以进。
+        <br>3.116路公交到古埃尔公园正门，24路到侧门。但是两个门距离并不是很远，大概十多分钟就到了。如果从 加泰罗尼亚广场 可以直接坐24路不用倒车，如果不能直接坐24路，可以坐地铁倒116路比较方便，反正75分钟内换乘是免费的。
+      </div>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第二日 巴塞罗那</h2>
+      <p class="text">睁眼的时候窗外已经蒙蒙亮了。抬眼一看才7点，闭上眼睡了个回笼觉再醒来已经快8点了。预订了10点钟圣家堂的门票，倒是也不急，洗漱完就跟芝麻兄手拉着手出门找早饭吃啦。</p>
+      <p class="text">路口就有一家连锁咖啡面包店，各式甜品当早餐刚好。又看到墙上贴着churros，也就是 西班牙 细油条加热巧克力的套餐，于是也点了一份尝尝。吃完早餐坐地铁到圣家堂这一站出来，刚好9点。先去前面有水池的小公园拍了圣家堂的证件照，幸运的是此时还有点阴天，所以正好拍合照后面的圣家堂不会太亮。然后就决定围着圣家堂转一圈，拍拍完整的诞生和受难立面以及其他部分的外观，再加上很多纪念品商店也开门了，又买了冰箱贴，40多分钟倒是很快就过去了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1tmnFueifOsW-Lr5It_rxduEO9_6puDLa"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1meGfvGbudBeaHr8aC71_phH_zg1tTCfM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1KcR9rEPAuThY_jsVFXYbKixHYtM2g-Yf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1O-lcqg50IlZKtnH9jlt8QXptOd8ZYstx"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15_9MuGBsH85T4TEovIPNviW5Niu4TcGX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1x35ptP2jovNmnPJT8v1o5oexG-KyrlHA"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看看表还不到10点，到门口一问说是可以进了，于是就提前进入了圣家堂。本来早上还有点阴天，结果进入大殿没多久就阳光灿烂，透过恢宏的彩色玻璃照进来，这些迷幻的光线让人觉得如此惊艳。不得不说高迪投入毕生精力所铸的圣家堂，确实是让人叹为观止。无论是建筑框架，细节雕饰，还是光影和色彩的运用，都堪称是举世无双的杰作。</p>
+      <p class="text">我和芝麻兄一边感慨一边慢慢游览，又安静的在椅子上坐了一会儿。教堂外围走廊里有很多展览，包括建筑模型、高迪设计的家具细节等等，着实能看好一阵子。由于对登塔实在没有兴趣，所以根本就没有订上去的票，只是按自己的速度欣赏和体会圣家堂的美妙。由于省去了大量排队和登塔的时间，即便我们仔细的全部走遍，也只用了不到两个小时的时间。</p>
+      <p class="text">本来计划中午去圣家堂旁边的La Paradeta海鲜餐厅吃饭，但是下午1点餐厅才开门！我们又不想在冷风中等一个小时，索性坐车去 西班牙巴塞罗那凯旋门 ，那边还有一个La Paradeta。连锁店就是这个好处！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Z-tNdx7jlR7_r1R5x_GLxiYdcxKwo9xs"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_zZz1mkQMU6y_tySptV1WGg787tJFc8D"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1RdaZjoL2Zp_jR4EF_JUKYcVUdncOtVwF"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1xpcd46Q2LUXoULhSEpV-WpDcBNOPJ8KL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1zIBVpdWGEB4uwl-hNenWAFFzPXoqqAuy"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1x-4mviucl-6Yi9o_HFJgxIzWNO0ncrHT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1jcMNo0-1ayG7xEJeiPnlftwXwurKrtQh"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13J-8cIVXAwtUgqbLf-mDE2q8GSudmVD0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1CrTPsDUq_bFodVzDAlDI23sflWEQ2Z38"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nb5CncDss-RYDx-HJi3alcy4n5n0ll3b"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Tm0Wud2r_W6MD3-TjJL9ZmGtbmwxFVum"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/19GzJksEKEmTT8ZWAF9nPINAAa5sOmFM_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12a4nX_wFh7SzV9jkXtkpqqeFKh3iCOr2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1au92XDCWhLX2XHJ9pHsejAVEaFYVVX70"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1A8mZpyJpruGL2vZAd2DnlyjFazHdaVCz"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1lUoQ4H0Z6rvfX9i7WJlOnL16W_-6HFMm"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">地铁转车一路顺利，出了站口就是凯旋门，阳光下更显英武大气。顺着凯旋门后面的公园一路逛着走下去，到餐厅的门口等了大概5分钟就开门了。和我们一起等着开门的还有两拨人，看来大家都是慕名而来。</p>
+      <p class="text">我和芝麻兄自然是第一拨客人，点了小乌贼、大虾、生蚝和一些鱼。另外点了两条巨大的章鱼须（别问我怎么知道是章鱼的，脚都被砍下来了也没法数，就随便叫吧），店家说蒸了切片吃。这一顿一共50欧左右。这两个章鱼须好贵，要20欧，但确实是好吃啊。哭。</p>
+      <p class="text">点完海鲜都是按斤称，然后就让店家推荐了做法，几乎都是加蒜蓉汁烤的。叫号领菜。章鱼须切成薄片撒上完全不辣的辣椒粉（相信我，芝麻兄说不辣就是真的不辣），大虾新鲜无比，鮟鱇鱼居然滑滑的略带嚼劲，小乌贼更是一口一个香气四溢，再加上人生中第一次尝试的生蚝，口有余甘，真是超级鲜美的一顿！</p>
+      <p class="text">（当然对于芝麻兄这种不太爱吃海鲜的人来说，这就是“尚可”的一顿。看着我吃生蚝更是把他恶心的不行。。。）</p>
+      <p class="text">出门面对的就是 波恩 文化中心的入口。免费进入到这个巨大的钢铁结构的展厅，中间是巨大的地下考古遗址，展示的是18世纪初期 巴塞罗那 的街道和房舍。顺着 哥伦布 大道向南走，不出10分钟就来到哥伦布纪念碑，摆个一样的姿势跟这位大航海家雕塑合了个影，旁边就是 海事博物馆 。</p>
+      <p class="text">本来想进去参观一下，结果看看时间还有不到一个小时就到了 古埃尔宫 预约的时间，所以索性就不参观了，只在海事博物馆一楼的沙发上休息了一下。临走的时候穿过后院，看到一个超可爱的小型潜水艇，还有一个小台阶可以让人站上去通过潜水艇的窗户向里看。我傻不愣登就上去了，结果一抬头吓得直接掉了下来。你们知道吗？！一张假人的脸就贴在玻璃里面！占满了整个玻璃！而且！超级丑！</p>
+      <p class="text">这直接快吓死老娘了好吗！满心觉得可能会看到潜水艇内部构造，结果一抬头一张阴阳怪气的假人脸！芝麻兄快笑死了，然后在有心里准备的前提下上去看了一眼也还是被吓到了，可想而知小朋友都得哭了好吗！真不知道工作人员是抱着什么心情弄了这张脸在里面的。。。总之提醒大家，如果在海事博物馆的后院里看到一个可爱的潜水艇，而恰巧又有个踩脚的凳子，不要上去往里看。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/13Gb4N1iquy47500TdXLuS44Zb-IPePvD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1u1ynBEJjPH8RunY3tdFaE2YbPSgzO-Xr"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1C_Go6gnsEaDnLfVvmwzVfklqyi7SmWmT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1xlK-Dac3ByDC-QEwUQgEc6-JWgmLiPJr"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1R_yklrog79euAA7tLs_QrTbzR2FlasUg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1dYidzt0gLx3ry7QggOoRBOUoMUps4ylB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WNHWge211lygALzZw-jkRTtZqvTeHDTo"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nu5Y8hUshpV6IDXFSnVcbEJ1nlXg92mH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JWC-HO_DHQ5RMZKPsYykIq9-3qYF8r3Q"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12RJkMbjeP-XTR3O6ZLZuRF1kN95GK7q_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15926ofohTeVMkG4FZwcOKTnXyBdJON3G"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wSs-J-_QaHmXzlPZj9MDWbp-rNFCqV6Z"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">惊魂未定的朝古埃尔宫走，刚好差不多在预订时间到达。悲催的是正好有个国外旅行团，所以我和芝麻兄拿了语音导览，就只能尽量捡旅行团不去的几间屋子逛。即便是这样，各种精巧又华丽的设计还是很吸引眼球，通向主厅之前的走廊上那一排落地窗和天台上的烟囱，更是跟后面参观的 巴特罗之家 有异曲同工之感。</p>
+      <p class="text">从楼下仔细逛到楼上，从天台再下来到地下马厩，芝麻兄觉得好像漏了一部分房间就又上去了，我则躲在大厅里继续听语音导览里刚才漏掉的介绍。果不其然，芝麻兄回来告诉我漏了两三个房间，于是又爬上去参观。一直到快关门了，我俩才从古埃尔宫出来。</p>
+      <p class="text">隔着 兰布拉大道 ，对面就是 皇家广场 。置身其中，满满的西班牙风情。四周是欧式风情的建筑，悠闲的餐厅，流动的喷泉，高耸的棕榈树，还有传说中高迪的第一件作品：路灯。虽然没有标识不知道到底是不是高迪设计的，但确实是值得多看两眼的设计。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1M7uRo4USF9C1swby50-SPk8KqQXgVyL6"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1DRUNJTUQlYZ7OcRYYwT1dcFOSpG3EtKX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Y_Dq50Lm-XJwxY8AA0Aqf5KhrBb-1qm-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1z7SQNaBIIxfW_lRDUfdHgv75CEVRCH4R"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1yuO5sNcyLmlz4QDJr4S16tcwPxTYfpAH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/153bNuLWAgCukVcZmeMlzjI8347F-Hmgq"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/10anS8dVKAgH1t2LbsfOtl7ZpjQGCpKBy"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UAN0P9NTAOKwS7eepKF4PENgLesVZwYM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1I94eft_CX64eSS2RO5WPb-iq82IJJfqd"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1BQ2ROJPYTaROnM_9WHWy33YYxQFlYwC9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1EKf5f7vzl9g-_Lozx_liRSVNJ_fLPfWl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1T81LVxxt2FEvjZOORxvWR-6Y2NlEunlp"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mze1-m9IM0vycGavDYcYkuVX2E8dMc52"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1BIRMutMkIMn5HCiLVEGdGtSbrf2bFhde"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ga0g_9Yez7XVwxg3E-2tz9r9KOdZAojV"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">午饭吃的晚，我和芝麻兄此时都不怎么饿，所以在广场周围吃晚餐的计划也就临时改成了先去波盖利亚市场看看。沿着兰布拉大道一直往北走，途中还经过了著名甜品店Escribà，真是满满都是人。再往前一点就是博盖利亚市场，入口处两边各一家火腿店，那些闪着红宝石一般光芒的伊比利亚火腿，真是让人垂涎欲滴。</p>
+      <p class="text">市场里才真叫聆郎满目，各种水果、甜点、坚果、冰糕、海鲜、火腿、香辛料，分分钟就拔不动腿。我和芝麻兄自然也是抵挡不住，买了一大杯切好的水果，一杯椰子和猕猴桃混合鲜榨果汁，加一小卷火腿薄片，居然只花了5欧。（又一次花了钱还觉得赚到了的典型）</p>
+      <p class="text">火腿略咸，因此没有吃完就卷起来收好。从市场出来拐角处的小胡同里没多远，就是以热巧克力和churros闻名的百年老店Granja M. Viader，里面也自然是人满为患。眼看着就到晚餐的时间，我们也不敢再进去加餐了。看了看旁边的Los Toreros餐厅评价还不错，于是决定晚餐就是这里了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1tdP52I4EuJcGElw5hq6wrO8cxcoW60e3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Yx-ukw0AeMiM-Mab1byVqymuYWJoPqo0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1EuTMJqRmiHQQdFgJ9_EVWMtSEgqoVhBb"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1XVu8vztuA6ihX2kC__QUkzVVglzmv2iG"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fcrMqL2Pq2xnd6YQQdM70ZO34twwo-zf"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">稍微等了一下餐厅才开门，大概六点半吃晚餐的人在西班牙不多见吧。海鲜饭两人起点，所以直接来了一大锅，加上sangria。这一家的sangria加了很多苹果小块，所以口感上比较柔和，深得我心。海鲜饭自不必说，只是苦了陪我来吃的这位对海鲜不感冒的芝麻兄。</p>
+      <p class="text">吃完饭才7点多，我感觉芝麻兄不怎么喜欢海鲜饭，往回走的路上一直问要不要再买点别的吃的免得晚上饿。答曰走走看。于是一路逛回去。路过city hall那边的时候刚好看到之前在网上想订票的弗朗明戈表演，纠结了一下还是买了票。事实证明淡季的时候基本一场也就三四十个观众，所以前排后排距离并不大，真心没有很大区别，不用花钱买前排。</p>
+      <p class="text">一个小时的表演，虽然是歌曲和舞蹈穿插着，依然觉得很过瘾。有个小遗憾就是，跳舞的三个人居然，都，是，男，的！Excuse me？！宣传画上浓妆艳抹穿花裙子的大妈呢？！难道这也“产品以实物为准吗”？！虽然没说一定要全是女的，但好歹三个舞者里有一个也行啊！又虽然，可能现在这个行业不是女人的天下了，但，我就是个庸俗的人啊！我想看电视里那种大妈跳的啊！</p>
+      <p class="text">吐槽归吐槽，这三个男的跳得真是很棒。尤其是展现出了男性特有的力量，虽然少了妩媚，却多了份震撼人心的轰鸣。当然也刷了一下我俩的三观，因为第一次知道原来男性跳弗朗明戈也能跳得这么好。</p>
+      <p class="text">看完表演出来，一边吐槽一边走到宾馆旁边的小超市买了点水果，回到宾馆房间发现顶灯已经修好了。给个赞。暴走了一天，倒下就呼呼大睡了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/13L-dDbfLqZ3bNnf0vWpk8vgEXHvzAD3q"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1leE4QLTZ7K7njvs1UoEx9mtiBEvJOsxY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1t8aqB_vnhSYtbGzeQ-YOXXj8OqT68lEa"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PM3KzWOj8Q91Z1E8S0nBPE4R8a5iFq6t"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1oZNaz6SKOPVDiBf_ACuYLSMFbuBZISYs"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.古埃尔宫上到主厅那一层的时候，有两条路线，互不相通，所以要注意看地图不要漏掉。
+        <br>2.在波盖利亚市场想买水果或果汁的话，不要在门口那几家，往里走会更便宜一些。比如一杯切好的水果或鲜榨果汁，门口摊位2欧或2.5欧，里面只需1.5欧。如果本来就需要多买几杯，能省一张地铁票出来。
+        <br>3.其他几家弗朗明戈表演我不清楚，但是大家来city hall这一家如果介意看不到女性跳舞的话，建议买票前问一下。我们看到有女性舞者，但是可能这一场恰好不上场而已。
+        <br>4.海事博物馆那个潜水艇窗户里的假人脸，可能是我太怂才会被吓到，有心理准备的话，可能会好些。大家可以去瞧瞧，试试看。。。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第三日 巴塞罗那</h2>
+      <p class="text">早上醒来还不到八点，预订的 巴特罗之家 9点的门票，因为离的很近，所以不慌不忙收拾完退了房，再把行李寄存好，出门吃早饭。</p>
+      <p class="text">这次早饭选在了去巴特罗之家路上的Il Caffe di Francesco，看评价还不错，决定来尝一尝。环顾了店里一周都是当地来吃早餐喝个咖啡看报纸的当地人，有老爷爷老奶奶也有西装革履的上班族。于是和芝麻兄选了吧台的座位坐下。油条巧克力一般，油条是提前炸好的，吧台后的大叔会再放到烤箱里烤酥，但终究是不如昨天在pan吃的现炸的好吃。倒是火腿三明治出奇的惊艳，面包的劲道刚刚好，润滑的火腿和芝士的搭配有刚好让整个三明治咸淡适中。</p>
+      <p class="text">服务员大叔在吧台后忙的风生水起，恨不得有三头六臂的样子。我们吃完饭差不多8点半多一点，两个服务生小妹才刚刚来，而店里吃早餐的顾客却都该去上班的上班，走的差不多空了。纠结了半天这么好吃的火腿三明治要不要再买一个带走，最后还是作罢。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1WgBNYJsf66RQ4W7Np-b6q-id8gPNVn02">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/12ufS9xTOTwOv0-AycIGuak7UCXRSjky8">
+        </div></figure>
+      </div>
+      <p class="text">不到五分钟就走到了巴特罗之家，门口的队伍已经排了一点。我和芝麻兄在外面拍了一圈，正好去排队进馆。领了语音导览，就直接从下到上再到天台趁着人少先拍了个够，此时大部队当然还在最初的几间房间里按顺序游览。然后我俩又下到底层，开始跟着导览一点一点慢慢逛。</p>
+      <p class="text">巴特罗之家的导览器确实做得很好，摄像头对准的位置就能虚拟显示出房间内的家居摆设，给人留下强烈的直观印象。尤其是高迪以海洋主题来设计整个公寓，天台上龙的脊背，天井里渐变的瓷砖颜色，以及各种波浪型的设计，不断给人惊喜。</p>
+      <p class="text">就这样刷了整整两遍巴特罗之家，花了12欧买了工作人员给照的照片（很好看但巨贵！），又在里面的纪念品店里买了个迷你杯，我和芝麻兄出来才11点左右。到旁边的 阿马特耶之家 看了一下，门票要14欧，鉴于我俩兴趣都不大，感觉不太值所以就只在门口逛了一圈。街角的狮子与桑树之家直接不对外开放。本来要在附近吃午餐，但是时间还早。看看宾馆前台发的游客地图，还有 西班牙广场 和 圣保罗 圣十字医院没有去，所以决定先去西班牙广场。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1xXvLTADqP2NsGZAcNAv_JwK_5ZSKN5sn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WbKouVvMbMJS-IOLKglTyueXuh22Z-8-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1qQrLxtjQ2zIXtW_iqaRzFgLK7sWUSA56"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13uDcH5fdXaU3bu97lSGCiyStQbhbPA9Y"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_8yvHe87aVN3-4ZB3emXCaFmnw5mXmXH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ookF4ZDvauPVbvXFCf_cTSLiKtYBpJKX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1t4uTJ3TGXjIjDdXTIKDLjvILNzRqqguv"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1il8nGcznfove8m8xgagHsHhdKV93la2q"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">此时我们买的10次地铁通票已经用完了，算了算只要乘5次地铁就能值回票价，就又买了一张10次通票。坐地铁到Espanya这一站下来，出来就是西班牙广场了。顺着两个擎天柱的那条路一直走，不到10分钟过了过街天桥，就是 魔幻喷泉 。在爬上好几打台阶，上面就是加泰罗尼亚 国家艺术博物馆 。</p>
+      <p class="text">从加泰罗尼亚国家艺术博物馆的前面 观景台 上，可以俯瞰 巴塞罗那 城区。远处是 圣心圣殿 和所在的山丘，近处是四座高耸的立柱。此番景色，又跟在 古埃尔公园 俯瞰巴塞罗那直至海边的景色大不相同。一山一海，算是把巴塞罗那看尽了。</p>
+      <p class="text">我和芝麻兄都对艺术博物馆不怎么感冒，于是便没有进去，直接返回 米拉之家 附近午餐。12点半的Cerveseria Catalana已经有很多人了，我们坐在吧台区方便点菜。这一顿吃了tapas，海鲜串，沙拉等等，我觉得很好吃，芝麻兄不怎么喜欢，大概是觉得菜单都是西语没点到更多好吃的吧。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1TrRfmnFVFS__tI_AdgcUpA02kiJvhBU_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1r5sYBUVGs96RcfpSmSxPHdewlDF1v0dC"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1eKtVAmHL8OzoY_3QqzHx2aIoIIsEoEsG"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1akkMBxXcOacgiTJYAzn2ExDMmQUvl54s"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1axEmHBMhAuN1fWtEGsgKqI_CvaH25V7f"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ssYfOJn2aM5jhJGeFqFFON4T7rZk8QAT"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">吃完正好快到下午参观 米拉之家 的预定时间，走路3分钟左右就到了。进去之后照例是领语音导览，工作人员 会安 排大家排队坐电梯先到天台，然后从上往下参观。天台的烟囱绝对是最别具特色的设计，再到下面隔层的展览区，接着是下面的视听影片观看和公寓区，包括卧室、儿童房、缝纫室、厨房、餐厅、客厅、书房等等。总之不管是展览还是室内家具的陈设，都很吸引人完全不会无聊。</p>
+      <p class="text">最后我和芝麻兄走回天井底层，坐在一旁的台阶上，一边抬头看着头顶悬空的阶梯和天井设计，一边完完整整一字不漏的把语音导览听完。再起身时已经是下午三点左右了。看看离晚上的航班还早，又坐地铁去了圣保罗圣十字医院。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1tpbbgN_elSh7TvxcSORitOndwBA7CrXU"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Dw8tjc0toTbgYFkOXUWTCA-exeXsqwCu"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1EpKYDBoxwPU1G4wWNUMW4bdqgtDwxdAm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1991kyPPGgMujsnXa6th7edHtX29kA3E7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1V4QyWoM0snVUkeQq9AKW75LFgCYkghh0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mm6vouk91UbI9RMk6XGqbQYsjDAnA6Ta"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18GnsSRA_y2l9Jj0-D0CInLOonmQxn6Sr"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">到了之后发现本来以为5欧的门票居然是13欧（具体忘记了大概是这个数），掂量了一下时间也许不够了就没再进去，门口逛了一圈就走了，真算是打了个卡。剩下的时间也不能浪费，于是坐地铁又一次回到了波盖利亚市场，又一次的买了水果和跟昨天同样味道的鲜榨果汁。本来是专门为了昨天没吃成的百年老店的炸油条回来的，结果！居然要5点才开门。。。于是再一次遗憾的跟它擦肩而过。。。</p>
+      <p class="text">一路步行回酒店，下午的阳光像初春的花朵一样开得正好，照在小巷里和公寓阳台上，带着温热的暖意。路旁的甜品小店里，人们正排着队等一锅新鲜出炉的面包。而我正拉着芝麻兄的手，一步一步的，感觉整个世界都要甜化了。</p>
+      <p class="text">回到宾馆拿了行李，又再一次拐过街角，到El Glop De La Rambla餐厅吃墨汁饭。六点多我们依旧是第一波客人，又是夜里9点半的航班，所以即便菜单上写着墨汁饭海鲜饭都要等20分钟，我们也无所谓。最后一次要了sangria，味道中规中矩。倒是芝麻兄点的pork cheek，两大块肉加沙拉居然只要7欧，几乎要比我的墨汁饭便宜一倍。</p>
+      <p class="text">于是乎我俩各自大快朵颐，当然芝麻兄也吃了不少美味的墨汁饭，整个牙齿舌头嘴唇跟我一样被染上了黑色，最后我俩龇牙咧嘴的排了数张自拍以示纪念。漱好口擦好嘴结了账，走路3分钟到巴特罗之家门口地铁站里准备坐R2N火车。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1NuGZ2Xm4w4sY7XEBbXGVEB5YRKGhUbUh"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1d66MQmOJgGCR5qFHTWwOmx53pOIDgkS2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VJIBrhurD5NCFXX3k-yMva71-bACRIEQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1pzYuHebi-f2SFOTdPONltXMLQO0xVhol"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">每人4欧的车票进了站，刚好来了一辆火车，我和芝麻兄就跳上去了。然后我发现为啥站台上那些拖着大包小包的人都不上车呢？于是赶紧跟芝麻兄表达了我的疑惑，他当机立断问了前面座位的老大爷。老大爷虽然不懂英语，但是airport这个词跟西语中的发音差不多，他懂了！然后nonono的摇头说不到airport，于是我和芝麻兄电光火石的拎着包在最后一刻跳下了火车！</p>
+      <p class="text">这辆火车刚开走，下一辆去机场的火车就准时到了，前后只差2分钟。我就觉得当时在google map上搜到的火车时刻跟它实际到站的时间不一样，就差两分钟所以也没有在意，原来是上错了车！好在有惊无险的到了机场，安检都很顺利，结果飞机延误了了整整一个半小时。不过也无所谓了，一上飞机我就昏睡过去了，以至于什么时候起飞的完全不知道。就这样，一路睡回了家，也算是圆满结束了吧！</p>
+      
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.从魔幻喷泉到加泰罗尼亚国家艺术博物馆要上很多台阶，但是每一层台阶都有自动扶梯，所以可以利用一下不至于爬的那么累。
+        <br>2.去机场的火车每半小时一般，电子牌上会显示终点站是机场，千万不要上错了火车。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第四日 里斯本</h2>
+      <p class="text">早上迷迷糊糊被闹铃叫醒，外面还是漆黑一片，订了这么早的廉航真是醉了。从冰箱里拿出昨天芝麻兄准备的三明治热了一下抓紧吃完，就风风火火的奔到了机场。这么早安检还是大排长队，检完一看只剩半小时左右了。这时候路过机场里的商店还想买两瓶水，结果偶然一看机票上写的提前半小时关舱门，于是一路狂奔到登机口刚好赶上最后时刻。满头满身大汗的坐在机舱里，我们的第二波旅行就在一片慌乱中开始了。</p>
+      <p class="text">早晨9点多到达里斯本机场，手机上说打uber不贵，为了节省时间直接叫了一辆，20多分钟到Rossio火车站附近只要10欧左右。到预订的旅馆放下行李，才发现大概是早上慌乱的余波未平，居然在机场只顾着打车忘记了买里斯本卡。好在酒店前台很热心，上网查了哪里还能买，又给我们打印了地图（其实我们手机可以导航），我和芝麻兄就出门啦。</p>
+      <p class="text">市中心买里斯本卡的地方叫Lisbon Welcome Center，就在 商业广场 旁边，于是我俩就趁着天气好顺便把 奥古斯塔街凯旋门 和商业广场逛了一下。面朝大海的商业广场加上蓝天下黄色衬托的凯旋门，还有凯旋门前红色的叮叮车，让人的心情一下子就振奋了起来。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1v02_UGGclMKdbmCz_0L8e-oi7X7wb4JF">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1M7vDNf9fHDn84MA6TxKqURtD4kNGgO3S">
+        </div></figure>
+      </div>
+      <p class="text">在游客中心以18.5欧/人的价格各买了一张24小时的里斯本卡，这样不但各种景点免费或打折，各种地铁、公交、有轨电车、升降机，甚至去 辛特拉 和凯斯卡斯的火车票也包括在内了，非常划算。在商业广场与凯旋门之间的主路上就有去 贝伦区 的15路有轨电车，于是我们就跟着一大波游客一起挤到了 贝伦区 。</p>
+      <p class="text">幸亏是在商业广场这一站坐的车，由于人太多，导致后面几站根本上不来人，车上的人也被挤得汗流浃背。好不容易到了贝伦的第一站就下了车，芝麻兄已经饿得不行了。本来站牌后就是价廉物美的小餐馆O Prado想直接吃午饭的，结果太早要12点餐厅才开门。于是顺着下坡走下去，在 国家马车博物馆 旁边的café里吃了个甜点先垫一下。</p>
+      <p class="text">阳光正好的要命，本来看天气预报说今天有阵雨的，看这架势当机立断改了计划，先趁着阳光灿烂沿着海边走去 大发现纪念碑 和 贝伦塔 ，之后就不用顾虑天气直接呆在室内看博物馆和修道院了。虽说气温已经十几度，身上倒是不冷，就是海风吹的头昏脑涨。</p>
+      <p class="text">远远的就看到巨型大发现纪念碑，走到近处果然宏伟壮观。尤其是看着上面雕刻的那些航海家们，想到他们曾经以性命为赌注探索未知，直至征服大海，居然让人有些微微的热血沸腾。然后不知怎的又联想到了海贼王，就更热血沸腾了。</p>
+      <p class="text">我坐在海岸堤坝上凹了半天造型，果然，要脸皮厚不怕丢人才能拍出满意的照片哈哈。往远处看，就是4月25日大桥和 大耶稣像 。朝着 贝伦塔 方向沿海岸走，看着不远，其实要走好一会儿才能到。结果走到跟前一看，排队入塔的队伍已经沿着入口处的桥排到岸上来了。眼看着排队可能要等超久，我和芝麻兄一合计决定不进去了。</p>
+      <p class="text">附近小店逛了逛买了一张像是软木塞做成纸那种材质的明信片，颇有特色。往回走的时候选择了从大发现纪念碑直接往北，也就是穿过Jardim da Praça do Império这个小花园，直接走到热罗尼莫斯修道院前面，趁着天气晴朗先拍照。拍照的时候就看到远远的依然是一大群人在排队，好在我们也不急，所以就沿着修道院门口的那条路往马车博物馆的方向走。路过超有名的 贝伦蛋挞店 ，又是人山人海，真是累觉不爱了。</p>
+      <p class="text">回到O Prado小餐馆点了牛排和海鲜泡饭（其实点的是海鲜泡小粒意面）。之所以叫海鲜泡饭，是我觉得 葡萄牙 的海鲜饭跟 西班牙 的不太一样，是一个比较深的小煮锅端上来，里面汤汁多一些。填饱肚子，马路对面楼梯下去就是马车博物馆，里斯本卡免费。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1mrvLL_wQOwcNe7ZX9UF-t_kCM1vp9Mjv"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1HPQxX9h-6oVU2x_lzzcE7MbY7upWDIY2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1FQkU7q0kfFLKV7Lpe2WSpJXwLhqKmHlY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/116lpXNTlxq_P2ZUUKZ-iEzcjo6kAS9sA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Xr2LHxX490uIGHCD_b59jtZnM1OhACC7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1EaDQs7IDoHVO6OltGEgiCvxRVOdmSpit"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13JLiPEXDsJg5Llh0i_y04eWVAsimzAlb"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1V4ou4D4A-tfk9Ot4_tvzfccjw6WCsJDj"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">一进去我和芝麻兄就震惊了，本来就想随便看看，结果完全惊艳。从小看的灰姑娘故事里面的美到爆的马车，真的出现在眼前了！各种豪华马车一辆接着一辆，奢华繁复的雕饰，鲜明的颜色和独特的设计，感觉真是让人垂涎三尺，恨不得真的拥有一辆。看到后面还有类似公交车的马车，儿童马车，邮政马车，总之完全不会无聊。</p>
+      <p class="text">从这个新馆出来，再回到主路上，对面就是类似旧馆的地方，光线相对昏暗，天花板上是巨型壁画。这里有七八辆豪华马车，侧面的回廊里展示的是消防马车，面积比新馆要小。如果没有里斯本卡的话，这里是单独要票的，当然，也可以买跟新馆的套票就是了。</p>
+      <p class="text">从马车博物馆出来，太阳已经藏到云后去了，暗自庆幸刚才先拍了外景。等我们一路经过 总统府 进了热罗尼莫斯修道院，居然开始有蒙蒙细雨落下来。好在我们待在室内，并没有什么妨碍。这座据说修了100年的修道院，几乎每一步都让人流连，一楼二楼全逛下来，再加上去教堂里面找达伽玛的墓，居然已经一个多小时了。眼看着已经快五点，去 海事博物馆 是来不及了，索性又拐进去看了EMEE的展览（Eurovision Museums Exhibiting Europe），算是把里斯本卡用了个痛快。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/11ts4GMnQ9BF1NaePhDsCll0YOXCV-NMt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17kkrCpYMAFGhri9NPlwt_dHVTqgmsj0l"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1NilnYg3L0e4sgLNk9_UmfZfLAmkEXQtD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Le0fWBM66zLbnaaglYx8e8orWrH9zVrb"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fMPO2oe4htpp-fMIx6OVP1V_gsXZ20Sx"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1__nW9t3et-6T6_LJYJQQVAecT2N5W2lH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1MveEfbpZRif0-KB1MLojOIBS7Tgct6Ix"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1q4K7gqmcNqFrMLXx6sKI0xWSGYZ73017"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1HR0ndHxDDJ5qziRD_AM7yo-khrPFSja2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Ackp4kb_7fOpGIp1i7TNIAUF9DUh8C76"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZYml0VH-q_s7BozUxwTHZv-izNnkHZHN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ejOkX0nIYQmFkoXsc2gB6u_rULqq0uJ9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12Tx7b_8MnUR01I6T-tacVsNT-QXpL7ye"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ngLgq85zK0MOZsi8esa5dh5yawjOVzIg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1tCE4vZv_XVnG27qoRapTkSr6gW1VzQ8e"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1B0eFT8BXCUyKxMxc_zjOZjC8Xg928Rqo"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1d8THLhF245JNLaQNyFpbmd1W8PnoV4IQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nFemdWLxoTcz0GsyWxMmo4odsoD5Y9x6"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WQarhpOummmulbHGFjd6efTIP0ls1FBB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/148BJwM_SvRFOK6TrDYoaYeGYHZTHDeFb"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1K5f0bT6xHdrxDpFpze1--OHIQVgPMCL1"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看完展览出来雨已经停了，正好15路有轨电车在修道院门口有一站，我们就跟着上了车回到市区，在Cais do Sodré火车站这里下了车。因为明天里斯本卡就过期了，所以进火车站买了24小时可乘坐公交、地铁和去附近城镇火车的交通票，10欧/人，反正从第一次激活开始算时间，明天随时可以用很方便。马路对面就是Time Out Market美食广场，懒得去别处找吃的，我和芝麻兄就进去了。</p>
+      <p class="text">进来一看好不热闹，硕大的大厅里已经几乎坐满食客，最中央有一小块空出来，弹奏乐器的艺人和随之起舞的食客让本来温暖的大厅里更平添了许多欢快。我和芝麻兄围着广场转了一圈，看了各家店的菜单，最后我决定吃海鲜泡饭他依旧吃牛排，顺便还来了一杯葡萄牙特有的Green Wine尝尝鲜。</p>
+      <p class="text">总体来说味道还不错，这一顿吃了大概不到30欧。这里的好处就是可以多些菜色的选择，在火车站门口很方便，但是性价比感觉不高，所以不打算再来了。吃完芝麻兄还专门去买了两个蛋挞来解馋，不过蛋芯口感黏黏的，我并不很喜欢。看了看要做地铁还要再拐回路口过马路下楼梯，索性顶着上坡的压力走回旅馆来的快些。</p>
+      <p class="text">谁知道这上坡坡度太大，走两步我就要停下喘两口，然后发誓再也不轻易在 老城区 步行了，如果要再步行，一定先考察好上坡下坡再说。回到宾馆感觉这一天真是累挺了，洗漱了一下就睡过去了。</p>
+      <p class="text">结果半夜，发烧了。。。</p>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.建议大家避免在周末前往贝伦区，主要景点大排长队不说，来回的公交车也挤的不行，即便是冬天这种旅游淡季也不例外。稍微一个不小心，连公交车都挤上不去。
+        <br>2.热罗尼莫斯修道院门票10欧，跟贝伦塔套票12欧；马车博物馆新馆6欧，旧馆4欧，套票8欧。所以即便是只去修道院和马车博物馆，加上来回交通，一张24小时的里斯本卡也值回票价了，更别说还能坐升降机、火车、以及其他地方的打折了。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">第五日 里斯本–辛特拉</h2>
+
+      <p class="text">迷迷糊糊睡到半夜，发现浑身热得要命却不出汗，手心额头也是热热的，浑身酸痛，初步断定是发烧，却没带体温计。吃了两粒感冒药，多喝了些水又睡下，朦胧中假设了一万种情况，还在脑子里把明天的路线改了又改，甚至做好了在宾馆休息一天的打算。谁知道早上起来的时候却觉得轻松多了，分析了一下大概是昨天海风吹多了的后遗症，于是还是准时在7点多起来洗漱准备出门了，大不了随时回来休息就是了。</p>
+      <p class="text">宾馆提供了旁边一家café的早餐券，名字叫A Padaria Portuguesa - Loja Camões，貌似各网站评价都还不错，于是我们就欣然在8点钟的时候出现在店里了。没想到早餐还没吃上却吃了一肚子气。进门的时候是跟着前面两个同样是我们宾馆的旅客一起进店的，就排在我们前面，说 葡萄牙 语。排着排着右边有人到前面去看柜台里都有哪些面包种类，后面不知情的就跟着又排在那些人后面，结果就是我们右面又出现了一队跟我们平行的队伍。好在人们都很自觉，所以右边这一队的人并没有抢着让服务员给他们点单。</p>
+      <p class="text">结果轮到我们的时候，某个女服务员看了我们一眼，说，去取号，有号才能点单。我一下子懵了，说，什么？她又不耐烦的指了一下门口，说，去领号。然后就去给右边那一队人点单把我们撂在这里不管了。我又迷惑又生气，因为我们前面的人都点单了，并没有看到叫号或者把号码条交给服务员，根本不可能知道还有拿号这回事。虽说如此但还是乖乖到店门口楼梯处的机器上撕了两个号码。结果一回头就看到电子牌上写着我的号码，所以我现在应该可以点单了吧？</p>
+      <p class="text">错！我回到柜台前面，那个女服务员示意我等着，我跟她指了一下说电子牌写着我的号码呢，结果她直接无视了我，继续给旁边的人点单。然后我就出离愤怒了，因为这一会儿她给我旁边的三个人点了单，自始至终没有一个人需要交号码！而且这三个人就是刚才我和芝麻兄摆弄取号机的时候从我们身边过去的（取号机正好在前门到柜台的必经之路上），明明是我们之后来的，而且根本没拿任何号码因为当时除了我们没人碰过取号机！轮到我的时候我说屏幕上写着我的号呢你怎么不给我点单，而且为什么别人不用取号？人家这服务员回头看了一眼说，现在才轮到你，之前服务的都是在你前面的号码。</p>
+      <p class="text">你特么当我眼瞎吗？！还是当我不识数？！我真是被气昏头了，不然当机立断就应该让她把前面那些人交的号码拿出来给我看看！真想把她那张胡扯的嘴给撕烂！</p>
+      <p class="text">主要是这边的人英语程度可能有限，我巴拉巴拉说了一通人家直接装听不懂我就一点办法也没有了。于是在这种语言不通的地方就只能吃闷亏，一肚子的气被芝麻兄安慰了许久，早饭没吃多少，光吃气就吃饱了。不过味道还不错，这个我要客观的说。早餐券包含一个三明治、一杯果汁、一个葡式蛋挞、一杯浓缩咖啡，还算丰盛。后来翻了翻这家店在网上的评价，没有说东西不好吃的，所有负面评价全是说的服务不好。说实话，店里生意好服务态度差这种情况哪里都会有，关键是你要公平。服务不好，你就对全部顾客都不好，不能因为看着不是欧洲人不说葡萄牙语，你就满嘴放炮的胡扯，转头对别人服务可麻利着呢。</p>
+      <p class="text">这里要表扬芝麻兄，对我消气和转换心情起到了决定性作用，虽然他也老大不高兴，但还是以安抚我的情绪为主，所以吃完早饭我也就恢复得差不多了。说实话可能并不是这个店里的每一个服务员都这样，也可能不是针对每一个亚洲顾客，就是碰巧被我们赶上了，认倒霉呗。反正我对这个店的评价是低到不能再低了，一个连自己的服务员都管不好的店，不知道会不会长久。</p>
+      <p class="text">一路下坡步行到 圣胡斯塔升降机 ，早上几乎没有人，很顺利就坐上了，当然升降机的票和上面 观景台 的票拿里斯本卡都免费，单买大概5.5欧左右，上面观景台另收2欧。作为里斯本众多升降机中唯一一个直上直下的，其实就是超大号复古带座位的观景电梯。</p>
+      <p class="text">下了电梯我和芝麻兄就往 卡尔莫修道院 的方向走，脚下的钢铁步道在街道上方横跨而过，因为又窄又高搞得我都快恐高症了。结果芝麻兄刚反应过来说上面还有个观景台为啥不上去，反正拿卡免费，于是我俩又往回走。沿着蜿蜒的旋转钢制超窄楼梯上到顶，发现观景台不过就是个围起来的六七米见方的平台，主要胜在360无死角，可以将整个里斯本 老城区 一览无余。</p>
+      <p class="text">话说我本来没有恐高症的，不知道为什么在这上头心里慌慌的，于是在拍全景照片要靠近围栏的时候一直拜托芝麻兄在我背后抓着我的衣服防止我掉下去，被他笑得不行。然后还指挥我站在靠近围栏某处给我和背后稍远的卡尔莫修道院合影，拍出来我脸上的笑容都是僵硬的。。。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1PCXLk5OfBQiizcwzJm1CXi349_EbX0Ey">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/19g2SG1QNssA_qfSf-jpOSCyi1vf4SQVl">
+        </div></figure>
+      </div>
+      <p class="text">得瑟完这一出，我俩顺着步道过去就是卡尔莫修道院，眼看都9点半了居然不开，拿出攻略一看才发现10点开门。纠结了半天决定不等了。本来的计划是去 贝伦区 的 海事博物馆 ，因为是周一， 贝伦区 我们想去的景点只有这个博物馆开门，然后中午出发去辛特拉小镇的。但是昨晚这一烧，不知道下午还有没有体力去 罗卡角 ，万一又严重了怎么办。再加上此时已经离Rossio火车站很近了，再往返一趟贝伦区，时间上极其不划算，思前想后决定直接去辛特拉，回来看情况再决定是否去海事博物馆。</p>
+      <p class="text">走到Rossio广场附近，顺路还在街边小店里买了里斯本的冰箱贴，然后芝麻兄去替我买体温计和退烧药，以防万一下午再烧起来。我则是在广场上逛逛，看看喷泉看看雕塑找个长凳坐下休息，顺便感慨一下有时候天气预报不准也挺好的，晴空万里的天气真是太给我面子。走到Rossio火车站现在外面咔嚓了几张照片，进去一看刚好错过一辆去辛特拉的火车，不过也不着急，距离我们里斯本卡失效还有一个多小时，再说下一班20分钟之后就出发了，正好趁这个时间试个体温。</p>
+      <p class="text">试过体温一看，根本不烧，然后不知道是不是心理作用，瞬间我又满血复活了。芝麻兄警告我别太欢实，于是我乖乖在去辛特拉的火车上睡了一路，等他叫醒我的时候一个小时的路程已经结束，辛特拉小镇到啦。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1zGAQdV4Ijcj8Ux3DkrLv82q4v2cEgSC-">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1BuJbukNKuRdTAfQu28ZCdOryEJmwVeEU">
+        </div></figure>
+      </div>
+      <p class="text">之前看了很多游记，知道来这里的标配是去 佩纳宫 和 摩尔人城堡 ，再加上辛特拉 皇宫 。 雷加莱拉庄园 算是略小众，但是一溜儿的好评，说是极为有趣。我和芝麻兄一路看城堡看皇宫已经有些审美疲劳，而有趣的地方谁不喜欢呢，所以来之前就知道时间有限，决定直接去 雷加莱拉庄园 。</p>
+      <p class="text">从辛特拉火车站出来马路对面就是游客中心，但前提是，你要从火车站正门，也就是那个白色小楼里出来。像我们这种跟着人流在火车站 西端 最尽头的出口出来的，就好一阵子晕晕的找不到游客中心。到游客中心问了公交线路和单程价格，去辛特拉皇宫和雷加莱拉庄园的435路公交单程2.5欧，去 罗卡角 单程4欧多，算了算觉得还是买12欧天票比较划算。</p>
+      <p class="text">买好车票到马路对面的车站一看，队伍已经排了大半条街。幸亏我机灵先去问了一下前面站着的司机，发现这些人都是在等去 佩纳宫 的434路游客公交，而我们的435正停在那里等到点发车呢。我和芝麻兄欢欢喜喜的在一长队羡慕的目光中上了车，还在如此小的公交车上找到了座位，刚坐稳就发车啦。</p>
+      <p class="text">车程倒真没有几分钟，不过都是盘山路，地图上看着走到这里只要20分钟左右，但这上坡可能真的吃不消。第一站是辛特拉皇宫，第二站才到雷加莱拉庄园。下了车发现车站设置在了庄园的出口，要想买票进去还得爬一段。于是又爬到入口买了票，6欧/人，里斯本卡还能有20%的折扣。但苦于我们的24小时里斯本卡刚刚过期，所以还是买了全价票。（根本忘了里斯本卡可以打折这事我会说？）即使这样，玩儿完出来还是觉得，票价太良心了！</p>
+      <p class="text">拿着给的地图，我和芝麻兄就开始了庄园里的大探险！一路上错综复杂，楼梯暗道相互连通，每条小径都连到不同的地方，又不知怎么就绕到别处了。三步一景不说，这里特有的气候让庄园里即使是冬日也是满眼绿色，到处布满的青苔更让人觉得有些梦幻，似乎是置身游戏里的世界，如此不真实。我和芝麻兄逛着逛着就到了地道的入口，于是各种兴奋，钻进去没多久就到了某个小瀑布的后面，西游记里的水帘洞这次让我们见了个微缩版。</p>
+      <p class="text">地道里岔路也不少，有的是死路，有的可以通到另一个未完工的井里。地道出口是一个被螺旋楼梯围着的天井通到地面，如此巧思也是从未见过，反正我是一路都处在头脑兴奋的状态中，觉得真是妙趣横生。天井上端隐藏在几块布满青苔的假山后面，不仔细看也是找不到的。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/14USYmbU3epPy9KDz8b3TSXk2Dng1ofnW"></figure>
+      <p class="text">从地道出来当然是意犹未尽，我们又找去了小瀑布外面，正对着的是一座小桥，下面一汪铺满绿色浮萍的小湖上，蜿蜒横排着几个供人踩着过湖的石头。正好我们要过河的时候，另外一帮人堵着石头路，也不知道要干什么。因为湖面上全是浮萍看不到下面，一位大叔趴在湖面上把手伸下去捞了好久，终于替一大妈捞上来一副墨镜，大概是先前过河的时候掉进去的。而我当时一直在脑补大叔拿着墨镜问大妈“这金墨镜是你的吗？”“那这个银墨镜呢？”等等等等的画面。。。</p>
+      <p class="text">横穿过庄园的另一端就是主楼和小教堂了，走到这里正好有个小餐馆，我和芝麻兄一看早就过了午饭时间，自然也是饿了，再加上还有一小半庄园没逛，正好在这里吃了。要了三明治和某种芝士焗土豆泥和鱼泥，谈不上好吃，只为了填饱肚子，因此不推荐这家。有条件的同学自己带点吃的在庄园里随便找个地方午餐就不错。</p>
+      <p class="text">吃完去参观了主楼，里面的东西不多，外观却是很好看。小教堂也有个地道，但并不长。顺着庄园围墙上方的步道，穿过雕花的镂空石门，下来一直往前走，路过诸多神像和石狮，到庄园另一边的另一个小湖。在桥上俯瞰，湖里鸳鸯成双，旁边的几处洞穴似乎又通着多处暗道，真是好不过瘾。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1SU7YazaTeaRmhq1PIicU8IXfHEK7V7n5"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mKF3s623jScqskR0x6ZIz6nRRyFfFxZT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LtztgwLxOymRUCGqnAMJKnzGrtWsEeTp"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_SKgnZcTt9MEByhnmzEEhKT1p--iwrmu"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">整个庄园玩下来加上午餐，我和芝麻兄居然在里面逛了整整三个小时！要不是为了赶回程的公交车，我们还得去礼品店转一圈。出口处就是回程的公交站，等了半天明明已经过了点十几分钟却还是不来。因为我们还想去辛特拉皇宫所在的镇中心逛逛，所以决定不等了直接问了旁边等活儿的突突车，答曰两人5欧，于是就这样被带到了辛特拉皇宫门口。</p>
+      <p class="text">在皇宫门口逛了一圈，果然不怎么感兴趣，于是决定不进去了，取而代之的是在附近的小街小巷和小商店里逛逛，买了冰箱贴，再回到辛特拉火车站坐车去罗卡角。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/13WCfU4-w82700vHV2-RDnVvKsXmClW9N">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1_SxyNnWxETMRhtAPg0_Yb7KMQ1oLnoji">
+        </div></figure>
+      </div>
+      <p class="text">三点多的时候我们已经在出发去罗卡角的公交车上昏昏欲睡了，窗外的风景却美得让人舍不得闭上眼睛。40分钟的车程之后我们顺利到达罗卡角，此时头顶天空湛蓝，远处海面却有一抹乌云，而阳光正从云中缝隙穿透而出，这样的景色让人不由得惊叹出声来。</p>
+      <p class="text">这里是欧亚大陆的最西端啊。</p>
+      <p class="text">陆止于此，海始于斯。</p>
+      <p class="text">以前不止一次的在各种书上、游记上读到过这里，总想着此生一定要来一次。然而此时立于此地，没有热泪盈眶，没有欢欣鼓舞，只是有一种淡然的欣慰。大概是因为如今陪我来这 天涯海角 的人，让我早就觉得，即使不来，也会一起天荒地老的吧。</p>
+      <p class="text">除了一个纪念碑，罗卡角并没有多少好逛的地方。旁边红白相间的 灯塔 很是上相，却不知能不能进去。游客中心里可以买证书证明到达了欧亚大陆最西端，不过证书设计没多少技术含量，上面印着罗卡角的几张彩色照片，好大一张，完全不是我想象中的复古印花小开本的模样，再加上十几欧的价格，没买。一旁的礼品店居然没有罗卡角的冰箱贴，也只能买张明信片作罢。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1jK44aoymIRKjg5RGDQ8pw1MFyED22FTo">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/15s0tI6bXZiFUJbmEnVrdlbmubcxcl4RP">
+        </div></figure>
+      </div>
+      <p class="text">沿着悬崖边上的围栏有很长的步道，有兴趣的同学可以沿着走走。我们去的那天很是泥泞，所以没走多远就回来了。等公交车用了好一会儿，不过游客中心有免费wifi，芝麻兄在外面车站排队等车，让体力不好的我进来休息。就这样在罗卡角呆了将近一个小时之后，我们坐上了去Cascais镇的403路公交车。</p>
+      <p class="text">之所以没有返回辛特拉是因为去卡斯凯斯小镇车程只需要20多分钟，而且直达小镇火车站，去里斯本的火车班次也相对多些，每12分钟就有一班。激活了昨天买的24小时交通卡，坐火车回到里斯本已经是6点多了，海事博物馆的计划只能留到明天。纠结了半天不想再去Time Out Market吃晚餐，于是又坐了地铁到Baixa-Chiado站，准备去吃著名的Uma餐厅。</p>
+      <p class="text">别提了，想着千万别走错地铁出口，这样上来能省一大段路，结果千算万算还是走错了，上到地面来发现是离自己宾馆较近的出口，于是欲哭无泪的又往回走了大概10分钟。Uma餐厅真是一个不起眼的单扇小门，以至于要不是门口排着长队我们大概也就找不到了，感觉比自己家里的门还要窄些。7点才开门，所以还要等将近10分钟。</p>
+      <p class="text">不过幸好是早点来排队了，进去一看发现餐厅很小，一共大概34个座位，加上提前预订的，像我们这种walk-in的大概只能坐20多个人。以至于排队的倒是都进来了，刚落座，后面进来的全部被请了出去，被告知8点以后再来。</p>
+      <p class="text">点了两人份的招牌海鲜饭。然后发现这20多个人全部点了这款海鲜饭！甚至有一个人来吃的，就算是海鲜饭两人起点，还是要了这款，吃不了带着回去接着吃。点菜的服务员是一个老大爷，然后点完菜就消失了，严重怀疑是不是兼职厨师，因为直到大家的菜都上齐了他才又出现；点饮料的是另一个年龄更大的老大爷，态度时而恶劣时而又很认真，一直嘟嘟囔囔，自己来回在壁橱里拿东西又对自己很生气，总之有点让人摸不着头脑。</p>
+      <p class="text">轮到我们的时候他颤颤巍巍来到我们桌边，用极不标准的英语反复重复“drink、drink”这个单词，我们说要水不要冰，他听不懂后半句，旁边桌的小姑娘给我们翻译了一下，他似乎很烦，嘟囔了一阵，但拿来东西的时候却态度还不错。本来我们以为可能点酒的话会服务好一点，但是在他把一瓶酒“Duang”的一声戳在客人桌子上的时候，我们都震惊了，于是就觉得即便是花了钱大概也买不来他的服务吧。莫名觉得这老大爷有点可爱。</p>
+      <p class="text">过了一阵子，一锅锅的海鲜泡饭就陆续上来了。里面料很足，居然有螃蟹、大虾、龙虾和贝壳类。说实话海鲜饭里放螃蟹的我还是第一次见，而且好几块，加起来大概有整整一只大的。不幸的是，这边的螃蟹壳都太硬了，没有一口好牙还真有点费劲。还有一件困惑我的事就是大家都是怎么优雅的吃海鲜饭啊，难道螃蟹啊虾壳啊这一类的不是要下手扒的吗，为什么我就觉得一直只有我自己手舞足蹈啃得这么豪迈，感觉旁边的人没下过手啊怎么就吃完了。。。</p>
+      <p class="text">大概是我身体还没完全恢复的原因，吃到最后稍稍有点腻。倒是一直不爱吃海鲜的芝麻兄，居然吃的津津有味，还将此封为吃过的最好吃的海鲜饭没有之一。总体来说味道上乘，性价比不错，值得一试，但如果要等位一小时的话，我大约就会就另寻别处了。</p>
+      <p class="text">饱餐一顿之后结账走人，站起来回头看了一下，真的每张桌子上都是一锅海鲜饭。回宾馆的路是一路上坡，偷了个懒，直接找到这边地铁站的入口坐电梯下去，走到另一个出口坐电梯上来就差不多到宾馆门口了。至于省了多少爬坡的路，地铁站出口六节超长自动扶梯和大概5分钟的坐电梯时间就能说明了吧。</p>
+      <p class="text">回到房间吃上药，试了体温依旧不烧，洗漱了一下就躺在床上准备睡了，毕竟还是不要掉以轻心的好，养足精神才能面对接下来的旅程。另外，这宾馆干净整洁倒是没的说，唯一不足的是这房子是旧式住房，天花板四米多高还有雕花吊顶，而且极其不隔音，隔壁楼上楼下听得清清楚楚。好在我也是困极了，管他有没有声音，一转眼就昏睡过去了。</p>
+      
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.我们在辛特拉小镇游客中心买公交票的时候，工作人员一直说的“天票”而不是24小时票，所以过夜之后还能不能用我们不太清楚，如果在辛特拉留宿想第二天接着用的话，最好再问一下。在里斯本游客中心买里斯本卡的时候，工作人员就会说这是24小时的卡，所以只要第一次激活后未满24小时都是可以用的。
+        <br>2.辛特拉403路公交车是连接辛特拉小镇和卡斯凯斯小镇的，往返都经过罗卡角，因此在罗卡角上车的时候要看清楚这辆车是去Cascais的还是回Sintra的。
+        <br>3.如果去Uma用餐，门口排队太长的的话，大概数一数，超过30个人的话就不用排队了，即便排了也不一定有座位。所以想吃的话要么早去，要么直接预订。
+      </div>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第六日 里斯本–马德里</h2>
+      <p class="text">依然是7点多准时醒来，连闹钟都不用。洗漱好收拾完东西拎到楼上前台，前台小哥刚上班连电脑都没开，退了房交了钥匙，存了行李（其实就是放在旁边走廊上），芝麻兄边下楼边问我是不是找另外的地方吃早餐。我手里拿着早餐券朝他瞪眼，说为啥不去，又不是东西不好吃，明明有免费的早餐干嘛自己花钱？去！</p>
+      <p class="text">看看离8点开门还有段时间，今天要逛的景点又都在宾馆东边，只有一个Bica升降机在反方向，所以决定趁着早上人少先去体验一把。走过去不用5分钟，一辆黄色的升降机正停在Calcada do Combro街和R. da Bica de Duarte Belo的交界处。自然是除了司机以外几乎没人，让芝麻兄帮我拍了个够。然后找刷交通卡的地方，没找到，问司机，司机正忙着玩手机，大手一挥示意我们上车。又等了好一阵子，司机打了N个电话，升降机才终于启动了。</p>
+      <p class="text">貌似Bica升降机要两个方向同时发车，迎面而来的是反向的上坡升降机，在途中一小段轨道会变为平行的两条，好让两个升降机交错而过。我仔细一看，对面那辆的所有车身已经被涂得花里胡哨的了，心里暗自庆幸自己拍的是这一辆小黄车。据说Bica是唯一有站台楼的升降机，最后停在一个类似站台的建筑里。我和芝麻兄下车走出站台在门口晃了一圈看没啥好逛的，就刷卡又上了车，这次倒是没几分钟就发车了。原来Bica升降机刷交通卡的机器在站台内不在车上，所以相当于上坡交钱下坡免费，一趟来回3.7欧。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1HZouj8mCwIEScPc76ISlTkp6W_lxS_iZ">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/18dvrDtFKYgGdHnXjdPOOkxKda7PkiCCL">
+        </div></figure>
+      </div>
+      <p class="text">回到 主街 上已经8点多了，我和芝麻兄回到早餐店吃早餐，吸取教训一进门先拿号。我一看又是昨天的女服务员在柜台后面，立刻转身跟芝麻兄说你去点餐吧我不想跟她说话，白了她一眼就走了。心想说不想跟你吵架，我总能用一个白眼稍微表达一下我的愤怒吧。</p>
+      <p class="text">早餐吃罢，门口就是758路公交车直达Miradouro Sao Pedro de Alcantara这个小公园兼 观景台 。公园里有长椅和小池塘，其实更棒的是这里俯瞰里斯本 老城区 也是视野极佳之地，虽然早上有点逆光。观景台旁边就是 格洛丽亚升降机 ，比Bica升降机略微大一些，内部不是横排椅而是两竖排贴边的长椅，车身外部也已经是各种涂鸦完全看不出原来的颜色。车上有刷交通卡的机器所以上下坡都要交钱。</p>
+      <p class="text">大概是只有一辆车要上下坡的来回开，很快就坐满乘客发车了，一路下坡到底，下车拐过路口就是Rossio火车站。芝麻兄昨天在Rossio广场附近买药的时候说是看到了一家特别好看的店，就是不知道是卖什么的，然后又急着给我量体温就没仔细看，以至于昨晚那么晚了还念念不忘的嚷嚷着要走回来看个究竟却被我制止了，许诺他说今天一定陪他回来看。所以既然要言而有信，就再走一趟跟他一起路过来看看。</p>
+      <p class="text">找到的那个店原来叫O Mundo Fantástico Da Sardinha Portuguesa，也就是卖沙丁鱼罐头的。虽然店铺因为不到10点还没开门，但是透过玻璃可以看到里面花花绿绿的有好多沙丁鱼罐头！而且用罐头做成了摩天轮啊旋转木马啊，满墙都堆着标着不同年份的超级好看的罐头！感觉都可以作为一个景点来看了！不仅是我们，来往的许多路人都情不自禁的被吸引过来，好奇的往里看，无奈不开门而遗憾离去。我和芝麻兄一直猜那些罐头盖上硕大的数字年份是什么意思，我说是那一年生产的罐头，芝麻兄嫌恶心，说看到一个写着1907的，那一年的罐头留到现在能吃吗？！然后他转头又一想说不对啊，那时候还没发明出罐头来呢好吗！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/13kJoKjWZqNTZY-9XIvnvkAZVkmv6FPdZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-qd5NrsFu0aTTw4ZVoXWdXVQZiYY9zJ2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1XoxISMVIaIrTOI1MB4MR3JynT-noAZTJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1immSNSRk9Uuo-k3d1_PKEwDVZh6J8xf1"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mAEwwD-u78boaQ0Qx6m0esERIezIoHrW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WhpcDVm2XtzQaS0o2Jb5AIQSSH4pzAJc"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">步行两分钟到Praça Da Figueira，正好赶上737路公交车，一路坐到里斯本 大教堂 门口。快到站的时候我按了停车的铃，结果芝麻兄到站却没往车门那里走，而我又身在后方根本走不动，司机停车以为没人下就压根没开车门，于是又往前开了一站我们才得以下来。当然这也有司机的不对，有人按了停车铃到站还不开门；但面对明明司机已经停车了却不下车的芝麻兄，我也是气不打一处来。</p>
+      <p class="text">好在这一站超级短，只用了不到一分钟就一路下坡的走回来，不然我真要哭了。里斯本大教堂作为为数不多的9点就开门的景点，自然是早起的我们的救星。参观教堂省略100字。在欧洲玩过的朋友们都懂。</p>
+      <p class="text">貌似除了教堂主厅，后院还有一部分和珍宝室，我俩兴趣都不大，就直接出来了，在正门前等着叮叮车经过拍张里斯本经典照。没一会儿就有一辆28路经过，顺利拍照完成，又步行了几分钟到 商业广场 坐15路再次前往 贝伦区 。作为曾经的海上霸主，来 葡萄牙 怎么能错过 海事博物馆 呢。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1JfGKiu5Gc4_ZJAblAvp_H5KOhx4ewaWo"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1i07-O12PkFXvhvMguCONboaAkFhj9BqM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OhGvgz5Aw1WKRXWq6RV9HCeRSMmXyh9L"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">到达 贝伦区 ，在热罗尼莫斯修道院的下一站下来就是海事博物馆了。里斯本卡有25%的折扣，可惜我们的已经过期了，就买了全价6.5欧/人的门票。整个博物馆大概分为三大部分，旧式船舰模型、新式模型、以及在大仓库里的实体船。看着曾经辉煌的海上版图和精致的复原模型，那些在历史课本里出现过的名字和年代居然如此真实的展现在眼前，不由得一阵感慨。如今哪怕霸业不再，在世界航海的漫长历史中，葡萄牙都会是最让人难忘的一笔。</p>
+      <p class="text">整个参观完出来已经是12点了，本来想坐一站15路公交车到日思夜想的 贝伦蛋挞店 ，看看时刻表感觉不太靠谱，于是直接步行过去了。门口依旧是人山人海，往里走找座位堂食，正好有位老奶奶要结账离开，我们就落座了。其实往里走还有很多很多座位，千万不要被门口两个小房间蒙骗了，里面是一个大厅还连着小花园，不要放弃一直走进去到厕所那边才会看到那个大厅，肯定会有座位的！</p>
+      <p class="text">我就是来吃蛋挞的，芝麻兄却觉得门口柜台里很多东西都很好吃想尝尝，无奈菜单没图片，我们也不知道啥是啥，索性芝麻兄拉着服务员到柜台一个一个指着点。回来跟我汇报的时候我都快疯了，点的太多了啊，居然还有夹着蛋黄奶油的面包、炸春卷、鸡肉丸、炸虾盒、炸鱼盒，以及四个葡式蛋挞！这是要直接当做午饭的节奏了啊！</p>
+      <p class="text">等都上齐了我才舒了一口气，好在每样只点了一个尝尝，即便如此，眼看就到午饭时间，作为加餐也是不小的工程。反正我不要吃那个像是吐了一样的蛋黄奶油面包，其他五种我也每样吃一半，已经很饱了。芝麻兄也是眼大肚子小，虽然最后都吃光了，但一路都在嘀咕“现在别跟我提吃的我快被那奶油腻吐了”。。。</p>
+      <p class="text">这老牌蛋挞店的招牌蛋挞确实很好吃，蛋芯是我喜欢的那种像鸡蛋羹一样的质感，而不是别家那种黏糊糊加多了面粉的感觉。只不过外面的酥皮稍微硬了一点，虽然很脆，但略扎嘴。即便如此，这也是我吃过的诸多蛋挞里第二好吃的了。第一嘛，我得没出息的承认，大概是先入为主的缘故，我觉得国内肯德基的最好吃。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/146QBjfzB97ykE3Xrqk1Ozb1ebjqJ3J4-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1QkbS2Ov9MgqVrV2K2Pd17x2Bi9vb-W9X"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1y42J5JaNT2_qsPuV6G2XHwcpTSKyrIJM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1c5c43cfWrEmjnCEcHPGuUyI8IeS3dz0o"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rUhgrMN16FTebthY_f6Iw0OZQLREEfWn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JN_Ac3c87lOZ1icsniGAyuUEemVPrMU_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1zxC1OGwOZLvBetK1YM2ootb3_nDXdE_r"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1vNEWIVSsIa3Ne_-KeTdsvW4Mo4NoJtrR"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">吃完蛋挞结了账出来，可惜的是接下来要坐 飞机 去马德里外带不方便，不然真想打包两盒带走。又坐15路回到市区转地铁到宾馆取了行李，想到毕竟在蛋挞店不是吃的正餐，于是在地铁站口的麦当劳买了点吃的，就又冲进地铁去机场了。到了机场转接驳车到easyjet的航站楼，各种折腾居然没时间把手里的 汉堡 吃掉就登机了。好在飞机按时 起飞 ，从高空中跟阳光下风景如画的里斯本说了拜拜，吃完这顿下午餐睡了一觉，睁眼的时候，就降落在马德里机场了。</p>
+      <p class="text">由于 西班牙 比葡萄牙早一个时区，也就是路上平白无故的丢了一个小时，到达马德里的时候已经是傍晚五点半了。地铁8号线在整修，到4月才会重新开放，因此往返机场的公共交通只能是机场大巴，5欧/人，经停市里Cibeles，最后到Atocha火车站。我和芝麻兄在Cibeles下了车，想着走到宾馆也就10分钟左右，于是就没有去坐地铁。</p>
+      <p class="text">然后就开始了惊魂的 十分 钟。</p>
+      <p class="text">先是走着走着一个老太太在我后面喊，我还以为是叫别人或者要钱的，就没回头，结果她还是一直在我们后面喊。于是我们转头发现她再叫我们，然后又发现她指着芝麻兄背后的双肩包，双肩包拉链已然大敞着了！看她的意思是你们包的拉链开了，我们赶紧谢过她，把拉链拉好了，心想着大概在大巴上的时候没拉好，又仔细拉好拉链并把链扣都放在了一侧，这样就不容易敞开了。</p>
+      <p class="text">结果又走了没两分钟芝麻兄突然停下了，我还以为是一路上坡他有点累，于是也停下了，这时候我又发现他背后的双肩包拉链大开！这可不正常了！果然一翻，芝麻兄工作的硬皮本和相机套不见了！好在护照和我的钱包放在最后面的夹层最底部不好够，相机被我早两分钟拿出来挂在胸前了因为想随走随拍些照片。其他东西也没丢，可是我们在葡萄牙买的明信片全在那个本子里夹着呢！</p>
+      <p class="text">此时我们都明白是遭了贼了，但我还心存一丝侥幸的往回头的路上找看是不是掉了。徘徊了一会儿发现真的是被偷了，心里沮丧的要命。但同时又太庆幸没丢什么要紧的或者是值钱的东西，算是因祸得福了。</p>
+      <p class="text">就在我们准备收拾一下离开的时候，旁边过来一个大概十一二岁的男生，把相机套和硬皮本都还给了我们，还指了指地上意思是你们掉的。我们说了句谢谢他也没听到就走了，但是我和芝麻兄都很确定他是偷盗团伙中的一个。因为我看见这小子刚才一直在我们周围转悠，要是捡到的东西早就应该还给我们了。芝麻兄后来跟我说一开始他就是看到这帮人一直在附近左看右看，又来来回回好几趟，他才停下脚步的，没想到还是晚了一步已经遭殃了。</p>
+      <p class="text">拿回来的硬皮本已经被翻过了，里面的明信片都掉了出来，相机套也被打开了，显然是没翻到什么值钱的东西所以还给了我们，也算是还有点职业道德。不论如何我和芝麻兄再也不敢大意了，一直把双肩包背在胸前，我手里也紧紧握着相机，一路上问芝麻兄好几次装在裤兜里的钱包和手机还在吗。答曰，我大腿这么多肉裤子又这么紧，要是有人能不知不觉把钱包从我裤兜里掏出来我就服！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/16Cv_jrYmGZZXw1vOsvLoWiB9nLdoEBC2">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1tTpM5II09MVBH-yJ1y4u1MEAod8xrdYv">
+        </div></figure>
+      </div>
+      <p class="text">于是为求 保险 我伸手试了一下，放心了。走到酒店的这几分钟像是过了好几年这么久。拿到房卡进屋先清点了一遍重要物品，把能留下的都留在了房间里，连背包都没带，就带着相机手机钱包出门往 普拉 多博物馆去了。</p>
+      <p class="text">普拉多博物馆晚上6点到8点之间免费，我和芝麻兄这种没什么艺术细胞的，去蹭个免费时间就差不多了。走过去大概十几分钟，一路上我都还心有余悸的不断确认相机手机钱包是否还在，捂着口袋跟揣了金元宝似的，真是把我偷怕了。路过某个像是国家博物馆的那种有高大石砌立柱的建筑门前，看着有记者和摄像师已经在门口蹲点了，我和芝麻兄还纳闷这里到底是啥地方，猜了半天觉得不是 市政厅 就是 议会大楼 ，后来才知道是西班牙众议院。再往前走到Fuente de Neptuno这个 大喷泉 就已经看到普拉多博物馆近在眼前了。</p>
+      <p class="text">之前一直用google map，到了眼前才发现正门有雕像的那里并不是入口，然后又继续往前走到侧面，发现是出口，入口在另一个侧面！于是我们又绕回去，终于在售票处拿了免费票检票进门了，至此我们已经整整绕着普拉多美术馆走了一圈还多。。。</p>
+      <p class="text">过了安检进入大厅已经是人声鼎沸，即便如此距离国内景点的那种人山人海还差一些。在信息台要了一份中文一份英文的导览图，就直奔着那几个镇馆之宝去了。一开始匆匆忙忙的冲进馆来不知道是不让拍照的（周围的人很多都在拍所以我们压根就没想到是禁止拍照的），后来走到《宫娥》前面正要对焦的时候才被工作人员告知。汗颜。</p>
+      <p class="text">顺着展厅往前一路看过包括《红衣主教》、两幅《玛哈》、《三美神》、《卡洛斯四世一家》等在内的诸多拉斐尔、戈雅、鲁本斯等人的画作，整个二楼走一圈就基本都差不多了。转眼间已经到了闭馆的时间，各个房间也开始清场了。我和芝麻兄随着人群走出来，右手边高处阶梯上方就是 皇家圣赫罗尼莫教堂 。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1bJgnIdIO5JxbWshj0XNj3rl9TYMt3jZg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1sYLETPOj-9wcHXTH64RbOQC1lG_DnW6e"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1TVw522eRxrgybyPYAMQeb185zQ8ySsYk"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">本来我们想着这么晚了就在门口逛一圈看看就好，结果突然发现有人进，去，了！将信将疑的我们走到跟前一推门，果然是可以进去的。趁着夜色参观教堂这还是头一遭，新鲜刺激占了大多数，教堂反而没怎么仔细看只呆了一会儿就出来了。</p>
+      <p class="text">附近有什么好吃的餐厅我实在是不知道，反倒是住的宾馆旁观据说有几家评价还不错，所以索性还是往回走。路过一个超精致的纪念品店，犹豫再三还是没买那个看中的冰箱贴，想着第二天再逛逛别的店，结果成为了我此次在马德里的一个小遗憾。在此劝大家看到好的东西及时下手，免得之后就碰不到了。再次经过西班牙众议院门口的时候已经有很多记者守在那里了，各种照明灯摄像器材也是一堆。警察叔叔们更是严阵以待，以至于我们都走出去好远了还看到警察叔叔在主街另一头准备封路，心想着不知道碰上了什么大事件，有一颗想凑热闹的心却没这个胆，乖乖找地方吃晚餐。</p>
+      <p class="text">宾馆旁边有两家店都还不错，挑了这家叫Restaurante Museo Del Vino的进去，看不懂西语菜单，直接问服务员那些是肉。大概解释了一下菜单之后我们点了两个套餐，各包括一个前菜一个主菜，有七八种可以选择，每套10.5欧，性价比不错。只不过前菜和主菜分量几乎一样，都是中等分量，所以肯定是能吃饱的。但是味道嘛，不好不坏，只能算是特别平均的水平吧。</p>
+      <p class="text">头盘分别是海鲜饭和pasta（别问我头盘里为什么会有这两个选项），主菜是红烧鱼块和煎猪颊肉。按理说这种正规餐馆应该是卫生过关的，却不知道为什么第二天一早我就开始拉肚子。当然这都是后话了。撑得肚儿圆圆的我们直接回到酒店，我洗澡，芝麻兄去小超市买水果回来。本来吃饭就晚，这一折腾就快到半夜才睡下。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/19drJlxLNqCmQVvYWvUG5o_z0IEt7XsUi"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1j5HDcsbct9SbvT1eL-Tba4s2PeDzav5q"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1n_-6-w1xNKdYJCWH3AX30PU0GaBMwJqE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1voTfVw5fn4BuoEFGOtaVr_mHW4PoQ2Jl"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.如果大家路过Rossio广场，千万不要忘了去看看那个沙丁鱼罐头的店！就在广场一边，在google map上搜O Mundo Fantástico Da Sardinha Portuguesa就能准确定位了。
+        <br>2.马德里一定要注意防偷！一定注意防偷！一定注意防偷！我们是运气比较好的，真要丢了什么，哭都来不及。
+        <br>3.尽量不要凑热闹。最近欧洲这边都不太平，继 尼斯 碰见拿着步枪巡逻的军警小分队之后，感觉马德里也是严阵以待（不过貌似小偷是不理这些的）。所以像是嘉年华游行啊狂欢节什么的，我个人是不建议大家往前凑啦。
+      </div>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第七日 马德里–塞戈维亚</h2>
+
+      <p class="text">早上7点多被肚子痛醒，居然拉肚子了！回想了一下昨晚买的水果一口都没吃，只能是晚饭的缘故了。好在痛的也不厉害，吃了两片药，收拾好行李，我和芝麻兄就出发去吃 西班牙 油条和热巧克力了。</p>
+      <p class="text">走去吃早餐的路上会路过太阳门广场，由于出发前刚吃了两块哈密瓜，也不是很饿，所以决定先顺路逛逛广场。找到 市政厅 前面被誉为“西班牙肚脐”的“0 kilometer”标志处合影留念，又在 火腿博物馆 门口瞅了半天，这才心满意足的奔赴传说中的百年老店San Ginés chocolate。</p>
+      <p class="text">之前查到这家店是24小时营业，也不知是真是假，反正我们8点到的时候里面已经有不少食客，服务员也一溜站开很是精神。点了六根细油条和热巧的套餐，芝麻兄觉得不够吃，又加了六根油条，结账的时候又拿了一块胡萝卜蛋糕。于是在东西全部上齐的时候又昨！日！重！现！</p>
+      <p class="text">别看是细油条，可是它长啊！于是十几根油条一起端上来俨然一座小山，再加上carrot cake，这一顿又是吃了个撑。就连爱吃甜品的芝麻兄出门的时候还在说，10分钟内不要在跟我提吃的或者甜的这些词。。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1mpWfHavzUWkivKuepuPTcGvVUW2nqtXK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/111SCyvq_4aof-2MpyrL9wilowfWdwUb0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1lCZfxwjqX5tEYDlEWl4U5x8GBKeePBRM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/10Pf-vTchDFahK1O5WULLVzFRXvANGGoy"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ENBxlJ1TQhzrRRq8nvchjiB8G8hrpygn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1AOYa3GJzfTq6GYbCZ3TfJgnExF4Jbj8J"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1cZVdd5IzDr6lSv0g-dhQJGI-wJP2m-Bw"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">走回到马约尔大街上，路对面就是 马约尔广场 ，只不过并不挨着马路，在沿街的建筑后面，要穿过去才看得到。早上的广场自然也是寥寥无几的几个人，只不过正中心的雕像周围正在搭建舞台，貌似晚些时候有什么活动。马约尔广场旁边就是圣米盖尔市场，感觉市场不大，铁棚加玻璃的建筑，但是外面那些铁艺雕花超美的。可惜的是10点才开门，我们只能在外面过过眼瘾没法去里面逛了。</p>
+      <p class="text">沿着马约尔大街一直往东走到底，就是阿穆德纳 圣母主教堂 。比起 里斯本 的修道院，感觉这座主教堂更有一番恢宏大气。里面穹顶上五彩斑斓的瓷砖很是夺人眼球，圣母像附近的高台也是可以顺着阶梯上去的。印象颇深的是里面还有一座巨大的管风琴，没能听到它奏响稍稍遗憾。</p>
+      <p class="text">教堂隔壁就是马德里 皇宫 ，正好快到10点开门的时间，门口售票处已经排了一小队，我们也就加入其中了。11欧/人的票价，真的是很值得。里面顺着参观路线一间一间的屋子参观下来，其精美和奢华程度不亚于欧洲任何一个皇宫。可惜不让拍照。皇宫内部房间参观完毕后走出大厅，侧门进去则是各种家具陈设和艺术收藏的展览。</p>
+      <p class="text">再次回到皇宫前面的广场上右手边（售票处一侧的对面）是可俯瞰山下的 观景台 。再往前走快到围栏的地方有个不起眼的小门，就是兵器铠甲展览了，进去别有洞天，一共上下两层地方不小，不注意的话真的会错过。这里就是芝麻兄的天下了，兴奋的不断问我能再看一会儿吗能再看一会儿吗。答曰，愿意看多久就看多久。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1IGdK4XnptcmAq5vThNG9UAtuo-Ri-ZRg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17dZpoOUq9PPE09L1AiVtSYbN5Mn13jT4"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1K7BZxhDAjDeQJIYNcNsPG_xz0KTg4sbj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rCgkUCyi2KVLDibrd0gn6oYZYSBjvI1Y"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ATbxozootTeTLo1QAC4mTDfcvUS4QFZY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1g02YOykZLGm-pY9qwrnLp6-lIomjosZT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1NyXCN-k8uyQjXm5KfUZ5rcNF1XanzoVo"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">整个参观完出来取了存的背包，我们在马德里感兴趣的部分已经基本完成了，只剩一个太阳广场的熊与草莓树的雕塑我俩今早居然没看到？！反正就在住的地方附近，可以晚上取行李的时候再找，所以打算坐大巴去塞戈维亚看 罗马大渡槽 。买了地铁票从Opera站进去往Moncloa方向坐，却不知道在哪里转乘，想看地图发现地铁路线图居然坑爹的印在闸机外面的墙上！找不到工作人员又赶时间，问了个清洁工不会说英语，叨叨一通我们也听不懂，索性又从闸口出去看明白路线图再买一张票进来。坐在地铁上的时候想想都要被自己蠢哭了，多花了1.5欧的智商钱。</p>
+      <p class="text">本来以为是每半小时发车，拿出自己做的攻略一看每45分钟才发一辆，而距离我们最早的一班只剩下不到20分钟了。出了地铁，并没有像别人的游记里写的那样看到长途大巴的自动售票机，而我也不记得那个 巴士 公司到底叫什么了，于是一路问人风风火火的上到地面来，再过马路，到对面的长途站，下楼，找到La Sepulvedana公司的人工窗口准备买票。</p>
+      <p class="text">在我们排队买票并且马上就轮到我们的时候，有个类似工作人员的小姑娘来到我旁边问我要去塞戈维亚吗，然后开始给我们说有车票加午餐的套餐，然后还非要把我们带出来看那个吃烤乳猪的餐厅的宣传立板，即便是我说了很多遍我不需要这个我要买车票我来不及了，她看看表说还有 十分 钟肯定来得及你看这个blabla….就在这时因为我们远离了柜台又有两三个人去我们前面买车票了，我当机立断的对那个女的说，我不需要这个，我订好了餐厅，我不要去这里吃饭。她一直强调如果要去这个很有名的餐厅吃饭，只能在她这里预订。看我特别坚决她也就没再说了，我们赶紧上前买了车票，往返17欧/人，到登车口的时候已经开始登车了。</p>
+      <p class="text">事实证明如果再晚几分钟买票的话，虽然不会错过这班车，但是车票就会全部售完了。跟我们一起排队的这几个人分别买了最后几场票，等我们发车的时候，我已经看到有人带着行李在这个登车口等下一班车了，因为车上所有座位都坐满了。</p>
+      <p class="text">有惊无险的赶上了这班车，我和芝麻兄都是一身的汗。况且因为是最后上车两个人还不是挨着的座位，只能一路默默无语的睡过去。一个小时之后准时到达塞戈维亚，下车点离 罗马大渡槽 步行不到10分钟。既然已经过了午饭的时间，我们饿得不行也懒得再找餐厅，直接到大渡槽脚下传说中的老字号Mesón De Cándido吃烤乳猪去吧。</p>
+      <p class="text">既然知道这一家的略有些盛名难副，我们也就做好了菜价虚高的心里准备。点了一份烤乳猪一份鸭胸肉沾梨酱，一共40多欧（肉疼）。烤乳猪自然是没得说，皮酥肉嫩入口即化，只不过吃到最后微微有点腻，幸亏只点了一份（芝麻兄大呼你在说什么啊，超级好吃的啊）；鸭胸肉实在是做的有点老，也略肥，牙口不好的同学不建议尝试。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Kjv7je0NaJts3LWFn6fOKuL-toeu_xUf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1HG8ccBtkXs3d__sCrw6r7k0KDd13hJhK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1lxudlfcXqXP3--cT60Dx7beR0XHvpuWC"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1C_ixhrnImIBaFNQB3KTCskbhLg75dltQ"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">吃罢出来才开始了正式游览塞戈维亚。先到餐厅对面的游客中心拿了一张地图，出门就是罗马大渡槽，再顺着一旁的阶梯走上去参观上部。虽然已经看过无数人的游记和图片，但实际站在大渡槽下面还是觉得很震撼的。</p>
+      <p class="text">参观完渡槽一路步行到塞戈维亚圣 马丁广场 ，再到塞戈维亚主教堂。门票记得是大概5欧，因为从昨天到今天已经参观了两个教堂了，这个就没进去。顺着 大教堂 前面这条路一路到底就是一个小公园，公园另一头就是塞戈维亚城堡了。在城堡外逛了逛，本来想进去，结果走到门口正好碰上一个 中国 散客团，导游压着声音说原地解散自由活动，但是不要买票进城堡，里面就是一些兵器没什么好看的。</p>
+      <p class="text">我和芝麻兄面面相觑了一下都笑了出来，正好走了大半个 老城区 我们也真的是累了。于是就在售票厅的长椅上坐了下来。免费的wifi自然是让人精神大振的利器，芝麻兄抓小精灵抓的不亦乐乎，阳光暖暖的照在我们身上，我的脑袋靠着芝麻兄的肩膀，真是安静又幸福的一个下午。</p>
+      <p class="text">休息了一下我们决定沿着 古城墙 走回乘车点。因为是走的老城区外围因而几乎都没什么人，阳光照在土黄色斑驳的 城墙 上，路过塔楼，路过连廊，路过旧城门，不到半小时的路程，说说笑笑居然不知不觉就已经到了。到达车站的时候上一班刚走，但由于不是直达马德里，所以我们本来也没打算坐那一班。于是就坐了下来继续等车。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/15Pvfu9HD4I_jv1cmtPJvmWwkjI5ZB6UN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Aj3Dw2-ufYM7_08mIM4dhT9rY1B6HK02"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Yj6R8rtbOyjF6DuTwHPS-3m2HweyRKkf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1QwdfQ0xFp-kCR5o4bq5pfP3JhmJhyDbp"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1h6413Qa5CrAA046vZhvUpPbZaAHoHmiP"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZfnpINSC8ifCdsAj94uS-TVkCEqP1iIO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1FaMLZy39wKQu6zJ_HbLaOuNNXywar9Cw"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1YhkfO9b83Q18P3eUQ9HXreAvn3z7kG-Z"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">车站后面就是La Sepulvedana的售票处，往里走的大厅有卫生间。终于等到开始排队上车，本来在最前面的我们因为回程的票上没有打印具体班次时间（去程是打印了发车时间的，回程可以选择任何一班车所以就不会打印具体时间在票上），被司机要求去售票处盖个章再来。结果这一来一回就又在登车队伍末尾了，我和芝麻兄心里慌慌的不知道能不能挨在一起坐。现在想来也是好笑，可能队伍不长潜意识觉得坐不满的缘故，我俩首先担心的不是能不能坐上这班车，而是能不能挨在一起。。。</p>
+      <p class="text">好在还有两个连着的座位，我挨着窗户一路看雪山，芝麻兄则是因为来时看过了所以一直睡到马德里。进入城区车就多了起来，但也算是按时到达了。我俩又坐地铁回到太阳门广场，一出站就看到熊与草莓树的雕塑，只不过旁边已经挤满了人，跟清晨的广场判若两景。想着刚才用车上的wifi搜到去机场可以坐火车10分钟就到，就不紧不慢的去宾馆取了行李，又从太阳门广场这一站坐火车到了Madrid Chamartin。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1jqdbNRAEHFO_j4PbzWBl68mAG7NTs2Nz"></figure>
+      <p class="text">各位看到这里可能就看出端倪了，到Chamartin干啥？！对！我也不知道哪根筋不对，居然一直觉得Chamartin就是机场的名字！就跟什么北京南苑机场什么的这种，我就一直认为到Chamartin就是到了机场！下来之后没看到任何机场的指示箭头，芝麻兄拿出手机来一看，离机场还十万八千里远呢好吗？！</p>
+      <p class="text">然后我就陷入了深深的自责和郁闷之中，怎么也想不通我是为什么会把这里当做机场，还在地图上用星星标出来！真是活见鬼了。再自责也没有办法，反正已经来了，火车有一个支线是去机场4号航站楼。而我们的航班好死不死的在离它最远的T1。又去信息台问了，只有这一个线路，要么到T4再转接驳巴士到T1，要么想别的办法。看看时刻表，去T4的火车还有半小时才来，我们根本等不起，只能出门打车了。</p>
+      <p class="text">从Chamartin火车站打车到机场定价30欧，一开始我看到计价器起价就是30欧还以为碰到了黑车，想着在出租车候车处打的车也能是黑车？后来才发现人家窗户上贴着计价价目表呢，到机场就是30欧，不按公里算。虽然是西语的但是我研究了一下，严重怀疑在市区打车去机场应该也是30欧，早知道就直接打车不折腾着一趟了。于是我再次陷入郁闷中。。。</p>
+      <p class="text">芝麻兄倒是很大度，虽然也觉得折腾这一阵子有点冤枉，但还是安慰我说没关系。到了机场本来我们已经在家打印好了登机牌，但因为要检查护照和签证还是要去一趟柜台。谁知道到跟前一看这队伍已经排的拐三拐了，由于不是按照航班先后办理行李托运，所以这一队排下去还不知道能不能赶得上我们的航班。</p>
+      <p class="text">眼看着还有不到一个小时就要起飞了，我只能跑到旁边队伍比较短的客服柜台排队，芝麻兄在托运处排队。就在这时客服有个工作人员从柜台后面出来，我就想走过去两步问问是不是应该在这里排队，别等排了好久才知道排错了。被告知确实是在客服柜台排队之后我准备回到队伍里，就跟刚才排在我后面的银发大叔说麻烦您稍微退后一步给我留个地方，我刚才是站在这里的。结果！大叔不但不让开，还伸出手指了指后面，意思是去队尾排队。</p>
+      <p class="text">我就震惊了。我就走出队伍两米的距离，问了个问题20秒都不到，刚才站的地板还热乎着呢，就这样被发配到了队尾？！当然严格来说确实是我出队了，所以我也没说什么就又重新去排队，但我想大多数情况下人的善意总归是愿意让我回到刚才的位置的吧？就在这时，轮到排在最前面的小姑娘了，但刚才问过问题的一对年轻夫妇似乎又忘了问什么，想回来再问一句，这小姑娘就毫不犹豫的把柜台前的位置让给他们，让他们先问，不用再去队尾重新排队。如此一对比，我觉得我三观应该没什么问题才对，怎么碰上的人这么奇葩？</p>
+      <p class="text">眼看时间一分一秒的过去，我已经急的快哭出来了，前面的大叔大妈像是没看到一样，改机票的改机票，办升舱的办升舱。我很想跟他们说我飞机快起飞了，就是需要检查一下护照签证，一分钟就能办完，可看到他们的表情，终究是没有说出口。好不容易轮到我的时候我几乎是冲向柜台的，果然，一分钟检查完盖章走人。</p>
+      <p class="text">一路狂奔着安检再到远得不能再远的登机口，发现航班稍微晚了几分钟，还没开始登机。我已经累到不行瘫坐在椅子上不能动了，只能麻烦芝麻兄又大老远的往回走了好一段买了Burger King回来。趁着别人排队登机的时间我俩狼吞虎咽的吃完，一路昏睡到家已经是半夜了。这一路有惊喜有委屈，有奔波有惬意，幸福很多，吵架不少，应该是两人都成长了一些吧。偶尔回顾，发现我和芝麻兄的很多次成长都是在旅行中慢慢磨砺出来的，然后又回馈到生活之中。将来还有好长好长的路要走，如此看来，真期待啊。</p>
+      
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.在长途汽车站买票的时候，尤其是时间快来不及的情况下，任何推销一旦弄清楚不是自己需要的，就要立刻坚决说不，省的耽误时间。我们觉得那个给我们推销套餐的小姑娘大概跟这个长途汽车公司有合作，看起来很像售票的工作人员，而且推销也比较规范。就是被她搞得差点买不到这一趟车的车票这一点还是让我觉得，不要纠缠为好。。。
+        <br>2.塞戈维亚游客中心的地图画的很好，感觉比手机导航更直观方便，建议使用。
+        <br>3.到达塞戈维亚的大巴会在刚到城区的时候停一下，不要下车，下一站是终点站在靠近塞戈维亚市中心的地方，这里再下车。回程乘车点就在下车点对面。
+      </div>
+      
+
+
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>

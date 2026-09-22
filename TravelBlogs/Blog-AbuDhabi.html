@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1dKLN--EWiID44yYTPZ631LXplb1VlDwC") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1>土豪国的日与夜</h1>
+        <p class="cover-description">阿布扎比/法拉利世界/迪拜24小时攻略</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    <section class="itinerary">
+      <div class="itinerary-header">
+        <h2 class="itinerary-title">行程单</h2>
+        <span class="itinerary-subtitle">我的旅行路线</span>
+      </div>
+
+      <ol class="itinerary-list">
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>1</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">阿布扎比 - 迪拜</h3>
+            <div class="day-route">
+              <span class="route-place">谢赫扎耶德大清真寺</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">法拉利主题公园</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">亚斯码头赛车场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">哈利法塔</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">迪拜购物中心</span>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+
+      <p class="text">去年生娃带娃忙活了整整一年，大门不出二门不迈真是把我和相公憋坏了！圣诞放假回国，订返程票的时候发现因为订的晚价格已经水涨船高，最便宜的就是阿提哈德航空，但是要在 阿布扎比 转机整整一天！后来转念一想，反正这次娃不跟着飞， 阿联酋 去年11月也已经免费落地签了，何不在那里出来逛一圈呢，于是又双叒叕欢脱的订了票~~</p>
+
+      <h2 class="title">准备篇</h2>
+      
+      <h3 class="subtitle">机票和签证</h3>
+      <p class="text">携程订的单程票飞欧洲，阿提哈德航空在阿布扎比转机将近一天。价格上没什么参考性，因为是临近圣诞假期订的，只要是横向比较中最便宜的那个就行了。。。T_T</p>
+      <p class="text">签证就更好说了，去年11月开始阿联酋对 中国 普通护照免费落地签停留30天，所以都不用准备。事实是感觉更像是免签，只有一个入境章，没有签证章，也没标明可以停留多久。</p>
+      
+      <h3 class="subtitle">租车和停车</h3>
+      <p class="text">在Rentalcars 上提前订了Avis的车，因为懒得买手机卡所以加了GPS。本来没有买油，结果回程的时候没时间找加油站了（实际上是我们开错了路这种事我会乱说？），就留给 租车 公司自己加满了。</p>
+      <p class="text">停车更不用说了，这种地广人稀的地方当然都是各种免费停，停车场大得跟地皮不要钱似的（人家确实地多钱也多），整个行程没收过停车费。</p>
+      
+      <h3 class="subtitle">制订攻略和购买门票</h3>
+      <p class="text">看起来只有一天的时间，但是！那可是足足24小时！试想一下一般出门旅游从早上8点玩到晚上六点也只不过是10个小时而已！这次就相当于整整两天半的时间！本来是想玩完了找个酒店睡个几小时，但制定计划的时候太贪心，这里也想去那里也想去，结果把这一天时间安排的满满的，于是索性就想回到飞机上再睡吧！</p>
+      <p class="text">因为芝麻兄一心想去法拉利世界体验世界最快的过山车，于是提前在各旅行网站上比价了门票，但是一直没有下手的原因就是：出发前几天我把腰给晃了。因此不知道经过长时间飞行到底能不能去主题公园，狠狠心想到了现场再买吧，虽然贵一些要排个队，但总比花了钱买了票又不能去还不能退要好。</p>
+      <p class="text">迪拜 的 哈利法塔 也是在官网订了6.00pm登塔的票，因为看到国内各代理并不会便宜多少还要再等待确认，还不如直接在官网订了省事。</p>
+      <p class="text">另外，因为提前做攻略看到去清真寺要求女性遮住全身只露脸，不达标的还会现场给个黑袍。考虑了一下黑袍实在太难看，于是自己想破脑袋翻遍衣橱配了长裙长袖，再加上漂亮的头巾遮住头发，应该可以了吧。</p>
+      
+
+      <h2 class="title">Part 1 谢赫扎伊德清真寺</h2>
+
+      <p class="text">晚上到北京的时候正赶上雾霾肆虐，司机师傅还问我们为啥不戴口罩。我们哭笑不得的说哪想到会有这么严重的雾霾，好在没两个小时就飞走了。就这样因为是红眼航班一路昏昏沉沉睡过来倒也没觉得累。</p>
+      <p class="text">凌晨时分到达阿布扎比上空，整个城市笼罩在浓浓的雾气里。因为刚刚经历了几小时北京的超级雾霾，我担忧的问身边的芝麻兄不会这里也是雾霾或者沙尘暴了吧，毕竟这里是沙漠中的国家嘛。芝麻兄看看窗外，也表示说不准，因为能见度实在太低了。此时地面的灯光都在雾气中变成了五彩的斑块，从窗户中看下去竟然像飘着水汽的湖面倒影一般，朦朦胧胧让人觉得像是在梦中飞行，着实是奇妙的体验！</p>
+      <p class="text">走出机舱门的时候长舒一口气，扑面而来的水汽和眼前的白雾让我们确定了这真的只是雾气而已，芝麻兄拍着胸脯跟我保证太阳一出来就都散了。由于不用取行李，直接走到边检，连问题也没问，敲了半天键盘，直接盖章出境。拿到护照我还专门看了一眼，说是免费落地签，但却只有出境章和日期，并没有签证章和停留期限，不知道是不是只录在系统里了。总之顺利过关！</p>
+      <p class="text">紧接着我和芝麻兄就双双去洗手间换了夏季的衣服，毛衣什么的统统塞到随身行李箱里。在出口处打算换400欧元的迪拉姆（AED），结果工作人员给我们说换500欧的话，如果明天这个时间把剩下的钱拿回来换回欧元是同一汇率，即换入等于换出，在汇率上没有损失。如此一来岂不是大好，毅然换了500欧，机场汇率不好也就认了，反正也花不完。</p>
+      <p class="text">走到旁边的Skypark Plaza，找到Avis的柜台办理了提车手续，就向着谢赫扎伊德清真寺出发了。不得不说这个租来的GPS太难用了，提示右拐的时候右边根本没路可拐好吗？！结果后来一直被我们当做只能定位大方向的导航，到景点附近自己按照路边指示牌找过去。</p>
+      <p class="text">拜它所赐开了20分钟到清真寺附近却又小绕了两圈之后终于在北广场停了车，然后自己把头巾围上用发夹夹好，顺利过了安检没让我披黑袍。此时才早上8点多，清真寺里几乎一个人也没有，想来是太早了，太阳也还在浓雾里没露头，却让我们欣赏到了一般游客不常见到的白色雾气中的清真寺的模样。缥缈之中诵经的咏唱声远远飘来，高耸的塔尖隐约在水汽里，空旷的广场和走廊上甚至能看到一团团的白雾飘过，突然间给这座宗教建筑蒙上了一层神圣又神秘的色彩。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1xTrgv7xJ3xpCdjv_exCry8T0bJp7IxQt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1l3KdzkhPLSK2yfW7Oa3e7iYedY8muzh-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UtjFsPd3fn3E4k87r8WQO8Qh5yp05wL2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bHopql4pErwlF0b56zWAzoJm4h_7VYNu"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/10R9LEAvQklIKPuVKxyKvYFk6DTMeHQHb"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">我和芝麻兄边拍边走，沿着长廊一路走到大殿的入口处，脱了鞋放在鞋柜上，在触到冰凉的地板那一刹才似乎回到了现实。殿内奢华的波斯地毯和无数宝石一般的吊灯，又给人呈现了另一番景象，让人感慨“世界最奢华清真寺”这一名号果然是名不虚传。</p>
+      <p class="text">从大殿出来的时候，阳光已经洒在整个清真寺的广场上，薄雾散开，湛蓝的天空下映衬着雪白的建筑，这时才初体现出恢宏大气的感觉，与刚才雾中景色完全不同。此时飞机上吃的凌晨一餐已经撑不住了，在旁边的café里买了两小杯甜品（草莓芝士蛋糕和提拉米苏）和一杯覆盆子星冰乐。付款时看到旁边的一个金色裱花蛋糕也是美得惊人。</p>
+      <p class="text">在一边的纪念品店照例买了明信片和冰箱贴，看看时间10点多了就直奔Yas Island的法拉利世界啦。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1UY1NPr_926UcWE736r5OCTah4OFLsWIZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/16YtTFQs-F_tOzSXShbgpO5x3mkSSFogR"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1uiDfYQvuZKnLbpe9mAXyEVmAj6GxCTNV"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1limY-BG6VfT_FKQYWKN4OsujuRPrJ6ES"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LmZj-t2191HjspXzIDLide9YypIbYks-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12gCrSf9ohSEr5UwKnlW9NB-6z6fpYaSL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1AptfFovGWfClIGDBo7SUieW1gImrtkRM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_7Ex08g6eaW4lCxF-qVMqRh61qAvZt9e"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/16jptvgqVM6hNioi_GjbH4sqXRZfN2ARK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1e_Vs1LbLtrulGU3AOV-ggPiT9zeU7LFn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1vKv7OCJYyslZM7rdPRhL4knkQe9B3Kfy"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1q0jYMR5CEUn3wGaCihJHiZO_jkOinxae"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>本段Tips</strong>
+        <br>1. 谢赫扎伊德清真寺入口安检处是在一个小屋里，男女是分开在两边进入的，虽然最后会一起出来。
+        <br>2. 清真寺对女性着装比较严格，即便是长裙也要一定能遮住脚踝，甚至拖地都不为过。不能穿紧身的衣服。头巾要用夹子固定住不能滑落，脖子处也要遮起来。外国游客露一点点刘海应该问题不大。
+        <br>3. 在清真寺周围和里面照相不能摆太夸张的pose，合照也不能太亲密，端正一点总是好的。
+      </div>
+      <h2 class="title">Part 2 法拉利世界和F1赛道</h2>
+
+      <p class="text">停车的时候还觉得车不是很多，到了mall里一看不知道这些人群都是从哪里冒出来的？！好在排队买票的人并不是很多，大概是刚开园的缘故，大概排了5分钟不到就买好了。</p>
+      <p class="text">满眼的法拉利都来不及照相，拿着地图进去的第一件事就是兵分两路，一路让芝麻兄去排队体验他心心念念的世界上最快的过山车（据说加速度是赛车级别4秒多加速到240公里/小时，当然我是怂的不敢坐，芝麻兄也是紧张的一手汗）；另一路我就直奔后面的 卡丁车 和模拟赛车驾驶去预约拿号，不然万一预约到很晚就来不及了。</p>
+      <p class="text">可能公园刚开门人不是很多，模拟赛车顺利拿到了12点36分的预约单，卡丁车则是1点19分，正好不会耽误后面的行程。圆满完成了任务我就往芝麻兄的方向走过去，心想着他这么无敌的体验了这么牛的云霄飞车，怎么也要在下来的时候给他照张相纪念一下。结果场地太大我俩走叉了方向，好一顿找。不得不说法拉利世界虽然是室内主题公园，不过一点也不小，绕两圈就累的不行，好在是全园空调，不然非要折腾死不可。</p>
+      <p class="text">然后看到芝麻兄的脸我就知道他崩了，哈哈哈哈哈！果然问他感觉如何，他一副“我认怂”的样子跟我说本来排队就紧张得不行一直想逃出来，后来排到很靠里了想出来也出不来就直接心如死灰的认命了。但是虽然很崩溃还是觉得非坐一次不可，刺激的不要不要的。好吧我真的不懂这种找虐的心情，在我看来就是：人生苦短，何必呢。。。。</p>
+      <p class="text">于是问他这里还有一个世界最高的过山车要不要体验一把，芝麻兄吞吞吐吐的说，额….等一会儿吧….鉴于之前被他动员的太久，连我这种一贯的过山车怂货都忍不住想尝试一把。当然了，我只能挑了一个最不恐怖的双车追逐的过山车。事实证明这个失重感真的不强，但时不时的加速还是会让人觉得很酸爽。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1H7cld4HdGEqfbbjkmhtLrhNxf9RiKjwp"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1MnGSJ3R9XEcZCLI7-NEDCtaCduUEhTlm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1skpAU_J7Kzy1jUSntr1B4SgugwEs93d_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1sYCLPaf9bxW9idxXwMbHXVnXfO-jaLy4"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1CwjPP88Ro5KjfJwU6PUQlgk9JWXaZXpY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1uZzvDyqmAodSU4F8-9qcTh5UA7A9QV0a"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看看表已经12点多，怕错过模拟赛车的预约时间（要求提前5分钟到场），就在旁边的小咖啡馆坐了一会儿。可能是看我俩等的太可怜，工作人员居然让我们稍微早了一点上去，我这个笨蛋一开始还找不到油门和刹车。八个人一组，一通呼呼呼彪彪彪翻翻翻之后，芝麻兄跑了个小组第二很是骄傲。当我看到自己排名在最末端的时候觉得真是欲哭无泪了。</p>
+      <p class="text">出来之后本来想去坐小车参观微缩 意大利 ，结果排队时间居然要30分钟，从桥上一看景致也就那么回事，果然觉得像大家说的，除了过山车之外的项目做得都没迪士尼好。正好时间还够吃个午餐，我俩就在旁边的快餐店买了烤鸡肉卷和牛肉 汉堡 ，外加薯条可乐算是饱餐了一顿。其实感觉园内的饮食还是相对划算的，至少汉堡比肯德基大很多，两个人100 AED吃了个撑。</p>
+      <p class="text">慢慢悠悠吃完，正好到了卡丁车的时间。因为要排成绩所以先排队在小屏幕上注册名字，然后听安全讲座，再选适合自己头型的头盔。这里因为我穿了长裙所以还要额外换一件制服式的连体衣，懒得脱长裙于是都塞在了裤子里也是real难受。又在选头盔的时候纠结的不行，因为眼镜带不上换了好几个头盔才弄好。结果还没开始开车就满身大汗。</p>
+      <p class="text">由于是室内的卡丁车，所以都是电动，在光滑的赛道上开起来阻力超小。感觉我预热太慢，身边呼呼的有人超车，刚找到窍门就差不多结束了。芝麻兄不出意外的成绩超好，居然还进了周榜！我光顾着让芝麻兄帮我拍张制服照，具体成绩反正很烂所以也是一点不关心哈哈。</p>
+      <p class="text">前前后后卡丁车几乎是搞了40多分钟，这样一来各个项目上几乎都是很多人在排队了。顺着一边走过去，Viaggio in Italy已经是要排45分钟，于是直接到前面坐了那个帮小老鼠修东西的项目。车上每个人会发一个类似扳手的游戏手柄，冲相应位置按蓝色按钮就会在各个场景里与主题互动（也就是帮忙修东西），有点像那种激光枪。结果我一开始看着芝麻兄一直在横着扳手假装拧，一边笑到岔气一边只能点醒他要把扳手的顶部冲着画面再按键才行！</p>
+      <p class="text">体验完这一个项目我和芝麻兄果然都对其他项目失去了兴趣。毕竟作为去过迪士尼也去过环球影城的人，法拉利世界在高科技娱乐项目和互动体验的设备上还是略微比不上的。但这并不妨碍我们心水各种法拉利跑车和赛车的展览，芝麻兄这个赛车迷更是难得的要求跟这个那个合影，搞得我也莫名兴奋起来。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1S769UfPlU6lQ3__Wjiia7GweXnIUwgpW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1o8FyCaZ9R4HkfqBWIx_Z1lTlYGq2XmiL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PYcen-XS5lHdmc2YFttWRZAft-LHompz"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mPDGGEbcgAJKCYj2eyUD4uItsi59SQEA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OsnF3d6dVL918rIQSV8gzbeWnr_BRfUE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18JPJRBvxEsf5y4YPXyV61_CVuIp_AjcE"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">逛得差不多了我和芝麻兄就在纪念品商店买了点东西走了出来，准备按照之前许诺给他的到一级方程式赛车（Formula 1）在 阿布扎比 的赛道门口留个影。其实之前做攻略的时候像跟着tour好好参观一下的，结果发现只有周二至周六有，碰巧我们赶不上。再加上时间段也有点不合适，所以芝麻兄很大度的说那就给我留个影就很好啦。</p>
+      <p class="text">Yas Marina Circuit赛道很长范围很广，没来之前确实很困惑到底去哪里合影才合适。结果在去法拉利世界的路上碰巧路过赛道大门，所以就直接又开回来了。位置大概在Gate 20 附近，顺着门口的路开进去不远就有小停车场，两分钟就能走回大门口照相。虽然这次没能来看比赛又没能进去参观有些遗憾，但怎么说也是我陪芝麻兄来的第一个赛道，希望以后一个一个都走遍吧！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1dQnYuXh7RbvE_cQkMuVzkG105zo12Xb9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1SinJdXULlIF4lrnvq3f6MWnZVZbVwbTh"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1vptWe4cBCQOR2F7RPAq4PMAHnml-C39q"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Me5dpz_l5mC-nY0Zj797DablO5J7CWoT"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>本段Tips</strong>
+       <br>1. 法拉利世界最好提前订票，比官网订票和现场买票都要便宜不少，国内很多代理，各旅行网站上也都有，自己比价就好。大多数都是电子票，要去Yas Mall里的某个中餐厅换票，稍微麻烦一点，但也还算方便，所以要预留出相应的时间。有一家代理可以免费快递纸质票不用去中餐厅换票，但要提前至少7天订。法拉利世界官网买票打印出来的电子票似乎是要在售票处旁边的窗口换成卡片式门票，我们一开始排错队就站到那一队去了。看起来那队比正常售票窗口慢不少，但是网上订票价只有275 AED，比现场便宜20 AED。
+       <br>2. 时常关注法拉利世界官网的通知，因为节假日会适当延长开放时间，比如说我们去的这一天就从11点-20点延长为10点-22点。这就意味着可能10点去的时候会有比较少的游客数量，预约项目也会相对容易提前时间。
+       <br>3. 法拉利世界的纪念品商店里面东西没有标价但是超！级！贵！一个冰箱贴大概60 AED，我在清真寺买的冰箱贴和明信片加起来才18 AED。
+      </div>
+      
+      
+      <h2 class="title">Part 3 迪拜</h2>
+      <p class="text">眼看着太阳西斜，我们还有足足十个小时的时间，所以就慢慢悠悠开上了去往迪拜的康庄大道。一上高速我和芝麻兄就连呼：靠！路好宽！车道好多！车速好快！即便我们开在了限速上依旧被两边的车呼呼呼的超过去感觉自己都不是在跑高速。</p>
+      <p class="text">一个小时多一点的时间我们就俨然看到了眼前迪拜的高楼大厦。但不知为何看看此时道路两旁的一个个小商店门头房和头顶纵横的高架路，再加上与阿布扎比遍地鲜花绿植又干净截然不同的景象，到处灰灰的感觉像随时要来一阵沙尘暴，居然让我俩不约而同的脱口而出：怎么看着这么像北京啊！</p>
+      <p class="text">到达迪拜塔和迪拜购物中心附近的时候还搞了个乌龙，明明按照指示进入了拐向停车场的车队，结果愣是错过了停车场入口，跟着出来的车队又回到了大路上。哭笑不得的两人不得不又绕了巨大的一个圈回来，无奈眼看着找不到停车入口，芝麻兄把我放在迪拜塔附近自己去停车了。于是我端着相机绕着迪拜塔和音乐喷泉走了大半圈，终于从一家餐厅穿堂而过进入了迪拜购物中心。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/15iG-UQ352S5hF4OLGlHikq8HAk4Jb_tA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VJK4CiYA2MRzOgOCXYnqViHqPjyAkzLo"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1uwPuRpEVcZFCmnJeIVqRajwP7WZbeKtA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1aal-XT3ztxH9SrAAqSFQu2uuAkU28sBb"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">然…后….走到哈利法塔（也就是迪拜塔）检票入口处的时候已经比预约时间只提前15分钟了。芝麻兄还是杳无音信。于是我打开了狂打电话狂留言模式，心想就算停车场没信号他走出来的时候总能看到未接电话吧。在马上要过上塔的最后期限并给芝麻兄留了15通留言之后我崩溃了，而且打印的电子票还在他手上，我只能临时连上无线网问工作人员能不能凭手机上的票进去。工作人员大手一挥“去换纸质票”，我又心急火燎的去售票处排队。</p>
+      <p class="text">就在我排队的时候看到芝麻兄满头大汗的向我跑来，瞬间心里一块石头落了地，之前还担心会不会出什么意外了脑洞大的不得了。但是此时已经到了我们预约的时间，一分不差。因为之前预定的时候说务必提前15分钟到场，因此心里打鼓不知道还能不能换出票来。好在一切都很顺利，换完票到检票处虽然已经比预约的晚了一两分钟，工作人员还是直接让我们进去排队了。</p>
+      <p class="text">但！是！从此就拉开了排队的巨长无比的新篇章。先是排了大概一个小时的队终于到了电梯口，坐上电梯噌噌噌的上到楼上，出来又被安排到一个莫名其妙的队伍里。这时候队后有人…吐了….大概是刚才电梯升的太快导致晕梯了吧。。。</p>
+      <p class="text">排了不久终于到了前面才搞清楚原来是照相的，勉强被安排照了几张，到选相片的地方居然没P过背景工作人员手动在触摸屏上开始P。。。一看这么个等法我们也瞬间没了兴致，直接说不要啦就走了。绕着观景台走了一圈发现夜景虽然好看，但是双层玻璃的夹层里因为水汽的关系蒙上了一层白雾，导致拍啥都拍不清楚（大概也是因为我摄影水平太有限），甚为可惜。</p>
+      <p class="text">又渴又饿的在观景台的纪念品商店买了冰箱贴和水，发现价格比法拉利世界不知道好到哪里去！然后再一抬头就发现居然下楼也要排队等电梯！于是又加入了浩浩荡荡的等电梯队伍中。等到真正下楼出了门已经是将近8点了，活活耗了差不多两个小时！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1NMMmhmR2OImtUsk-kja4HjNKqYcidGF7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1sVrTYggTFnzpDNacOCV5hpIArd_C87VS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PAvUVzHnA1cmZcLYDwSBP8NN5DMdbT4-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1TG0ricpJ5JTrWPD1zEUOLhlxDIvMBFLB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1XepUZGC7r0mTskwofy2ZL6mKPz-FTbU0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14KLoqS9bPXqP8Gcp6APegN5hEBNG9We_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1SnYgV2jKxQpECOlSNHVi2rrJykbSDGtw"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">因为不知道要吃什么所以走出了迪拜购物中心想沿着音乐喷泉旁边的那一圈餐厅看看。出门一看哈利法塔上闪烁的灯光加上顶端的一团白雾颇为惊艳，于是又不管不顾的沿着湖边一直走，还纠结了一下要不要坐那个游船。想到今夜又是无眠所以也不急着吃饭。之后回到餐厅门口一看菜单觉得稍有小贵，而且大老远跑到迪拜来吃牛排是什么鬼，索性作罢转身再次走进Dubai Mall里找美食广场了。</p>
+      <p class="text">身心俱疲的情况下连着走过两家汉堡店和Subway，突然眼前一亮的看到柜台里很多异国风情的炖羊肉炖鸡肉，然后芝麻兄指着这些对我说，你看这好像是中东菜哎，我们体验一下吧！我大喜说好啊好啊。然后点完餐坐着等的时候赫然发现餐巾纸上印着：India Palace ….. 欲哭无泪。</p>
+      <p class="text">Butter Chicken中规中矩，炖羊肉好吃的要死就是太辣了。饱餐之后当然就是一路逛啊逛回去停车场的地方，期间路过了硕大的水族箱，还找了半天路因为实在是太大了。看了看价位所谓的免税也没觉得便宜，因为还要转机所以没有购物的计划也就看个热闹。</p>
+      <p class="text">一路开回阿布扎比的时候路上已经又起了白雾，有时候看着飘忽而过的雾气真的感觉这个沙漠国家好神奇。深夜时分我和芝麻兄都是困得不行，好不容易坚持到机场又错过了下高速的出口，后来直接懒得找加油站还车算了。在此警告大家千万不要在很困的时候开车！我们是运气好！不然很容易出事故的！</p>
+      <p class="text">到机场还车、出境、到登机口都很顺利，凌晨时分我俩坐下头挨着头就一觉睡到被登机call叫醒。至于怎么起飞的我们已经不记得了。至此阿联酋之行圆满的被我们睡到了尾声。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/10XiIhUnoyIBYx4DeXdDWIdHrJJzpfFYr"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1iyPJpN1CVrH2qNadOMgTzu-O5CJAdIyR"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1yu6QVZ5LdItsl4RekeYf1BXsd_757c-W"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1pu7qkLzKXW-XweHvaHhWJRwN57wJbccm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rkw-tWuhqrZQBizG8pNy4l4K3UTlu8Qt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WRD13ryFP4mbzUgB_Q2C-Gj0vKHZHBOe"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wRjhG8iK-4WneRQnxbky7QAIvnK9oI7g"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1pmeY1sLUyvwo2XI3qnZo-P8TkQ6uws4l"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>本段Tips</strong>
+      <br>1. 哈利法塔的门票也有国内代理可以预定，但是感觉价格差别不大，可以直接去官网上订。高峰时段和非高峰时段价格不一样，而且时段的划分每个季节也不一样，建议去之前在官网确认一下。
+      <br>2. 哈利法塔的登顶入口处在迪拜购物中心里面。建议留出充足的时间，提前吃饱喝足，里面倒是有厕所但排队的话就不好离开队伍了。
+      <br>3. 迪拜购物中心真。的。很。大。如果要购物的话提前看好需要的品牌在哪些地方，不然逛着逛着什么都看看最后就走不动了。。。
+      </div>
+
+
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>

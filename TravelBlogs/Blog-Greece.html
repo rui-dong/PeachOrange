@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1JzIyI0TJEmY0P8V053XTmBY3lqrZ53qG") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1>爱琴之畔，一眼千年</h1>
+        <p class="cover-description">希腊圣托里尼/雅典/苏尼恩海神殿冬末攻略，人少景美不可错过！</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    <section class="itinerary">
+      <div class="itinerary-header">
+        <h2 class="itinerary-title">行程单</h2>
+        <span class="itinerary-subtitle"></span>
+      </div>
+
+      <ol class="itinerary-list">
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>1</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">圣托里尼 - 伊亚</h3>
+            <div class="day-route">
+              <span class="route-place">伊亚小镇</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Sunset in Oia</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">伊亚拜占庭城堡遗址</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Roka</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>2</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">圣托里尼</h3>
+            <div class="day-route">
+              <span class="route-place">蓝顶教堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">费拉</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Church of Panagia</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Cathedral of Saint John the Baptist</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Cathedral Church Of Candlemas Of The Lord</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>3</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">雅典</h3>
+            <div class="day-route">
+              <span class="route-place">雅典卫城</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">帕特农神庙</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">酒神剧场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">伊瑞克提翁神庙</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">雅典娜胜利神庙</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">阿迪库斯剧场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">雅典古代市集</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">赫淮斯托斯神庙</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">雅典古罗马市集</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">风之塔</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">哈德良图书馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">圣使徒教堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">雅典古市集博物馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">雅典国家考古博物馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">波塞冬神庙</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>4</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">雅典</h3>
+            <div class="day-route">
+              <span class="route-place">卫城博物馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">奥林匹亚宙斯神庙</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">哈德良拱门</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">泛雅典娜体育场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">国家花园</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">扎皮翁宫</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">新古典主义三部曲</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">狼山</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>5</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">雅典</h3>
+            <div class="day-route">
+              <span class="route-place">Kapnikarea教堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">雅典大都市教堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">无名烈士纪念碑</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">宪法广场</span>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>  
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+      <h2 class="title">前言</h2>
+
+      <p class="text">工作累成狗，但是去年11月就定下的希腊之行，为了这一张申根签跑了五趟使馆的希腊之行，不得不带着工作上飞机的希腊之行，自己作的旅途，跪着也要走完！</p>
+      
+      <h2 class="title">准备篇</h2>
+      
+      <h3 class="subtitle">签证</h3>
+      <p class="text">没什么好说的，在欧洲某国申希腊申根，之所以申希腊是因为本来就去希腊一国，而且我们这里只有希腊申根签不用预约直接递签就可以（ 法国 荷兰 这种早早就被预约完了，还有一些不知名小国压根不想去所以也不能去申）。</p>
+      <p class="text">事实再次证明越是这种小国家越毛病，第一次去说是来早了，距离出行时间提前两周再来。我就纳了闷了，官网上明明写可以提前3个月申请啊！总之就是不让交。</p>
+      <p class="text">第二次去，第三次去，都是些鸡蛋里挑骨头或者自相矛盾的要求，简直罄竹难书。比如说：啊你暂住证5月31日到期，我们只能给你签到3月1日，因为你希腊回程的时候要保证暂住证还有三个月有效期。。。。。好吧。我忍。</p>
+      <p class="text">又说，所以不能cover你3月22日去法国的行程（只有两天，转个机），只能cover你2月底去希腊的单次往返。。。。好吧。我忍。</p>
+      <p class="text">然后拿到签证发现给到3月18日。单次。距离我去法国就差4天。而且不明白3月18日这个日子的意义在哪里。不是说好的要保证暂住证剩余3个月有效期吗。。。略去5000字义愤填膺的细节不表。第四次去终于交好了材料，第五次拿签证。</p>
+      <p class="text">我这个曾经申过四次申根签都一遍成功的人，真的对希腊使馆很无语。</p>
+      
+      <h3 class="subtitle">机票</h3>
+      <p class="text">瑞安航空往返 雅典 。雅典机场呆两个半小时转机去 圣托里尼 。</p>
+      <p class="text">瑞安现在是越来越坑了，登机的随身行李箱已经不能带了，只能带一个随身小包，就是女士挎包或者电脑包，能塞到前方座位下的那种。想要带登机箱？没问题，花钱买个优先登机就可以带一个随身行李箱（其实明明以前不用买优先登机也可以带）。</p>
+      <p class="text">而且，优先登机一定要在订机票的过程中一起买了，因为最便宜，大概6欧左右。订完机票哪怕你立即想加买个优先登机，就是8欧了（也就是说后悔的代价）。如果你不买优先登机，而是订完机票过了几天几周甚至一两个月才想起来买，就要花12欧了。最不幸的，优先登机卖完了（因为飞机行李架就这么点空，大家都要带随身登机箱的话可能放不开），你就只能买10kg的托运行李，价格跟优先登机一样，你到了目的地还要到行李提取处等着拿行李，最不划算。</p>
+      <p class="text">后面是爱琴航空从圣托里尼回雅典。其实之前订的是Volotea航空的，结果订了没几天（距离出行大概还有两个月的时候）发来邮件说航班排班表改了，改成预订日期的第二天同一时间飞了，也就是当天的航班没了。果断取消订了爱琴航空的另一班。</p>
+      <p class="text">因为冬天圣托里尼人比较少，航班安排有可能变动，所以也并不很奇怪。</p>
+      
+      <h3 class="subtitle">酒店</h3>
+      <p class="text">圣托里尼淡季和shoulder season交接的季节， booking.com 上在 伊亚 小镇（Oia）海景洞穴房间：60欧一晚！同志们，走过路过不要错过！60欧一晚伊亚小镇海景圣托里尼啊！你值得拥有！要知道夏天同酒店同房型每晚要270欧+！下图是清晨阳台，就在伊亚著名的三 蓝顶教堂 后方：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1aVVn9Hx9W7cBM2hwdRwbki0qgNA2FliI"></figure>' 
+      <p class="text">雅典订了 Airbnb ，这个就更赚到了，刚预订的时候房主还不是superhost，只有两个评论，但是房间照片看起来很靠谱，位置好价格低，又免费取消，果断下手。结果到我们快出行之前，房主已经是superhost了，评论也多了起来，但因为我们订的早所以价格还是维持不变。又因为种种原因，免费把我们从机场接到家里！一室一厅一厨一卫（后面游记上图），位置在卫城、 卫城博物馆 、 宪法广场 、 宙斯神庙 之间，真是正中心的正中心，到哪里都很近，而且三晚加手续费只要100欧！（目前不加手续费已经每晚45欧了）。</p>
+      
+      <h3 class="subtitle">交通和通讯</h3>
+      <p class="text">除了到达圣托里尼用了酒店的接机服务，以及从雅典离开时坐了X95路机场巴士去雅典机场之外，全程靠走！</p>
+      <p class="text">去海神 波塞冬神庙 的时候乘坐了KTEL ATTIKIS的长途巴士，路程两小时，一路靠着海岸走，非常美。后面会写到宪法广场一站到底在什么地方。2018-2019冬季时刻表和价格如下（往返12.5欧元）：</p>
+      <p class="text">http://ktelattikis.gr/en/anav_sounio</p>
+      <p class="text">http://ktelattikis.gr/uploads/athens-sounio_by_coast.pdf</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1IeIJ-r6DqlWUpTlMMcOLf4bceWxsqGi8">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1kR18eEdDGvG_LbjBV1Z4UZUUavK9_Haz">
+        </div></figure>
+      </div>
+      <p class="text">通讯没有参考意义，身在欧盟，没有漫游费，欧盟的手机卡希腊照用不误。</p>
+      <p class="text">照例上图：</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1g3VpCM7AezUMh-o3VYcaVlmmPP096ni8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1i9pWGhZCBkcaXPR-pe7bJHzWlVku0V8z"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mfPqDmEHmnedrnEt2AM4f3HMZHE0L76b"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1TdBt0Alc4RukJD2XU8urcYMHmBoUxg_8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1o-PGU4ueMH07WGxGUP8ZvuxjkRgFBKCL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1zLzvp6Tdaj5ivJbGrHKfcpKo2mC0ntt8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1d_Bc2maUE8745VQ60tQxp3q04SpQZMgt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1GU3Q3ZF0rL55DVGCDcCbDAiMGRKqSqoL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1XsPfx8W28uDB4cUtrelcJ0OZPTaWlr5T"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1APN6CYziOpn-piPS1mOcPNj_k1a7qSmD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/109UzK1e3WgpCBf7Z29shLCfANrAbd41Q"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">Day 1 圣托里尼</h2>
+      <p class="text">早上6点的飞机，4点起了床，在恍惚中洗了个澡洗了个头出门，上了飞机就是一通睡。到 雅典 的时候是中午12点多，下了飞机取了行李已经1点了，在机场随便挑了家餐馆买了个夹馅儿的pizza（一块素的一块肉的），真的是太好吃了！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1aRAm-gZOj0hVKQqpd1PsDqnsphUudztN"></figure>' 
+      <p class="text">吃完正好准备到下一程飞圣托里尼的登机口登机，赫然发现瑞安航空去年底出的行李新规（只有优先登机乘客可以携带随身登机箱），导致优先登机的乘客比不优先的多到不知道哪里去。上飞机前给酒店打了电话，接机服务35欧元两人，想想还算划算，况且只在圣托里尼呆一天，不想耽误晚上 看日落 ，因此就这么愉快的决定了。</p>
+      <p class="text">飞机落地圣托里尼，很快拿到了行李，出门就看到很多司机举着牌子接人。我们一眼找到了我们酒店的名字，上去跟司机打了招呼，司机示意我们在这里等一下，还有其他酒店几个人要接着一起去 伊亚 小镇。本来四点半就能走的，结果因为人一直不全，等到地老天荒（其实也就二十多分钟）终于把人等齐了，司机领着我们到了一辆小面包车上，正好挤开九个人。我和芝麻兄最后才上，因祸得福挤在副驾的两人座上，景色不要太好。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/19Og3UnH5nq2gn6z-mh_YMaEzhu3lhvPA"></figure>' 
+      <p class="text">大概20分钟就到了Oia小镇，一路上开阔地带放眼望去都是爱琴海壮阔的深蓝色，大片的云朵飘浮在远处海面上，阳光穿透云间的缝隙照射下来，才终于有了一种“啊，终于来了圣托里尼”的感觉。</p>
+      <p class="text">司机把我们一行人放在的Oia的巴士总站，旁边就是旅客中心，我们的酒店要在这里Check-in。貌似很多酒店都是这样，因为房间都是一户一户的那种，有的也不连着，所以办理入住就变成在Tourist Information Centre了（如下图，截取谷歌地图街景）。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/13ulznm4VlJW5r8JVuP1jaQgwOo7uX0w1"></figure>' 
+      <p class="text">因为我订房的时候就知道要在旅客中心办理入住，一直算着飞机落地的时间加上路上时间，最后能赶上看日落。结果没想到在机场等人耽误了不少时间，心里火急火燎的，第一个冲进了旅客中心，顺利办理完入住，拉着芝麻兄跟着一个领路小哥就出发去房间了。</p>
+      <p class="text">步行几分钟就到了酒店房间，有点上下坡，但不费劲，再加上我们只有两个小登机箱，所以比较轻松。我们的房间就在悬崖楼梯边，一个小院门进来就是小露台，进门之后依次是卧室，小客厅（餐厅）和卫生间。有空调有电视有烧水壶有餐具，而且是冬暖夏凉的圣托里尼特色洞穴房间，瞬间感觉60欧真是捡了个大便宜！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1DWqjp0D6xgEzBVa_xgjrMSNOeEjpKs2Q">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1c62jkiekBQLs7Ev5V4p3wrAxYqflXskO">
+        </div></figure>
+      </div>
+      <p class="text">然而此时我还对于这间房超赞的地理位置一无所知。因为心心念念要去看日落，放下行李就催着芝麻兄快点走。出来锁门的时候才看了一眼发现果然是海景房！（我自己订的自己已然忘记了，况且预订的时候说不一定会分到图片上的房间）</p>
+      <p class="text">打算跟着导航走到拜占庭城堡遗址，据说那里是明信片上伊亚小镇日落打卡地。结果感觉可能因为太心急，导航不怎么好用，再加上冬天本来游客就比较少，根本不存在跟着人流走这一说，眼看就日落了就更心急了。好在后来瞧着有三个人一路大步流星朝前走，估计也是去看日落且轻车熟路的，就堵了一把跟着了，果然一路跟到了 日落观景台 。</p>
+      <p class="text">这时候距离我们从酒店房间出来也不过10分钟而已。夕阳还好好的挂在天边，不过 观景台 后面的步道上已经有人在路旁矮墙坐好等着看日落了。我们顺着台阶走到了城堡遗址的平台上，拍了几张标准伊亚小镇黄昏照，就静静等着看日落。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Mj_4iQeL637JE4cA5M8_AIJquWiuPvdC">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/10tH5hUbvMsxKglww7Z3FybTkK2FJFDIj">
+        </div></figure>
+      </div>
+      <p class="text">说到这里我就纳闷了，之前在穷游上看了这么多冬季圣托里尼的热门游记，没有一个提到了风大这回事？！大家来的时候都是风和日丽波澜不惊的吗？！实际上从我12月开始关注圣托里尼的天气，基本七八成的时间都是大风天。虽然说不影响晴天或者多云，不至于下雨，但风大却是实实在在的，像我这种披肩发就很难凹造型啊。</p>
+      <p class="text">因此说是静等日落，但其实风力已经达到了38km/h！什么概念呢？就是长发只要不扎起来都会呼一脸，单手拿相机举高拍照都会糊，背后兜帽只要没有松紧绳根本戴不住的程度。不过好在气温没有特别低，加上冬季游客确实少，虽然观景台好位置依然占满，但基本上到最后每个人都能拍到跟背后伊亚小镇合影——而不是跟一群人头的合影。</p>
+      <p class="text">天边的夕阳此时藏进了云层中，再稍微等几分钟，就又在两排云的间隙中露了出来，连带着漂浮在伊亚上方的云朵也变成了好看的粉红色。当太阳沉到海面下，暮色四合，风声呼啸，所谓“世界上最浪漫的日落”之旅也正式拉上帷幕。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1F38hnShk7NIG7POymHidSXVUGRKcXXUs"></figure>' 
+      <p class="text">被风吹到个不行的我和芝麻兄赶紧回到酒店房间稍事休整，顺便加了个衣服，又出门觅食了。此次出门我才发现我们的房间正好在Oia著名三 蓝顶教堂 的斜后方，位置真是好到爆！远处海面上像风吹过蓝色的绸缎，泛起层层波纹。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1zlHPzuu786EyZatGLZPZrOo9yloU2YgM"></figure>' 
+      <p class="text">冬末的圣托里尼依然是淡到不行的淡季，伊亚小镇更是天一黑基本路上就没人了，零星小店还开着。本来做了攻略记下了冬季都有哪些餐厅开门，结果攻略放在家里忘了带……好在自己在谷歌地图上提前标注了几家不错的餐厅，打算去找找看。</p>
+      <p class="text">按照谷歌地图找到了位于游客中心旁边的小超市（位置如下图），想去买点饮用水和水果点心什么的，但又要去吃饭不想拎着东西走，问了前台说9点才关门，一看表现在才刚7点，先吃饭的走起！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1SwSG2Sp6GAuK5aIV7nKsj1rsPfzgr19d"></figure>' 
+      <p class="text">顺着导航很顺利的就找到了Roka餐厅，全年开业，此时室内还没坐满（室外自然是没人坐的），顺利点餐，还要了一杯圣托里尼自产的白葡萄酒，因为之后没时间去酒厂，就这么品尝一下吧！</p>
+      <p class="text">头盘点了一个烤茄子，夹着cheese和西红柿等材料，淋上酸奶油，味道不错。主菜我点了 希腊 肉丸（soutzoukakia），芝麻兄接受服务生推荐点了慢炖羊小腿。事实证明味道都不错，没有特别惊艳，但也绝对算是好吃。Roka菜单在这里： http://roka.gr/#menu</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1JoiZi7McJ6YNIShvo9xy0CLT6ybVnZxQ">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1nQylqqktc86nVA4_PeAdTfPpv8lBL6W4">
+        </div></figure>
+      </div>
+      <p class="text">吃完后暖了一会儿才出来，直奔来时经过的小超市，买了一大桶水、西红柿、橙子和一盒小点心。回到酒店房间就拆了小点心，结果真的是就跟蜂蜜泡出来的一样，太甜了！完全接受不了。倒是西红柿真的很好吃！有点像我小时候在 中国 吃的那种，大个儿，西红柿味道很浓又起沙，很多年没吃过这么好吃的西红柿啦！尝到甜头的我们后来到雅典也是去超市买西红柿吃…</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1_yO3rZ6QEBfjgxilXZOUTAy-wJSiuAaM"></figure>' 
+      <p class="text">洗个热水澡吹着空调暖风舒舒服服在床上工作了一会儿已经困得不行。想到明早如果能起来看 日出 就好了，所以还是早点睡吧。</p>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.如果乘坐瑞安航空而你想带随身登机箱，务必在订机票的过程中把优先登机一起买了，这样最划算。而且对于需要目的地国家签证的人来说，需要提前打印出登机牌（不能用手机登机牌），然后到托运行李柜台检查目的地国家签证，检查好了会盖章。但其实从雅典飞往非 申根 国的时候，柜台说并没有必要来检查签证，也没有盖章，不知道在别的国家适不适用，总之还是按照瑞安官网来做比较好。
+        <br>2.冬季圣托里尼没有这么多人，从机场到伊亚公共交通不是特别方便，所以如果到达时间在下午5点之后就直接联系酒店接机就好了。
+        <br>3.瑞安航空在雅典机场的航站楼…很远…很远。大概走到行李提取要10分钟的样子，所以不要太赶，尽早过安检去找登机口。
+        <br>4.冬季伊亚小镇很多店家都在修缮，所以看到最多的就是建筑工人（可能夏季这些人就变成了店主或者司机什么的），游人不是很多，因此赶上天气不错的时候，真的是好到不能再好的旅游季节。不过就算是大风天也不影响阳光，偶尔多云，因此做好防风保暖措施就完全没问题。
+        <br>5.第一次去伊亚看日落的话，提前个10分钟去，不要赶着日落的时间，万一找不到路就耽误了。不过夏季应该没问题，毕竟大家都是往那个方向走的，冬季就没有人流了，全靠自己。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 2 圣托里尼</h2>
+      
+      <h3 class="subtitle">伊亚</h3>
+      <p class="text">早上按照 日出 时间上的闹钟响了，瞄了一眼窗外，天空还很黑，于是又舒舒服服的睡了个回笼觉。这个洞穴房间确实是很暖和，加上昨晚开开了空调暖风，只盖了一层毛毯的我们居然半夜被热醒了。</p>
+      <p class="text">起床洗漱了一下，打算出去先走走逛逛，毕竟才刚过7点，早餐店基本还不开门。何况又是淡季，觉得还是8点左右去吃早饭比较 保险 一些。一直习惯起床就吃早饭的芝麻兄把昨天的小点心强忍着吃了两个，防止待会儿饿昏。</p>
+      <p class="text">清晨的Oia小镇笼罩在一片静谧中，坐在房前露台椅子上，面前是刚醒来的蔚蓝爱琴海，旁边是沐浴在晨光中的 蓝顶教堂 。如此醉人的景色，大概就是来圣托里尼的全部意义吧。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1D4ByRMnJudSF6QRAr-XwRfbSc0APzsLC"></figure>' 
+      <p class="text">打开院门发现外面的墙围上趴了两只小猫。其实很可爱，但因为从来都是怕猫怕狗，所以还是稍微心惊了一下。殊不知，这光景比起后面长达半小时的躲狗旅程来说，简直就什么都不算！</p>
+      <p class="text">我和芝麻兄一路往昨天 看日落 的拜占庭城堡遗址走过去。此时太阳已经越过山头，照在了悬崖边白色的房屋上，让整个伊亚小镇都披上了一层金色的光。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1t6XhJC9Ihxruq6Cles9y7CWXGhsb8moW">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Exko34oLBpyIi31fWoCb71T91JnglEJ5">
+        </div></figure>
+      </div>
+      <p class="text">然而刚到观景平台，就被一只狗跟上了。中号身型，看起来比较没有攻击性，但架不住我从小到大都怕狗啊！所以哆哆嗦嗦让芝麻兄给我守着，赶紧拍了两张日出就准备撤。结果这狗一路跟着我们，我只能一边在前面紧张的小跑，一边不停叫芝麻兄给我在后面远远的挡住它。芝麻兄尽忠职守，但因为这狗就是盯上我们了，所以紧跟着不放啊啊啊啊啊。</p>
+      <p class="text">说实话我不知道为啥就跟着我们。路上也有当地人或者游客经过，但就是跟定了我们！以至于芝麻兄只能站定不动，我一个人往前走。结果我一直走到风车附近，发现有段路因为修缮堵上了，所以只能原路返回。</p>
+      <p class="text">此时芝麻兄还在跟那只狗原地面对面硬刚。我心想说你这样跟他大眼瞪小眼也不是办法啊！于是鼓起勇气问芝麻兄，你能把它弄走吗？芝麻兄无奈的看了我一眼，转头用极其温柔的商量的语气跟那只狗说：没吃的，你走吧。</p>
+      <p class="text">我当时就一个白眼翻到天上去！它能走才怪！</p>
+      <p class="text">于是我不得不挑了另外一条路准备回去，并喊上了芝麻兄一起，心想我们从前面快走，它在后面跟着就跟着吧。结果迎面来了一群人，擦身而过之后，发现特么这群人后面又跟着两只狗！比这只狗还大！而且看到我们之后，果断抛弃了那帮人，转头就跟上了我们！！！</p>
+      <p class="text">我的心理防线这一瞬间就濒临崩溃了，况且这两只新来的还在打架，气氛极其不友好。你想想，路上基本没啥人，我们两个人，被三只中等体型的狗围在中间，还时不时的冲我们吼两声，我本来就怕狗，这一下子身上的冷汗已经把两层打底衫都湿透了。</p>
+      <p class="text">芝麻兄没有这么害怕，所以不像我，跟打了鸡血似的一路奋勇向酒店房间奔去（快走，还不能跑，怕它们看出我害怕来）。我一边心里恨铁不成钢，因为还要一路等着芝麻兄跟上（怕自己走快了，前面碰上更害怕的狗来不及搬救兵），一边又要时刻注意这三只狗的情绪动向，神经紧绷到了极点。好在很快就到了，我第一时间溜进房间把门锁上，长舒一口气就差爆个粗口了！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1VWdYWvCiJCvdLtGdrjupw5smcC2DybE_">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/13zPQ2UpNyUp56x5vxeLNxwK6AYUfloXD">
+        </div></figure>
+      </div>
+      <p class="text">整个日出之旅就这么在躲狗中度过了。除了刚出门的那一会儿，这半个小时基本都是快步竞走，身上的汗早就出透了，在加上今天还是有些风，整个人透心凉。</p>
+      <p class="text">反正正好是回来了，我们就顺便把行李收拾好，方便之后退房。又把湿透的打底衫换下来，用吹风机吹了一会儿，空调也开着暖风，才暖了过来。</p>
+      <p class="text">整理完之后已经差不多8点了。有了刚才的心理建设，心想着怎么也不会比刚才更糟糕了，于是跟芝麻兄再次出门准备到Skiza Café吃早餐。路上逛逛停停，在角度比较好的地方拍到了伊亚标志的三蓝顶，发现大概是游人少的缘故，并没有拉起来什么栏杆，或者哪里不让进，随便拍（有标注私人领地的当然还是不能进，但总体感觉比夏季能走的地方多些？）。</p>
+      <p class="text">然而，惊吓总是来得这么突然。路过Panagia Platsani蓝顶 大教堂 ，在前面的广场上拍照的时候，那只一直跟着我们的狗又出现了！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1DywTWhitDpEX1FZ_ILmCN7k0to48SZtV">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1AnZi0qx4mtKKlCcAjLTEAyuKqlBMnwEB">
+        </div></figure>
+      </div>
+      <p class="text">我真的是欲哭无泪。不过已经看开了，可能这就是命吧。依旧强装镇定的继续拍照，然后顺着路往Skiza Café方向走。回头发现那只狗趴在广场上不跟了，感觉有点不对，因为之前它这样的时候，一般前面都是死胡同，“反正你们还得原路返回”所以才不跟的。果然，Skiza不开门。前面虽然不是死胡同，但如果我们想去另一个Vitrin Café吃早饭的话，还是要原路返回！</p>
+      <p class="text">一脸黑线的往回走，果然路过它的时候它就又站起来跟着了。此时我真的已经心力交瘁，再加上路上又碰到了驴队，那驴嘴离我最近的时候也不过一拳左右，我已经各种放弃治疗了。不过很快就有一伙游客对跟在后面的狗感兴趣，所以趁此机会我们就成功溜之大吉了！</p>
+      <p class="text">顺利来到了Vitrin Café，他们才刚开门。看看菜单也没什么好点的，就要了香草冰淇淋巧克力华夫饼和巧克力坚果可丽饼。事实证明不该要两个巧克力味道的，真的好甜，要个水果类的应该比较好。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1vEog8OFjZhtmgH0F6wx8t3Mm-G6pIAzD"></figure>' 
+      <p class="text">吃完出来，Vitrin门口下方飘着 希腊 国旗，阳光已经照到了远处的火山岛，这一早上到此时才有心力好好欣赏一下爱琴海的风景。看看表还不到9点，但感觉已经有一个世纪这么长。心累到不想说话。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1jethNMLJmNHEOTuellF4pi5sq_2A9INr"></figure>' 
+      <p class="text">因为Oia这边都逛的差不多了，按照计划接下来要去圣托里尼的主镇Fira逛逛。查了一下Oia到Fira的大巴，9点35有一班，赶紧回去收拾了行李，去游客中心退房。就在退房的时候注意到旁边摆着打印出来的Oia到Fira的大巴时刻表，但是9.35这一班被圆珠笔划掉了是什么鬼？！</p>
+      <p class="text">问了一下果然这班大巴取消了，下一班是10点50分。感觉圣托里尼的人还真是很任性。好在出门就有出租车，尽管游客中心的人说打车到Fira要大概20欧，但司机说15欧我们这种穷人也不好往上加钱是不是。</p>
+      
+      <h3 class="subtitle">费拉</h3>
+      <p class="text">就这样我们在大概20分钟之后就到了费拉小镇。之前在网上找了存行李的地方，叫J & K Souvenir，直接谷歌地图定位这里就行。出租车司机还好心的提前打电话给老板问开不开门（毕竟是冬季），得到肯定答复后直接把我们拉到这里。圣托里尼真是每个人都相互认识的感觉……感激！</p>
+      <p class="text">我们是两个小件行李，算算时间正好要存超过5小时，所以10欧元（0-5小时每件小行李3欧，5-10小时5欧），好贵！但也没办法只能存了。</p>
+      <p class="text">存好行李出来拐过街口，就有两家在热情招呼我们进去吃饭的希腊餐馆，第一家小哥口语比较好，超级热情，非要芝麻兄进去看一眼他们烤肉的精良设备和肉质的外焦里嫩。我们表示现在才10点没到吃饭的时候，于是给了我们一张名片，说拿着名片待会儿回来打9折！紧接着路过隔壁，这家门口招揽生意的是个中年人，神神秘秘拉着我们也给了一张名片，小声说，拿着回来打85折… 我和芝麻兄都要笑疯了，做个生意不容易，竞争真是很惨烈！</p>
+      <p class="text">把导航指到著名的国家地理杂志蓝顶教堂，我和布先生就出发了。一路上果然没几家店开门，到处冷冷清清的。不过走到悬崖边步道的时候倒真是震撼了一下，由于费拉这边的悬崖坡度比伊亚大些，所以在高处俯瞰，以爱琴海和远处火山岛为背景的画面，不免也添了些壮阔的风情。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1UfN8T0V6_sJkVSLyIsBVqEZUuUEzTe7p"></figure>' 
+      <p class="text">不知不觉走到了Saint John The Baptist教堂（这是google map的名字，穷游上名字叫Cathedral of Saint John the Baptist），云层下的这一抹黄色给蓝白相间的圣托里尼带来了些不一样的魅力。偶尔会有游客，我们也进去逛了一圈很快就出来了。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Aae8lfGS_z4tvGXFnwOfz1Qhd3HTDm9r">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1ctvFC6odcp1Zx74eVz_812F5MS7e1_fm">
+        </div></figure>
+      </div>
+      <p class="text">如果跟着谷歌地图的导航找蓝顶教堂，定位是很准确的，但会把你导到教堂正门口，而不是背后看蓝顶的高处。尤其是，我们过去的时候发现教堂门口也在修缮，是过不去的，因此又绕了好大一圈才绕到蓝顶背后。</p>
+      <p class="text">上到观景平台时正好阳光灿烂，而且，平台上一个人都没有！随便拍！港真，要是拍婚纱不怕冷的话，冬末这种淡季真的是个好选择：没人抢地方，而且风能自动把婚纱吹起来都不用人帮忙！</p>
+      <p class="text">虽然是著名景点打卡，但真的只有一个蓝顶，后面爱琴海的背景确实衬托的相得益彰，然而如果不拍婚纱的话，很快就没什么意思了。可见我心里的那些对“浪漫”的热爱，甚是虚伪。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1odReUv5BSkafz1NKRT48F4_gWMzfkKVe"></figure>' 
+      <p class="text">就在我们拍完要走的时候才来了另外两位游客，可见人有多么少。一路回到费拉的Main Square，逛了几家纪念品小店（还给人家摔碎了一个冰箱贴，不得已就在店里买了冰箱贴和明信片），本来想去麦当劳上厕所，结果发现唯一一家麦当劳居然也在修缮，不开门？！于是打算去巴士总站看看下午去机场的巴士时刻表，途中路过一个免费公厕解决了燃眉之急。大巴时刻表：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1zNfDX7nzH8gk5xHBzzqMNs86XtmY1uHF"></figure>' 
+      <p class="text">算了算时间，打算做下午3点的大巴去机场，还有将近4个小时不知道如何度过。巴士站对面就是 费拉史前博物馆 ，没什么兴趣，因此也不打算进，况且还要门票（3欧还是5欧忘记了）。</p>
+      <p class="text">于是顺着主路往回到Main Square的方向走。看到不少旅行社都在卖半日游，火山岛3小时游每人只要30欧左右。结果一看表，已经11点多了，进去问了下，现在报名来不及，况且还要自己去悬崖下的码头集合。果断放弃。</p>
+      <p class="text">我和芝麻兄对这个半日游实际是兴趣寥寥，然而圣托里尼对于我们来说本来就没什么特别需要去的地方，只是想随便逛逛，结果冬季不管是路边小店还是餐厅，离开主路之后都大部分不开门，所以根本没地方打发时间。于是我们打算自己所缆车到悬崖下面看看有什么好玩的。</p>
+      <p class="text">坐缆车的地方就在距离一开始经过的Saint John The Baptist教堂不远，所以我们相当于又一次走回去了。不过从另一条路沿着悬崖步道走，倒是看到了不一样的风景，而且有些餐厅虽然不营业，但他们的观景平台倒是对公众开放了（平台上桌子椅子都收起来了），平白多了好多能欣赏美景的地方。</p>
+      <p class="text">然而当我们走到缆车乘坐点，又一次傻眼了。冬季缆车只在每天7点到9点，下午3点到4点间运营，每半小时一趟。也就是说，中午12点左右站在门前的我们，是没有缆车可以坐的……</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1LOC4VdXkp1W855n7KEJjXwqBXcVhCxKy">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1PEOi5VJvPWk5ntQ5CVhA9-Irw-X-c1tV">
+        </div></figure>
+      </div>
+      <p class="text">于是我们又双只能往回走。回到Main Square附近，在今早跟我们热情推销的那两家餐厅中选了一家，吃个了里面塞满米饭的烤鱿鱼，芝麻兄吃了个类似 土耳其 烤肉加Pita饼的主菜。味道非常一般。如果不是因为懒得再去找那些不知道开不开门的餐厅，我大概是不会在这里吃的。</p>
+      <p class="text">结果吃了个饭出来，还是没地方可去。临时搜了搜穷游，去Orthodox Metropolitan Cathedral打了个卡（栏杆围起来了不让进），发现下面有个好看的旧式教堂，去外围逛了一圈。又又又回到了Main Square吃了个冰淇淋消磨了点时间。</p>
+      <p class="text">出来逛啊逛，发现那些有名的餐厅Mama啊什么的都关门了，在存放行李的店周围连个咖啡厅都找不到。这一天的风虽然比前一天好了很多，但依然不是那种微风拂面的舒服的天气，因此比起在外面被吹，还是想找个室内的地方歇着。于是又双叒回到Main Square旁边的shopping centre，找了个咖啡店，我要了杯香蕉汁，芝麻兄要了个摩卡，刷刷手机上上网把剩下的半小时耗完准备坐车去机场。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1IGM_qZ-7spbyjX5aVegJvtaLa5YWVLDm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1oUZ0EwxD7RTZsQGio4f7ioFODixNg_xa"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12Mx_a7NOoCrjvbo_L3R-NXcJ11g__EJd"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1tzTld-UCSgePNviIb5bfGVOp8zV0H6KS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17GVrtBNXEJ8WeacvwygoZlp5Jh6waRAH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1738ZN3-FGOoCUh98SY6x2erQ3o5FtVxn"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">终于！漫长的圣托里尼之行要结束了。我们顺利坐上了去机场的大巴（上车前向司机购票），准时到达机场。依旧是熟悉的瑞安，熟悉的流程。而且，像来时一样哭笑不得的是，圣托里尼机场真的是…太小了。登机口检票后，接驳车带着我们从航站楼门口出发，行驶大概20-30米就到了飞机下面，走过来都比做接驳车要快……</p>
+      <p class="text">不论如何，我们的圣托里尼就这样在飞机起飞的轰鸣声中结束了。飞行时间大概一小时，意味着刚闭上眼还没睡沉就要醒来， 十分 不爽。</p>
+      
+      <h3 class="subtitle">雅典</h3>
+      <p class="text">不过到达雅典之后兴致就来了。之前联络过 Airbnb 的房东，要免费来机场接我们，这样一来天黑也能顺利入住不用找来找去，这房东真的是太赞了。见到房东默默的给芝麻兄使了个眼色，房东是个好帅的大叔啊！</p>
+      <p class="text">一路上小部分时间是跟房东寒暄，也顺便介绍了一下房子周边的情况。根据房东的说法，今天正赶上一个什么烧烤节，好多餐厅都在烧烤，注意，是烤肉！如果想吃海鲜什么的，就要等明天了。后来我查了一下，这个节日叫Tsiknopempti，也叫Barbecue Thursday， 是东正教进入斋戒之前的一个enjoy烤肉的节日。本来想去吃房东给我们推荐的一种叫Kokoretsi的烧烤（是用羊肠把羊杂包裹起来像土耳其烤肉那样转着烤很久，不过是横过来烤，如图示），结果因为不知道哪里有，错过了！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/16WTSfV9FXmcPOq2L2UvLU7m3a9mRVP4s"></figure>' 
+      <p class="text">到了住宿的地方，房东向我们介绍了房子，果然跟图片一致，一室一厅一厨一卫，干净整洁，装修也简洁但不廉价。又出来给我们说：步行15分钟有个跳蚤市场，那边可能会有些比家门口更便宜好吃的餐厅。我们让房东写下几个希腊必吃的菜就充满感恩的送走了他。回去收拾了一下就出门觅食了！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1T0vyqgfd3VVJurBWpe0MktIt4hoTrstA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1n9tPtSi4EZVbW7O2hwHZTVCUf5p4_MVr"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1jrcAWXwqmWPEJFDjvOZmSVVuw-29yKee"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">此时已经是晚上8点多了，一路上看到好多餐厅，还有一家烧烤的烟蹿的老高，看起来很诱人。但我一直惦记着跳蚤市场的好吃的，所以即便是芝麻兄很感兴趣，也拉着他走了。步行大概15-20分钟果然被我们找到了很有人气的街区（按照房东的说法就是，跟着你的鼻子走），看到一个做souvlaki很火的小店，饿到不行的我们就打算在这里吃了。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1paBOkb3fcrWNRrS2cjmBiNtC3HKkEuvW">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1hOyhlOg1CKhkXJ3PZU29H-5P-pltYAjp">
+        </div></figure>
+      </div>
+      <p class="text">要了两个mini的卷饼夹烤肉只要6欧，事实证明这是我在希腊吃的最好吃的souvlaki。吃完意犹未尽，芝麻兄依然惦记着之前看到的烧烤店，打算回去路过再买些。我怕太晚了没吃的，又要了两个卷饼夹烤肉外带。结果回到那个烧烤店一看果然人家准备打烊了，剩下炉子上的烤肉已经有人预订了不烤新的了，最恨的是，这里有那个好吃的Kokoretsi！但是已经没办法买了，而且这种烧烤不是每个餐厅都有，即便是有，也不是常做的，因此超级遗憾！</p>
+      <p class="text">带着满腔的悲愤，我和芝麻兄回到家把外带的两个souvlaki吃掉了。然后愤恨的洗了个澡上床睡觉，准备明天再去别的餐厅碰碰运气。</p>
+      <p class="text">今日Tips</p>
+      <p class="text">1. 冬季伊亚小镇有很多狗和猫，因为游人较少，所以像清晨没什么人的时候，只要被跟上就甩不掉了。有项圈，因此应该是有主人但放养的。可能是要吃的，但给了吃的可能会跟的更紧，所以怕狗的人，像我，出门之前先做好心理建设，或者上午人多一点之后再出门。</p>
+      <p class="text">2. 冬季不管是伊亚还是费拉开门的餐馆都比较少，但并不是没有，所以如果你不挑的话，填饱肚子没问题，并且也不会难吃到哪里去。但如果有目标，那些比较红火的餐馆，一般冬季都是不开的，所以务必先查询好再去找，免得空跑一趟。</p>
+      <p class="text">3. 国家地理杂志那个著名的蓝顶教堂，下午拍是逆光的，所以如果不想逆光就像我们一样安排早上去。有人说逆光好出片，但我们下午3点就要走了，横竖也是等不到夕阳那时候。</p>
+      <p class="text">4. 蓝顶教堂在谷歌地图上是Virgin Mary Orthodox Church-Three Bells of Fira，导航的时候最好能导到后面的分岔路口，或者 santorini palace 。Santorini Palace旁边有个斜坡上去就是能看到蓝顶教堂的平台。</p>
+      <p class="text">一般都是给你发的邮件里带有一个取消预订的链接，如果没有的话就去网站上取消。航班因为航空公司改期导致旅客取消应该都是不收费的，但我建议你可以先问一下。</p>
+      
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">Day 3 雅典</h2>
+      <p class="text">终于不用早起了，结果还是7点就自然醒，恨自己的不争气。洗漱完毕就准备出门，毕竟今天在雅典的重头戏 雅典卫城 可是8点就开门了。</p>
+      
+      <h3 class="subtitle">雅典卫城</h3>
+      <p class="text">在街口的咖啡馆吃了早餐，面包味道中规中矩，Rice Pudding倒是很好吃。吃完出来步行不到10分钟就到了卫城东边的入口（再次赞叹一下 民宿 绝佳的位置），因为还要参观古代集市和 宙斯神庙 ，所以买了30欧的联票，5天内有效。（买票攻略见本日最下方“今日Tips”）</p>
+      <p class="text">由于是淡季又是一早，所以买票的地方只排了四五个人，很快就买好了。进门之后最先看到的是门口处的诸多雕塑，初升的朝阳将橙色的光洒在 酒神剧场 一圈圈的座位上，抬头看，是山顶卫城高耸的 城墙 ，斑驳着千年风霜。突然就有了一种梦回西元前的感觉。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1OkiC1W8K_R9YZH0NqEHGcgDpjJ4rPUr7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18uFqcdB81rQ0gJM_6RRo8Ys3k1wCgleg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1f78JZzCZ-GxB-Trm75kxEh2yG789uLyF"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">在这里要感谢@big_michael，他的游记贴里面有很多关于卫城的历史介绍： https://bbs.qyer.com/thread-2633569-1.html ，在此就不赘述雅典各景点历史方面的背景信息了。</p>
+      <p class="text">与酒神剧场不同，旁边的阿提库斯剧场是至今还在使用的剧场，因此被铁栏杆围了起来，不能随意进入。也正因如此，所以看起来比断壁残垣的酒神剧场气派不少，尤其是舞台背后的那面高大断壁，镂空的门窗透出的，是天朗气清的映衬下的雅典城！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1_GZELayAmv46MvyEpVc8LKP5kal1uIOX"></figure>' 
+      <p class="text">参观完这两处剧场，就相当于从东边山脚下走到了西边，正好走到了雅典卫城山门。整个山门出现在眼前时，其高大的立柱和磅礴的气势，不由得让人心下肃然。正对山门右手边最外面的庙宇就是雅典娜胜利女神庙，其实在山门外看是最好的角度，进去之后反而是有遮挡了。</p>
+      <p class="text">爬上楼梯穿过山门，眼前又变得豁然开朗起来，此时已经在卫城高处了。苏瑞克提翁神庙在左边，传说的少女柱近在眼前。只不过这个是复制品，真品收到山脚下的 卫城博物馆 里了。而正前方偏右的恢宏神殿则是各种书中一直出现的 帕特农神庙 ，今天终于亲眼见到了！</p>
+      <p class="text">淡季来的好处就是人少，几乎能拍到跟帕特农神庙空无一人（除了自己）的合影。再加上阳光灿烂天空蔚蓝，如果不是穿着外套，恐怕真的很难区别是什么季节。我和芝麻兄看完关于帕特农神庙的介绍，又拍拍拍了一阵，才走到卫城山顶最西方挂着 希腊 国旗的小高台。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1kPONOMFeEOs1SrFgjAovZhczj8VRRRib"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1n1cqEts51YBRWdv7BbFPWpmlumWM1kHn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/120KaWKtJfkbfYBuauXBEuxQ3nrnAxN_A"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1dTAR2pZ3l3x4kOf1DeBBQUCC7F7KXoE2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ig7l5Vp1Ct1CRCem8egYmF_xT9tuYjNc"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">高台上有个长椅，坐下来，背后就是帕特农神庙和其他古迹，头顶上方是飘扬的蓝白相间的希腊国旗，而面前则是一眼望不到边的庞大的雅典城。轻风拂过，闭上眼的时候，似乎能听到古时街道上人们高声辩论的嘈杂，也能感觉到有人踏过神殿柱廊带来的轻微颤动。高耸的雅典娜神像在晨雾中散发着金色的光芒，指引着远处海面上归来的舰队。</p>
+      <p class="text">我的雅典情节在这一瞬间圆满的落幕了。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/15a_-uR_ib9gFY5-d5MCJNQFR7wvFCFMN">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/10Tn9CZDc3W6kHc9YVUJvC6BycWiKt_OH">
+        </div></figure>
+      </div>
+      <p class="text">又在卫城山顶逛了一会儿，该看的就都看完了。从山门原路出来，一路向下，就到了卫城山脚下的西门出入口。本来想去卫城山脚下的北部半环随便走走，结果被栏杆围住了，大概是在修缮，于是也就作罢。</p>
+      
+      <h3 class="subtitle">阿瑞斯山</h3>
+      <p class="text">从西门出来上了个厕所，看看表才10点多，顺着路一直往下走没几步就到了阿瑞斯山（Areopagus Hill）。说是山，也就是个小山头，但位于卫城和古代市集中间，据说也是古希腊人最高法院的所在地。上这个山坡有两种方式，一个是走修建的新楼梯，一个是从不规则石阶中爬上去（有“小径”）。我选择了后者。事实证明，一共没3分钟的路程，就不要麻烦自己了。石头比较滑，反正我爬着晃晃悠悠的很心累。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/16Fz9bW-V_z0YDeHYBo5VIToh0jdy7hDa">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1LnJ-Q_bTyWjEcs_5okLrALGWQnTGI0oa">
+        </div></figure>
+      </div>
+      <p class="text">上到山坡顶端，发现基本都是这种滑滑的石头，因此在坡顶这个看起来是“平台”，但依旧是一步一颤的石头群中走并不是一件开心的事情。于是索性坐下歇了几分钟赏景。背后是仰望的卫城，前方是俯瞰的古代市集，身下是戳在石头缝里的双脚，一种说不出的沧桑感油然而生。</p>
+      <p class="text">于是还是乖乖走了新的阶梯下来。再按照导航指示走了不到5分钟，右手边就是古 罗马 市集的入口了。把买好的联票扫一下码就可以进。接下来我们在好几个遗迹的参观方式都是：进门，停下，看门口介绍，看手机里更多的介绍，然后再逛。感觉这样有针对性的参观更效率些。</p>
+      
+      <h3 class="subtitle">古罗马市集、 雅典古代市集 、赫淮斯托斯神殿</h3>
+      <p class="text">古罗马市集别看前面都是断壁残垣，后面的反而是保存的相对完好些。而且“ 风之塔 ”也在古罗马市集内，塔顶八个方向分别刻有八个风神的浮雕，塔内在古时有一个水钟，由卫城山上流下的水驱动。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1nNo5iHubJS-tKirZ5_Bx-8rpb4KNH9lT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WaLGF2Jogdnyju-TNEGbXxsw_C21p6uF"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1TuedKy-5nj8ibxqPZyts06QM1vig1RPv"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mooaNFvQIP9nlO7QbCZtV8-hIKQTvzML"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1D3lWyFfWBl3Lar2iHW9plLKMs6rIB-O-"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看完古罗马市集出来，按照谷歌导航打算从 圣使徒教堂 那边进入雅典古代市集区域参观，结果走到那边一看，栏杆围着不开门？正在纳闷的时候看到贴着告示，因为是淡季所以这个门关了。。。整个雅典古代市集大概有三四个门，淡季只有在Adrianou街上的那个正门开放，因此我们就绕了半圈走到了正门。</p>
+      <p class="text">因为不清楚雅典古代市集的大小，刷了联票进来之后才发现可看的东西比较多。按照顺时针方向先到了阿塔 罗斯 柱廊（Stoa of Attalos），虽然这是重建的，但在看过这么多破碎的遗迹之后，能看到一个完整的古希腊式建筑还是很让人开心的。虽然外面太阳暴晒甚至有点热，柱廊里面还是非常阴凉的，坐在长椅上吹着小风歇歇脚那叫一个舒服。再加上一上午都在走，此时还真有点不想起来。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1yfj34w0s0ch19EU1MoDDaZNkZxQw7DFQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1KSNOCYiDEXDq-UJ8G7GVaf6SnfhqdhbJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1lRI8m4mrNN0hdnC0Vab97FOaXZD4sIK-"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">阿塔罗斯柱廊里面被开辟成了雅典古代市集博物馆，虽然不大，但有很多有意思的藏品，比如说我很感兴趣的这个陪审员随机抽取系统：所有人将写有自己名字的牌子分别插到任意一排的石槽里。工作人员将一堆黑球和一个白球混合放入上方漏斗里，让小球通过管道一个个落下，直至白球出现为止。数出这个白球是所有小球中第几个落下的，就选取第几行石槽里名牌上的人作为本场审判的陪审员。这种方法是一种双重随机系统，插入石槽中的名牌是随机的，白球也是随机落下的。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1xXCCCikSkEn7diwxp2xVLtasKoDfQNZM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VPBBGVuO1J0P8xWt0SVIqCy9NpSWzEOm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1txBLjL9o6QFwykDQIZ-qZz5OnG2X_m-3"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">参观完博物馆出来一直往后走，就来到圣使徒教堂。兴趣不大所以没有进去，顺着又分别经过了南广场、 市政厅 和自然女神庙等遗迹，走走停停，最后才来到了小山丘上的 赫淮斯托斯神庙 。</p>
+      <p class="text">相比起帕特农神庙来，赫淮斯托斯神庙整体保存的更完好，浮雕也更清晰，让人能够更直观的感受到古希腊神殿的魅力。下山时看到了小乌龟，貌似其他游记里也有提到，让人很好奇到底是不是同一只一直在这不走。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1xDhMkPdlV_OFxFH_UG3CHzwIasLkzaED"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1aQK-QMks4N5ESdU7NsRM8kTCyHdYjZGo"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_I6vX4gAN7WUHTCGS91Rtnuhud6RMPzL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PL-kKIjQ0D3oGfMg949XlSkhzNSDLycO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Rtr7xQtE6xQ3O_AU6EWEvekQ6Kw4ik3p"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      
+      <h3 class="subtitle">哈德良图书馆</h3>
+      <p class="text">逛完已经早就到了午餐的时间，提前在地图上标注出的比较好吃的餐厅附近就有一家：Eúcharis（Εύχαρις），距离古代集市门口就200米，旁边就是哈德良图书馆。我和芝麻兄挑了个室外的座位，因为当天比较暖（十八度左右），棚子下面又有暖炉，所以一点也不觉得冷。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1TGl4omNaPYRlk6dhm10cQlgcCRe3Hj7k">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/157B9o6lu089sm5Fs3dFMSP41dsarZyDB">
+        </div></figure>
+      </div>
+      <p class="text">点了个之前希腊房东推荐的Tzatziki做头盘（一种酸奶、黄瓜、薄荷等调料混合起来的酱料）蘸面包吃，然后要了一个小的海鲜拼盘。专门问了服务生，小份的海鲜拼盘会不会吃不饱，后来端上来果然像他说的，真的够吃了。。。最后硬撑着吃完（主要是芝麻兄对海鲜不是特别感兴趣可能影响了食量），出门就是哈德良图书馆了。正好刷了票进去消消食。</p>
+      <p class="text">哈德良图书馆的部分墙壁保存的相对较好，甚至还能看到墙后部分楼梯残垣，因此比起神庙来，这里更多了一点亲和力。这个图书馆曾经多次被改建成不同教堂，因此一开始看展板介绍还看得晕晕乎乎。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/19RPTZMX39nEamaNLuLkpdoU0tAI3sHEw">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1VrQIFjxX-YtajSOfcDEK2QJkITr0bpDx">
+        </div></figure>
+      </div>
+      
+      <h3 class="subtitle">国家考古博物馆</h3>
+      <p class="text">看看表发现下午的时间还剩不少，于是决定坐大巴去苏尼恩的海神波塞冬神殿 看日落 。由于之前一直看攻略说 宪法广场 会停一站，但是很多人没等到，感觉不太 保险 ，于是决定亲自走一遭，走到KTEL Attika的巴士总站去。打开地图导航了一下要接近30分钟的步行路程！</p>
+      <p class="text">不过去巴士总站的路上会路过国家考古博物馆，想着冬季可能很多博物馆都会提前关门，就趁机赶紧参观一下。于是开始一路往国家考古博物馆的方向走，虽然是一直顺着主干道，还经过了海鲜市场等等有意思的地方，但一路上坡确实是有点累的。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1FfVAZcATLo2BJVVBIAgABJ1DgfxBg-vg">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Z5Lbz-9c__kudp-7ko5vEXUA6l2d__QC">
+        </div></figure>
+      </div>
+      <p class="text">走到国家博物馆已经是过了两点了，看了一下门口贴着下午4点关门，再加上要去坐大巴车，所以时间相当紧张。在门口的长椅上思索了一分钟，在进不进去这件事上纠结时间如此之短前所未有。打发芝麻兄去买票（每张5欧），我则默默打开了之前收藏的帖子。在这里要感谢@鼹鼠勇士，他的帖子让我们在一个多小时的时间里看遍了考古博物馆精华： https://bbs.qyer.com/thread-659853-1.html</p>
+      <p class="text">国家考古博物馆里的人淡季人不多，甚至有的厅里只有我们两个人，所以一路看下来超级爽。相比起后来去的卫城博物馆，这里的展品种类更丰富，地域更广泛，因此更能碰到有趣的东西。比如说形状各异的陶器，古希腊用玫瑰制作的香水，牛头人身的怪物雕塑，以及墓碑上一个个故事，都让人觉得兴趣盎然。有些展厅更是布置的充满着一丝梦幻，深色背景衬托着灯光下雪白的雕塑，让人觉得仿佛是夜空中绽放的光。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/15kspUuHbG41S6FRZH2NltZcfGu_IVnTJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rhRXbAHhIC5zm2JmXUYYrnIvFmx-iCzg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1CVLsJlAkiyYK680wOGI9po_7JcW1ybMI"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1NMFODdGNmAVyIWPVV6jwN5QE2P1DEdqQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1lZUMRSTHb2pqCMv3TyVlQi6z55yoAdya"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZEPo1creRa2M5Ffy3CA00Er3SDIPUGNE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1B1offVrGnS8x0XD6-7lMgyqBqOxoaEJm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1a6xUXR95pqswEN1b_KGfPPTlGC3La74e"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1y3pPbgybIanYJ3vteKBjlB98SByRr5m5"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+      <h3 class="subtitle">海神波塞冬神殿（苏尼恩）</h3>
+      <p class="text">拖到不能再拖，距离大巴发车还剩5分钟的时候我才被芝麻兄恋恋不舍的从博物馆里拽出来，一路小跑直冲到Attika巴士总站售票亭。我气喘吁吁的说我要两张去苏尼恩的票，里面的白发大叔正在一边翻报纸一边吃 奥利 奥，含糊不清的伸手一指：去苏尼恩是吧，跟我来。</p>
+      <p class="text">于是我和芝麻兄就懵懵懂懂的跟着他，看着他一边吃一边走，随性的不得了。暗暗感觉不太靠谱，问，是在哪里坐车？大叔又伸手一指前面（当时完全不知道他指的什么），说跟着我就行，我就是司机。</p>
+      <p class="text">纳尼？所以刚才售票亭只有你一个人悠哉悠哉的吃奥利奥？我们不来你是不是不打算走？所以现在是准备发车了？真切体会到了希腊自古以来就是个“随性”的国家的奥义。。。</p>
+      <p class="text">总之是顺利上车了，后续又有人陆陆续续上来，没几分钟我们就正式出发了（Tips里有巴士始发站地图标注）。大约10分钟之后就到了传说中宪法广场旁边的一站（如下图），事实证明确实是在这里停的，小伙伴们只是要比始发时间多等10分钟左右就是了，遇到堵车可能会再多等一会儿不要着急。站牌上写着Attika，也写着Sounion，背后是露天停车场，应该比较容易找到的。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1G9Ladfn7eU7hIf__GRsbhN-a6xTiCrA9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12vbwVuxxdWC2IPvsV_Uzjz_rjD4n_-Hl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LzIrb739O9ftdHhsKN6um83G3E52Gugo"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">再往前开没多久还停了两三次，我们由右边的座位换到了左边。虽然攻略都说因为沿着海岸走，右边风景好，但有个前提就是你不怕晒啊！我们这一天天气好的不像话，坐在右边妥妥的晒，没一会儿就已经撑不住了，果断换到左边座位。不过因为这一排右边每人，所以不影响看风景呀！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1o4RysgUx3txqUzTumoOPbZHThGdJyUOs"></figure>' 
+      <p class="text">另外，不知道大家发现了什么没有。。。是的，还没买票！不知道希腊人怎么想的，有几个大妈大伯都下车了，也没见他们买过票。这时候上来一个长发胖小伙，才开始挨个乘客售票。我们买的是往返票每人12.5欧元。</p>
+      <p class="text">就在开出去一个多小时的时候，芝麻兄已经睡了一觉醒过来了，而我才刚昏昏欲睡。难得车停了一下，就听芝麻兄小声嘀咕了一句，我靠，售票员下车走了？！我一边心里想着这就是希腊人啊一边放弃了把眼皮睁开的努力，两个多小时一直睡到海神波塞冬神殿山脚下。</p>
+      <p class="text">神殿在山丘之上，峭壁下是汹涌的大海。小时候《圣斗士》里拾阶而上的黄金十二宫，就这样以实景的状态出现在眼前，才恍然意识到这次雅典之行冥冥中实现了我一个从5岁起就一直潜藏心底的梦想。原来即便没有长发披肩身型娇弱的雅典娜，即便没有星矢没有一辉，即便是神殿只剩下断壁残垣，此刻的希腊，也一如我20多年前想象中的一般，充满了神圣的魅力。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1ySmmw15-CvPCMS-JjKu4coJ1vtyFtSSm"></figure>' 
+      <p class="text">满足的此时夕阳还慢悠悠的斜在那里，我和芝麻兄先是在神殿外的餐厅所在的山坡上拍了些远景，才在距离日落还有大概20分钟的时候买票进入了海神波塞冬神殿的景点大门（门票8欧）。</p>
+      <p class="text">此时神殿高耸的立柱上洒满了黄昏红彤彤的光，千年的风声从遥远的海面而来，激起浪花拍打着岩石，一切似乎停滞在了此刻，又似乎变得缥缈起来。没多久，太阳逐渐贴近海平面，海天相接处出现了一道橙色的水平线，夕阳的光芒照在海面上，好像铺就了一条通往天边的金色步道，泛起层层波光。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1t53abLEQojZuUqwnQr9qWvj7a57crME2">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1kRo5lGxg9z-Kfka3bVBTClz4cYNpbkgy">
+        </div></figure>
+      </div>
+      <p class="text">我和芝麻兄在暮光中站定，看着夕阳就这样缓缓的落到了海里，却又觉得这一瞬太过短暂，千百年来的日升日落也不过是弹指之间。太阳完全沉没的那一霎，人群中有低低的欢呼，似乎是竭尽全力赞颂光芒殆尽的一刻，又好像是为了拥抱黑夜的到来。</p>
+      <p class="text">天色渐渐暗下去，我们在工作人员的催促声中跟着大家陆陆续续走出了海神殿景点范围，回到了半山腰的小餐厅，买了个冰淇淋（是的有点饿又不想在这里吃饭，况且淡季没几个人在这里吃饭，厨房也是早早关了）。在餐厅外面的观景平台上远眺天边一抹微光中的海神殿，竟有了一丝恋恋不舍的感觉。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1H8TBmpu21C5scjhffYDSFknOO8pQ2vpn">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/17MV5x3EeumRt8-Rb_jHKTBu1QDD7Hdrn">
+        </div></figure>
+      </div>
+      <p class="text">去程和回程的巴士站点都在同一个地方，就是餐厅门口，所以一行人在略黑暗的台阶上等了一小会儿，7点整巴士准时从远处驶来接我们了。居然是同一个司机。想想也是，我们乘坐的是最后一班从雅典出发的大巴到苏尼恩，不是同一个司机才见鬼了呢。</p>
+      <p class="text">上车有点犯困，但开到一半路程的时候就突然醒了，因为那个售票员又神奇般的上车了！开始查票售票，到快进入雅典市区的时候又下车不见了！我和芝麻兄相视一笑，风一般的男子。</p>
+      <p class="text">回程没什么车所以很快，只用了大概1小时40分钟就到了宪法广场那一站，我们也下了车。附近有家餐厅The Greco's Project看评分还不错，下车步行三分钟就到，所以就选了这家吃晚餐。要了“手卷 土耳其 烤鸡肉”和“散装土耳其烤猪肉”（都是自己起的名字），芝麻兄趁上菜的功夫赶去即将关门的小超市买了点橙子、酸奶和西红柿，我俩饱餐了一顿就回住处了。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1MEfY8rqaFH91vrTQNaG2S_RKg4BJazDN"></figure>' 
+      <p class="text">进门已经是接近11点了，在外面足足浪了将近16个小时。虽然有4个小时是坐大巴，但依旧累的不行。洗了澡躺在床上已是午夜。完全秒睡。</p>
+      
+      <div class="quote"><strong>今日Tips</strong>
+      <br>1. 雅典卫城不止一个入口，但是貌似如果用谷歌地图导航的话只会导到西边的入口去。我们是从东边的入口进去的，个人认为从这个入口进的参观路线最好，自下而上依次经过酒神剧场和阿提库斯剧场之后，再进入卫城观看。而西边入口几乎正对着卫城山门，如果想先看卫城山脚下再往上的话，就有点绕：
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1NiuBe-2JZE0XXNYtTzNJSwW03RldsD4V"></figure>' 
+        <br>2.雅典卫城分为单体票和联票，就我们绝大多数人感兴趣的景点来说，卫城单体票包括（英文名称均为谷歌地图上显示的名称）：卫城山脚下的酒神剧场Theatre of Dionysus和阿提库斯剧场Odeon of Herodes Atticus，卫城山 上城 门内的雅典娜胜利女神庙Temple of Athena Nike，帕特农神庙Parthenon和 伊瑞克提翁神庙 Erechtheion。
+        <br>3.而雅典卫城与其他景点的联票，除了包括卫城单体票的所有景点，还包括下面这些外部景点：古罗马集市Roman Forum（单票6欧），哈德良图书馆Hadrian's Library（单票4欧），雅典古代市集及博物馆Ancient Agora of Athens（单票8欧），赫淮斯托斯神庙Temple of Hephaestus（门票包含在古代市集内），宙斯神庙（单票6欧），以及另外三个不那么著名的景点：Archaeological Museum of Kerameikos，Archaeological Site of Lykeion，Kerameikos。
+        <br>4.因此如果你也像我一样想看上述那些“著名景点”，最好是买个联票，能省下14欧呢！至于能否同一景点在5天内多次进入，我一开始感觉有这个需求，因为一个安排不好可能就到了午饭时间，出来吃个饭再接着进去逛也合情合理。但后来感觉可能是不行的，毕竟那样就有很多人转让没过期的联票来小赚一笔了不是吗。既然没人这么干（或者我不知道有人这么干），那就说明每个景点大概只能进去一次吧。
+        <br>5.卫城西门出入口的厕所在门外面，不用买票就可以去。换句话说就是参观完之后出来才能使用。
+        <br>6.海神波塞冬神殿日落后关门，日落前15分钟就停止进入，所以大家稍微早点进去。日落后会有工作人员赶着大家出门，所以也别想多呆。
+        <br>7.去苏尼恩的巴士总站位置如下：
+        <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/19WxRBvzKi5bbOSx77w0WZbkh4fn288Fy"></figure>' 
+      </div>
+      
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">Day 4 雅典</h2>
+
+      <h3 class="subtitle">卫城博物馆</h3>
+      <p class="text">早上醒来看到时间还早就又休息了一下，出门的时候已经是8点多了。往卫城博物馆的方向走，正好路过一家在tripadvisor上搜到的酸奶店，于是就打算在这里把早餐也解决了。</p>
+      <p class="text">一开始还在担心是那种跟冰淇淋差不多的Frozen Yogurt，结果不是的！是那种比较浓稠的 希腊 酸奶做底，上面可以自选各种口味，比如我们就选了一个蓝莓和黑莓口味的，一个蜂蜜核桃口味的，配着希腊特有的酥脆Bagel和火腿奶酪面包，别提有多惬意了！而且吃了两口那个酥脆的Bagel我们当即决定再去买一个，上面洒满了芝麻真的很香很脆。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1m6RVvWBXYtS-vusSRUj78ttpvm-QVTaR">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1flV6WCbMIdb8jrl75eq_tF8AifT0l7rM">
+        </div></figure>
+      </div>
+      <p class="text">这家店旁边路口就是 哈德良拱门 ，所以吃完饭自然趁着早上光线比较柔和去拍拍照。然后跟着导航步行5分钟就到了卫城博物馆的门口，我们不是从正门进去的，所以还在想怎么都快9点了还没什么人，结果一进院子就发现了大批旅行团游客，赶紧拉着芝麻兄过安检进入大厅买票。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1sBp9omT143betT6ki1aisSP2AelsnGio">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1392JvQaIsbuvc5b28C5AzHXIO7aR-Qa8">
+        </div></figure>
+      </div>
+      <p class="text">雅典卫城 博物馆建造在考古发掘的场所之上，因此很多地方地板都是透明的，方便观察脚下的遗迹。大厅里已经是人声嘈杂，我们花10欧买好了两张票，又去信息台领了英文和中文两份地图，就坐在一旁开始规划参观路线。其实人家博物馆都帮你规划好了，地图上也标注的很清晰，所以我们参观完大厅里的几个雅典卫城不同年代的沙盘，就准备正式进入展览区域了。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/135RQQzFa9-pLQWVwqBAcuFCu5KWcuh3U">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1UJZ4qjymCtWpQlrnBkhPqBITF10EXdDO">
+        </div></figure>
+      </div>
+      <p class="text">卫城博物馆一共有四层，底层（level 0）是大厅，包括售票处、信息台、卫城沙盘、临时展览区域（我们去的时候墙上电子屏好大一个故宫的广告，但问了工作人员并没有故宫的展出），以及刷票进入之后的卫城考古发掘出来的一些展品。此时不少学校老师带着学生也刚进来，正在讲解，我和芝麻兄本来想蹭个导览但是无奈都听不懂希腊语，只能自顾自的看介绍啦。这一部分主要是各种陶器、古希腊文字和一小部分雕塑，都是跟古希腊人民生活息息相关的物品。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1AxTngckyLYuwV0W4lXwmf8clEXAMm8nY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1DOpjDMW6OxKM6g6RqPpuOpXa0esV0JBQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1TBUnk-jGL4fPOCMLcQRPJT7xOBgRq_4a"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12rSY8MBRxF_iSPJPCff2rL3Dp1xYwJ_y"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">往上一层（level 1）是“古代时期”展品和卫城山门、雅典娜胜利 女神庙 、 伊瑞克提翁神庙 等卫城其他地方的文物展示。之所以说“其他地方”，是因为卫城博物馆里最全面最亮眼的 帕特农神庙 藏品被单独规划到了最顶层（level 3）。值得注意的是卫城博物馆并不是不能拍照，只有“古代时期”展览区域不能拍照，其他地方随便拍，但不能用闪光灯。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1oqDoLD1LEogLnt_5FqSsRCXNx4l0x86k"></figure>' 
+      <p class="text">由于一早来博物馆的游客大部分都是旅游团或是学校组织的参观，因此大批人潮还在底层，正意欲往上走。我和芝麻兄本来从楼梯上到level 1，刚被巨大恢宏的三角门楣雕塑震到，一看楼下这状况，就决定在这一层简单看下，麻溜儿的坐电梯直奔帕特农神庙文物所在的level 3。</p>
+      <p class="text">坐扶梯一上来两旁就是帕特农神庙三角门楣的复原雕塑，而扶梯面对的就是一个影片放映厅。建议大家先坐下来看一遍影片对帕特农神庙的介绍，包括博物馆里都有帕特农神庙的哪些展品，各种雕塑上都是刻画了什么，有哪些故事，能增长不少知识，也可以对即将要参观的展品有一个大致的认识。</p>
+      <p class="text">看完转过身来，帕特农神庙三角门楣的复原雕塑做的很精致，刻画了形态神态各异的众神，尤其是一端太阳神驾着马车驶出地面，另一端月神驾车下沉代表“ 日出 月落”这一寓意，真是让人不得不佩服古代雅典人的艺术创造能力。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1FA1tmz1pnBV1k8Z_mPfgC9NjV6oMar9P"></figure>' 
+      <p class="text">然后进入主厅，环绕一周的是帕特农神庙柱间壁板的雕刻，以及内殿楣上的石雕。有原物也有复制品，不同的壁板和楣雕刻画了不同的主题，有提坦之战，特洛伊之战，也有泛雅典娜节热闹的游行。刚才看到的三角楣原物只剩了零星碎片，只能通过想象还原一下这壮丽的雕塑了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1z0OqzDbOfDnUgmGVI_CNxfi2sEP6iAFY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1qBKZ4V4_DSH7JUHV5Iovvy-WnCUPPTvy"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-hH0LMn5nlrYoWetNA0-Kygt5dVDQgq-"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">不过这个展厅整面墙的落地窗正对着雅典卫城。仔仔细细看完这一圈，正好也走累了，我们就坐在窗边石台上，看着远处阳光下的高耸卫城和面前千年前的石雕，大厅除了我们几乎空无一人。这时候我整个人就陷入了一种特别放松又舒服的状态，似乎能听到历史的回声在脑海里悄然而过，轻飘飘的飞上云端不见了。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1sP_eHMDT3EyMBkRTui0FqXHMIl5ma3lX"></figure>' 
+      <p class="text">此时才有三三两两的游客出现，于是我们乘电梯下到level 1，从雅典卫城的山门开始慢慢看。胜利女神庙、伊瑞克提翁神庙的展品都不是很多，最出名的大概就是少女柱原物了。逛完这半圈就到了“古代时期”展区，乖乖收起相机，一个一个展品看过去。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1TzSlY7FPeh8gl7IwhdEXFp_2rU8zcN_F"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JeU-h60xefttN0gVnTcQACOV38ppgvMs"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1H6HMCRwO6m8MhbiOTGF7S4aWBNXoYleW"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">直到把展品基本看遍，我们才又回到level 2，也就是帕特农神庙展区下面的一层。这一层有个小餐厅，以及大平台，也是能看到雅典卫城本城。餐厅对面是一个休息区域，如果不想在其他楼层的厕所排队，这一层的厕所倒是比较少有人来。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1GHf0bNxTB_n1IGPIvTYPKYSXYQHNgpbs"></figure>' 
+      <p class="text">看完卫城博物馆，已然到了正午。出来院子里又感慨了一下不知道这么高大的建筑如何建在这遗迹之上的好神奇，就感觉已经饥肠辘辘了。好在附近高评分的餐厅不少，我们就选择了Arcadia这一家。我点了Triditional Moussaka，里面有茄子和肉馅，还有一点土豆片；芝麻兄点了Lahanodolmades，是一种卷心菜叶包着牛肉馅和米饭的东西。两个都很好吃！最后还送了店里自制的蜂蜜酸奶，超浓郁太美味了！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1qiGP8-HWIauUyZkR1cmW4Z-0XAr5gCXH">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1TrNm1WixZkThTvWrK_dBNJvYjPtNGcu4">
+        </div></figure>
+      </div>
+      
+      <h3 class="subtitle">宙斯神殿</h3>
+      <p class="text">由于我吃饭间隙还工作了一会儿，所以吃完出来已经是下午一点多了。原路返回到哈德良拱门附近，发现本来导航到的宙斯神殿侧门不开，于是又绕到神殿东 北角 的正门，刷了昨天在卫城买的联票就进来了。</p>
+      <p class="text">不知道是不是宙斯神殿建立在空旷之地的缘故，到近处时感觉这些立柱异常高大，尤其是在蓝天的映衬下，远处的山顶的卫城清晰可见，近处高耸的立柱则更显威严。不过宙斯神殿的范围比较大且无遮挡，如果是夏天来的话要注意防晒防中暑。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1XdBqA_zgUBG2_afzWNGJoCNm1RMc2d-A"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1S-HXiF8KWtve6nYchj140Dusxk_Xc7Z3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13JcrRKCyKEOxhdbY9Qt677OpH28JphFa"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">从宙斯神殿出来往 泛雅典娜体育场 走，正好会经过 扎皮翁宫 。扎皮翁宫见证了希腊历史上许多重要的时刻：1896年的首届现代奥林匹克运动会场馆，1979年希腊在此签署加入欧盟文件等等。不过我们去的那一天正好扎皮翁宫在举办活动，门口有安检，人也很多，我们实在是没有什么兴致进去了。</p>
+      
+      <h3 class="subtitle">泛雅典娜体育场</h3>
+      <p class="text">回到主干道上再往东走，就是泛雅典娜体育场。这座始建于公元前并全部用大理石建造的体育场，也同样是首届现代奥林匹克运动会的开幕场地。同样花了10欧买了两张票，拿了两个免费的语音导览，我和芝麻兄就开始慢慢逛了。这是雅典主要景点里唯一一个提供免费语音导览的，不得不说，因为有了这个语音导览，本来以为能一眼望到头的体育场，变得生动丰富了很多，最后感觉这5欧的门票花的很值！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1SL0dWN3kZIFk2FkiaEOo5oPvj_zwBYOe"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZfeNPVKjl1jQSA8yHQw_V1NrPS3MplI1"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1kn1Qx5du9s3LQ5URjmH2FJAXyo-Bgwy8"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">体育场里的大理石座位和跑道都可以随便参观，有不少人还尝试着在跑道上跑上一段，体会一下做奥林匹克运动员的感觉。弧形跑道旁边有个门，进去之后是非常凉爽的通道，通到二楼的小展室，里面有每一届奥林匹克运动会的海报和火炬。最后还能站在领奖台上装一把，给你的奥林匹克运动会之旅画个圆满的句号。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1yuS2oU98V8v4wCiuIozqBwaOIvxYovee"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1dRQM3S547p40p2OSVyma9gZxvVgPRZCL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1on1c5iBd5AZuyM3jbc-Gjhh11uymw2rT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1GwxVqBLzpHlY4hyIPff2CFx_FWlsMcj3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1b2KAgK_7O9R2d0nz7Bw1LmgDhGvlXwD7"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">从泛雅典娜体育场出来已经是三点半了。因为晚上要去 狼山 （Lycabettus Hill） 看日落 ，现在时间还早，就打算去 新古典主义三部曲 那边看看建筑。从体育场出来直直向北走，还经过了 总统府 ，第一次看到所谓的“卫兵换岗”还是“卫兵巡逻”，总之这俩士兵面对面向对方走去，每迈一步似乎都要下很大的决心，前后踢腿三周半等七八个节拍才落地。看到五分钟才没走一半，顿时我就没了耐心，心里默默笑到不行。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1fb8xHC6r1zcZvk6A6hMSXh12EolF9KqB"></figure>' 
+      
+      <h3 class="subtitle">新古典主义三部曲</h3>
+      <p class="text">从 国家花园 的小径中穿出来就到了 宪法广场 附近。不过我们是留着周日再来看卫兵换岗仪式，所以就直奔雅典学院了。这一路走走停停，其实到新古典主义三部曲——雅典学院、 雅典大学 、国家图书馆这三个建筑附近已经是4点多了，果然，周末都是不开的，只能在外面欣赏一下了。</p>
+      <p class="text">综合来讲，除了国家图书馆的楼梯很有范儿之外，最心水的还是雅典学院，尤其是雅典娜、波塞冬的高高在上的雕像，一下子气势就出来了，不愧是圣斗士里海神波塞冬神殿的原型。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1e2aQZvrYgQGkpYmhoIbMI_U6dhY2pzaS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OdsbgGsHqtDG0eNUW4UOlNbh9Gg_TM8c"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1e76nT3TIXldz0jj5UcovHJ-bM2wFSHpB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1tckppgWmTo4qapVwUIQWOWM5WXdFTM1Q"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1sJNVzXzbfQHto5_JN7upTTFVW5kdtpus"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ST5LcfTRsh6bEx2gPT4rkw730GZvxprf"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">晃悠完这一圈，我们就出发往狼山的缆车乘坐点（如下图）方向走去了。因为担心日落后下来吃饭比较晚，所以路过一家叫Athens Bakery的烘培坊的时候就进去看了看。好家伙，不进去还没觉得，里面数十种甜点面包，都是本地人比较常买的，我们挑了三种，性价比超高还好吃，坐在里面吃完都意犹未尽，可惜又不想带着上山，只能悔恨的离开了！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1no6s3_YtIuWWyKxCduHcvzd_XtXL7DWq"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mVxKEA7_-V6bvFamPBe3QL4SdOsFY18L"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1p-GYAGHQqKkm7y7Nik_qO63hy2nO69tA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1G4SFRG6639OsxpGIuXYRBVPhs9jZlwua"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      
+      <h3 class="subtitle">狼山</h3>
+      <p class="text">越往狼山的方向走，一路都在上坡，本来以为不走东边不用爬台阶，结果还是一路上坡爬上去才走到缆车乘坐点。正好赶上一班缆车到站，我们跟在队伍末尾买票上了车，结果没有座位只能站着。好在这个缆车一路都是在封闭轨道中运行，没什么风景可拍，而且全程也就5分钟左右，所以很快就到了狼山山顶。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1HWUmLhJ5iTnl1rR-gqnmhjlwc8vH2Dvy">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1SwX44JWn6x1qiB7iAI6ELLZUfCTV_zYZ">
+        </div></figure>
+      </div>
+      <p class="text">出站又爬了几级台阶，眼前人头攒动，便知道是到了观景平台。这大概是这次雅典之行人口密度最大的景点了。刚绕了半圈就发现降旗仪式开始了，还饶有兴致的看了半场。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1ArMKGEpTJRce1e9Ye3dyeZdIInLHErOs"></figure>' 
+      <p class="text">此时天边云层还比较厚，不知道能不能有日落看，我和芝麻兄就来回观察了一下最佳观景位，然后跑到一边坐下歇着了。虽然雅典当天已经到了19-20度，但山顶风还是有点大的，所以我们就默默坐下依偎在一起等日落。</p>
+      <p class="text">期间我去小教堂看了一眼，真的没啥好看的，很快就跑回来继续瘫在芝麻兄怀里。还有大概15分钟日落的时候我们站到最佳观景位置后面静静等着（前排都坐在栏杆旁所以不挡视线）。果然夕阳并没有露出头来，云层中的夕阳收敛起光芒，夜色像晕染开来的水汽一般，渐渐笼罩了雅典城。远处的宙斯神殿、泛雅典娜体育场相继点亮了灯光，最后卫城亮灯的一瞬，整座城市又似乎是复活了一般，开始焕发出另一种宁静的生机。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1rJAvvU0pjPwxFGQWvWFcLCZodHa1MZje">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1qqxur3VnopGMyV2WT3xEU7Z24UnRjzty">
+        </div></figure>
+      </div>
+      <p class="text">从夜色初上到万家灯火，到此我们的日落之旅就并不圆满的结束了。坐缆车下山，第一之间找到附近tripadvisor上评分很好的Stick Bar餐厅吃烤串。点了茄泥沙拉做头盘，要了两个pita饼和四个烤串（鸡肉羊肉猪肉牛肉各一串），问服务员两个人够不够吃？服务员说差不多吧，你们可以再点个薯条什么的。我们想说来希腊吃薯条算什么，索性想说先看看情况，不够再点吧。</p>
+      <p class="text">结果，茄泥沙拉（说是沙拉但除了茄子其他都是调味料，所以更像是茄子酱）一上来，配着刚烤出来的pita饼，吃了两口之后我们就叫来服务员，说再来俩pita饼吧，这茄子太好吃了！一盘茄子泥吃完，我们已经吃了三个pita小饼。好吃到什么程度呢，要不是后面的烤串还没上来，我们是要再点一盘茄泥的！</p>
+      <p class="text">等了一会儿烤串终于上来了。每一串都鲜嫩饱满，口味也各不相同但都很合我们的喜好！吃到一半我们就又叫来了服务员。。。。能再来四个肉串和两个pita饼吗。。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/11AJnvkRN46xNURlAnTsomLONQmD99j-3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Kj52usQHtyLAJWTHOyHKNbtHNApi_JL-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1FC5Dkyr1EWpgsm3IoNlS-F4ywvCi_lae"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">由于是现烤所以上的比较慢，再加上他家确实比较火，外卖小哥进进出出就没停过，所以好不容易才等来的加单的四个肉串。结账的时候，我和芝麻兄吃了一盘头盘，六个pita饼（他家的确实稍微小点），八个肉串，总共不到30欧。真是扶着墙出去！</p>
+      <p class="text">虽然距离住处还有段距离，但吃撑了的我们是肯定要走回去的。一路经过各种商店，宪法广场那里遛弯的玩滑板的好不热闹。本来以为这一天就要圆满结束的时候，却因为一个小插曲毁了心情。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1HSEduYguZmBSWOcWO6GTQAgQGJ4p10zr"></figure>' 
+      
+      <h3 class="subtitle">一个人毁一天事件</h3>
+      <p class="text">起因是路过住处附近的一家纪念品店，看上了一个冰箱贴，店主是个中年微胖男子，问他这种类型的冰箱贴还有没有新的。然后店主就突然发飙了，用英语咄咄逼人的质问我们：为什么你们 中国 人非要一个新的？为什么你们就不能好好买放在外面的？每次都要新的！没有！放在外面的就是新的！除了这些没别的！你是中国人吧？是？！那你告诉我你们为什么每次都要新的？真是太奇怪了！别人没有你们这样的blablabla。。。。</p>
+      <p class="text">真的是直接把我俩弄懵逼了。连能插进去一个词的机会都没有。我们试图打断他来解释为什么我要一个新的，结果他根本不听也不停，一直用各种“你们中国人”的句子训我们。后来我懵逼之后有点反应过来，大声一遍又一遍的打断他，告诉他因为你这个冰箱贴坏掉了！</p>
+      <p class="text">估计是最后一遍他终于从自己怨念的世界中听到了我说话，茫然的问我，什么？我又超大声的告诉他，这一个！在这的冰箱贴！特么的坏掉了！上面的字掉了一半！</p>
+      <p class="text">至此他终于反应过来我到底在说什么了。连说了几个哦哦哦ok，ok。然后就不做声了。我也是太蠢，因为太气愤直接拔腿就走了，一路都在生气，回到住处才想起来我特么应该让他给我道歉啊！！！真是把我气糊涂了。</p>
+      <p class="text">在此跟大家说一下，这个纪念品店叫Greco Souvenir，地址在Kidathineon 16, Athina 105 58, Greece。走过路过的小伙伴都小心一点，能不在他家买就尽量不在他家买吧。门口长这样：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/13AfVu9ShtSsYbvndevl28TwsKfXJ5RSp"></figure>' 
+      <p class="text">同时，因为我在国外生活了比较多年，所以只要不牵扯到质量问题，我一般不会非要店主再去拿一个新的给我，因为知道外国人一般没这个习惯，而且我自己也不怎么在乎。但我要声明，我觉得就算顾客问你有没有新的，也是很合理的，毕竟有顾客就是比较在乎样品在外面摆的久了风吹日晒比较旧，这有什么不能理解的吗？你想给新的就去拿，不想给就说没有新的，何必搞的这么怨念呢？</p>
+      <p class="text">总之，这一天在气愤中就这么结束了。一直到晚上上床睡觉我还在愤愤不平，于是第二天又路过这家店的时候专门看了看这家店的店名和位置（我也真的是小肚鸡肠）。当然这是后话了。</p>
+      
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.卫城博物馆大包是需要存的，包括双肩书包，但女士小挎包可以带进去。全楼都有免费Wifi。底层（level 0）信息台可以免费拿一张地图，也有中文版。拍照的话，除了二楼“古代时期”的展品区域不让拍照（也就是文中标注出来的），其他地方都可以拍，但是不能用闪光灯。
+        <br>2.卫城博物馆顶层的帕特农神庙展区，放映的影片是希腊语和英语轮番播的，但都有另外一种语言的字幕，所以不影响看，甚至可以看两遍，如果没听懂英语的，希腊语播放的时候还能看一遍英语字幕会好理解一些。
+        <br>3.泛雅典娜体育场售票处旁边有厕所，但要另收费。
+        <br>4.宪法广场的卫兵换岗仪式每整点都有，不过周日11点的会盛大一些，有军乐队，因此我们打算周日再来看。
+        <br>5.狼山缆车从早上9点开到凌晨2点30分，每15-30分钟一班，人多就频繁些，往返票价每人7.5欧元。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">Day 5 雅典</h2>
+      
+      <p class="text">最后一天在雅典了，由于之前都把感兴趣的地方去过了，所以今早的任务很轻松，只有雅典 大都会教堂 和 宪法广场 的卫兵换岗仪式必须要去，另外就是买点纪念品冰箱贴明信片什么的。</p>
+      <p class="text">早上起来先收拾了房间，叠被子倒垃圾，尽量给房主将屋子还原到我们刚来的状态。出门的时候发现没有前两天阳光灿烂万里无云，但也还算晴朗。由于是周日街上大部分店还没开门，我和芝麻兄找了家小bakery把早饭吃了。我吃了个“酥皮菜盒子”，芝麻兄吃了个cheese面包。</p>
+      
+      <h3 class="subtitle">雅典大都会教堂</h3>
+      <p class="text">吃完还不到9点，于是我们朝着卫城方向走，打算在Anafiotika Plaka地区随便逛逛。一路随性而行，通往卫城的曲折台阶旁，是还未开花的三角梅和五颜六色的桌椅，都在朝阳的光芒里静静的睡着。不难想象夏日的人声鼎沸和风情万种。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1sQ4di0XPjlQxt8V39Eei-e8HQRkfVEWz">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1v7A4G6Y7sVvGstU7DIDWiqoawK7WjZze">
+        </div></figure>
+      </div>
+      <p class="text">由于是周日，很多小教堂里面都传来声音，也陆陆续续有人进去。有早起的店家开了张，我们便进去找找有没有合眼的纪念品。尤其是一位老奶奶，虽然英语不好，人却很善良，一边热情的给你介绍所有商品的价格一边又转过身去怕催你买，所以最后虽然没有特别中意的，我们愣是买了个钥匙链。</p>
+      <p class="text">逛了一会儿就打算往雅典大都会的教堂走，大概几分钟路程就到了。教堂里正在做礼拜，我们进去的时候满满的都是人。神父正在宣讲。整个教堂因为灯光显得金碧辉煌，熠熠生辉。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1xsStSvLdWq02YaVDbpZ1BOfIvmVw2_UE">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Z3vIlSJu94oCxcmARUQuU9h8mBMvwScj">
+        </div></figure>
+      </div>
+      <p class="text">不多时宣讲结束，开始唱圣歌。我和芝麻兄不敢多叨扰，就静静的出来了。此时也不过刚过10点，然而还有一件事没有办。瑞安航空如果不提前买座位的话，只能起飞前48小时网上办理直接并自己打印登机牌。无奈住处没有打印机，所以我们只能自己出来找地方把回程的机票打印了。</p>
+      <p class="text">网上搜了一家高大上的酒店过去，跟前台一副求助无门的样子解释了一下，表示可以付钱打印，结果前台大叔大手一挥：机票发过来我给你打印！两分钟解决。我们提出要付钱，大叔说一百万欧元拿来！然后笑笑说当然是不要钱啦！我和芝麻兄感激涕零，表示世界上还是好人多！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/15r5_aUP_RrAcN1gGL1HZPga6FX3qC5CW"></figure>' 
+      
+      <h3 class="subtitle">宪法广场</h3>
+      <p class="text">解决了一件大事之后就往宪法广场走，越走越发现，怎么已经这么多人了？不是10点50才开始吗？结果发现广场一边已经拉上了绳子开始禁止通行了，马路中间的安全岛也站满了人，于是赶紧去找了个位置站定。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1-L51r8trWhT4cAPdKgCFCDpekUoY6f-X"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/11jlKImVE1cFpqab2eJxhEs_DreAzo0kT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14hwF8J1UO0O8h3VOoNfGD70RnDngNrKp"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">太阳好晒，幸亏是3月初，估计夏天要热坏了。虽然是旅游淡季，但看卫兵换岗的人真的好多，我们要费点劲才能不被挤走。等了大概有15分钟，还不到10点50分，就远远传来了鼓号队的声音，知道军乐队快来了。</p>
+      <p class="text">打头的是深色衣服的军乐队，不知道演奏的什么，但人群里有人会唱，所以估计是国歌什么的，还挺好听。后面是一排排的白色制服卫兵，虽然跟我国军人风采不能比，但也算是整齐划一威风凛凛了。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1gQhi1pEtlBSExDHaq5AsPmooUIaeI6I_">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1X3Hffnra0n0U_35aRh8ufmGxZLxjDssy">
+        </div></figure>
+      </div>
+      <p class="text">这一队卫兵走到广场上，出来三个人，其中一个领着到前面去把两个卫兵换下来，再走回来入队。然后军乐队再次开始奏乐，大队人马再走回去。整个过程大概20多分钟，他们换岗的时候那个正步前后踢得还是挺有意思的。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1Jy0It_lmDzOOaMDG4QFusWiUM7dbqlgu"></figure>' 
+      <p class="text">看完“盛大”的卫兵换岗仪式，我俩往回走的时候在路过的纪念品店里买到了最后一个冰箱贴，就心满意足的回去拿行李准备来坐X95大巴去机场。大巴站点就在宪法广场旁边，我们步行往返加上收拾东西用了不到半小时，想想午饭还没吃，所以到之前吃过的The Greco's Project要了mini烤肉卷饼外带了。</p>
+      <p class="text">离X95巴士站还有几步路的时候发现有一辆X95正好开到站上停下，于是我们抓紧趁着开门就上去了。结果上去发现没有卖票的？（以为像去苏尼恩的大巴那样有人售票。）结果一问发现要下车去售票亭买票。我在车上左等右等都快发车了怎么还不来？后来勉强赶上了，一问芝麻兄才知道，售票亭前面有好多人在排队在买票，都不是急着走的（可能在买今天晚些时候或者明天的票），所以后面赶这班车走的人反而排不到很心急，幸亏是芝麻兄前面有个 希腊 人也急着走，跑到队伍前面跟人家解释了一下，芝麻兄和这个希腊小哥才能及时买到票。</p>
+      <p class="text">有惊无险的上了车，一路晃到了雅典机场。结果柜台说瑞安在雅典没有check visa的章要盖，也就是说虽然官网提醒我们要打印登机牌到柜台检查签证方便盖章，实际上是不用的。哭。</p>
+      <p class="text">进去安检之后把饭吃完，趁着最后的时间买了点伴手礼。就顺利登机了。结果虽然一路飞到了家，但落地之后由于下雪没有停机位和接驳车，硬是在飞机上等了三个多小时才下来。到家已经是深夜了，一身疲惫。</p>
+      
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1. 如果要乘坐X95路大巴的话，可以提前去买个票。如果急着走临时买票也ok，但就怕像我们一样前面有很多提前买票又不赶着走的人在排队，就很耽误时间，万一因为这个买不上票没走成那多亏。</p>
+      </div>
+
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>

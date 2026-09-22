@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1fmHqQz94Z4svcHD1CvpM_BqHo6E3vWqG") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1>冬季佛州艳阳天</h1>
+        <p class="cover-description">迈阿密/奥兰多主题公园/西礁岛行程攻略+迪士尼/环球FastPass</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+      <h2 class="title">前言</h2>
+
+      <p class="text">嘉年华东 加勒 比海邮轮的游记攻略，包括 巴哈马 拿骚 、美属维京群岛圣托马斯、 大特克 群岛游记，请戳 ： http://bbs.qyer.com/thread-1056646-1.html</p>
+      <p class="text">这里主要写佛州的行程，包括上邮轮前半天的 迈阿密 游览，下邮轮之后迈阿密一天， 奥兰多 两天， 西礁岛 一天的行程。去邮轮好不容易飞去佛州一次，怎么能就这么离开呢？！于是订了路线9月就开始欢脱的各种订票，眼巴巴的等到12月终于出发啦！</p>
+      
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1lmSf9jihfNWTinvFEzZ7q4qh7hv4KQPd"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1oWav0DByJXIcH1gowdPHmQAhpCHPCiIw"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bDf5WTZdhoJfewrDYthT_a-SuwFctkLN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1vyQ9s50k2JQxZSQBfr99tyxW588ebiZz"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1q0FAOwvODqVyFlzmXr3KzPs01996dcPh"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hfoP_KWCgfZ8yftFwn_YPMfGgK5yguEi"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">准备篇：关于预订机票和酒店，租车与停车场查询详细攻略</h2>
+
+      <h3 class="subtitle">关于 签证 和机票</h3>
+      <p class="text">因为楼主人现在 美国 ，所以这方面大概不能给从 中国 出发的朋友们很多建议。不过！从美国出发的朋友们！美国航空American Airline的大本营在迈阿密，所以如果你们城市有AA的点又不怎么绕路的话（我的意思是有的小城市要在其他州的 大城 市转机，如果是从美国中纬度飞到北边转机再转到迈阿密的话就很不值得了），一般都有直达迈阿密的班机。一定要在AA的官网研究一下他们各个城市之间的航线，要知道订个时间路程价格都合适的机票会给你的旅行加分很多！比如楼主当时就是查了好多航空，后来发现AA大本营在迈阿密，基本直达是没问题。很多人说最好提前一天到港口城市以免因飞机延误错过邮轮，楼主这里的情况不太适合。首先前一天到的话早上到就要只租一天车不划算，下午到的话时间不能很好的利用还要多一晚的酒店钱，不如邮轮出发当天早上到。这里一定提醒各位楼主这样做的原因是这里有一班飞机到的特别早！大概早上8点就到达迈阿密机场了。况且因为起飞早所以价格也便宜，含税往返才140多刀，于是又欢脱的订了这个两全其美的机票~~~！</p>
+      
+      <h3 class="subtitle">关于订酒店</h3>
+      <p class="text">邮轮上的自然不用担心，关键是下邮轮之后还要有5天在时间在佛州。加上邮轮之前的大半天基本路线确定是迈阿密2天，奥兰多2天，西礁岛1天。因为决定要 自驾 ，所以并不需要住在公共交通方便的地方。在这里也有个经验要分享给大家，这也是很多旅行社都在默默使用的，酒店要根据开车的路线订，可以有效的调节开车时间和总体行程，做到最大化理由时间和金钱。比如说这次，邮轮下来在迈阿密玩一天，下午开车北上到奥兰多，酒店就订在了奥兰多以南的小城Kissimmee。这里的酒店比主题公园附近的便宜不少，开过去也就20-30分钟的路程，也省去第一天再赶半小时夜路的疲劳。</p>
+      <p class="text">从奥兰多到西礁岛更是分了两段，酒店订在了迈阿密以北的Hollywood，第二天再南下开到迈阿密也就不到1小时的车程。而且可以绕过堵车的迈阿密走外圈直接去西礁岛，感觉也很好。含税三星大床房52刀。</p>
+      <p class="text">当然，上面说的这些同时要结合各种酒店预订网站，如果位置对行程好价格反而很高一样还是不划算。这里推荐Groupon！他家的酒店页面选择有限，但是碰上的话就很便宜！这次成功订到一家三星酒店大床房，每晚含税才34刀。Priceline的bid功能也很好用，在没有更好的选择的时候，它可以让你以高性价比取得想要的酒店。</p>
+      
+      <h3 class="subtitle">关于 租车</h3>
+      <p class="text">迈阿密 租车 相对较便宜（感觉在美国大城市 租车 反而比较便宜一些），订了机票船票之后就一直在看各种 租车 网站。而且佛州很多路是要交高速费的，我研究了很久很久看了各种网站和论坛吐槽。。。你可以自己在高速口排队交cash，也可以包含进 租车 的package里面，不同 租车 公司提供的服务也不一样。需要说明的是现在很多高速口收费站取消了，改为一种叫toll-by-plate的东西，大概是你只管走，之后给你寄账单。这其实方便了本地居民却给 租车 的外来游客造成了一些困扰，之后你飞回国了， 租车 公司说账单上有几百刀，你怎么对质？很多网站上都有吐槽贴。。。未免麻烦，楼主比较了各大吐槽论坛和 租车 公司的政策，选了认为最划算的一个，6.99刀一天的附加费，包所有的高速费。于是又欢脱的订了~~~！</p>
+      <p class="text">其实导航的时候可以避免走收费高速，我本来也想这么做的，结果看到很多人吐槽说明明走了免费的高速或者明明自己交了cash，还是收到了 租车 公司寄来的高速费账单，又花了很多精力和时间和电话费解决问题，瞬间就很头痛懒得折腾了。。。。</p>
+      
+      <h3 class="subtitle">关于停车</h3>
+      <p class="text">很多同学都反映 租车 是很方便，就是有时候找停车位很烦啊！楼主在试过N个停车查询网站之后给大家推荐Parkme.com这个网站。它可以自由选择停车日期和时段来查询价格，这样就大大增加了准确性（因为很多停车场周末价格或者节假日价格跟平时不一样，就算是工作日不同时段价格也不一样）。最关键的是点击每个停车场会有详细的说明，如果接着打开细节页面的话甚至会有该停车场收费标准的真实照片。有些其他的网站感觉价格信息比较混乱，界面做的不如这家的清晰，所以就一直用下来啦！去西海岸和佛州都是用的它，感觉信息很准确更新也很及时。</p>
+      <p class="text">楼主使用这个网站的时候一般是输入要查询的城市，在搜索出结果后直接利用它提供的地图在景点周围查询。如下图所示，左边可以输入要停车的日期和时间，右边就可以自动拖拽地图的范围进行浏览，绿色是停车费较低的，橘黄色费用中等，红色最高。蓝色的是可以预定停车位的，以免到时候没有车位。不过以楼主的经验除非是游人特别多的景点（比如说 好莱坞星光大道 附近的停车场），一般都是可以找到车位的不需要预定。</p>
+      <p class="text">之后在迈阿密和西礁岛楼主也是提前找好了停车场，省去了不少时间。具体地址会在相应景点中标出。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1t4z30FTX8yWBq8OUX7J3EVGzzU9by66j"></figure>' 
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 1 迈阿密</h2>
+      <p class="text">一大清早约了出租车把我们送到机场，按时起飞按时降落无悬念（基本每天早上的第一班飞机除了天气原因很少延误）。一下飞机就双双跑到卫生间换上夏装，迈阿密12月初还是26摄氏度好热！</p>
+      <p class="text">拉着行李准备做轻轨到维兹卡亚博物馆及花园。迈阿密的公共交通分好几种，我们从机场出来坐的是Metro Rail，单人票2.25刀，直达目的地。进站时的保安老爷爷教了我们很多遍怎么在机器上买票。。。虽然我早早就研究好了，但还是很感激他的热情~~</p>
+      <p class="text">Metro Rail的线路图如下：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1SWqxmtMSta9i0nqZ6BzXhCLAl79QrJIN"></figure>' 
+      <p class="text">还有一种叫Metro Mover，主要集中在downtown运营，是免费乘坐的，这个后来我们用到了。线路图如下：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1cCV9QyI1-4Np1JjLop7B6pGz0Y-0OaYv"></figure>' 
+      <p class="text">坐轻轨到达维兹卡亚博物馆那一站之后还需要步行一小段，虽然不长，但是鉴于刚从冬天来到这个火热的地方，又拉着两个小行李箱，还要过天桥上上下下的走，不一会儿已经是满头大汗了。好在这个博物馆和花园树荫很多，风景也很漂亮，顿时凉快了不少。这个博物馆其实是个私人庄园，建筑风格充满了文艺复兴时期的元素，内部奢华惊艳。门票18刀，有自己的免费停车场，不过车位很少要早去或者看准时机。开放时间和门票戳这里： http://vizcaya.org/visit-hours-admission.asp</p>
+      <p class="text">见过比特摩尔庄园或者赫兹古堡的可能会觉得有点小巫见大巫，不过它也有自己独有的特点 – 门口出去台阶下面就是海！从海上看过来这种浪漫又让人难忘的感觉一下就出来了，可惜不能拍照。。。。</p>
+      <p class="text">官网上的图是这样滴，我们拍不到：</p>
+      <p class="text">门口拍了几张：</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1rBwcInTV5V_nR6jFGhsLu2n1MHVAst7K"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1q1sGm3IgYsJIg3b8XOc77Ru_S4RS2nQh"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gt6DL3bjnkMYuSHwWMEw9Xm2hbuIMx7C"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">差不多11点的时候就坐轻轨去了Freedom Tower，中间要倒一下Metro Mover。这两个公共交通系统是要出站之后再入站倒车的，我们当时以为是站内就可以换乘，找了好久。。。</p>
+      <p class="text">传说中 古巴 移民潮的时候在这个 塔里 设置了各种检疫和入境文件发放机构，所以被称作自由之塔。现在是个艺术馆，里面是一些展览。对面就是热火队的主场美航球馆，可惜当时他们正在客场打球而且我们也没时间看球啊~~~</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1685DmU5H6-mD-Sw_88QJ2GO1hkP7vNKu">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1rbf5exPFSdppomPuA3colbqRObv4FGJC">
+        </div></figure>
+      </div>
+      <p class="text">看看表已经接近中午了，去便利店买了水就直接打车去了码头准备登邮轮啦！</p>
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.Metro Mover是免费乘坐的，车次也很多，如果可能的话在downtown尽量使用这个系统。而Metro Rail路线比较长，单程2.25刀，也可以买充值卡充值，是从downtown到机场这种稍远的地方的首选。
+        <br>2.迈阿密的出租车很多是不打表的，上车的时候跟司机讲好价钱。从港口码头到机场是25刀。
+        <br>3.迈阿密机场有寄存行李的地方，但是我们觉得箱子不大而且存在那里还要回去拿不怎么方便所以没有存。如果有大件行李可以存在downtown的某个酒店，给服务生一些小费就可以。至于不住酒店的话怎么在网上找可以存行李的酒店。。。有人问的话我再写吧~~
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">Day 2 – Day 7 嘉年华东加勒比海8天7夜邮轮之旅</h2>
+      <p class="text">包括 巴哈马 拿骚、亚特兰蒂斯天堂岛 游览；美属维京群岛的圣托马斯游览； 波多黎各 的 圣胡安 游览； 大特克 岛的游览。详情请戳： http://bbs.qyer.com/thread-1056646-1.html</p>
+      
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">Day 8 迈阿密-奥兰多</h2>
+      <p class="text">下船后从港口码头打车去了迈阿密国际机场，因为是在这里订了 租车 （还车的时候比较方便）。 租车 手续都很顺利，从机场开出来才9点左右。于是决定把最后一天的行程提前，直奔著名的南沙滩！</p>
+      <p class="text">根据楼主提前找的停车场停好车（13th Street Garage (G3), address: 1301 CollinsAve, Miami Beach, FL 33139, USA），价格大概是每小时1刀左右，一路走着逛着不到5分钟就到了南沙滩。不愧是著名的海滩，沙子细腻干净又柔软，海水也是清澈的蓝色，感觉跟加勒比众岛的海滩一样让人惊艳！加上管理和清洁都做的很好，如果说海岛上的沙滩是纯自然，这里更感觉是将玉石雕成了玉器。再加上沙滩上特有的色彩斑斓的救生站，绝对是迈阿密明信片上的风景照出产地！楼主到的时候救生站的小帅哥刚来，还在忙活着搬东西，旁边的租赁太阳椅啊太阳伞啊也刚开始营业，不过很多水上运动爱好者已经开始驾驶着 水上摩托 或是站在冲浪板上跃跃欲试啦。沿着海岸线来回走一趟，跟海鸥们玩一会儿，转眼间就到了午餐时间。顺着回停车场的路上各种纪念品小商店也都开了，逛一圈就准备去市里一个叫“小哈瓦”的区域吃好吃哒！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1sPRT7xC_OAtTdUH9AiaYbaEPxqyI3kVA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZmwVhJA-CJGO_mGLQHT46UXiVQZhpMgE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fGfsep5srsOiKWA1hB3Z6rDA4aVIuYLB"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">这个 小哈瓦那 区域里大部分是早期的 古巴 移民，街道和各种小店都包含着浓浓的加勒比风情。楼主早就在网上看好了一家评价极好的古巴餐厅叫Versailles，迫不及待的直奔目的地。果然是要等位子，不过好在几乎没两分钟就可以就坐了。看着菜单每个都想吃，纠结了半天点了鱼和羊肉。味道名不虚传！超级好！头盘是鱼肉丁做的沙拉，主菜的羊肉炖的很入味，烧鱼也超级嫩。价格比较合理，我们点了一个头盘两个主菜，加小费大概40刀的样子。他家旁边还有一家自己的面包店，出售各种甜品，也是一致好评。楼主吃完午饭真是撑到了，所以忍痛没有买甜品。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1JuuIwyrZcgUJj9KwEFG8Qv0rNIax3XT9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nHg0Upo-jNKwdwTp3UXXJdc5zZhx-1DS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1jaHRdtBZh5oXo9H75PhsqNl6OXzS5cH0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1f1_mMVpG-UXoMb_sI1zs85h3JMycxozc"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">吃饱喝足之后就出发像奥兰多进发！下一个要去的是肯尼迪航天中心，并不在奥兰多市内，而是在东边大概1小时车程的地方。一路北上到达的时候已经是快下午4点了，这里真是要说提前把高速费的问题在 租车 公司那里解决了真的是很方便，一路上导航都不用专门避开收费高速，无形中省了不少时间和精力。</p>
+      <p class="text">肯尼迪航天中心是个巨大的航空航天基地，现在一部分作为展览向公众开放。感兴趣的同学可以在这里呆上一天也不为过，除了可以参观博物馆的展览，还可以近距离接触各种与航天航空相关的人事物，比如说在模拟舱里亲身体验火箭发射的感觉，参观火箭发射的控制中心，或者跟宇航员一同午餐。一般性的门票是50刀，当然如果想参观更多的地方或者了解更多的相关知识，还有很多附加的package可以买啦！不过楼主对这些兴趣并不大，所以本来就没有要进去参观，来了之后在游客中心大概逛一下，给航空航天爱好者的朋友买了明信片和纪念品就差不多到了傍晚时分。迎着夕阳一路开到奥兰多差不多用了1个小时多一点，实在是懒得找餐厅了，在whole foods吃了晚餐，晚上去逛Downtown Disney！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1atr3I3RwmXZCCS_iJNviGhnF2Bq3-Smm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UU4H44u6G-FesvDVu4FKOnAfa7cBDSiO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1oWav0DByJXIcH1gowdPHmQAhpCHPCiIw"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ThvvY0U8iVYRpH1sixZig_PxoZQjfWSf"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">迪士尼综合商业区 （Downtown Disney）里面包括各种主题餐厅，剧院，商店，酒吧和广场，集购物、娱乐和餐饮为一体，也是一个很有主题公园风格的小镇，不管是餐厅还是迪士尼主题商店，很多的装饰装修都比较多变且让人惊喜。楼主之所以要来这里是因为第一是在网上订了主题公园的门票，想先换了到时候节省入园时间；第二是听说这里的主题商店产品种类比较全，买纪念品的话是个好选择。本来以为周日晚上的应该不会很挤，结果完全超出想象！还离着入口一段距离就开始堵车，到了入口附近显示没有车位，只能按照工作人员的调度停在了附近某个迪士尼酒店的停车场。幸好是提供免费的接驳巴士，大概 十分 钟左右就可以直达Downtown Disney。这里也要提醒各位，奥兰多在12月份的时候早晚温差比较大，白天20多度短袖即可，但是夜间温度也就是10度左右，一定要注意保暖！幸亏楼主穿上了一件小毛衣，不然等接驳巴士的时候好冷啊~~~</p>
+      <p class="text">进去之后首先换了在网上预订的门票，是要第二天去 未来世界 （Epcot）用的。工作人员很细心的给楼主挑了两张门卡，一个米奇一个米妮，刚好是一对！之前有看别人拿到的是米奇和唐老鸭的，心里还想不管给啥但愿都是一对，果然成真啦！于是欢脱的继续各种逛商店啊，买纪念品啊，看街头艺人表演啊，不知不觉就过了两三个小时。但是还没走到商业区的另一头！尤其是那个巨大的迪士尼主题商店，仅仅是在里面随便看看就逛了半小时。楼主也是第一次看到这阵仗，震惊了。。。。眼花缭乱的各种周边产品。。。而且大晚上的。。。人山人海。。。。</p>
+      <p class="text">转念想想该买的也买了，不论如何今晚也就告一段落啦，楼主的酒店订在了离迪士尼主题园区大概20分钟车程的小城Kissimmee，打算回酒店洗洗睡了，养足精神准备明天去未来世界！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1CKe_Y9vg_wayast_juqeAmZbEzSoKTNj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nXRuzfS5_Y7eDpYlxElbdpK25iHrtaKl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_fnMQoasyqa_RNdpWWq7zCA6RmMi3em0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1khOlZBu9ev5yshvhmhKj4FDNMPE-W85Z"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hP2vdH_q1o6iHxUKXvTkXglqPASssYvx"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.在小哈瓦那Versailles吃饭的话尽量早点去，车位比较紧张。
+        <br>2.迈阿密的南沙滩早上人比较少，感觉最漂亮的是第12街到第17街的这一段。9点左右是最佳时间，如果再早或者要去看 日出 的话12月海边有点冷，注意保暖。
+        <br>3.如果想去肯尼迪航天中心逛的同学至少要留出大半天的时间来。楼主看了看还是有很多东西可以体验的。
+        <br>4.去迪士尼综合商业区（Downtown Disney）很多时候会堵车，因为白天在各主题公园人们晚上很大一部分会来这里吃饭购物，所以要注意预留出相应的时间。没有车位的话不要着急，按照工作人员的安排就好，整体感觉他们的调度还是很有序且没有增加游客烦恼的。
+      </div>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 9 奥兰多 迪士尼 未来世界 和世博园）</h2>
+      <p class="text">今天一天都是迪士尼Epcot未来世界和世博园！</p>
+      <p class="text">Epcot分为两部分，一部分是与各种未来科技相关的体验游玩区域，另一部分是类似世博园的各国风情建筑，包括展览，商店，特色餐饮或者游戏项目。之所以选择这个主题乐园是因为这个是奥兰多独有的，在世界上任何其他地方的迪士尼都没有类似的哦！还有就是魔法世界楼主前几年在 巴黎 去过了，楼主相公也觉得那都是小孩子的东西超级没劲，而且Epcot有两个园可以参观，风格大不相同，所以就定下Epcot来啦！</p>
+      <p class="text">在开车进迪士尼主题乐园区域的时候会路过闸口收停车费，楼主去的时候加税貌似是17刀一天。早上9点开园，楼主早上8点半就已经来到了Epcot的停车场，其实还是比较沾光的，因为去其他主题乐园的游客貌似要在这里停车后坐接驳的小火车到达其他园区入口，而Epcot的大门步行两三分钟就到了。在到达大门前要先经过随身携带物品的检查，就是翻翻背包而已。楼主害怕玩起来吃饭时间赶不上会饿，带了一些饼干啊苹果啊作为零食，保安大叔看了看说：Oh, I can see you’ve got really good snacks！</p>
+      <p class="text">安检过后楼主去门口排队了，大概十几条队伍，每一队不到10个人，于是楼主就站定等待。楼主相公负责去售票处拿了一份地图，两个人就根据攻略想大体上安排一下路线。抬起头来的时候大概还有不到10分钟就开门了，回头一看惊呆了，每队后面至少排了百人以上，根本看不到队尾。。。</p>
+      <p class="text">关于FastPass</p>
+      <p class="text">看了一下论坛上专门讲这个的不太多，楼主预定之前弄不太明白这个系统，也是研究了好久才娴熟起来。简单来说FastPass就是迪士尼人流调配系统，手持某个项目的FastPass就相当于是可以走这个项目的快速通道，免去了排队之苦。FastPass是免费的，一旦你在网上买了迪士尼主题公园的门票，确定了入园的日期，就可以在入园日期前30天预定这个主题乐园的FastPass（如果你预定了迪士尼旗下的酒店，则可以提前60天预定FastPass）。登录迪士尼官网或者在迪士尼手机app上都可以进行预订、修改和取消。</p>
+      <p class="text">每个项目的FastPass上会标注一个时间，基本上都是持续一小时，在这个时间段内去这个项目是可以走快捷通道的，超过这个时间段则不行。理论上来讲游客是可以自己选择时间段的（注意，是理论上），比如说想9点去项目A，11点去项目B，12点去项目C，预定的时候是可以自己决定的。但是！实际预定FastPass的时候，系统会给你一些已经把3个FastPass时间段组合好的搭配。比如说预定的选项一是9点到10点A项目，10点半到11点半B项目，12点到1点C项目。或者是10点到11点A项目，2点到3点B项目，3点06分到4点06分C项目。游客只能在这些搭配中选择时间最合理并且自己好安排的，而不能自由决定每个项目想使用FastPass的时间段。这就导致了其实有些时间是在中间被浪费了，比如在结束A项目的游玩等待B项目FastPass时间到来的过程中，既不能去别的项目玩（怕错过B项目的FastPass时间段），又不能提前进入B项目。</p>
+      <p class="text">另外还有以下几点导致合理预定FastPass并制定游玩路线变得非常重要：</p>
+      <p class="text">1.      FastPass只能预定3张。这不意味着你只能使用这三张，因为入园后在你这三张FastPass全部消耗掉之后，或者你由于某些原因没有使用，但是时间段已经过期的话，可以再领一张。之后还可以继续领FastPass，但前提都是你要把上一张消耗掉之后才能领下一张。</p>
+      <p class="text">2.      你预定的每个项目的FastPass时间上不能重叠。如果你A项目的FastPass是9点到10点可以使用，那么下一个项目的FastPass时间段一定要在10点零一分之后。</p>
+      <p class="text">3.      由于FastPass可以有效的节省等待时间，自然是越热门的项目（等待时间越长的项目）使用FastPass越划算。这就导致了热门项目的FastPass很早就会被预定一空，很可能你预定的时候只能抢到下午的时间段。</p>
+      <p class="text">4.      预定的时候全园的项目会被官网分成三组，楼主感觉是分为“排队时间最长的几个项目”，“流动量小导致排队时间中等的项目”和“流动量大但是参与人数众多导致排队时间中等的项目”这三个组。每个组里面只能选择一个项目预定。这就导致了你不可能预定到所有排队时间最长的几个项目，有的项目即使是排队时间长你也要乖乖去排。比如说预定FastPass的时候，等待时间最长的两个项目Soarin和TestTrack就在同一组，只能选择一个。</p>
+      <p class="text">综合以上这些，楼主的经验就是，要么大家把预定的三个项目分得很开，比如各间隔2小时以上；或者把其中两个项目的时间段挨在一起，这样在时间段的末尾参加了A项目，出来就可以马上去B项目了。考虑再三楼主觉得时间间隔太长不好掌控，选择了9点35分到10点35分的Test Track，10点45分到11点45分的Mission Space，12点05分到1点05分的Spaceship Earth这个组合。这已经是楼主觉得最好的时间段组合了，本来想要Soarin的，可是预定的选项里只有一个有Soarin而且时间段是下午4点开始。想到下午要去Epcot里面的世博园，楼主果断抛弃了这个选项，决定一入园直奔Soarin避免排队，如果觉得好玩可以在预定的FastPass用完之后再拿一个Soarin的玩第二次。</p>
+      <p class="text">事实证明用完三个FastPass已经玩的差不多了，而且Soarin的早就被拿光了，楼主就又拿了一个晚上看焰火的FastPass。具体FastPass如何使用的，以及实际的路线安排，会在后文中详细描述。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1qfhXYec5MdFv016Q0wkX_HsMJ8uxfuk4"></figure>' 
+      <p class="text">开园之后自然是直接冲到Soarin，就是模拟飞行让你360度感受加州风光。这个一定要早去或者拿FastPass！楼主是第一批坐上的，整个项目大概15分钟左右，出来的时候发现等候时间已经1小时以上了。由于楼主想在第一个FastPass时间段的末尾使用，这样紧接着可以去下一个FastPass的项目，就直接把跟Soarin在一个馆内的几个项目也先玩了。</p>
+      <p class="text">看看时间已经过10点了，第一个Test Track的FastPass在10点半过期。这个项目是先自己设计汽车，包括车的可操纵性、经济性和最高可达的速度（极速）等。然后就是坐上你自己设计的汽车亲自进行测试，每个性能的测试环节都会有说明。每4个人坐一辆车，所以楼主最后也没搞明白到底是测的四辆中的那一辆。只是因为楼主相公特别喜欢赛车，所以极速设置的很高。。。。不知道是不是这个原因楼主坐在车里的时候加速度太大直接脖子都直不起来。。。感觉很酸爽。。。</p>
+      <p class="text">接着是第二个FastPass的项目Mission Space，在模拟舱里体验火箭发射升空。一开始楼主选了比较温和的绿线，坐过一次之后楼主相公觉得不过瘾，反正离下一个FastPass时间段还早，拉着楼主又排队坐了一次失重超重感觉较强烈的橙线。好在橙线排队的人并不多，不到大概10分钟就坐上了。说是感觉比较强烈，其实楼主觉得能承受过山车的人这个应该没有问题。</p>
+      <p class="text">之后的时间零零碎碎逛了创新馆的几个项目，发现楼主想坐的那个The Sum of All Thrills不明原因的故障了，只能晚一些再来。这个项目貌似大家介绍的很少，有不少人也觉得创新馆没什么好玩的所以略过了。楼主下午来坐了这个，觉得还是没有失望的，是设计过山车的轨道，然后在模拟舱里体验车子开上这个轨道的感觉，有点像模拟过山车。</p>
+      <p class="text">在创新馆周围吃了个 汉堡 ，品尝了来自世界各地的可口可乐之后就来到第三个FastPass的使用项目Spaceship Earth，就是坐在室内观光小车里面经历整个地球的变迁和文明演化。这个项目结束后楼主的预定的三个FastPass已经用完了，可以在园内任何FastPass机器上拿下一个FastPass了。不懂怎么使用那个机器的朋友不用担心，每一台机器都有一个工作人员会指导你使用。楼主去的时候发现好多项目的FastPass已经被拿完了，连与米奇合影的FastPass都没有了（好多家长带着小盆友跟米奇他们合影啊排队要很久）！不过还好有晚上焰火秀的FastPass。这个FastPass跟别的有点不同，因为焰火秀不用排队，是固定时间开始，于是在观看焰火最好的位置会圈出一块场地来，只有FastPass才能进去。这就意味着不用提前一小时在冷风中占位置看焰火，也能省下时间多玩一点别的项目，还是挺值的。果断决定拿这个！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/10OxxOT5m7sKNOGAbFNUePuEM63-9db05">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1IRDygHjyXQ_sZrEMAu7iTJEc3ZVmV5yl">
+        </div></figure>
+      </div>
+      <p class="text">下午的时间就开始逛世博园，里面包括 墨西哥 的玛雅金字塔， 挪威 的维京海盗展， 中国 的天坛， 英国 、 法国 、 摩洛哥 、 德国 和 意大利 的小镇， 美国 的冒险纪录片， 日本 的阁楼， 加拿大 的风光展。每个主题区域不但全部是当地的特色建筑和餐厅小吃，就连街头的表演都是浓浓的异国风情。有的主题区域里面会有景点，比如墨西哥馆是玛雅文化展览和观光小车之旅，美国是舞台与电影结合的冒险之旅，加拿大是360环绕的风光大片。当然啦，楼主夫妇的嘴巴也没闲着，意大利的冰淇淋，英国的fish & chips，中国的牛肉拉面都尝了个遍。这还遗憾的没有尝到德国的啤酒和日本的甜品。</p>
+      <p class="text">由于快到圣诞了，各国馆都会有特殊的人物角色根据各国不同的圣诞传说讲圣诞故事。有的国家圣诞是女巫传说，就由老奶奶扮成女巫来讲。另外参考表演时刻表各国馆也会有不同的表演项目，比如中国是杂技，意大利是滑稽表演，日本是击鼓。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1SZ-IZVpi9BqiCt4y8aYXOvt1oPDMagdf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ELBD0MqSczVWu5CWC4KYpbeM_jg9LW24"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15kvNRaKSjOkHJyCCflmECsjqq6EMZ1fl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1BdV3EL7tIzFMeHvEH_s3nB3vGA0NeGcR"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bq1louXNCGKf9RkkCljZfvxmH5hxKvP-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZFo7Jw4JnD4hpaDQjfyndXsPfUf55Rlf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WXJeyyUpHJa2qB6TRPYr4zgBM4trLsSJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/163dZTtZ21VxRR5lggYHZjzaysvOWEo6a"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Z5Z8k17pdVN6qkcik6jXnxn-yEIhUquC"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">到了傍晚时分人群会稍微退去一点，但是夜幕降临园里依然是热闹非凡。焰火秀9点半才开始，于是楼主夫妇又慢慢悠悠的逛回上午的未来科技园把剩下的几个不怎么关心的项目也玩了。还有就是终于在人不太多的情况下排队去跟米奇米妮他们照了合影，也算是圆了心愿。这里也要提醒大家注意每个项目的关闭时间，有的大概7点就关了，有的会运营到9点左右，请以当天入园时拿到的时刻表为准。园内也有电子牌显示哪些项目的等待时间有多久或者是否已经关闭，请多留意。</p>
+      <p class="text">大约9点的时候楼主夫妇回到世博园的 大湖 边，用FastPass进入了视野最好的区域，就等着焰火开始啦！不夸张的说这是楼主见过的最好的焰火秀，创意、灯效、音乐和焰火搭配的 十分 融洽，整体感觉很大气也很绚丽，给人非常震撼的感觉。整个表演大概20多分钟，不知道为啥一看焰火楼主就很感动。。。也不知道感动的啥。。。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1vyQ9s50k2JQxZSQBfr99tyxW588ebiZz"></figure>' 
+      
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.想早去排队的同学一定要8点半之前到，基本上8点50分左右的时候门口的队伍就长的看不到尾巴了，更不要提周末节假日的阵仗。排在前面的话一进去就冲去Soarin是完全可以第一批坐上的。
+        <br>2.一！定！记！得！提！前！预！定！FastPass！这东西会给大家省去相当多的时间！让人一整天都心情舒畅！尤其是热门项目排队一个半小时到两个小时是很可能的！楼主记得当年在巴黎迪士尼魔法世界的时候几乎大半天都花在排队上了好郁闷。
+        <br>3.楼主觉得游玩路线这种东西仁者见仁智者见智，找到最适合自己的路线才是最好的。至于每个项目都是玩什么的，英语好一点的直接登录迪士尼官网就可以看到每项介绍，信息最全最及时最权威： https://disneyworld.disney.go.com/destinations/epcot/
+        <br>4.玩的时候不用特意找时间吃饭，等待的时间吃一点，也可以两个人share一份，这样在世博园可以把每个国家的小吃都尝尝。
+      </div>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 10 奥兰多（冒险岛）</h2>
+      <p class="text">之所以选择环球旗下的冒险岛，很大一部分原因是楼主夫妇已经去过了 洛杉矶 的环球影城，所以奥兰多的这个里面的很多项目已经玩过了。再加上时间也比较紧迫，只能还有一天时间呆在奥兰多，玩 两个园可能每个都会有点不尽兴。所以就决定了直接去冒险岛！</p>
+      <p class="text">照例是8点半到达等着9点开门，不过要进去之后才能拿到地图。好在早就在网上研究好了路线，楼主夫妇都是哈利波特迷，来之前还特地重温了所有的哈利波特系列电影和书，一进门就直奔哈利波特城堡，一刻也没有耽误。整个霍格莫德村还笼罩在清晨淡淡的白雾中，朦胧又神秘，感觉像置身于电影中一样。快步走到哈利波特园区的时候几乎还几乎没有人，超级开心！要知道之后这里简直就像赶庙会一样，照片上的路人甲乙丙丁都比楼主明显！</p>
+      <p class="text">哈利波特城堡里的游玩项目是360度的全景3D飞行体验，与哈利波特一起上场打魁地奇，客服种种困难，包括跟龙战斗和亲历摄魂怪，直到赢得冠军杯。简直爽爆了！楼主坐过的最好的Ride！没有之一！而且由于来得早，也是几乎第一批坐上的，进入城堡后单是走过排队的路线就走了将近5分钟，可想而知之后排队的人有多少。不过大家排队的时候也不会无聊，根据楼主走过的排队区域，会经过很多电影里的场景，，包括屋子里很多会动的画像，赫敏他们的教室（甚至有全息投影让这三个人出来在教室里表演一段），预言家日报，一直叨叨个不停的分院帽，邓布利多的办公室等等。后来楼主在下午的时候又忍不住回来坐了一次，当时排队的队伍已经到城堡门口了，少说也要2个小时，于是果断跟楼主相公走了单人通道，一分钟都没有等就又坐了一次！</p>
+      <p class="text">还有就是这个项目是要存包的，根据排队时间长短的不同可以免费寄存的时限也会改变。早上楼主去的时候是免费寄存20分钟，下午的时候就变成了免费1个半小时。超过时间是要收费的。由于是自助存包，几个小的寄存房间都是室内，真的是挤不进去也挤不进来。。。能尽量少带东西就少带，能存一个就绝不存两个包。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1mJkkhLxCGNtuOvzE9yMA4KlqxLFUUTq7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bndpiPL7bjlpCAVh4Y9TiWNh6oHcoaGZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1F0lzbvG-FYacWH7KVXgTA_EzAF71dCR0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14UPVX1fI-omk2mS5xVkzDbd1avEDsBVe"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1DlRmOEr4a2hDvoKI-f5dvZgEqAnKLyE4"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">关于Express Pass</p>
+      <p class="text">环球影城和冒险岛也有相当于迪士尼FastPass的东西，叫做Express Pass。手持Express Pass也就相当于可以走快捷通道，免去排队之苦。与迪士尼不同的是，这个Express Pass是要收费的，但是只要买一个，几乎所有的项目都可以使用（注意，是“几乎”），不需要每个项目分开预定。价格可以在官网查到： https://www.universalorlando.com/Theme-Park-Tickets/Universal-Express/Express-Passes.aspx</p>
+      <p class="text">具体Express Pass价格由低到高可以分为四种：</p>
+      <p class="text">1.      环球影城或冒险岛这两个主题乐园选其中一个，每个项目只能使用一次的Express Pass；</p>
+      <p class="text">2.      环球影城和冒险岛两个主题乐园都可以使用，每个项目只能使用一次的Express Pass；</p>
+      <p class="text">3.      环球影城或冒险岛这两个主题乐园选其中一个，每个项目可以无限次使用的Express Pass；</p>
+      <p class="text">4.      环球影城和冒险岛这两个主题乐园都可以使用，每个项目可以无限次使用的Express Pass。</p>
+      <p class="text">这里要注意的是，有些项目即使是大热门，排队的人很多，也不能使用Express Pass，比如说冒险岛哈利波特城堡内的项目。楼主不太明白为什么，大概是因为这个等待时间超级长，而Express Pass都是均一价所以大家都在这个项目上用有失公允？如果要一天玩两个园，或者节假日来，可以考虑买Express Pass省去不少排队时间（但是哈利波特城堡内的还是要排队）。大多数情况下，工作日的话一天一园都可以玩的差不多，不需要特地买。另外，预定环球影城主题乐园旗下的酒店会有package免费赠送Express Pass，也不失为一个好选择。</p>
+      <p class="text">Express Pass在园内各个售卖点都有，所以如果一开始没有买，到排队的地方临时决定购买也是可以的。不过要提前问好此项目是否可以使用Express Pass，不然白白浪费银子。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1MBvoJNT-gDDWfStTRtWXfaLR9qkze-N_"></figure>' 
+      <p class="text">在哈利波特城堡出来，打算待会儿再逛霍格莫德村，因为听说蜘蛛侠也是热门之一，所以直接就过去了。它的位置跟哈利波特正好是对角线，相当于一上来我们就穿越了整个园区。。。不过为了少排队也是没办法的。到达之后人还不是很多，排队大概10分钟也就坐上了。这个项目跟以前在洛杉矶坐过的变形金刚很像，也是全景模式3D模式跟着蜘蛛侠打怪，效果依然是逼真又震撼。出来之后也顾不上照相，因为这里离正门不远，想着还是下午回去的时候顺便来照。</p>
+      <p class="text">旁边就是大名鼎鼎的绿巨人过山车，这个也是要存包的，而且衣服口袋里的东西也要拿出来存上以免坐过山车的时候掉出来。楼主从小就对过山车有点害怕，虽然硬着头皮也能坐，不过还是能不去就不去，毕竟心里怕怕的。楼主相公拍着胸脯说不要害怕肯定没问题，楼主也觉得来都来了。。。结果存好包到入口的时候被工作人员拦住了，因为楼主相公手上绑着石膏！啊哈哈哈哈！天助我也！</p>
+      <p class="text">在这里提醒各位如果身上不管是受伤还是恢复期，如果带有硬性材料的物质（比如石膏）是不能上去坐这个绿巨人过山车的。楼主虽然知道这是为了安全考虑，不过不太明白具体的原理，因为感觉坐过山车的时候手都是露在外面的啊，难道是为了防止到处乱晃打到别人？</p>
+      <p class="text">于是又一次顺着入园时候的路线去哈利波特园，一路上先是经过类似游艺乐园的地方，各种彩色的小火车啊，旋转木马啊，冰淇淋店啊，一看就是给年纪小的孩子玩的地方。楼主当然是趁机装一把年轻，跟着也玩了一会儿，而且这个区域装饰色彩特别绚丽，妹纸们照出相来肯定是很好看的。接着去了海神波塞冬的水电火声光秀，虽然排了一会儿队，但是效果还是做得很不错的，整个舞台非常有气势。从游艺园小火车上可以远眺绿巨人过山车，看到它整个轨道。没做成过山车楼主相公特别沮丧，楼主倒是觉得是天意啊天意！留有遗憾才会有再来的动力嘛！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1vPCiZtvH7EY6oxuMj3whcvN6gp-Pk-xH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bMPW0pq4g7UFQg20MtMlwxBS8-xlSElN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13xGm2qBOqMJ95FoqIMPxpicWbtfiLrxK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1cXyH8hViPmDj0ijgAD4kvVx2SiDdJd48"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1FKuIvCFRpx5RGtgSfWGcyu9ySoJSZ7CS"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">回到哈利波特园的入口处有霍格沃兹特快列车，也是仿照电影里做的，可以在一旁跟列车员合影。真正的霍格沃兹特快站台就在旁边不远，是连接冒险岛里的霍格莫德村和环球影城里的 对角巷 的区间小火车。当然，要同时有两个园的门票才能坐这个火车哦！据说火车的车窗都是屏幕，一路上“窗外”的风景都跟电影中一模一样，貌似旁边会有罗恩和哈利波特驾着卫斯理家的那一辆飞天汽车经过，而且来回程的风景和情景都不同！可惜楼主只买了冒险岛的票，所以不能去坐这个火车啦。</p>
+      <p class="text">这个时候园里已经是游人如织，尤其是卖黄油啤酒的小摊前都是长长的队伍。楼主当然不能错过这么好喝的东西啦！在 英国 参观哈利波特摄影基地就曾经喝过这个黄油啤酒，简直不能自拔，这次更是积极，二话不说就站到了队伍里。6刀多一点买了一杯冰沙款（还有一种冰镇款，不如冰沙的好喝），果然是熟悉的味道！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/18qjAzs0OnKHvkgVby2G2YOrLoeJoXGUD">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Y7-XU_PvQ7bJutbwgBOWQSsqhRQ-Ctes">
+        </div></figure>
+      </div>
+      <p class="text">往前走一点发现 奥利 凡德魔杖店前面的队伍已经是拐了三个弯，抱着冰沙立刻去排队。排队的时候旁边的露天舞台上偶尔会有表演，有时候是霍格沃兹各个学院的学生，有时候是三强争霸赛别的魔法学校的学生。排了大概不到半小时终于到了，进去魔杖店其实是个小的魔杖表演，会挑一两个小朋友做互动，时间不长大约15分钟。结束后会被引导到商品区域自行选购。绝对是国内赶山会的节奏啊！想选个魔杖直接够不到，前前后后都是人，连转身都困难。不过魔杖的款式都很全，基本想到的都有。而且有的魔杖是带“魔法”功能的，在哈利波特园里的固定地点挥舞魔杖，就会有魔法发生哦！楼主一路看到好多小朋友乐此不疲的到处尝试，别提多开心啦！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1LLqaSRR075ft_1h4z8vm0xaRyXl-pN8D"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1jcOLXqcQACJiG7Hfl5giXX52ZD8Bb2f2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1QHUH822qId7uSS0LfYIzbKkG21quzd_w"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">到了哈利波特冰龙和火龙的过山车那里，虽然抱着一丝希望去问了工作人员，但被告知带着石膏还是不能上去。于是楼主相公彻底死心了。看看已经是中午了，马上到三把扫帚去吃饭。不得不说从室外建筑到室内结构和装饰都跟电影里完全一样！在里面吃饭真是神奇的体验啊！而且东西也不贵，楼主夫妇要了两份套餐一共大概20刀。</p>
+      <p class="text">吃完出来继续在霍格莫德村里逛，在海格的小屋那里坐了一个不那么激烈的小过山车，是模仿哈利波特在第三部里骑在巴克比克身上飞翔的感觉。由于是安全杠是在大腿处的，所以手上的石膏不会影响。楼主相公这才觉得心里平衡了一点（男人们有时候也挺孩子气的啊哈哈）。紧接着又去城堡里走单人通道坐了一次魁地奇的项目，心满意足的从哈利波特园出来了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1qRf4rf6Tv0xx-RC0FolknlNIKcIDPpVu"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nx2uyXpn9_CC7C-7p2FKx8by69OESrvQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PiRwKKL8aaa0P47COuNzdAP8eajl-kdN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gFWi6wUbicdd0CiV_Z7qVqHNBslqtgsI"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">穿过侏罗纪园就到了很多水上项目的地方，如果大家想坐的话一定要夏天来，这种不到20度的气温一旦弄湿了真心好冷啊。楼主还在这里跟大力水手和奥利弗合了影。吐槽一下奥利弗真心好丑啊。。。下午3点钟左右的时候超级英雄们就出来了，楼主也排队跟美队握了个手照了张相。私以为是这些包括金刚狼等一群超级英雄里面最像的一个了。找了半天没找到蜘蛛侠，作罢，买了些纪念品看看时间差不多了就恋恋不舍的准备向南方的 西礁岛 进发啦！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1odXZ2R6c2Tv507Q_co6L234kOlJ-RtgT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1a59kDsgcxdNF1Va0PYmJLGvtCKyPMlOK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1R8exK-KyYUb-RigAW7Kmc0k6fbil-0BS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1yKRO1OoF3V8w7FE9DYQTKuWsbKMdfh4i"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.在园区外面和里面都有自助寄存行李的柜子，大概是一天5-15刀不等，按大小分类。如果带了比较多的行李（比如水上项目可换的干净衣裤）或者吃的，可以寄存到这些柜子里。
+        <br>2.一早进入哈利波特园的时候如果要照相就抓紧照，不然以后就等着跟路人们合影吧！
+        <br>3.除了一开园就冲进哈利波特城堡，这样肯定不会排长队之外，基本上全天都是等待时间1小时以上，网上说都有过4小时的先例。建议如果不是非要跟家人朋友在一起乘坐的话（因为项目快结束的时候会机器拍照，出来可以买照片），走单人通道绝对是个好选择！楼主跟相公第二次坐的时候完全没有排队，到了就坐上了，而同时期普通排队时间是2小时。
+        <br>4.哈利波特和绿巨人都是要存包的，绿巨人那边的存包柜子是半敞开式的房间，相当于有屋顶的室外，所以不会很挤。哈利波特的存包房间都是室内，人多的时候简直就是进不去也出不来。建议大家如果几个人一起去，可以先让一半人在外面看包，另一半人从单人通道进去，应该很快就可以排到。玩完了出来再换岗，让另一半人去玩这个项目，这样既可以稍微休息也可以省去大量的时间。另外尽量少带东西，如果要存包的话，能合并起来存一个包就尽量不存两个，省时省力啊！
+        <br>5.玩水上项目尽量夏天去，不管冬天佛州再怎么温暖弄湿了还是会瑟瑟发抖。而且最好是带着一次性雨衣（园里也有的卖不过有些贵）和暖和的衣裤，弄湿了赶紧换上以防感冒。
+        <br>6.如果想跟特别的人物照相的话，注意好他们的出场和停留时间以免错过。楼主觉得他们呆的时间普遍都不长，一不小心就错过了。
+      </div>
+
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 11 西礁岛（Key West）</h2>
+      <p class="text">前一天傍晚从 奥兰多 出发开车3小时左右，楼主选择住在了 迈阿密 以北将近1小时车程的Hollywood地区。在这里的好处一是能把从奥兰多到西礁岛7小时的车程拆成两段，不至于开车疲劳；二是能避开迈阿密市区拥堵的交通状况，从迈阿密西边绕过去南下，以便第二天顺利到达西礁岛。考虑到西礁岛住宿较贵，楼主把西礁岛安排在最后一天，这样一天内往返，晚上就可以坐飞机离开佛州了。</p>
+      <p class="text">早上6点多起床吃饭，7点钟准时出发。绕过迈阿密没多久就上了 美国1号公路 ，传说中的跨海公路，也是 美国 最值得 自驾 的公路之一。尤其是串联众多小岛的这一段，简直就像是汽车开在海面上一样，远远望去两边都一片辽阔，在阳光的照耀下发出蓝色晶莹的光芒。开了2小时左右经过 马拉松 岛之后就是著名的7英里大桥，以前是公路大桥，现在已经改成了风景无敌的海上人行栈道。在近马拉松岛的一端有停车的位置，可以从那里步行上桥。不过7英里大桥是废弃不用的大桥，所以并不能通向前面的岛，步行很长一段才看得到断开的地方，最终还是要折返回来停车场的。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1IIucF2jqDYQ13HVqYXQ0FlHOgGmdHTzg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1xflXR40rBETK0xMbl6XOV8LMm29-obF-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1KbOBfB-iFhqkMfxdRvpHZ3WEWqTBak1Q"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">游览过后在旁边的小餐厅外带了一个pancake路上吃。继续向前开，大概中午时分到达西礁岛（Key West）。在这里的 老城区 逛，最好的方式就是步行或者租借自行车，因为看到网上说很多街道虽然是可以街趴的（街边停车位），但是很多都是只给本地人或者居民停的。游客停的时候一定要看好地上有没有画标识。况且基本上离景点近的街趴都会被早早抢光，因此很难找到车位。</p>
+      <p class="text">楼主研究了一下发现， 老城 区是有Park & Ride的，停车地址在Grinnell Street 和Caroline Street交叉路口的西 北角 。2刀一小时，撕下停车票的存根是可以免费乘坐老城区的观光公交车的。楼主吸取了之前在 波多黎各 圣胡安 老城的教训，等了10分钟看没有公交来，就直接步行出发去景点了，反正老城区就这么一点，走走就到了。</p>
+      <p class="text">西礁岛老城充满了浓浓的热带风情，色彩明亮的房子，高大的棕榈树，让步行的路程比较轻松也不会很晒。大概不到10分钟就到了St Paul's Episcopal Church。工作日的中午教堂都没什么人，我们顺便也休息了一下。不远处就是杜鲁门总统的小白宫，据说以前是度假的行宫，后来不用了就作为展览馆对公众开放了。楼主到的时候刚好错过了一批导览，等下一批还要一会儿而且楼主夫妇兴趣都不大，于是继续顺着Whitehead St.南下到 海明威故居 博物馆。这里可是大名鼎鼎的《老人与海》的诞生之地，怎么能错过！门票13刀一张，里面果然如网上所说到处可见懒懒的晒太阳的猫。。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1vPK0H4QoN5PxFbSo2oIKQUVnfP4C2EnG"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_sIRMuIAskNSze4YmxUyjTZLeKP_rQ3f"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1SO9ovfUKEi0devdvo_kE3Yypa06bPSLA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZvOm5hRUegnyWiJqjRn3L2kCoYTrDZ9w"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Q6qxtLL7zAjuCvW3BbkjziktPZdRuIXg"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">由于路上吃了pancake导致两人都不太饿，与其找地方吃午饭不如先去所谓美国的最南端看看。一个硕大的石墩子就是最南端的标志啦，上面写着“美国大陆最南端！距离 古巴 90英里”（貌似到古巴的距离比到美国本土还近）。跟这个大墩子照相是要排队的哦，楼主排了大概10分钟左右。很多人都懒得排，在旁边照一下就好了，楼主想，既然来都来了。。。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1q0FAOwvODqVyFlzmXr3KzPs01996dcPh"></figure>' 
+      <p class="text">顺着来时的路走回去，逛逛纪念品店，在yelp上找了个还可以的餐馆吃了龙虾卷作为下午餐（因为吃的时间实在是已经下午了，没敢多吃怕吃不下晚餐）。期间楼主相公深深的鄙视了楼主，觉得到美国最南端吃最北端缅因州的龙虾卷真是浪费啊。Duval St.整条街是老城区主要的商业街，买东西的话可以来这里。在纪念品商店的时候看到了画着“美国1号公路终点”的冰箱贴，于是问老板这个终点的里程地标到底在什么地方。按照老板指示的路很容易就找到了，这个1号公路的起点和终点都在Fleming St. 和Whitehead St.的路口，如果像楼主夫妇一样 自驾 来的朋友不妨来留个纪念，毕竟是开到纵贯美国南北的大公路的尽头啦！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1nKSCrYx2uIhyE_N39tKd4kIeXNf7cfV6">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1BVdGqpHo0lIbQMNWa6AOOim_FtOHADks">
+        </div></figure>
+      </div>
+      <p class="text">由于是晚上9点40的飞机从迈阿密离开，快傍晚的时候楼主和相公就从西礁岛出发了。暮色四合的时候开在辽阔海面上的1号公路，夕阳西沉，不论是天空还是海面，整个视野所及都被染上了紫红色，像是在梦里一般。感觉整个心境都变得辽远空旷，天地间不复一物，只有汽车经过的声音回响在公路边缘的石壁上。一路上都很顺利，在机场附近的古巴餐厅吃了晚饭。这一顿简直了，8刀的盒饭，两个sides，包括一盆鸡肉炒米饭和一个重达半斤多的肉疙瘩。两个人吃了一半就吃不下了，古巴人的胃口太惊悚。到机场还车后正好8点半左右，抓紧时间过安检准备登机。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/15jqyOl5xj_Zk_pCyoAaxfrE1laX_X4zD"></figure>' 
+      <p class="text">回到家的时候已经过了半夜，是第二天凌晨了。这次旅行有惊喜有遗憾，有兴奋有懊恼，有享受有辛苦，也算是圆满结束了！把一路上的纪念品倒出来摆在桌子上欣赏一下，洗个澡舒舒服服的躺在自家床上，岂一个爽字了得！</p>
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.在 自驾 美国1号公路迈阿密至西礁岛一段的时候，要看准时机加满油，有时候很长一段是没有加油站或者是各小岛上汽油特别贵。
+        <br>2.美国1号公路的终点地标不太好找，楼主之前想来的时候在网上也是费劲了好一阵子，最后都放弃了，结果竟然意想不到的找到了。地址在上面的攻略中。
+        <br>3.西礁岛经常有邮轮停靠，这样的日子岛上就会比较热闹，当然各景点游人也会较多。楼主去的那天没有看到邮轮，不过一路上貌似很多邮轮下来的乘客，总体感觉景点并不是很拥挤。有网友说美国大陆最南端的地标前要排将近半个小时队拍照，楼主没有经历到，排了10分钟而已。
+        <br>4.美国1号公路很长一段都是单车道，意味着不能超车，所以能开多快、能不能按时到达全看前面的车况，说白了就是拼人品。建议大家留出充足的时间在路上，不然很可能来不及赶飞机什么的。
+      </div>
+
+
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>

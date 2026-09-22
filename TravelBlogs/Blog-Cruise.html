@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+    h2 {
+      font-size: 28px;
+      line-height: 1.4;
+      margin: 40px 0 16px;
+    }
+
+    h3 {
+      font-size: 21px;
+      line-height: 1.5;
+      margin: 28px 0 12px;
+    }
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1WLc_2rmsW-JQcIwi3dShHbMP3WjDnIMg") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1>冬季到加勒比来看海</h1>
+        <p class="cover-description">嘉年华东加勒比海邮轮8天7夜+各港口攻略</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    <section class="itinerary">
+      <div class="itinerary-header">
+        <h2 class="itinerary-title">行程单</h2>
+        <span class="itinerary-subtitle"></span>
+      </div>
+
+      <ol class="itinerary-list">
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>1</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">迈阿密</h3>
+            <div class="day-route">
+              <span class="route-place">菲兹卡亚博物馆与花园</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">美航中心</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">freedom tower</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>2</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">拿骚</h3>
+            <div class="day-route">
+              <span class="route-place">水塔和芬卡斯尔堡</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">亚特兰蒂斯天堂岛</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">海盗博物馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Queen's Staircase</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Christ Church Cathedral</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">The Cloisters Nassau/Versailles Gardens and French Cloister</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>4</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">圣托马斯岛</h3>
+            <div class="day-route">
+              <span class="route-place">山顶俯瞰</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">梅根湾</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">克里斯蒂安堡</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Legislature of the U.S. Virgin Islands</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">99 Steps</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Blackbeard's Castle</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Hotel 1829</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>5</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">圣胡安</h3>
+            <div class="day-route">
+              <span class="route-place">圣克里斯多巴城堡</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">圣费利佩海角城堡</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">圣胡安包蒂斯塔大教堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">圣胡安门</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">福塔莱萨要塞</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">City hall</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Casa BACARDI Visitor Center</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Casa Blanca</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Capitol Buiding</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>6</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">大特克</h3>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>8</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">迈阿密</h3>
+            <div class="day-route">
+              <span class="route-place">南海滩</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">小哈瓦那</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>9</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">奥兰多</h3>
+            <div class="day-route">
+              <span class="route-place">未来世界</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>10</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">奥兰多</h3>
+            <div class="day-route">
+              <span class="route-place">冒险岛</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>11</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">西礁岛</h3>
+            <div class="day-route">
+              <span class="route-place">七里长桥</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">海明威故居与博物馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">天涯海角</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">杜鲁门小白宫</span>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+      
+      <div class="divider"><span>✦</span></div>
+
+      <p class="text">结婚一周年纪念日心心念念原本蜜月的备选之一 加勒 比海邮轮！我家相公大手一挥，今年给你再来一次蜜月去加勒比！于是9月就开始欢脱的各种订票，眼巴巴的等到12月终于出发啦！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1x6cU8Tev1cV4tb-cAbP7eTKBB2qv3Emu"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1uuO4aBjwG8Mq5-IktfUH0jy48_66w2LY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13qWhvwNh8ZqlRMliKVEziCGo9ARz04vk"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mTCmO2PyZE8UISa2tVKdEJpYSPDOn6cZ"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <h2 class="title">准备篇</h2>
+
+      <h3 class="subtitle">关于本次邮轮旅行和游记</h3>
+      
+      <p class="text">楼主是个对名牌包包和名牌首饰不感冒的主儿！所以注定了出行都是以游玩为主，购物也大多是当地纪念品和特产。很多人邮轮行一个重要组成部分就是购物，各种船上的港口里的小岛上的免税店啊一逛一天，楼主真心不觉得有趣。因此本次出行和游记都以性价比较高的游玩和吃喝为主，既不奢侈浪费，也不会不尽兴。</p>
+      <p class="text">各停靠港口都是楼主自己做攻略安排的景点和行程 ，有些地方国内论坛的详细攻略较少，也是从国外网站和其他渠道获得的相关信息。 没有跟团也没有荒废时光！每一天最后都有tips，需要注意的地方都会标出来！总之是心血就对了！ 除了买纪念品几乎没有购物，所以想要购物指南的朋友可能要失望了。</p>
+      <p class="text">鉴于此次目的地比较特殊，很多景点都没有单独的官网，除了国内几大旅游论坛，这次主要参考的国外网站：</p>
+      <p class="text">1. Tripadvisor</p>
+      <p class="text">各种景点的信息都包含在大家对目的地的评论里，所以要花大量的时间一条一条阅读评论。用关键字搜索相应的评论会比较好用。楼主一般是找到一个想去的景点，阅读大概10条评论，找到想搜索的信息会以何种方式被提及，然后在评论里进行关键词搜索。这招非常好用！</p>
+      <p class="text">2. 各地旅游官网</p>
+      <p class="text">比如说 拿骚 的行程大部分信息都是 巴哈马 旅游官网得来的。官网的好处是更新较及时，种类也很全。还有 大特克 群岛本来就有个游客中心官网，各种吃喝玩乐信息更是一应俱全。Google搜索地名+旅游/景点 基本前几个搜索结果里一定含有官网。</p>
+      <p class="text">3. 邮轮公司论坛</p>
+      <p class="text">订好邮轮后在邮轮公司官网搜索停靠港口，一般跟都会出来一些岸上一日游的报团选项。可以参考这些游玩线路的景点内容和路线，为自己制定适当的计划。同时很多乘坐过的游客也会提供相关的游玩信息，在评论或留言里都可以找到。</p>
+      <p class="text">4. 邮轮综合评价论坛</p>
+      <p class="text">一般会有几个综合评价各公司邮轮和线路的网站，比如说cruise critic，论坛里可以搜出各种岸上游玩的信息和路线，甚至会告诉上岸后在哪里会有地接旅行社可以当场报名。</p>
+      
+      <h3 class="subtitle">关于邮轮选择</h3>
+      <p class="text">论坛上有很多帖子都是讲如何选择邮轮的，对楼主出行帮助很大，在此深表感谢！因为是第一次乘坐邮轮，不但要考虑舒适度，也要考虑万一不适应船上生活怎么办。而且楼主是个出去玩就闲不住的主儿，除了蜜月在 马尔代夫 真是休闲假期之外，还是想尽可能多的走走逛逛，于是想选一个停靠港口多一点的航线。在加上一直想去巴哈马的首府拿骚和亚特兰蒂斯的 天堂岛 ，还有 波多黎各 的 圣胡安 ，但是其他公司的船都不能兼顾这几个地方，于是果断出手拿下了12月初出发，性价比超级高的嘉年华东加勒比航线8天7夜的内舱房。由于后来曲折多多，稍后订船票会写最终多少钱成交和房型。</p>
+      
+      <h3 class="subtitle">关于订船票</h3>
+
+      <p class="text">路线敲定之后就开始对比各家网站看积分政策和bonus，后来选定Expedia这个网站。一来是当时害怕计划有变，而网站搞活动当时订票押金只要交不到100刀就可以还给双倍网站积分和25刀船上消费券。另外他家订酒店订机票都很好用，积分可用的渠道很多不会浪费，总之很满意的就定了。</p>
+      <p class="text">但是！有一些话这里要跟朋友们提醒一下，有时候网站会有订票的bonus是lowest price guaranteed，这种低价保障有两种，一种是邮轮出发的同时段同公司同航线保证在他家的网站上订票最低，如果同一时间发现其他网站上有更低的价格，保证退给你多出来的钱。这里注意一定是同一时间不同网站上价格的比较，如果你已经在A网站上订票了，过两天促销，B网站比你在A上订过的价格低，是符合这个规定不能退钱的。</p>
+      <p class="text">另一种就是保证现在你看到的这个价格是这个公司这条航线在这个出发日期的最低价，以后（起码在你出行前）不会再降价了，如果降价的话就退差价。当朋友们看到这种说明的时候就不要犹豫大胆出手买吧！反正相当于给了 保险 ，以后再降价也可以把多的钱要回来！</p>
+      <p class="text">但是！（对不起，上面的‘但是’我本来要说这个的，结果话唠病犯了多说了很多其他的）</p>
+      <p class="text">楼主订票的时候没有第二种的保证，只有第一种的，楼主看错了！！！原因就是楼主看了太多的网站，最后订票的时候虽然知道是在Expedia订的但是已经稀里糊涂的了，这些bonus都看了无数次于是就跟别的网站搞混了！订了票没两天就发现降价了！</p>
+      <p class="text">唉楼主也是手贱，都订好了还要时不时的翻来看看票，结果就让我发现降价了。。。一张票降了20刀，于是楼主很郁闷，感觉不能就这么罢休（当时心里很壮的觉得你们保证降价要退钱的，殊不知是自己看错了。。。捂脸），于是打电话到客服，很郁闷的要求把多交的钱退回来，结果客服很好心的告诉我我这个不能退。。。。再次捂脸。</p>
+      <p class="text">因为真心是就过了两天半，客服妹妹也觉得我很悲催，说这样吧我打电话去邮轮公司给你问问。我说好。过了一会儿之后她说可以给你退多余的钱，但是这就是final了，以后再降价都不能退，你愿意吗？我开心的说愿意啊愿意啊！心想着还能怎么降啊能退就是赚了啊，于是交完定金之后不是有个需要补交的全款数额账单吗？上面就赫然少了40刀~~~</p>
+      <p class="text">再后来两周左右，楼主又手贱了。。。点进去一看所有其他航线或者其他日期的邮轮都涨价了，偏偏我这一艘又降价了！虽然依然只降了一点，但当时想不去心都有了。。。你懂的，不在乎钱多钱少，就是心里堵得慌。。。于是再三思量了一下又给客服打了电话。。。客服态度依旧很好，说不能退钱。可是我真是不甘心啊！为啥就这一艘降价了啊！于是带着惴惴不安的心情问是这艘船有问题吗？客服大概觉得很有趣，笑了半天说不是的，影响定价的因素有很多，包括满员率啊各种房型的预订率啊什么的。我说我这可是人生第一个结婚纪念日啊！还没去呢心里就好堵了啊！后来客服说我帮你跟邮轮公司交涉一下吧。。。。过了好一阵子，那边大喊一声：Good News！虽然不能给你退钱，可以给你升舱！升到海景房！你愿意吗？于是我又开心的说愿意啊愿意啊！最终以不含税329刀的价格订到8天7夜的海景房！</p>
+      <p class="text">对于房型的选择，一开始选择内舱房完全是预算原因。但是因为我们对自然光很依赖，都是每天被太阳公公叫着起床的（比任何闹钟都管用，所以倒时差也特别困难），卧室里也是两面落地窗，所以后来体会到海景房比起内舱房来简直就是不要太舒心！当然这些都是因人而异，那些游轮上绝大部分时间不在自己房间呆的同学，或者戴眼罩睡觉的同学，内舱房完全是个好选择。不怕海风吹的同学订阳台房，视野应该会好不少。我们去的港口多，又都是自己安排的行程，一天逛下来回船上已经很累了。除了看show之外也不去酒吧，甲板上海风又大不能久留，所以大部分都呆在自己房间看 日出 看日落 看星星看月亮不要太惬意啊~~~</p>
+      
+      <h3 class="subtitle">关于签证和机票</h3>
+      <p class="text">因为楼主人现在 美国 ，所以这方面大概不能给从 中国 出发的朋友们很多建议。不过！从美国出发的朋友们！美国航空American Airline的大本营在迈阿密，所以如果你们城市有AA的点又不怎么绕路的话（我的意思是有的小城市要在其他州的 大城 市转机，如果是从美国中纬度飞到北边转机再转到迈阿密的话就很不值得了），一般都有直达迈阿密的班机。一定要在AA的官网研究一下他们各个城市之间的航线，要知道订个时间路程价格都合适的机票会给你的旅行加分很多！</p>
+      <p class="text">比如楼主当时就是查了好多航空，后来发现AA大本营在迈阿密，基本直达是没问题。很多人说最好提前一天到港口城市以免因飞机延误错过邮轮，楼主这里的情况不太适合。首先前一天到的话早上到就要只租一天车不划算，下午到的话时间不能很好的利用还要多一晚的酒店钱，不如邮轮出发当天早上到。这里一定提醒各位楼主这样做的原因是这里有一班飞机到的特别早！大概早上8点就到达迈阿密机场了。况且因为起飞早所以价格也便宜，含税往返才140多刀，于是又欢脱的订了这个两全其美的机票~~~！</p>
+      
+      <h3 class="subtitle">关于行李</h3>
+      <p class="text">安排的行程是早上8点先到迈阿密观光，中午上船，而且每人只能带一个随身行李箱一个小包，托运行李是要另买的，所以决定行李不带很多。反正都是夏装，轻便的很！</p>
+      <p class="text">邮轮的话5天以上有两个elegant night，就是传说中的正装之夜。男士就是西装领带皮鞋，女士就是各种晚礼服。楼主赶着感恩节买了一套拖地的长裙晚礼服，还有国内寄来的一件短款的旗袍，就这么安排好了！高跟皮鞋不是必须的，一双比较精致且稍微有点高度的凉鞋就可以。这样带是因为其他时间去晚餐或者较正式的场合也可以穿，不至于太正式，太高或者太休闲。下面说一下除了内衣裤和洗漱用品这些必须物之外的衣服类：</p>
+      <p class="text">女生： 短袖T恤2-3件，短裤1-2件，长裙1-2件，（港口上岸游的时候按照行程，要走很多路就T恤加短裤，不走很多路的话就长裙）</p>
+      <p class="text">连衣裙1-2件（稍微精致一点，除了正装之夜都可以穿去晚餐），披肩1-2件（甲板上抵挡海风，餐厅剧院里抵挡空调冷气，换着颜色穿拍出来也好看）</p>
+      <p class="text">晚礼服一件，旗袍一件，配套小首饰若干。</p>
+      <p class="text">Crocs一双（可以当拖鞋用，也可以去海滩的时候穿），高跟精致凉鞋或鱼嘴鞋一双（晚餐穿），坡跟的凉鞋一双（港口上岸游的时候穿，尤其是穿长裙的时候，crocs不搭，高跟凉鞋爬坡脚痛。我这双鞋跟不高且非常舒服，走路一点也不累），运动鞋一双（毕竟从佛州要飞回还是冬天的地方，而且之后去奥兰多温度真心不高凉鞋太冷）</p>
+      <p class="text">感觉穿长袖非常鸡肋，除了出发去迈阿密的时候穿在里面的一件长袖其他都没带。出发的时候这边还是冬天，穿了长袖加毛衣，下面是牛仔裤运动鞋。外套没穿，因为毛衣带抓绒的，而且出门打车，到机场有暖气不太需要。</p>
+      <p class="text">男士： 短袖2-3件，短裤2-3件，长袖衬衣1-2件，西装上衣1件，长裤2件（一件薄的可以在冷气很足的室内穿，跟西装上衣要搭配，一件厚的天冷或者回北方的时候穿保暖），crocs一双，皮鞋一双，运动鞋一双。</p>
+      <p class="text">一件保暖衣裤和抓绒外套都是来回的路上和天气冷的时候穿的。</p>
+      <p class="text">以上服装加上各种必备物品，一共两个随身登机箱和一个背包。完美！</p>
+      
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1. 订机票要趁早，看到时间价格合适的就下手。像楼主这种直飞短程航线的很难在后面再降价。提前3个月基本就是最佳时机了。
+        <br>2. 订了邮轮之后如果发现降价了或者有什么不满意，英语还过得去的同学都鼓励去跟客服打电话争取一下。当然主要还是看自己的心态，争取过但不成功，或者不争取吃哑巴亏，对于楼主来说是完全两种不同的心境。努力过即使没结果也不后悔。
+        <br>3. 跟客服打电话的时候，把自己摆在一个“你看这么悲剧的事情在我身上发生了我好难过啊”的地位比“你看你们干的这叫什么好事大爷我很生气”要有效的多。真要是碰到一个好客服同情心泛滥的时候是愿意在规定允许的范围内帮你多争取一些利益的。一旦争取到了好结果不要吝啬赞美，夸他个上天入地都没问题！
+        <br>4. 登船前把一切都 online做好会极大地节省登船时间。
+        <br>5. 两人以上出行极力推荐打车去港口。从机场去的话大概25-35刀之间都比较合理（根据堵车时间不同会有差别）。邮轮公司在你online check-in的时候会有接送机场的选项，16刀一个人，不过貌似是会等几个人一起走，所以人多的话还是打车最划算。
+        <br>6. 一般11点左右就开始登船了，网上很多人希望早登船早享受或者说之后排队的人多，其实我们这艘船3000多乘客，12点左右人多一些但并没有等很久，也是一会儿就好了，大家可以根据自己的时间安排。
+      </div>
+
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1MNkALeq0C-Nnikd55he12wEeQ042fMcT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1PpVGjP05zSZnLBTVdnIgnU14KIod9PAG"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13qWhvwNh8ZqlRMliKVEziCGo9ARz04vk"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gVMBEKVVVJ9ij3i_dN36psTLxbbb3PDV"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UjEcMIoAwPz8_9IqeL6v4z-uZMRvgmFO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bKE_H5n9AHuT_vlSWPat4W3_CyU36APX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_mQNxXO9Jhq6qF5Y3h4kAE_7kk-3gqdN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1360ygB5bJJ60H4xLFN_buUeE0JBj7znY"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+
+
+
+      <h2 class="title">Day 2 拿骚（巴哈马）</h2>
+      <p class="text">早上7点邮轮靠岸，我们6点就起床了，先上楼吃了自助早餐把自己喂饱，拿好相机和自己做的攻略，在7点一开舱门的时候就下船啦！这样早靠岸的时候下船的人真心很少，前后都几乎只有我们两个，所以下来就对着我们的邮轮一通猛照（昨天上船的时候看不到船的全身）。推荐早点下船，因为太阳没那么强烈不会很晒也不会很热，比较适合游玩，到10点之后就是超级晒了~~</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/11D_ozVefU_bfX1nM498zwCCDRyty18i9">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/18_ETdHcOc-u7LxgEcetv3XzYSQPRRlH-">
+        </div></figure>
+      </div>
+      <p class="text">网上很多人到了之后都是去 天堂岛 的亚特兰蒂斯，或者去拿骚市中心，其实攻略做好的话两个都去是完全来得及的！有人说这样会不会很赶啊！答案是安排好了就不会，我们都逛完吃完饭还又逛了一会儿街买了一些纪念品才上船。而且因为邮轮工作人员跟我们说最好在起航前半小时回来，我们就是按照这个时间回来的。</p>
+      <p class="text">下船之后在码头就有司机拉活，可以打车去天堂岛的亚特兰蒂斯。公共交通不太方便，建议大家要去的话就打车。拉满一辆小面包的话，每个人是4刀。因为我们下船早，人不是很多，而且行程都安排好了要等坐满的话貌似要很久，司机开价20刀立刻走。我心想说太坑爹啊于是问能不能便宜一点，司机说那就再等一下只要有人要去不管几个人我们都立刻走，15刀。同意。没一分钟就有一对 加拿大 夫妇要去天堂岛潜水，于是出发！</p>
+      <p class="text">看了tripadvisor上说亚特兰蒂斯的水族馆是每人54刀的门票，按照复原失落的亚特兰蒂斯帝国遗迹设计的。瞬间心心念就要去。就是觉得门票略贵有点心疼。到了亚特兰蒂斯之后发现里面太大了。。。晕晕乎乎转了一圈就走到了水族馆进去了。。。进去之后心里还在问说这是水族馆吗？就这么进来了吗？难道我们是从出口进来了？不过立刻就被玻璃窗里面的景色和水生动物吸引，大清早的也没人，于是里面各种浪~~~~</p>
+      <p class="text">照片都是微单的原片（其实相机刚买来自己都不太会用），各位去的话实景只会比这个更美，水族馆里的玻璃都是大落地玻璃，基本整个室内都是只有光线透过水照进来，超级梦幻，感觉真的是在海洋里遨游，还有那些仿制的遗迹，简直是楼主最爱啊！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1LCfJnZeR3GBYWVp3EsQnteojIZqtCPns"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OYqn8WcsdVPZmklLJ5ZFibykYHDIBCBs"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1kXhyQforp_dcAYEJwq6xxGtt6WMWAeAw"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1myTQLw9G8roiyyK6_M86VSWW3p8PygoH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18JVjmYOLA3iRQhHb2V250x4TkENAiQdA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VWdcZEiceyafv9m7Fo90lZazPeU6LPMv"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12ZtxDDHr49ddZiHW6y15TTCxdsr9FZqH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1aiH8uydN2wKFZarpNTbAGJlejA4WSZkQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1TVJDMQgsqETDNn400XlTZ95XLKTjBfy0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17W1Q2_wBznl_UuAcGYPIqd0F2a2JN7x0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1DPIHPpT0uWVpcrpncvlr2x08klX5fKxv"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Pu_KrmdKFd-y8oqQKRMgf0m-Ify50WXn"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">逛完一圈刚出来就发现是从另一个口出来了，于是又晕乎了（之前错误的估计了亚特兰蒂斯的复杂程度，攻略做的地图很简单）。貌似是整个酒店花园范围的入口，好多旅行团才来，呼啦啦的往里走。我们还很纠结的想问水族馆的票怎么办，结果周围只看到游客都没看到工作人员。。。往里走了一些，好不容易找到一个打扫卫生的小哥，结果小哥听完了说，估计卖票的工作人员还没上班，一般逃票是要罚钱的！不过这次就算是给你们的福利吧！当场惊呆又欣喜，于是又欢脱的继续往里逛啦！</p>
+      <p class="text">往里走就是一些花园啊 水上乐园 什么的，还有金字塔状的水滑梯，不过都是太早了不开。想玩的同学有个套票，可以跟水族馆的票一起买。有不同的水上活动的票种，大家去亚特兰蒂斯的网站上都可以看的到。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1o9l7GakG0KRH0LZ9l8Tl5W9TTaLNEjKu"></figure>' 
+      <p class="text">近看 亚特兰蒂斯酒店 主楼，还有很多楼。。。这是最有代表性的一个。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1wRtS4nPDW70466P8W8Su2wBTstlQCMGo"></figure>' 
+      <p class="text">里面逛了一会儿之后想去下一个目的地了， The Cloisters Nassau，也可以叫Versailles Gardens and French Cloister。它在one& only ocean club的对面，也在天堂岛上。我们本来想走过去，因为google map上说20分钟左右可以走到。后来因为在里面转晕了想找个人问方向，结果工作人员说走过去要40分钟，但是有免费的接驳小巴可以坐！于是蹦蹦跳跳的去指定的地方等了不到5分钟，一辆小巴士就把我们带到了ocean club，过马路就到了要去的cloister！</p>
+      <p class="text">接驳巴士的等待处。基本每个楼门口都有巴士点，所以可以就近乘坐。线路稍有不同，问一下工作人员要坐几号线就可以啦，我们貌似坐的5号还是6号线。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1-o93hnvEiRZbkJXGRLg3hNXlHM-2NXao"></figure>' 
+      <p class="text">早上的阳光还不是很强烈，照的小花园有种静谧的美。加上又是只有我们两个人，真是一种享受！海边的小亭子看起来是举行婚礼的不二选择，面朝大海春暖花开好浪漫啊！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1g5nyNr1K6sROjUOlKKBB7YOSGRnaUb0P"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LdMdHGq7d8zK2p3yRAmbeQL_hSFe1dn-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1j6IyZsDDE4pGLwKYJ7Igvo_iTsPCtNsF"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">因为到达的时候小巴士把我们放在了离cloister比较近的地方，回去的话要步行回ocean club大堂等接驳车，所以就横穿Paradise Island Dr. 顺着小花园一路步行回去。这边的花园和雕塑也很有艺术感，估计都是一起打理的。走着走着就发现貌似错过了左转小路（其实我们是一直沿路走的，只不过有些trail不是很明显被我们忽略了），来到了海边。立刻被海水的颜色惊艳到了！沿着海边逛了一圈才恋恋不舍的回大堂等车。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1y2VF0PutW1fgLZbuRtq4jgtDyFf0DHgl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_ukqLFNhheJcoB_gaVYwjWSgum8IR4Oo"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17id5E9Or8KWEflWhKJdFxSSSyE6N_siM"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">问了工作人员才知道不用坐小巴回到我们上车的地方，这里一样可以帮忙叫出租车（大概是5刀一个人，记不太清了）。于是跟司机说我们要去市里的The Queen’s Staircase，翻译过来就是女王阶梯。司机师傅人看起来很好，之后我们下车傻眼了，左顾右盼貌似也不是我们要去的地方，只看见马上要开走的司机师傅一个劲往上指，我们抬头一看不远的地方有个稍微高一点的堡垒，只能硬着头皮上去看看了。结果发现是我们安排在行程最后的Fort Fincastle。因为后面到 圣胡安 还会参观各种堡垒，所以这个景点是作为拿骚的备选项的。不过既然来了就在堡垒的平台上逛了一圈，进去的话要2刀的门票。我们都对内部没什么兴趣（因为比起圣胡安的来这个实在有点小），于是就顺着另一个方向继续走，没两步就发现，我们已经在女王阶梯的上端啦！司机师傅果然是个好人！阶梯下端有好一段的马路是只能步行的，就是说如果车停在下端不但要走一段路还要自己爬上来，而停在上边不但多让我们来了一个景点还能少费些力气。真是感激！</p>
+      <p class="text">女王阶梯也叫66阶梯，是在1793-1794年间由奴隶修建起来的，提供了Fincastle堡垒到 市区的直接通路。两边都是参天的高墙，非常震撼。后来这个阶梯以 维多利亚 女王命名。实际上这个阶梯只有65个台阶，因为最底下的一阶被埋住了。碰到一些私人导游给游客介绍的时候我们还蹭着听了一段，貌似也是当年奴隶逃亡的唯一通路，所以两边的高墙提供了很好的屏障，让逃亡变成几乎不可能。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1XT9UkEQj70sTUTKQbr2GEjSPCavNs9S9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_6JRNEye3ImkG0Im8bJMMF29mEew06HO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UB5AUqFNJb4heD2EZmUxmrLR-BTn0X0w"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">接下来拿出自制的地图，步行大概10分钟来到了Government House。因为地图上显示我们参观完要继续向前走，就问守卫能不能从院子里穿过去。结果守卫立刻点头答应了，不过要在画出来的一条黄线以内走，不能出来（就是类似于一条把人行道和机动车道分开的线）。于是我们得以近距离的参观一下这个粉红色的小房子。</p>
+      <p class="text">其实我们相当于是从左到右横穿了院子，因为院子的左右两边各有出口分别挨着两条街道。而照片是在横穿过程中路过大门的台阶又走下去一点照的。大门有护栏而且不让进，所以也算是误打误撞的进来了~~</p>
+      <p class="text">之后沿路走去了巴哈马 国家美术馆 ，因为是周一所以不巧闭馆了就没能进去。楼主相公很鄙视的说这么一点小楼估计里面也没有太多东西。。。。虽然话是不假，但是你们懂的，来都来了。。。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1HRb_oBI5nT5fpHJ_Xvs4umxlLFzhucRX">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/16zlKjJ2lIg-Ig6xI0nwql7rVPJ_CgPFF">
+        </div></figure>
+      </div>
+      <p class="text">这时候太阳已经比较晒了，楼主都是小心的找阴凉的地方走，不然很容易被晒伤！大概5-10分钟就来到了 海盗博物馆 ，也是拿骚的特色博物馆。外墙的装饰都是大爱，不过因为之前看了很多评论，大部分说13刀进去看到的都是假的海盗模型，不很值得，所以就没打算要进去。门口扮海盗的工作人员是个老大爷，特别入戏，追着一群路过的孩子满街跑。。。就算没人上前搭话他也会怒吼一声 “我要把你们都杀光！”。。。看到楼主相公在给楼主照相，瞬间上前跟楼主合照。。。好敬业。。。</p>
+      <p class="text">街口一拐就是Christ Church Cathedral，基本不用找就看到了。教堂里面基本很少人，走累了的话路过这里都可以进来歇一下。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1hOKAVq1i918l__01ROIpRcdDLTk-3eaX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1FJAZdnOcQMx1OB061O5Yp8-M3IO0Tv2u"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1qJeFsYn9AMSZ6js7khPGEO7OW64lNSQn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1yWmORNk9xaez_4aS7HUAiD89br0nz_6Z"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18PqRrxIqZBOCr2fLE_3zy9AwX9LVuEwp"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看一看攻略上的景点都逛得差不多了，因为早饭吃的早现在也饥肠辘辘了，出发吃饭去！之前在各国外旅行网站上搜了很久终于找到这家性价比较高的餐厅，几乎一致好评，所以就奔着目的地去了。在这里吐槽一下去这些 加勒 比的小岛做攻略真是资源很有限啊，各种英文的论坛网站的翻就为了找一家能吃到有点当地特色又性价比高的餐厅，真是不容易。</p>
+      <p class="text">餐厅叫Bahamian Kitchen，地址在Trinity Place（很短的一条街，我没查到具体牌号），就是巴哈马中央银行的对面。我们点的头盘是比较特色的海螺肉沙拉，两个主菜分别是羊肉和煎鱼，都非常非常好吃！这一餐被评为我们此次邮轮上岸吃到的最好吃的一餐。连小费一起不到30多不到40刀。</p>
+      <p class="text">吃完之后还有点时间，就顺着巴哈马主要的商业街逛了一下买了一点纪念品。大概半个多小时之后已经逛到离港口很近的地方，时间也差不多了就上船啦！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1J5UjqWKHuZ3S51w5wvyzaFMeP0iWpk2s">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1PqT03fbHf_4rlr-TjBV-ib3tkq1eUW7l">
+        </div></figure>
+      </div>
+      <p class="text">上船之后洗了个澡，整理一下照片，躺在床上歇了一会儿，毕竟7个小时走下来也已经很累了。起航之后小睡了一下就起来收拾房间准备吃晚饭去了，结果不知道是风浪有点大还是别的原因，楼主和相公两个人都有点晕船不太舒服。不过楼主过了大概一两个小时就好了，吃晚餐的时候也没有不舒服，但是会感觉得到船有微微的晃动。楼主相公感觉比较明显，吃饭的时候也一直不太舒服，不知道是不是这一天太累了或者刚上船不太适应（可是昨天起航我们都好好的一点事情也没有）。</p>
+      <p class="text">这种晕船的情况在过了一夜之后就好了，只会感到船在微微晃动不会不舒服了。而且基本只有在走路的时候才会感觉得到，坐下的时候就基本不觉得了，躺在床上更是没感觉。</p>
+      <p class="text">晚餐楼主点了海鲜意面，楼主相公点了另一款牛排：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1U1lG7US_2co8bvY5--7mZime2zBz6Rpi"></figure>' 
+      
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.如果晕船的话要提前准备好晕船药，房间的卫生间里有个放洗漱用品的小筐，里面也有成小袋包装的一两片晕船药，不行的话就赶紧吃上睡觉。再不行的话就去找船医开药，总之不要苦了自己。总体来说邮轮因为体积巨大载重数量也高，还是比较平稳的，跟轮渡什么的不太一样。楼主和相公平时偶尔会晕车，但是这次并没有用上晕船药。只有在这一天晚上出现了晕船的现象，躺下睡一觉就好了。之后的几天时间里都像上面说的，走路可以感到微微晃动，但是完全不影响。
+        <br>2.在这里还要提醒大家，订邮轮的时候做好研究，哪些线路的哪个时段风浪比较大要提前看好。比如冬季的加勒比海航线就相对平稳一些，比起其他季节来不容易晕船。房间也要尽量安排在2-3层，按理来说越往下的房间晃动幅度越小，这点楼主深有体会。有时候去9楼的自助餐厅，就明显感觉比自己房间晃得厉害。
+        <br>3.出来的时候带一些现金，最好能预估一下大概会花多少，稍微多一点带个差不多的钱数出来。并且带些5刀或1刀的零钱也很重要，很多时候比如出租车或者服务生小费，或者买纪念品，是只收现金且不找大钱的。楼主的策略是每个港口游览的时候都使用现金，船上消费绑定了信用卡。这样既不用麻烦提前打电话到信用卡公司报备需要在国外使用，也省去了不必要的隐患。
+        <br>4.在起航时间前半小时回船是个 保险 措施，基本上我们都会这样做，主要是回来之后检票上船还要三五分钟，就是为让所有乘客按时上船留出了这个时间。虽然快起航时会听到找人的广播说xxx在不在船上有没有回来，楼主还是觉得他们是不会专门等你的，尽量不要赶着开船时间回来以免错过。
+        <br>5.亚特兰蒂斯的水族馆穿长裙拍出来好看！毕竟后面的玻璃窗里是仿制的遗迹，很大气的感觉。尤其是穿红色系棕色系这一类跟海水反差较大的颜色效果更佳。
+        <br>6.楼主这里有一个拿骚市区自己标注景点和餐厅位置的超简易地图，就是在google map加画图自己简单弄的。觉得还挺好，建议大家自己也可以做一个。亚特兰蒂斯那里可以随时问工作人员，他们基本都熟悉，所以不用地图也可以。
+      </div>
+
+
+      <h2 class="title">Day 3 海上巡游</h2>
+      
+      <h3 class="subtitle">关于邮轮整体结构</h3>
+      
+      <p class="text">由于是正经开始探索整搜邮轮，这里先详细介绍一下。嘉年华的船都基本差不多，这艘conquest一共分12层，其中最上面的一层从未上去过，貌似是VIP用的。整艘船翻前后两部分，每部分有时候会分成不同的功能区域，比如说6层前部有赌场，后半部就是酒吧和一个小型脱口秀表演场地。基本每层前后都是相通的，偶尔有不通的，比如3层前后就不通，如果要从前部走到后部，只能上一层或者下一层再穿过去。从上往下说：</p>
+      <p class="text">·        11层是托儿所，有专人负责和小型玩耍的区域；</p>
+      <p class="text">·        10层大部分是甲板区域，可以看风景；还有室内spa & fitness，大部分是需要付费的项目，有时候会开放免费体验；</p>
+      <p class="text">·        9层是自助餐厅，露天泳池，室内泳池， 按摩 浴缸，大屏幕。基本到处都是太阳椅，白天航海日或者晚上放电影的时候都是人满为患；</p>
+      <p class="text">·        7-8层大部分是不开放的客房区；</p>
+      <p class="text">·        6层包括赌场，两个酒吧和一个脱口秀表演场地。赌场也是唯一可以吸烟的地方；</p>
+      <p class="text">·        5层后半部是各式商店，化妆品，名牌包包和手表，首饰，纪念品一应俱全；还有一部分带沙发的休息区，有时候工作人员会在这里摆布景给大家照相；图书馆也在这一层；</p>
+      <p class="text">·        4层中部和后半部，是分别与3层中部和后半部打通的两个两层餐厅，用于正式午餐，晚餐或者航海日的早午餐；另外4楼中部还有艺术画廊和咖啡厅；而前半部小块区域是照片墙；</p>
+      <p class="text">·        3-5层前半部分是打通的一个三层剧场，一般歌舞秀或者戏剧都会在这里表演；</p>
+      <p class="text">·        3楼大厅是主厅，民谣歌手有一个小型舞台在这里，还有沙发休息区域和一个小吧台方便客人点酒水；另外3楼大厅也是综合客服和岸上游报团的服务台所在地；</p>
+      <p class="text">·        1-2层是客房；</p>
+      <p class="text">·        0层是医务室所在地，还有除了第一次在 迈阿密 起航和最后一次靠岸是从3楼主厅出入，其他时间停靠港口都是从0层出入。</p>
+      <p class="text">从5楼俯瞰部分3楼大厅： 9层露天浴池和水上滑梯：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1ljbun_HINKa9jRKPul9odDixW0X1VPtp"></figure>' 
+      <p class="text">甲板的日落： 甲板上被挂起来的毛巾娃娃： 很少人来的图书馆：</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1lfPlRXFNb23jh2aqh518sb07j2zA5yU4"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hizMOyr0e4eaQenl-KAzxC3hmrWF01_o"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-xq1yEq5CiBldxqKs5C98oKh-k_g7yDt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fNWg5cg8da1Mbf_C7cEAj1NTXOb5SHto"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      
+      <h3 class="subtitle">关于船上餐厅</h3>
+      <p class="text">船上餐厅分为自助餐厅和正式餐厅。分别介绍如下：</p>
+      <p class="text">1.      自助餐厅里面有很多专题小区域，包括 墨西哥 食品区域，三明治区域，快餐区域（主要是 汉堡 和薯条一类），披萨区域， 意大利 食品区域，甜品区域，水果区域。就像上面提过的，饮料主要是碳酸饮料和柠檬水，早餐会有果汁。基本上三明治区域和披萨区域开的时间最长，基本可以算是24小时全开的（一般会开到凌晨3点左右），其他区域都是按照吃饭的点开的（晚上基本到10点左右就结束了）。</p>
+      <p class="text">2.      正式餐厅分三个，一个是我们晚餐的餐厅，在3-4层的尾部，是安排好位置和时间段的，必须按照自己晚餐的时间断和桌号就坐。另外一个在邮轮3-4层的中部，是就坐位置随意，时间段随意的餐厅，是给那些不定时用餐的乘客的。如果订票的时候选择不定时就餐 会安 排到这个餐厅，但是一般不定时就餐的package会稍贵一些，或者是这家邮轮公司的忠实客户有时候也会有优惠待遇被安排到这个餐厅。最后一个在10楼，是steak house，需要付费的，大部分时间都在搞活动有打折。</p>
+      
+      <h3 class="subtitle">关于饮食</h3>
+      <p class="text">自助餐厅不必多说，花样繁多开放时间也长。唯一缺点就是午餐和晚餐没有果汁供应（正式餐厅里是有的，客房服务也有，可以随便点）。</p>
+      <p class="text">正式餐厅在停靠港口的日子会提供三餐，海上巡游的日子里则会把早餐和午餐合并成brunch，就是早午餐。与早餐不同的地方就是开放时间稍晚一些，大概9点才开始，但是有更多的菜色选择，比如说正餐吃的牛排啊三文鱼啊都有。</p>
+      <p class="text">船上大部分带酒精的饮料都不是免费的，点之前确认一下总没错。还有不管是正餐还是自助都会有工作人员端着调好的鸡尾酒来问你需不需要，这些都是收费的，记得问清楚，以免糊里糊涂就花不少钱。</p>
+      <p class="text">9层自助餐厅： 正餐餐厅： 观光电梯：</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Jbdo0mXYe-wDvkYQGUGJQp8mNDxfUygf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bKE_H5n9AHuT_vlSWPat4W3_CyU36APX"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mTCmO2PyZE8UISa2tVKdEJpYSPDOn6cZ"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+      <h3 class="subtitle">关于购物</h3>
+      <p class="text">邮轮的第五层前半部是商店街，什么化妆品电子产品包包衣服糖果纪念品，基本都能找到。虽然楼主觉得样式不多，但是想买的人总会找到满意的。一般从上船开始每天就会有N场类似“购物指南”的讲座，也会介绍在哪个岛买什么产品最划算，有需要的同学可以去听听。</p>
+      <p class="text">一般整个行程结束的前一天商店街会有大甩卖，虽然楼主觉得羊毛出在羊身上，打折也就是这么回事，不过大家都跟不要钱一样。。。。</p>
+      <p class="text">商店街其中的一个商店：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/19SF-m23SZousP2N8awW_dUnVrdqV3BGS"></figure>' 
+      <p class="text">航海日早上睡到自然醒，其实说是自然醒，因为生物钟的原因，阳光洒进窗户来基本就开始慢慢醒过来了。8点左右睁眼起床，洗漱一下就去餐厅吃早午餐了。前菜主菜甜点吃完都快10点了，于是中午只是去自助餐厅吃了点水果，等待晚上的正装之夜吃龙虾！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/13AmmVcLxa_dWzimXbr5AA4tbhwrhg7k6"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1BHqfUt6u8wPoI1EApGlMFqHGyqzFS05m"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OFLtiqlu7HiEo9CductMPt2D1jQBzjoC"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1NIZgyzvjlBHx9UGenOOAH4etZNEZhqDU"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1oWPTsqVKsVOlAbK_KtzwUBJDtlBpExGD"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">饱餐一顿之后就是去甲板晃一圈，再看看有什么好看的节目。我们很喜欢大厅里的民谣组合，曲风婉转优美也不会太吵，而且沙发也适合休息，所以常去。另外还参加了桑巴舞还又另一种南美舞蹈的教学课，很有意思。船上的赌场发了两张小额免费券，我们也去试了一把手气。还去了哈利波特和老友记的猜谜活动，虽然成绩非常非常不理想。。。。不过就图一乐嘛！至于露天泳池，感觉风吹的有点凉不太想去游。热水的按摩浴缸里又常年都有身型庞大的大妈在。。。。一般下去半个浴缸就没了，所以也不太想去凑热闹。。。</p>
+      <p class="text">从上船开始，每次晚餐或者下船，还有一些特殊时刻（比如第一次起航登船或者酒吧生日派对），工作人员都会拿着相机给你咔嚓咔嚓几张，然后把每个人的照片放在照片墙上（我们船是在4楼的整个半场区域），你自己去找。 找到了如果喜欢就可以买，一般是根据尺寸不同价格不一样，最低好像是12刀左右一张。基本价格都在20刀。没有电子版。是的！非常坑人！</p>
+      <p class="text">我们没事的时候喜欢去逛一逛照片墙区域，看看前一天工作人员把自己拍的怎么样。海上巡游的两天晚上都是正装之夜，会在一些楼层摆出很多背景专门由工作人员给你照相（有点像简易艺术照拍摄的感觉）。我们正好有之前赠送的船上消费券，于是买了一张穿晚礼服的照片，感觉很拉轰！哈哈哈！</p>
+      <p class="text">在楼主前面拍照的老爷爷们：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1XGIvev3WvzhNVX-FwzHIxSSPucRF-0GZ"></figure>' 
+      <p class="text">下午3点左右可以去正餐餐厅喝下午茶。基本就是各种果茶花茶的茶包，加上小点心。</p>
+      <p class="text">晚餐主菜是龙虾，楼主最爱吃的食物之一！本来想说怕吃不了，想只点主菜（每道主菜一只龙虾尾），可以多点两只龙虾吃，结果实在是拉不下这个脸来还是点了头盘。后来发现周围的人都是N个主菜的点，顿时悔恨自己脸皮薄啊。。。。</p>
+      <p class="text">每次晚餐差不多快吃完的时候服务人员会一起来表演个节目，有时候是跳舞有时候是唱歌，总之非常欢乐，晚饭气氛一下就超级热了！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1c35BcOvFr3crxmBX0jCvFvRRVYqU6bDn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wDowAsuQY89xOqYUsj-7k8Dyx1xjZKv4"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hEs3Euq_qZVCffXPMcbuGpISe4daQAmO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ssZbIT0Avc4dGDlpjMq4CM7qebr6TzdU"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.不要不好意思点菜！要知道你的钱已经付过了，多吃就是多赚啊！楼主夫妇因为矜持头两天都不太好意思要两份，结果周围不管白人黑人胖的瘦的通通都是N个头盘N个主菜的点，后面楼主夫妇也就放开了（说是放开了，其实因为楼主夫妇属于少食多餐型，一顿真吃不了多少），最多的时候每人点了两个主菜（就是龙虾那一天，因为量太小了实在是不够吃）。。。。
+        <br>2.每天晚上会有第二天船上活动的安排表送到房间来，可以预先安排好不至于到时候太混乱。
+        <br>3.给房间清洁人员和餐厅服务生的消费都是预付的，每人每天12刀，所以就不用再给了。叫客房服务送吃的还是稍微给一点小费吧。楼主叫过一次早餐，结果因为某些原因送错了，而且是过了接近两个小时打电话催了三遍才送到，所以没有给小费！楼主最讨厌等饭！
+        <br>4.船上大部分活动是免费的，需要收费的话会标出来。
+        <br>5.楼主带了两套正装之夜穿的衣服，因为旗袍非常轻也不占地方，而且拍出来好看。没有的同学带一套就够了，一般两次正装之间会隔2-3天，没人记得你上次穿了什么。
+        <br>6.如果在照片墙看着自己拍出来的照片好看，就掏钱买吧！拿手机或者相机翻拍是会被制止的。。。其实楼主觉得早在工作人员给你拍照的时候你拿自己的相机让旁边的人帮你拍一张效果出来也非常不错！
+      </div>
+
+      <h2 class="title">Day 4 圣托马斯（美属维京群岛）</h2>
+      <p class="text">前一天好好在船上休息了一天，终于到了本次邮轮路线的最南端，圣托马斯岛。快中午的时候靠岸，正是太阳最晒的时候，下船就坐上了去市区的出租车。说是出租车，其实更像是四周是没有遮挡的小巴，也有点像 泰国 大号的突突车，只不过座位是一排一排面朝前的，上面有顶棚，最两边靠外的有扶手。一车大概十几人左右，坐满发车。这种将近中午的靠岸时间，基本上大家都出来了，很快就发车了。</p>
+      <p class="text">Again，楼主夫妇没有去市区主干道购物，而是步行去了早就计划好的景点。所谓的“出租车”把我们放在了市区主干道，我们问好了路就朝Fort Christian走过去。网上看到的照片是深红色的外墙，加上旁边稀稀落落的树枝拍出照片来还是挺好看的。结果到了一看很遗憾的用铁栏杆围起来了，说是在修复，只能在外面逛了一圈。马路对面就是Legislatureof the U.S. Virgin Islands，也就是整个美属维京群岛议会和立法机构所在，可以免费进去参观（不过感觉没什么可看的）。</p>
+      <p class="text">之后向北走是Frederick Lutheran Church，大门敞开随便参观，不过里面好热。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1KjpJni_Z_9W3-FNZqAas-0HbBja25Al_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1kqxUcD1XCy3yg2QhhHcGOegLfUJ8Rt0_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WvLzk5px-ERWmllbJ_v6fxn-PtBoeZNR"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Rg_RBb1mjv1mwMKBX_g9s45PT1Fu_vUa"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">离教堂不远就是所谓的历史遗迹Hotel 1829，就是一家比较古老的旅馆，规模不大，现在作为岛上的一处历史遗迹。旅馆庭院里的一片琥珀石瀑布是世界上最大的，虽然看起来只是一小块墙壁上流着水幕，其实这面墙是有一万两千块琥珀石砌成的。这里是所谓Historic Tour的一个景点，如果没有参加这个tour的话，除了大堂之外就不能进去了。楼主夫妇一开始并不知道，穿过大堂就想往里走，结果被老爷爷拦住了（对！就是照片上那个很霸气的大爷！），说没有参加tour的不能进去。我说怎么才能参加呢，他跟我说你去哪里哪里报名，这个tour包含岛上的7、8个历史景点，然后会发给你一个手环，带着这个手环跟着导游走就行了。如果掉队的话有那个手环也是到处都可以进去的。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1SZyAJ6sQLwjDovUEbMxfbEoJlTyhy3tx"></figure>' 
+      <p class="text">这就是琥珀石的瀑布墙：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1B8nmi-rO_ORAjDDWGS0A7bHUSLo4ws_D"></figure>' 
+      <p class="text">酒店大堂，很有怀旧的气氛：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/10Gy-WwZzheqQKMbETuaQKYIz5dUkR5Nj"></figure>' 
+      <p class="text">楼主其实来之前已经在网上看到过这个tour了，但是不能网上报名。后来楼主觉得还是自己安排时间比较方便一点，而且团里有一两个景点楼主不太想去，其他楼主想去的景点这个团也没有，于是就没有报。出来Hotel 1829向前走一点就是99 steps，因为每一阶高度都不大，沿着爬上去并不是很费力。这个阶梯是市区内几条台阶中最好看的一条，而且砌台阶的石头是 丹麦 殖民时期从丹麦运过来的（这些石头是作为压仓的重物带来的）。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1FplKb8nCgMjJGiCLRVk-ES0NQx4qZM3R">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1VIrTZ5LUJuuXvNjpA242qNF662Ek9Ixj">
+        </div></figure>
+      </div>
+      <p class="text">夏洛特 艾米丽市区并不大，没几分钟就走到了Government House。逛了一圈沿着它旁边的阶梯继续往高处走，大概十几分钟会看到三女王雕像。绕过去再上坡一点就是黑胡子海盗碉堡。到碉堡的时候又被告知参加tour才能进去，每人10刀，包括Hotel 1829和一两个别的景点。本来觉得价格比较合理，结果发觉大部分景点楼主已经去过了，再去一遍的话又耗费体力又耗费时间。加之在tripadvisor上看说黑胡子城堡特别鸡肋，就一个两层的小碉堡，绕一圈下来还不到10分钟，里面几乎什么也没有，就是有个小窗口可以看到海。于是决定还是不参加tour了。</p>
+      <p class="text">Government House:</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1371Ivhkhp_YK2Ek0Z1Cb5kaoSEi0_KZO"></figure>' 
+      <p class="text">一路上都是清新的颜色，心情大好！ 三女王雕像： 黑胡子海盗碉堡：</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/13emJRVlI1arcQQlSQjue3eP39T8jD24g"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1vCxRdR6L7uaieZGc0wQKiMkZMAzk5XOk"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZPcndR-x57X-ykujItLz3WCLUh3Y_od4"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看看早就过了吃中饭的时间，也懒得找餐厅了。幸亏早饭吃的很晚又很饱。坐在旁边的树荫下吃完了带来的三明治一路下坡绕回三女王雕像，想着回到市中心主干道那里打车去Drake's Seat，因为黑胡子碉堡周围叫不到车。继续下坡往市中心走的时候想走另外一条路，于是跟着也是从山坡上下来的一些游客一起走，心想着反正大方向是对的肯定可以走到市中心。楼主手里有个简易的自制地图，所以对于方向还是很有把握的，而且看起来走这条跟来时不一样的路也并不会绕。走着走着就发现跟着人群一起拐到了一个类似纪念品商店的地方，卖的都是跟海盗相关的纪念品，画面的走廊和花园也都是海盗的雕像。一问才知道这是 海盗博物馆 。</p>
+      <p class="text">楼主很开心啊！这个景点之前没有很留意，不过看起来还不错啊，而且是这么稀里糊涂就来了，感觉赚到了啊。赶紧逛逛买点纪念品，顺便开启欢脱模式跟海盗雕像们各种合影。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1A7YV-a_ieJGQdpX_gg-4To6x4LL5S3lJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1jSwOBGFok-W0GhYX4zImr7ycz1XO8-vB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mxdTc13HzhSQnOOoXJmUS8NVMG_bUOjV"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">再跟着人群出去接着走，心想快到主干道了吧。结果！没两步就发现这个情景好熟悉啊，又走了一阵赫然发现这难道不是Hotel 1829里面吗？！楼主夫妇又这么晕晕乎乎的跟着人从不知道哪一个入口进来了！一直走到出口才发现这不是当时不让我们进门的老爷爷嘛？！原来这个hotel有好多门，估计我们是跟着人群从另一个门进入，又从我们一开始见过的那个门出去了。。。。。</p>
+      <p class="text">到市区主干道商业街，跟一个正在堵车中的“出租车”司机谈好价钱15刀去Drake's Seat再去 梅根 湾，因为Drake's Seat在山顶，可以俯瞰整个梅根湾全景。而梅根湾被称为世界最美十大海滩之一，后来司机师傅跟我们说 美国 有两届总统在这里度假，每次都住一周以上。结果司机师傅理解成了我们要在山顶看梅根湾全景然后回来，于是欣然同意载我们去再把我们带回邮轮港口。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1OEI0vSmDhKPglwM_MfK-YYBeQ4eZiDdg"></figure>' 
+      <p class="text">到Drake's Seat之后我们下车游览，司机师傅在一边等着。其实就是一个相对制高点，主要是看风景，并没有多少可以逛的地方。一会儿我们就上车了说可以去梅根湾啦！司机师傅很茫然说啥？不是回邮轮港口吗？我们也很茫然，不是跟你确认过两遍这之后去梅根湾玩一圈再回港口吗？！司机师傅有点慌，说哎呀我理解错啦！我没有时间等你们在梅根湾玩完啊我还要立刻回来的。</p>
+      <p class="text">于是楼主也很纠结，在山上也不可能再回市中心重新叫车，因为Drake's Seat正好在梅根湾和市中心的中心地带，来回很折腾而且时间也不短（之前开到这里大概15-20分钟）。司机师傅又说我把你们送过去你们自己打车回来吧，不过因为路程又变远了要25刀。楼主不高兴了啊！心想着我们已经反复确认过了你自己理解错了现在这是要坑吗？！但是也不能不坐，因为事先做过功课知道大概的路程和价格应该在16刀左右，于是脸色一变说看在你陪我们来了山顶的份上20刀你把我们送过去，不然你就把我们送回市里我们自己再找车去。成交！</p>
+      <p class="text">梅根湾是我在国外第一个经历的收费的海滩，每人4刀。楼主没有游泳的打算，不过有戏水的计划，因为早就听说水质不错，而且风景很美！由于这海滩名声在外，自然是少不了人。正赶上太阳已经西斜，也不如中午这么晒了，足足欢腾了一个小时左右。梅根湾是一个著名景点，打车自然不必担心，有工作人员组织大家坐上去各自目的地的小巴车（也就是出租车），不管是去市中心逛街还是回港口，都跟来时一样，人满发车。本来想着还有一点时间去商业街逛逛，后来想想一路看来商业街上都是卖珠宝啊什么的不感兴趣，还是早点回船上休整一下！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1KySOrEjgrPZ1tPZV3Mz37WPJhN68EZaB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1HeviLzFhcF90WgnUSFaxiNNH4e7xtPte"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1pjs7D_p1fmR7XzdMeQwPmmGYeNinsf2F"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">回到船上歇了一下去晚餐，今天是主菜点了蒸鱼，楼主相公点了另另另一款牛排（他平时最爱吃的就是牛肉啊啊啊啊啊）。甜点的樱桃冰淇淋超正点！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1g6W8_E55zEq9Z3nAx0bpf9cu28MNAtLN">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1rw8QSHJtsEjp29Decqri3rrJc6vmCxbu">
+        </div></figure>
+      </div>
+
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.像圣托马斯这种小岛的“出租车”形式非常特殊，既不打表也不会宰客，而是有个大概的价目表。比如说从不同的港口到市中心商业街4-6刀不等，去MagenBay则要每人8刀左右。具体的价格参照表可以在圣托马斯的旅游官网查到。提前做到心里有数很重要！虽然感觉普遍要价不离谱，但还是以免被坑！
+        <br>2.不想费劲做攻略的同学可以直接交钱参加各旅行社的Historic Tour，官网也有相关信息，一般是1-2小时，大概3-5个景点。
+        <br>3.梅根湾因为名声在外，其实很多人去，但楼主觉得主要是海滩周围依山傍水的风景很不错，沙滩本身并不很出彩。
+        <br>4.自制地图依然是利器！
+      </div>
+      
+      <h2 class="title">Day 5 圣胡安（波多黎各）</h2>
+      <p class="text">依然是早上一早起床，7点靠岸就下船游览了。因为两个著名的碉堡都是9点才开门，所以先去逛了一些开门早的景点，比如说Casa Blanca，不到8点半就开了。</p>
+      <p class="text">在这里要吐槽一下圣胡安的交通。老城区本来就不大，走到Casa Blanca 大概不到20分钟的样子。可是楼主不想一大早就把体力耗光，于是决定乘坐免费的市内观光公交车。之前在网上做过研究，路线和停靠站点都研究好了，结果等了半天错过好几辆之后发现，跟网上说的不太一样啊！红线、绿线和蓝线根本无法从车体颜色上区分，因为他们都是绿的！而且路线也不太一样，只有两条路线。因为之前就听说这种观光公交在时间上不怎么靠谱，在等了半小时错过了两辆之后我们勇敢的跳上了一辆车，结果发现这不就是刚才我们错过的那一辆嘛？！我们还特地问过司机去不去city hall，他说不去，我们才没有坐，结果这辆明明就是去的！</p>
+      <p class="text">这些观光公交的停靠站都是以数字命名的，路线图请参照下图。同时要提醒一下大家，下邮轮的码头一般是4号码头或者3号码头，2号码头在下船后出来的左手边，也就是地图上西侧。如果下船的乘客很多，会有不少人乘坐这个免费的观光公交。这时候大家可以走几步去2号码头坐，因为整个路线是环线，而2号码头是最后一站（14号站），4号码头是第一站（1号站）。这样既可以上车就找到座位，也能避免人太多上不去车的尴尬。</p>
+      <p class="text">这种观光公交的介绍在这里： http://www.puertoricodaytrips.com/free-trolley-old-san-juan/</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1nKA3rRS6ICiZw6xnMBc0shghHWhloeRU"></figure>' 
+      <p class="text">City Hall，后面那辆绿色的就是传说中的观光公交：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1uPDfsBLtrTFGbROoUoLqKuh-RRTkq5x9"></figure>' 
+      <p class="text">看来人品果然是守恒的，前两天各种稀里糊涂的好事今天都抵回来了。这是后话。于是在晚了半小时的情况下我们匆匆逛了下city hall 和Cathedral of San Juan Bautista，又步行到了Casa Blanca参观。它最早是作为一个‘fort’，后来被西班牙驻军当做宿舍使用。现在作为一个展览馆免费参观，保持了当年室内装饰和家具的原貌，展示了当时岛上驻军生活的场景。工作人员正闲的要命，很热情的为我们介绍，感觉都快是私人导游了。</p>
+      <p class="text">教堂：</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1qJzRpyFPp03JemCqTQjE4gWcWVaAP6R9"></figure>' 
+      <p class="text">驻军宿舍：</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/12cbz8zDsq3B0-uvR_fs8MfBnG1kkSulJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1DxKfv4rXBNsm7vJqesXmxIVr4h6elVgK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1znkZ1YVqS5CdwWaWa1-DrBQdb54wAOAH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Y2jEIiHMFIgGsqsKoZzO0otkN48FMbYB"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">圣胡安老城的早晨很安静，走在石头路上偶尔会觉得有点硌。路上偶尔会碰到打扫自己店门口的大妈，很友好的向我们微笑致意。彩色的房子在朝阳里散发着清新的气息，感觉超级好！</p>
+      <p class="text">从Casa Blanca出来，楼主特地问了一下工作人员如何去圣胡安门（San Juan Gate），因为手上的自制地图感觉有点奇怪，明明是沿着海边有路，google map指示的路线却要往市中心绕一点。在这里提醒大家不要根据地图自己想当然，认为有路就可以走。或者盲目相信导航，因为这种小地方的导航不一定好使。果然，工作人员给楼主指了一条跟地图和导航都不完全相同的路。后来楼主发现，自己看地图认为对的那条路其实是在城墙里面，跟城墙外面沿海的路海拔高度差很多，根本不相通（后面会详述）。而导航指示的路上有个铁门，关上了就不能通过。按着工作人员指的路顺利到达圣胡安门！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1kpYGgPjHzJkBBbB8O7kKXWTQ7LrS2xSX"></figure>' 
+      <p class="text">在这里详述一下圣胡安西南部城墙周围的路。它的城墙很高，而且城墙里面（尤其是老城区西部的城墙里面）海拔比外面高很多，这也就是为什么圣胡安门这么高大的原因（圣胡安门就是城墙上的一个门）。从地图上看是看不出来的，因为并不会画出城墙来，于是楼主想当然的认为城墙里沿着城墙的路和外面是同一水平线上，可以互通。其实是不行的！所以在这附近区域行走的时候不要害怕，一定要多问路，才不至于走冤枉路。</p>
+      <p class="text">这个在后面也有体现。楼主从圣胡安门穿过（相当于从城墙里面到了城墙外面），就想继续前行去La Fortaleza，也就是总督官邸。走了好一会儿发现在城墙里面已经到了楼主的目的地（如下图），但是如何走到城墙里面成为了问题！继续走发现越走离目的地越远了，还是没看到连接城墙内外的出入口，问了当地人才知道，要么一直沿着海边绕到港口处进入城墙里面再绕回La Fortaleza，要么直接回头在圣胡安门那里再进去。咬咬牙只能回头了，貌似往前走绕的路更多。。。。</p>
+      <p class="text">同学们可以看到上方城墙里面已经是楼主要去的地方附近了，可是这是要让楼主从墙上爬上去吗。。。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/182ssInYo3N-6dhODaw2BbCjQO-bqPPcw"></figure>' 
+      <p class="text">总督官邸，圣诞节快到啦！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/19x4oyt2ZuDsJPTdjIUvqat8OIgKj8gBH"></figure>' 
+      <p class="text">按照楼主制定的路线来讲，之后就顺着路走到2号码头坐轮渡去百加得朗姆酒厂了（Bacardi Rum）。结果到码头发现有一班船刚开走，下一班要等半小时！瞬间觉得好悲凉，于是决定不要浪费时间，把后面的计划提前，坐观光公交车先去Capitol Building。因为知道可能这个公交也要等很久，而从2号码头步行去Capitol Building怎么也要15-20分钟，所以只能看船先来还是公交先来，有哪个就先去哪里。</p>
+      <p class="text">等了将近20分钟终于还是公交先来了，这次坐的绿色的直达线路（就是不在city hall附近绕来绕去的线路），所以很快就到了Capitol Building。从外观看就很大气，再加上前面的广场靠近海边，平添了几分气势。这里是免费参观的，之后我们还在大厅里遇到了小学生的鼓号队表演（好像是当天本地学校有什么活动）。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1lDzP4eomGd6CV33cAYhIKS4xPV-WA_CM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ejZqZGNsGbmtu3rccgSvuqvbzHivsdQ-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15E0Z0klz_mLrdvxIJ3hOFqplUfcXBXJ7"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">离这里不远就是圣胡安老城著名的两座堡垒之一，Castillo de San Cristobal。它与莫罗堡垒（Castillo San Felipe del Morro）有联票，每人5刀。一定记得把收据收好，这就是去莫罗堡垒的进门凭证！这些堡垒比拿骚或者圣托马斯的那些都要巨大坚固，每个逛下来少说也要1小时左右。而且堡垒上面很多地方都是无遮挡物的，海风吹得太阳伞也不好打，请务必做好防晒！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/16pyfzp98Z8GKvmBACOJQPJovmmBmw6FN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1w51uAQLoZp0EbRiaoYyfCKYfKanr8o6l"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Tc8yNuEtM-KfbPuQ8UdTw-bmmJEbf8P-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1H7_j3dKWro8XE9uo10EX6t92w-HSEcHW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/193DRbcKb_ZgJ1thRRYR3OAwArMz3MKDR"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17Uy5Pb7Tl2yZSaubJppOOaHB8g3IXBEV"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">出来之后想坐公交去莫罗堡垒，无奈公交又不按常理出牌了，等了20分钟依然不见踪影，只好一边向前走一边找机会打车。圣胡安老城一般会在某些地方有等待的出租车，不然在路上拦截是很困难的，因为毕竟邮轮下来游玩的游客有很多人！出租车在这种时候完全供不应求。看攻略也有同学是从Castillo de San Cristobal走到莫罗堡垒去的，这里要说明一下，走过去大概20分钟一共1.6公里，正常来讲是没问题的。如果是傍晚时分或者多云的天气走过去比较舒服，像楼主这时候已经是在正午时分了，天气又特别晴朗，一个大太阳顶着基本上不到5分钟就快中暑了。关键是一路走过去的那一条街，只有一边是有房屋的，另一边几乎没有任何遮挡物，加上正午太阳的角度，简直要疯！走了两步在一个极小的广场周围找到一辆小面包样式的出租车，太热也懒得讲价了，大概十几刀的样子，打车到了莫罗堡垒。</p>
+      <p class="text">下车就看到了网传的“大草坪”，也就是正如下图所见，不管是打车还是公交，下车点到城堡门口还有至少400米的距离。并且非！常！晒！又是没有遮挡物太阳伞也打不起来的情况！防晒霜涂涂涂！</p>
+      <p class="text">楼主出示了之前买的联票收据（其实上面只是说你付了5刀）就顺利的进去了。这个堡垒比上一个还要大一些，所以建议大家规划好时间，这个堡垒至少可以逛1个半小时左右。楼主因为之前各种等公交车浪费了至少一个多小时，再加上感觉和上一个堡垒有些相似，而之后还要去朗姆酒厂，所以并没有仔细逛。要是两个堡垒都想逛的朋友可以先来莫罗堡垒，逛完再去另一个。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Bha9Zs37z2CyPXag7MXvcGFfUhK0LLvB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1K90ld4b1AuJH_U6W6A5E_cjLgRIMmIF3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1SSYbDR3uaboGvXdAv9l8oVunQ3sAJfLy"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1sU405_LjqHPFnQ8gOJGYfJqmgy-Su6-9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1n3S--TfBiipscvnqWjgJbbqsqzSPfhRi"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1sKQdu1D0kr34qCYvzVTrXdhtR9ZwIu9t"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">继续顶着大太阳出了堡垒走到街上，打车到2号码头准备坐轮渡去百加得朗姆酒厂。朗姆酒厂在一个半岛上，是可以从老城区开车过去的，大概20分钟到25分钟左右。但是直线距离坐轮渡的话最短，而且只要10分钟左右的时间。这里给大家提个醒，坐轮渡去是没有问题，而且票价也很便宜，单程每人0.5刀。但是！楼主就是这里考虑不周了，等轮渡的时间没有算上啊！问售票员还有多久下一班轮渡来，售票员说大概10分钟，于是楼主就相！信！了！结果忘记了那个公交车的教训，足足等了快半小时才来！</p>
+      <p class="text">本来还安排从朗姆酒厂回来老城区再午饭，楼主提前把餐厅都找好了啊！这一上午等这个车等那个船的看来肯定是来不及了。匆匆在码头的subway趁等轮渡的时间吧午饭解决了。坐轮渡到了Catano，按照之前获得的信息，出了码头右拐，走大概一个街区就会看到一个停车场，几个司机会在停车场门口拉客去Bacardi 朗姆酒厂。也是小面包车，大概能坐7-8个人的样子，基本快满了就出发。单程每人3刀。</p>
+      <p class="text">大概10分钟之后到达了酒厂正门，进去就看到一个大亭子，是游客中心兼酒吧，在这里买票。楼主很困惑的是之前听说是免费的tour，结果完全不是啊！每个人12刀门票，包括45分钟的tour，一个Bacardi的纪念杯和一杯免费的鸡尾酒。因为tour是有时间安排的，楼主夫妇就用等待的这段时间各点了一杯经典的薄荷Mojito。还没全喝完的时候就发现tour要开始了，于是各自端着一杯鸡尾酒登上了观光小车。嘿！一边喝着小酒一边坐在小车上缓缓移动听讲解，别提多带劲了！</p>
+      <p class="text">观光小车围着酒厂逛了一圈就停在了展览馆门口，这时候大家就要下车进去啦。先是进入有蝙蝠标志的大厅，导游老爷爷详细介绍了酒厂的建立和发展，接着去旁边的小影院观看了一部大概10分钟左右的Bacardi Rum的纪录片。之后在老爷爷的带领下进入到真正的酿酒展览馆，里面做的很复古，包括创始人的办公室和酒窖，整整一面墙都是用过的硕大朗姆酒酒桶，然后详细给我们讲解朗姆酒制作流程和木桶选用原则。从进入这里开始就不让拍照了，因为据说其中展示的有当时创始人制作朗姆酒的日志。另外还有各种朗姆酒的样品，大家可以去闻不同产品的气味，有樱桃的朗姆酒，香草味的，苹果味的好多香气迷人的味道！</p>
+      <p class="text">由于灯光有些昏暗，这时候楼主的酒劲上来了，开始有点晕晕乎乎像踩在棉花上一样。楼主平时酒量不怎么样，但也不至于这么经不起考验啊！估计是前面想着赶紧喝完，可以把杯子收起来不然拿在手里总是不方便，导致喝的有点急，再加上这屋子里灯效偏暗，暴走了一天又很累，一下子好想睡觉啊！于是一边靠在楼主相公身上一边被他暗暗嘲笑。。。好心塞。。。</p>
+      <p class="text">参观完这一区域，游客们会被带到一个小型的酒吧，这里会给大家展示三种以朗姆酒做基底的经典鸡尾酒的做法，有时间的话还可以做出来自己尝一下。最后会来到纪念品商店，当然这里也出售各种百加得的朗姆酒！楼主看了半天，本来想买一瓶回去的，结果考虑到带上邮轮没问题，但是还要坐飞机回家没有托运行李，作罢！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/18HZCVnRj2BEEw69HABZld_rYYdtjNJwt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/16tUgq0rbPty5NYMAU6dl80rAuZU_0CVD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1286-GjDPVAvJo7YMmtjxIAWtdvQKolrD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1FBzB6guE6F9Udvq4qVy3NCa2E9XFCC0k"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Zs9Ix1k5h1PxS3MgMtA6r6xr7pyklXdY"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">看了看表还剩40分钟左右邮轮就要开了！因为来的时候轮渡买了往返的票，火速打车去了码头，可是根本看不到轮渡船的踪影，而且也不知道何时才能来！如果等20分钟再加上路上10分钟，还有上船下船的时间，根本来不及赶上邮轮起航啊！果断让司机直接送我们回轮渡码头！因为明显就被看出要赶邮轮，没有办法讲价，只能忍痛40刀成交。20分钟后就到了老城区的邮轮码头，赶着最后一批回到了邮轮上，离开船只有10分钟了。。。。好险！</p>
+      <p class="text">回顾这一天基本是都是在暴走，人品守恒前两天各种意想不到的惊喜，导致今天等车等船耗费了相当一部分时间。好在是想去的地方都逛了，也不枉这么折腾一番。唯一的遗憾是没吃到当地的特色菜，下次来补上！</p>
+      <p class="text">回到邮轮上好好休息一下！依然是晚餐：烟熏三文鱼和金枪鱼，焗蜗牛，烧虾，还有据说是主厨自创获过奖的烧鱼。甜品是冰淇淋蛋糕（有个很拉轰的名字叫Frozen Alaska）和巧克力蛋糕。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1XgSG-HaD1_t-mhICecwvzGV2ccESy4el"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VEkTa5nBF71mZQEu2SFF_tWBVrGTTIds"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_hFQdR_WjWUaYV5O-PEndBQCygr4MhTl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1HCmtPWx4NM--YIqSv0R0y3milZk1M5fD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1RE6e80n7TjPjMpYSu3nso_fxXoYTvUmq"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.圣胡安老城区的那个免费观光公交！大家碰上就坐，碰不上等个5分钟10分钟的就算了，千万不要多等，很不靠谱啊！
+        <br>2.如果可以的话不要把去Bacardi Rum安排在最后，以免发生像楼主这样差点来不及赶回来的情况。
+        <br>3.圣胡安大多数出租车都是小面包车形式的，意味着人越多越便宜，所以搭伙出行比较方便。
+        <br>4.防晒一定要做好！
+        <br>5.如果觉得赶不及回邮轮，多花点钱就多花点吧，直接打车回去，总比赶不上然后自己出机票要划算。开船前十分钟还没有回来的话，楼主觉得一定先跟邮轮联络一下说明情况，尽可能的让他们等着你。
+        <br>6.在各港口购买的含酒精的饮品以及其他限定物品（就是限制带上船的物品），一般会在返回邮轮上船时交给工作人员，然后等整个行程结束回到始发港口下船时领取。限定物品的种类和规定可以在邮轮公司官网找到。
+      </div>
+
+      <h2 class="title">Day 6 大特克岛（Grand Turk）</h2>
+      <p class="text">由于是接近中午才下船，早上时间比较充裕，决定去正餐厅点早餐吃（邮轮的主题对于楼主夫妇来说永远都是吃吃吃）。蛋饼，鸡肉肠，土豆牛肉碎。吃饱喝足准备下船啦！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1h5eRwe0U3j-dh5tuc_E2V2Pt_03KI9iD"></figure>' 
+      <p class="text">之前计划来大特克岛是要去浮潜或者参团去跟魔鬼鱼亲密接触的，结果感恩节楼主相公笨笨的把手摔了，还打着石膏，肯定是不能下水了（话说那样下水会真的会沉下去？）。楼主也不想自己去啊于是决定还是去市区几个所谓的Historic Sites走一走。到码头之后有一个information的小亭子，楼主问了怎么去市区以及沙滩。还以为最著名的是网传的Governor’s Beach，结果一问居然不是，工作人员说最受欢迎的是Pillory Beach。出了码头有专门的工作人员组织游客乘坐出租车去往不同的目的地，去市区的话单程每人5刀。</p>
+      <p class="text">出租车依然是小面包车，大概能坐8-10个人。坐上车之后发现这一辆车上居然都是 中国 的大妈和大爷！这也是我们这次邮轮之旅第一次看到中国人，还是满满一车，震惊。。。司机很会拉活，问了大家要去什么地方之后就offer说我带你们逛整个岛，导游加介绍，大概一个多小时，每人10刀怎么样？大爷大妈貌似有一些英语不错，商量之后决定可以。楼主不领情，因为之前在网上查询过，觉得这个岛没什么特别需要参观的地方，于是在市区跟大爷大妈们说了再见下了车。</p>
+      <p class="text">来之前看网上都会有地接团组织专门的tour走这些所谓景点，到了之后才发现，我的感觉果然是对的。大！失！所！望！整个市区就一条街，从南贯穿到北，沿着这条路 一直走你就能几乎到达所有传说中的历史景点。。。包括一个还还不错的教堂，一个破败的 维多利亚 公共图书馆（甚至连这个图书馆外墙的名字都掉的不成样子了），一个国家博物馆（也就是一个两层的小小楼），一个很有年头的旅馆。。。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1kIrFf9eS9msASh3FmzE731Qu5VLR3-uS"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1VVGtFC5Ytnd1d-0Abg6cFqthXz-Awyxj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1NEv6NGUIn9XMYkJPBKB9h2KZRnLHMBR3"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1MG483ofE_47rfc9zbZK6DOZvF6hy8yTn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1X1EtmlNrU8yWRfuL6GVFNLKnpz6VsfaG"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">大热天的我们沿着整条路走下来顺便进去逛了这么几个地方也不到1小时，然后拿着从码头information那里得来的地图就发现，市区所有的景点我们已经逛完了！</p>
+      <p class="text">真心就跟个小村子差不多吧。另一方面这条主干道其实是沿海的，海水的颜色向蓝宝石一样早就把楼主的魂勾去了，当即决定去海滩！每人4刀打车到了Pillory Beach，果然大爱！咔嚓咔嚓了两张就换了泳衣下海啦！</p>
+      <p class="text">不过要提醒大家，这里海水固然是漂亮，不过海藻什么的在靠近沙滩的地方也不少。再加上楼主一个人下海不敢跑远，就在浅滩附近玩，回来发现泳衣上全是沙子。。。。虽然白色的沙子是还挺漂亮的。。。但是只限于它们老实呆在沙滩上的时候。。。估计在稍微深一点的区域里游的话会好很多。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Dvecehr9UPkvNP1CCZfFXtaA3x8LfvUY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1v5mWoppb0mzh9PpmvVd8kOpz2G7kqiMz"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/19Z3DgF0d2Vf3f_RULu3H8sfix6ghwi8S"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">玩够了差不多也快到傍晚了，沙滩这里的工作人员依旧组织好游客乘坐出租车回邮轮码头。其实码头附近是一个小的购物中心，各种免税商品和纪念品都有得卖。楼主逛了一会儿买了纪念品就回去了。这里的酒真心便宜！可惜不能带上回去的飞机啊！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1L49XLw_vspuc8Rfi3UV81xqbT1aYv3YQ"></figure>' 
+      <p class="text">回到船上好好清理了泳衣（洗了好久的沙子。。。），开饭！今天头盘很惊艳，分别是泰式汤，鸭胸肉和海鲜沙拉拼盘。主菜是混合海鲜和羊腿。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1_iHRCW_bphGTJFwIHGIuTdlN6XK1gLbZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17cZKMDV5d63xosO096cMxJNVlYqljdkY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Os7SGHKgxsS96nytpcdM0VyHDhEowZFD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1qqgndrCduDCVJkvLfiglZMKUkwDy-I27"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.大特克市区真的没有什么好玩的，那些所谓的tour劝大家还是算了吧。浮潜楼主没有去不好说，不过海边是真值得一去的，海水的颜色超级美！
+        <br>2.有参团去其他的岛进行活动的，比如楼主之前想去的那个与魔鬼鱼亲密接触的项目。下船之后在information问一下会给你介绍相应的项目，但是都是其他旅行社在做。有机会的话还是现在网上预定好，下船直接就接走了。
+      </div>
+      
+      <h2 class="title">Day 7 & Day8 海上巡游及下船</h2>
+      <p class="text">又是一天的海上巡游，早上倒是没有赖床，早早起来去甲板上等着看 日出 。谁知道云层超级美，反而是太阳没看到。即便是热带，清晨的甲板还是很凉的，披肩啊甚至是穿个小毛衣都不会觉得很热。</p>
+      <p class="text">这一天照例是休整，吃吃喝喝，晒个太阳看个show。楼主夫妇也是带着相机随便拍拍，看了海上的夕阳也看了夜晚的月亮。正如之前预告的那样，各种商品都在打折 ，5楼商店街非常热闹。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1x6cU8Tev1cV4tb-cAbP7eTKBB2qv3Emu"></figure>' 
+      <p class="text">甲板上巨大的国际象棋：</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1t5nY0FkIoIKDu5PAgTUZnrvFVJhP8xmx">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1ry5n15EKh9-65hMht49EexW_FLUfUQd8">
+        </div></figure>
+      </div>
+      <p class="text">客房服务生给叠的毛巾： 晚上的月夜： 早午餐的香辣鸡和牛排： 晚餐的芒果奶昔，田鸡和煎鱼。甜品是咖啡蛋糕和白巧克力面包布丁：</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1YUqLnTOsFh3Wm-TYklR3sZhJkgV4Ra7b"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/11L6hNsum-Ub-Co1V13frSeMMxc_5XDnR"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1uuO4aBjwG8Mq5-IktfUH0jy48_66w2LY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1XGljX7WBw2-CT8leQnSIpwJPeYLhlgIo"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1W8lJ7Zz3EwZ0g94dkyPYWYcmAPbR-wfN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-ZEeKQ-XyXdRqmQo86zn3tOiPQpy2F2p"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bfXT_gxpLvFIR3jDhUhk7yvHrl7FMhMk"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mkOZF3WvqIVWlz_0DvOjzH5lnJw7xu45"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1T9uyEev06J9IYvOLfaWyNd20d8BxLeRM"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">另外就是要开始收拾行李，客房清洁人员会在打扫的时候给你留下几张号码条，如果你有大件的行李，可以把这些号码条绑在行李上，再放在房间门口。晚上11点之后工作人员就会把行李依次从各房间门口收走。乘客可以下船后再取行李，或者如果你提前报备过回程的航班号，可以直接让邮轮公司把行李送到机场帮你托运，你只要甩手去机场坐飞机就好了。如果没有大件行李，或者想自己拎下船的，就不需要号码条，也不需要让工作人员来收行李。</p>
+      <p class="text">行李号码条上的号码条同时也表示了你下船的顺序，从1开始，号码越越往后的下船时间越晚。如果你对下船时间有异议或者有特殊情况，需要自己去前台换号码条。提前一天会有广播，也会有宣传单，指示大家在没有叫到自己号码组的时候应该在哪里等候（通常都是会开放一些休息区或者咖啡厅供大家等候）。总体的下船顺序是这样的：</p>
+      <p class="text">1.      从早上7点半开始，不需要工作人员运送行李的乘客，按照从最底层（1层）客房开始的顺序下船，每15分钟为一个单位；</p>
+      <p class="text">2.      之后按照下船速度，大概9点左右，需要工作人员运送行李的乘客，从行李牌号码标号为1的组开始按顺序下船，每15分钟一个单位。</p>
+      <p class="text">按照楼主拿到的时刻表，大概12点之前全员都可以下船了。事实上下船的速度比时刻表安排的会快一些，所以基本上都没有问题。楼主夫妇下船日一早起床，先去自助餐厅填饱了肚子，因为没有大件行李又是住在下层，所以第一批就下船了，过关，上岸，非常顺利！</p>
+      <p class="text">下船按照指示走就可以到出租车打车区域，从 迈阿密 港口到机场大概25刀，很多是不打表的。接下来的</p>
+      <p class="text">佛州 迈阿密 / 奥兰多 / 西礁岛 5日游记攻略请戳： http://bbs.qyer.com/thread-1057087-1.html</p>
+      
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.提前了解自己是哪一组下船很重要，如果晚饭前还没有收到客房清洁人员给的行李号码条，建议直接去前台索要。万一对自己的下船事件不满意，越早知道自己的号码越有利于去换。
+        <br>2.如果有在其他海岛买了商品的，下船前不要忘记去问清楚寄放的商品在哪里领取。
+      </div>
+
+
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>

@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1suqZpI2tt-th4ahtA6qPboJ9szNosZvf") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1>夏日炎炎“意”难眠</h1>
+        <p class="cover-description">罗马/佛罗伦萨/梵蒂冈热门+小众景点攻略</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    <section class="itinerary">
+      <div class="itinerary-header">
+        <h2 class="itinerary-title">行程单</h2>
+        <span class="itinerary-subtitle"></span>
+      </div>
+
+      <ol class="itinerary-list">
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>1</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">罗马</h3>
+            <div class="day-route">
+              <span class="route-place">奎里纳尔宫</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>2</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">罗马</h3>
+            <div class="day-route">
+              <span class="route-place">古罗马广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">君士坦丁凯旋门</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">帕拉蒂尼山</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">罗马斗兽场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">卡比托利欧广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">卡比托利欧博物馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">威尼斯广场</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>3</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">罗马 - 佛罗伦萨</h3>
+            <div class="day-route">
+              <span class="route-place">西班牙广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">特莱维喷泉(许愿池)</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">圣依纳爵堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">万神殿</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">四河喷泉</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">圣母百花大教堂</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>4</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">佛罗伦萨</h3>
+            <div class="day-route">
+              <span class="route-place">乌菲兹美术馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">乔托钟楼</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Grom冰淇淋店</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">佛罗伦萨圣若望洗礼堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">大教堂博物馆</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>5</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">梵蒂冈 - 罗马</h3>
+            <div class="day-route">
+              <span class="route-place">圣彼得大教堂</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">圣彼得广场</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">梵蒂冈博物馆</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">圣天使城堡</span>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+
+
+      <h2 class="title">前言</h2>
+
+      <p class="text">一年的 申根 签到9月到期，想了想不在那之前出去一趟太不划算了。选来选去也就是7月出门比较方便，因为可以甩下娃跟老布两个人去！然后能每个城市密集玩儿至少两三天的，也就是 意大利 了。于是当时天真的订了去 罗马 的廉航机票。殊不知7月的罗马简直像下火一样，今年欧洲的热浪一波接着一波，再加上疫情之后到处都是人从众，暑假的意大利不能说人山人海，也至少是人坡人河吧。当然这就是后话了。</p>
+      
+      <h3 class="subtitle">酒店和交通</h3>
+      <p class="text">网上看了看罗马的各个景点，觉得五天有点多，于是选了两天去 佛罗伦萨 （实际只有一天半）。依旧是偷懒 Booking 上订了酒店，都在火车站附近，必须hotel三星或四星，价格预算100-130欧，包早餐。事实证明早订的话选择都还不错，前面两天我们住在距离罗马Termini火车站大概10分钟步行路程的地方，三星酒店双人房包早餐两天180欧。第三天佛罗伦萨，酒店距离火车站步行七八分钟，然后到 圣母百花大教堂 步行不到五分钟，包早餐130欧。最后一天回到罗马住，距离火车站步行20分钟四星酒店包早餐110欧。</p>
+      <p class="text">顺便也订了车，因为有10%的优惠。后面看看Italo公司罗马到佛罗伦萨的火车票每人只要10欧多，于是干脆就公共交通出行了。这里还有个小插曲，我把回程的火车票订错了一天，小某书上低价出也没出去，本来想随便火车站找个人送了算了，结果硬是没来得及，生生浪费了！</p>
+      
+      <h3 class="subtitle">安全问题</h3>
+      <p class="text">老天爷啊这个我要摊开说了。去之前在小某书上刷到的全是被偷被抢被坑，让我对意大利的治安产生了深深的恐惧。各种防盗措施提前就计划好，虽然拖到最后一天才实施，但我自己觉得还是很管用的。因为不在国内，所以那些淘宝防盗好物是一个也买不到，只能自己动手丰衣足食，做了一些简单的加固。</p>
+      <p class="text">其实防盗主要就两部分，平时出门的小包和旅途的大包。我们没有托运行李和行李箱，每个人一个双肩背包，我自己用那种平时绑充电线或者小袋子的小铁丝（带软的外皮不划手的那种）把两个拉链串在一起扭几下，让这两个拉链不容易拉开就行了。平时出门的话，我自己背了一个帆布包，装扇子面巾纸钱包手机门票这一类的，老布背了一个斜跨在胸前的小包（就是类似男士腰包的大小），装重要的证件和驱蚊液。我在各自包的拉链尽头各缝了一个小纽扣，然后套了个小皮筋在拉链上，这样拉上拉链之后，再把拉链上的小皮筋拉到纽扣上一套！拉链就不能轻易拉开啦！我真是个大聪明哈哈哈！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/11S9mxK6gF8ToD8du7YjbDEJxP_fAbCK4">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1CbinVjouUxtwMNbu1nmNtfEd8k90PdIX">
+        </div></figure>
+      </div>
+      <p class="text">说白了不一定要稳妥的做到怎么搞也搞不开这个包，而是只要大大增加打开的难度，基本小偷就劝退了。手机拿了手机挂绳，直接另一头绑在包带上，这样无论什么时候看手机都不会跟包分开，而包是牢牢挎在身上的，想抢也是有点难度。信用卡直接把安全码刮掉，但事实证明真是多虑了，这一路刷卡都是手机apple pay无接触刷卡，根本没有把卡拿出来过。到火车站双肩背包直接朝前背，断了小偷的念想，一路平安无事。</p>
+      <p class="text">其他安全问题的话就是防抢防坑，只要不太晚回酒店，不在人少或者看起来有点乱的区域逗留，走路看着点不要跟旁边卖纪念品/地摊上卖画/卖丝巾的有任何眼神或者肢体接触 ——我的意思是不要接触到他们的商品或者人，基本也就没事了。跟你搭话兜售的一律不理，这个时候没必要表现良好的教养，直接走就对了，也不会缠着你的。</p>
+      <p class="text">总而言之，只要自己警醒一点，整个旅途还是比较顺畅的，没有必要到草木皆兵的程度。也可能因为我们看起来就不像什么有钱的，身上没什么名牌，帆布包+胸前包也不好偷，所以我感觉虽然网上说的很恐怖，但大家还是不要像我一样自己吓自己。整个过程下来没有像在 摩洛哥 菲斯 一样不知道哪里就被坑了一把，所以不影响旅途舒适度。治安问题欧洲各 大城 市都有，可能某些城市的某些区域更厉害一点，我们自己做好防护，保持警惕，尽人事听天命就行了！</p>
+      
+      <h3 class="subtitle">行程安排和门票预订</h3>
+      <p class="text">我大概十多年前跟团来过一次欧洲游，意大利这两个城市我是都来过的，但是基本就是city walk，所以这次主打要买票的景点！虽然意大利的各种古迹啊博物馆啊都很有名，但我建议大家不要安排的太密集，因为真的会审美疲劳，反而不觉得惊艳了。所以基本这次我每天只安排了一个必去的景点，其他都是看当天的状况再临时调整。这样的好处就是不会太赶，心理上没有负担，也容易应付突发的状况；坏处就是本来就是旺季，不提前订票的大热景点基本是不可能当天在不排队的情况下临时进去的。</p>
+      <p class="text">于是最终的行程安排出炉：</p>
+      <p class="text">第一天因为11点才能到市里，吃个饭安排下午参观奎拉纳尔宫（Quirinal Palace）。我之前看到的时候还觉得奇怪，一个意大利 皇宫 哎，之前教皇的夏宫，后来的 总统府 ，怎么会是冷门景点呢？！门票居然只要1.5欧！然后看图片也很漂亮啊，大笔一挥安排上！于是就定了下午两点的场。然鹅。去了之后才知道为什么是冷门景点。等我后面细说哈哈哈。</p>
+      <p class="text">如果下午还有体力打算去Borghese Gallery看个关门场（就是17.45-19.00那一场），门票便宜一些。</p>
+      <p class="text">第二天想去斗兽场，知道要提前一个月订票，奈何当时人在国内，**抢票慢的要死，完全没抢到。不断的刷刷刷，只能刷出12点15分意大利语带地宫的导览票，实在懒得折腾了就直接订了。据说在提前一周的时候还有一波票放出来，不知道是不是带地宫的，所以就不想再麻烦了。说实话我感觉要是只想进去看看的朋友们可以不去地宫，我想去完全是因为我觉得上面应该好热啊……</p>
+      <p class="text">这一天还有一个Capitoline Museum 备选，据说不用提前订票也不用排队随买随进。</p>
+      <p class="text">第三天就是罗马的city walk，看看许愿池 万神殿 ，吃点甜品冰淇淋，中午就坐火车去佛罗伦萨啦。下午订了15.45圣母百花 大教堂 登穹顶，也是提前很久订的票。</p>
+      <p class="text">因为穹顶是跟教堂、地宫、礼拜堂、 钟楼 、博物馆的联票，所以第四天就打算去这其他几个地方。如果有时间可以去旧宫博物馆看看，据说也是不用排队买票的。但事实是第四天临时居然有了更好的安排，很惊喜呀！</p>
+      <p class="text">第五天 梵蒂冈 大教堂和博物馆，这个要提前两个月订票，依旧是没抢到，早餐票都没！只能订了午餐票。虽然很多人说午餐票有点亏，但我觉得还好呀！午餐味道也还可以，量也大，主要是不用自己出去找餐厅，直接在博物馆内部解决，省了好多力气！我是觉得花这个钱很值！</p>
+      <p class="text">如果这一天还有时间可以去圣天使堡看看，不过我做计划的时候感觉梵蒂冈可以看一天而且会非常累，事实证明，是这样的，但是我们依然去了圣天使堡，结果晚上飞回家之后直接躺尸了哈哈哈！</p>
+      <p class="text">火车的话意大利有两家常用火车公司，Trenitalia是国铁，Italo是私营。我看了下国铁线路多价格便宜，但时间延误比例稍高，硬件稍微差一丢丢。于是我本着瞎看看的心情去了Italo的官网（https://www.italotreno.it/en），结果发现罗马到佛罗伦萨单程最低只要10多欧，想也没想就直接订了。这应该就是为什么我会订了错误的回程日期。幸亏没多久就发现了，然后又订了正确的。这里很坑的是，即便网站有英文版，订出来收到的PDF车票还是意大利语的！所以一定要仔细检查日期姓名和车次这些。不过这种骨折票不退不换，所以订错的那一张最后还是浪费了。还有就是如果要当天查火车时刻以及是否延误可以用Trenit这个APP，不过不能在这上面订票。</p>
+      <p class="text">以上所有景点具体的订票链接和攻略会放在之后每天的游记中，大家酌情参考就行啦。照例上个图。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1UH10UydC_xsMkBIt9r_E5b1mVKcnOl3h"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bKyT3apkP_jQdWVBkgE12Mpfm6exsl_z"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1KrnR4nGPt6XFZ1-YVPUTvZZ8ap2kQJ9b"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13dlvK_tMH10ErTeUBfxScgOZ5E-Dlxh9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hmHKFUskwCs_VErsprSNaIdnG1fgvI8p"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12jqcum3LbGrXm0wuoz8Jaqrk7z__IUu-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Qswf9RzqqETsfcm2ybHl28LjioujGgyO"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="divider"><span>✦</span></div>
+      
+
+      <h2 class="title">第一天 罗马</h2>
+
+      <p class="text">订的早上6.15分飞罗马，三点多就从床上爬起来开车去了机场。一路过关斩将相当顺利，瑞安visa check柜台的大姐看着我们 申根 签那一页还问：“这是你们的签证吗？”我一脸懵的点头说是，心里全都是问号：你一个检查签证的还来问我？！</p>
+      <p class="text">一路睡呀睡直接就睡到了罗马Fiumicino机场。落地的那一刹那开始，我的防盗防抢防坑“三防”小雷达就滴滴滴的竖起来了。想起来前几天刷到小某书上说的，“感觉一到 中央车站 钱包就会从自己包里不翼而飞，等到终于被坑了5欧搬行李的钱，才终于感觉靴子落地了”。而我连一根鞋带也不想落地上，所以自然是十二万分警醒。</p>
+      <p class="text">丝滑出关，甚至连酒店订单什么都没看，一句话都没问，让我强烈怀疑这位边检人员是不是不太会说英语。拿过护照看了一眼签证刷刷盖章走人，甚至还个眼神都不屑给我，让我真的是感觉。。。。。。谢谢您嘞哈哈哈哈！</p>
+      <p class="text">出关之后我跟老布就在提取行李那边开始收拾自己的双肩包，把各种防盗措施加上，换了夏季的衣服——要知道从一个14度的地方飞到40度的地方，还穿同一件的话会热死的！之前看攻略说不要急着在机场买机场快线的火车票，可以到火车站再买，所以我们也就没有着急，一路跟着指示牌往火车站走了。</p>
+      <p class="text">到火车站直接在机器上买了机场快线Leonardo Express的车票，每人14欧，看看表还有大概20分钟发车。看攻略说火车慢车可能小偷会多些，因为中间有停靠，所以我们没有选择那个。也没有选择大巴，因为实在懒得折腾，酒店又在火车站附近，所以为求 保险 就直接坐了快车。因此如果不差这点钱的小伙伴也还是建议坐快车，主要是省心，不用担心查票或者坐错车，而且直达车车上人员也相对没那么乱。</p>
+      <p class="text">等车的功夫我们站在站台上把从家里带来的两个早餐卷饼吃了。虽然我过闸机的时候就反复跟工作人员确认我们这个票有二维码，还需不需要去车站里的打票机上激活打票，答案是不用。但我依然看到很多人去打票机里打了一下。因为之前看到太多没打票被罚款的帖子，为求 保险 我们最后也就把没有二维码的那一端放进去，果然给打了一下，这下别管需不需要都放心了。后来老布发现票的背面就写了要打票，幸亏打了！</p>
+      <p class="text">上了车找座位坐好，因为我们只有两个双肩包，所以一路放在自己怀里没有放在头顶行李架（防盗措施之N）。半小时就到了罗马Termini车站，下了车直接把包背在胸前，按照记忆好的路线一路走到旅馆连手机都没敢掏出来。</p>
+      <p class="text">到酒店发现才12点左右，房间暂时还没准备好，说让我们到check-in开始的时间也就是两点之后再回来，可以先洗洗脸凉快凉快或者出去转转。我们本来就是这么个打算，所以把行李放好就直接出来找个评分还不错的小饭店，准备吃完饭去预约好的奎里纳尔宫。</p>
+      <p class="text">搜了搜在去奎拉纳尔宫路上的几个评分不错的小餐馆，很快就确定了一家Ciro Purpetta。我们进去的时候才刚开门没多久，一个人都没，前台小哥英语不甚流利，英文菜单只能扫码才有。于是在老布的帮助下我连蒙加猜的点了一个肉酱 意大利 面（Ragu），他点了一个招牌披萨。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1sRMoP11DpfTQdu3auzBrcuNyD6zXmk-M"></figure>' 
+      <p class="text">36度的罗马简直热的一批，比起上个月去的38度的北京还要热上几倍！究其主要原因！意大利人太抠了！简直不是一般的抠！注意我这个咆哮体，是真的落地没几个小时已经通体出了几遍汗。机场快线的空调只能说刚刚好不出汗的程度；火车站压根没有空调；酒店大堂的空调聊胜于无，站在空调下面都感觉不到明显的凉风，前台小哥自己热的腋下湿了一片；餐厅就更绝了，我跟服务员讲能不能换到里面凉快一点的位置，他说整个餐厅都一样，因为有三个披萨烤炉，所以哪里都是一样热。我真的一整个无语，难道有三个披萨烤炉的餐厅就不能搞个封闭式厨房吗？非要一进门就能看到烤炉吗？不能来个功率大一点的空调吗？至少让人坐在空调正下方没这么崩溃啊！</p>
+      <p class="text">言而总之，幸亏我带了两把折扇，只能拿出来不停地扇啊扇。本来还想说吃个饭凉快够了再出发，结果菜还没上来已经想着赶紧走了，毕竟出去还能有那么一丢丢的风啊是不是，再不济还能自己跑起来带点风凉快凉快！</p>
+      <p class="text">好在静下来一会儿也没这么难熬，而且说实话菜的味道都还不错，老布觉得一般般，我是感觉还挺好吃的。尤其是那个肉酱意面，虽然油是多了点且看不到什么肉，但是真的好香啊。而且不得不说意大利的披萨真的有够薄，那个底也就是个单饼厚度，跟我们平时吃的美式那种不太一样，一个人吃完一个完全没啥问题。</p>
+      
+      <h3 class="subtitle">奎里纳尔宫</h3>
+
+      <p class="text">吃饱喝足出来，我跟老布一路沿着阴凉大概步行了15分钟走到了奎里纳尔宫（Palazzo del Quirinale）。这座宫殿曾经很长一段时间都作为教皇的夏宫，后来罗马并入意大利之后，又成为了意大利国王的王宫，直到意大利成立共和国，才成为了 总统府 。对于爱好收集 皇宫 的我来讲，这里虽然冷门，但却是个好去处，而且参观免费，只要1.5欧的订票费，因此当时也是欢欢喜喜的订了票。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1rkmoyFS2auJOjBP-_i0YKiPlB0Etvkuf"></figure>' 
+      <p class="text">到了之后发现门口各处都是戒备森严，还有穿着华丽服饰的卫兵驻守。看了看门口等待进入的全是意大利人，顿时有点感觉怪怪的，但当时我还没有意识到哪里怪。直到检查完ID进了门，每人发了一个胸牌挂上，我还是没有发觉不对劲。然后还傻乎乎的问了旁边站着的一个工作人员小姐姐，说有没有audio guide或者map，小姐姐不好意思的笑笑，用不太熟练的英语磕磕绊绊跟我讲说没有这些。我也没介意。</p>
+      <p class="text">直到走进里面的房间，发现大家都开始存包了，而且存完包居然都不走，就站在这里等着，我才灵光一闪：不好！怕不是只能跟着导览走吧！</p>
+      <p class="text">我当时订票的时候以为不同的那些订票选项只是不同的游览路线，完全没想到是只能跟着导游走的那种，而且这架势一看就不是英语的，难道是意大利语吗？！</p>
+      <p class="text">结果没两分钟就把我这猜测落实了，来了一个大叔一个大婶叽里呱啦介绍了一通，我大致通过body language明白这个大婶就是我们的导游，旁边那个小姐姐也是帮忙的工作人员，我们这一队人就是她们带着了。行吧，事已至此还能说什么呢，虽然心里一直在咆哮你丫只有意大利语的导览为什么要搞个英文订票网站啊！也不说清楚是意大利语导览啊！但也只能安慰自己，本来就是要自己进来逛的，所以多一个导游虽然听不懂但也没区别呀。况且总共就一块五毛钱，还要什么自行车！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1qf0Nv4rl1Sf60Vh7AypmYC6Ry9UA5K7-">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1P3f19nbP5fz19hQhIGQXIprsIg2N5ecV">
+        </div></figure>
+      </div>
+      <p class="text">然后我们就一路听讲一路走，包括当时意大利共和国建国的文书呀，王宫的各个华丽的房间，里面的艺术品等等。虽然听不懂，但还要装作稍微懂一点的样子，不然还担心是不是显得对导游大婶不尊重，真的是很考验我演技。但老布一副“反正我也听不懂”的样子，偶尔还凑到导游大婶前面试图用谷歌翻译同声传译，也是翻译的一知半解，只能领略一下重点了。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1rcgQybxap89LfxKNLj3DhGkbUkIbdUmu">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1boq4ckIqp8xSX6rcAI0ScZ60mH5hxDac">
+        </div></figure>
+      </div>
+      <p class="text">不出意料，王宫内部的空调也是少的可怜，有些房间还算凉快，有些也是热的要死，所以我整个人也是颇为无奈。总体来讲王宫还是很让人惊艳，不管是里面的各种大厅、会客室、起居室，还是建筑内部的小教堂，都是别有一番风情。毕竟曾是教皇夏宫，钱是肯定不差钱的，当然，作为讲解只听懂了一部分洛可可风格的我，如果能听懂全部讲解就更好了！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1_iNjn86rM5D8YrgpMXVBczaAbpWyVtpp"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OtTc5D66oFBrvwQCNMLuOkktprZM2Gxk"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1TlUvtDzcWIzUE7ACJ1UMmHjtoxm0E98j"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1R2Wx_XojZu2oil_AXS6uHbo3Bre9wOxt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1K6nDUEbydRiOCW2xXJem731vMo6OmZQj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/10eQ-aILEvF9G8mqj3spCWuAIRtY_mVkW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1cgHMjQLEPOe9o60e9AUOQwUw2AvI3GKc"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fL6RayJkjdug9MxQLOjABvu72OFOaoN9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1eO8q304nsgbIDdCv2SA81L7m3H84g92Q"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">磨磨蹭蹭出来已经快4点了，看了看还有时间，打算去博尔盖塞美术馆（Borghese Gallery）看看还有没有票。因为知道他们5.45那一场的票会便宜一些，所以看看时间可能正好合适。到这个时候我和老布还没太适应罗马这个下火的气温，所以想着公交不好坐，走过去又有点远，本来想租个电动滑板车，附近又没几辆，直接打车算了。</p>
+      <p class="text">用FreeNow打了车，杂七杂八加起来一共13欧多一点。结果到了博尔盖塞美术馆，门口大大的牌子“Today’s tickets are sold out”顿时让我们哭笑不得。进去找个地方坐下歇了一会儿，然后就真的“三而竭”了，只想回去躺着，因为连售票大厅也不凉快啊。</p>
+      <p class="text">出门本来还想在博尔盖塞的小公园走走，结果也是有心无力。步行回酒店还要十几分钟，但是到美术馆门口看到有电动滑板车，顿时那个大胆的想法就又冒了出来。研究了一下发现FreeNow就可以租，简直不要太方便！一人扫了一辆就欢快的出发了！</p>
+      <p class="text">在这之前我跟老布根本没碰过滑板车，所以一上来我也是紧张的要命。但好在是周末的下午，非景区的路上基本都没什么人，所以慢慢的胆子就大了起来，一路下坡加上小风吹着，别提有多惬意了！而且滑板车又快，又便宜，还能防盗，何乐而不为呢！</p>
+      <p class="text">然鹅我还是天真了。没多久就到了罗马特别猖獗的“小方石头路”路段，那叫一个颠啊……我的墨镜在鼻梁上跳跃，整个世界都开始上下波动，让我一度甚至看不清楚前方障碍物。震到最后我手臂的肉肉都颠累了，麻麻的，两只手紧张得更是因为紧紧握把而变得没了知觉。</p>
+      <p class="text">好在这次回酒店的路上这种石子路不多，颠了没多久就到了。看了看每个人花了3欧多，还是很满意的，主要是呼呼的在路上太拉风了！从此我在罗马就迷上了骑小车车，到哪里都想着先看看能不能骑一个，这就是后话了。</p>
+      <p class="text">先去附近超市买了点桃子、西红柿和水，回到酒店顺利check-in，啊终于到了房间里有了给力的空调了！把湿透的衣服脱下来舒舒服服洗了个澡就再也不想出门了。打发老布去附近的外卖店点个炒粉，结果老板还不在，只能楼下的餐厅打包了个意大利宽面Lasagne 算是晚饭。但味道是真的不错！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1IgYQpm8WbRsxzOAAq_m1RKNH6JSi3Zl2"></figure>' 
+      
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.从Fiumicino到市区，火车有快车和慢车两种选择：快车Leonardo Express，每人14欧，大概半小时到市区，直达；慢车在买票的时候会显示2nd class，每人8欧，大概一个小时到市区，路上会停靠。买慢车的票是不能坐快车的，这个一定要注意，不然车上查到会让你重新买票（不是补差价），而且有可能会罚款。
+        <br>2.火车票具体需不需要打票，我感觉只要不是那种特别薄的带二维码的跟收据一样的纸，应该都是需要打的，别管有没有二维码。当然家里订好票打印出来的应该是不用打票，但凡机器上买的应该都要打。更好的办法是翻过票来看下背面写没写，写了就一定要打票了。打票机一般都在站台上，一个灰绿相间的电子盒子，把票插进去，绿灯亮起来就说明打票成功了。
+        <br>3.奎里纳尔宫有几种路线可以选择： https://palazzo.quirinale.it/visitapalazzo/percorsi_en.html ，几种导览各有侧重，我对艺术品鉴赏兴趣不大，就订了第一个Artistic-institutional itinerary，主要是参观庭院和内部房间。大夏天的不建议参观花园，春天来的可以订那个。参观是免费的，预定费1.5欧。但是！都是意大利语的！虽然网站上没写但亲测的坑！
+        <br>  看好导览的选择之后，用这个链接订： https://palazzo.quirinale.it/visitapalazzo/prenota_en.html
+        <br>  注意每一种导览开放的日期可能略有区别，建议旺季至少提前一个月订，淡季的话提前两周也有。
+        <br>4.奎里纳尔宫进门是需要检查身份的，因此要带好护照或者其他ID。安检就不用多说了，意大利基本每个景点都要安检。
+        <br>5.博尔盖塞美术馆订票链接： https://www.tosc.it/en/artist/galleria-borghese/galleria-borghese-2253937/ ，谷歌地图上的订票链接不对。门票16欧，有每人2欧的网上预订费。注意该美术馆参观时间为两个小时，晚上5.45那一场的门票会便宜些，因为7.00关门，只要11欧。
+        <br>6.打车软件FreeNow或者Uber都能用，看哪个方便就可以用哪个。建议直接软件自动扣款付账，后期有问题好解决不牵扯第三方平台。这两个软件都可以租电动滑板车，对应的公司不太一样，一般FreeNow或者Uber里面都有两三个公司的电动滑板车可以租，不用再去特意下载每个电动车公司的APP，所以还是很好用的。电动滑板车1欧起租费，每分钟一般在0.25-0.28欧之间，起租时会先on-hold 3欧的费用作为押金，具体扣款数值以结算时间为准。
+      </div>
+      <div class="divider"><span>✦</span></div>
+
+
+      <h2 class="title">第二天 罗马</h2>
+
+      <p class="text">这一天的计划其实就是斗兽场、古罗马遗迹和帕拉丁山，因为门票是联票，而斗兽场提前一个月只约到了12点15分的 意大利 语导览票，所以打算9点古罗马遗迹开门先去看遗迹和帕拉丁山。就像前言里说的，订意大利语导览完全是因为英语的订不上，不带导览的就更订不上了。据说如果提前一个月订不到票，一直刷票的话提前一周还会有一波标准票放出来，但我本着来都来了的原则，本来就想去地下部分看看，于是研究了一下导览票就贵了10欧，想到实在没有精力一直刷票，就当是多花了10欧买个清净吧。写到这里不由的感慨自己真是老了，要是再早个五年不管怎么说也是肯定要在电脑前天天刷票的，现在宁愿在别的地方把这10欧抠出来，也不想这么心累了。</p>
+      <p class="text">早上起床收拾好，想到今天罗马36度的高温就很崩溃，防晒霜防晒服防晒帽折扇太阳镜驱蚊液通通装好，就下楼吃早饭了。小酒店早餐自助中规中矩，就是欧式早餐，面包火腿鸡蛋，外加水果酸奶和各种蛋糕，总归是很不错的。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1PerFeZ51dMIfHiP0Zfi2zZ2F1P7A6Bhv">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1jceWce8dC0uGijC0wipcDku3jjO013p1">
+        </div></figure>
+      </div>
+      <p class="text">吃完饭还不到8点，我和老布出了门就打算按照计划去租个电动滑板小车车！因为走过去要30分钟，说实话要不是这么热的天我就直接晃悠过去了，但是想到今天还要晒整整一天，还是把勇气都留在古罗马遗迹和斗兽场里吧。</p>
+      
+      <h3 class="subtitle">古罗马遗迹</h3>
+      <p class="text">本来我之前做攻略的时候就打算先去古罗马遗迹，从远离斗兽场的入口进去，这样不就一路顺着正好中午到斗兽场了吗。但是现实很骨感，攻略做了好多也只找到有两个入口，就是下图的1和2，所以就只能从2进去了。但是经过实地考察，还有一个入口3，我们早上确实看到有人从这个口进来了！但是下午就没人了，不知道是怎么回事。总之都标在下图啦，需要的小伙伴可以去试试！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1_NLKSit_xBEKqOefeTyw1VCrnchkw5pY"></figure>' 
+      <p class="text">因为古罗马遗迹9点才开门，所以我们打算先去斗兽场外面趁着早上人少拍个外景。机位很好找，据说就是斗兽场地铁站出来的平台就是了。我们一路小车车‘刷刷刷’‘噔噔噔’‘嘚嘚嘚’‘呼呼呼’的大概10来分钟就到了，大老远看到斗兽场一直骑到观景平台才停车。结果！停车的时候打开APP 发现罗马有禁停区域，我们正好卡在边边上，老布还是又往回倒了几步才能停。</p>
+      <p class="text">然后就开始站在平台上拍照，这个时候人还不是很多，但也是要轮流占位置拍了。无可避免的因为有个不会拍照的老公外加要等拍照位搞的我心态有点崩，老布也因为给我拍完但废片太多有些焦虑和不耐烦，因此这段不咋愉快。反正我俩各有各的委屈，略去千字不表。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1bKyT3apkP_jQdWVBkgE12Mpfm6exsl_z"></figure>' 
+      <p class="text">好在我俩各自调整按捺了情绪，看看已经9点了，就开始往古罗马遗迹的中间入口走了。有人问为啥一定要从外面走过去，干嘛不直接从1号口进去。我只能说，我很确定从我这个平台到1号口到古罗马遗迹里面大片范围都没有树荫只能暴晒，但走外面街上还有可能不被晒到啊对不对？</p>
+      <p class="text">果不其然顺着小巷子过去基本走在阴影里，一直到门口发现有个小小的队伍在缓缓前进，我们直接跟上，出示二维码不到三分钟丝滑入场。这个入口排队的人真的不多，大部分人都是从斗兽场那边的入口进，所以如果那边排队太久的话，2号口和3号口都可以考虑，走过来也就不到10分钟的样子。</p>
+      <p class="text">估计是怕游客中暑，罗马很多地方都有那种带水雾的大电风扇呼呼的吹，我们在检票口就看见两个，整队人走到那里都忍不住多享受一会儿，就只有我不仅躲着还拿扇子挡个脸 —— 我刘海待会儿贴脸上谁赔？！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1wfaj41nyq6BCn810ZWoyfJDpJAbFsXwj">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1cEd9ty_M7PjSETCzK4GzxLbiWi5EBunZ">
+        </div></figure>
+      </div>
+      <p class="text">2号口进去之后正好是古罗马遗迹的中间段。问了一下说是语音导览只能从1号口租，也不知道真假，但我们很快放弃了租语音导览的念头，因为真的是 太 热 了！！！9点半的样子已经是32度了，再加上古罗马遗迹里面基本没有树荫，真的受不了一直站在太阳下面听导览啊。</p>
+      <p class="text">于是我俩先往右走，一路各种神殿啊元老院啊啥的看过去，每个遗迹前面其实都有小牌子说明的，因此没有语音导览自己看看也很好。只是真的是没走两步已经是汗流浃背，等我俩到3号口那边的 小凯旋门 的时候，阴影里也是坐了一大批热到受不了的游客。然而！居然还有一对我觉得是情侣但老布说是母子的亚裔男女（感觉是 泰国 人）在自拍，男士穿的居然是衬衣加长袖长裤的白西装！真的我看到他们的一瞬间就又替他们热出了一层汗。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1FPU6gt8aGLHqutjmSf0JdFAuMwK-E4xY"></figure>' 
+      <p class="text">阴影里能坐的地方已经被全部占领，等我们歇够，研究出原来这边还有一个出入口之后，老布要往旁边的山上走过去看看。于是我顶着烈日默默尾随——唉我这个不想受罪又忍不住好奇的毛病，得改！</p>
+      <p class="text">确认小山坡上没有第四个出口之后我俩就决定快速往回走，迎着斗兽场的方向出发了。一路看过去又是晒到脸红脖子粗，到入口1附近那个凯旋门的时候已经快熟了。好在往南就是帕拉丁山，看上去还是有些树荫的，我俩直接给水壶（其实就是矿泉水瓶）灌好水找了个树荫下的石凳坐了好久。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/17CK8R3sEFZ3i-h7iYNjK4ICYNrcaDJcE"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/19QUISR42ZERf-dLFDMBZ_dQDID3DvOBu"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_fr8lIA88PlC3t8uHmvMVllZCmGGWeja"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1TeWTR6b93CcE4nw6GyfoevFHbkt1dYNA"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">其实这一路走过来是会碰到很多私人导游的，就是那种带两三个人的那种，站在一边讲解。很多都是没有麦克风和耳机，因为想蹭的话是可以蹭到的。比如我就蹭了几个，有的介绍之前的神殿后来怎么变成教堂的，然后又挖出了神殿的下半部，所以现在看教堂的门好像是建在空中一样；有的介绍路边哪个建筑曾经被作为私人住宅买了，后来才又回归到古罗马遗迹的一部分。有条件的话（钱+时间+天气）请个导游，这里可以逛一天。</p>
+      
+      <h3 class="subtitle">帕拉丁山</h3>
+      <p class="text">这一波我俩歇够之后就顺着大路往帕拉丁山上走，一路缓坡有树荫，反而没这么难熬。直到走到后面俯视宫殿大厅遗迹，才第一次觉得有些震撼 ——前面那些也很厉害，但看过 雅典 卫城之后罗马这一波着实保存的稍逊一筹。最南端有帕拉丁山博物馆，小小的一个白色小楼，大概四五个房间，检票进入。好不好看放在一边不说，凉快是真的凉快！不得不说这个博物馆大概是我们去的所有意大利景点中给空调给的最大方的，但也可能就是胜在小所以不费电！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1RcfuFNtnLwS_v4yFxCUlrwVVzM5hL3zI"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ghiA53XQ36CRtSrxlCXvE_Hp22xHfbIy"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1KT5zf-iossVi3-GMLNxiUXWVtwJOrw7E"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">然后我们就又没出息的坐了下来。看看表感觉快到斗兽场时间了，于是顺着帕拉丁山另一边一路逛回1号入口附近。期间还路过了一个山坡上的观景平台，从那里俯瞰古罗马遗迹，才有种千年风霜尽收眼底的感觉。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1COKR-sf7jBLGV7KKeSWxCVxK9ucMtWY3"></figure>' 
+      
+      <h3 class="subtitle">斗兽场</h3>
+      <p class="text">出古罗马遗迹之前在出口附近上了个厕所，我们就跟着人流浩浩荡荡出来了。此时该入口处已经是大排长队，估计都是看完斗兽场直接过来了。出门就是 君士坦丁凯旋门 ，门内繁复的雕刻确实是叹为观止，但此时的我只想找个背阴处！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1RMQo4NWatmkOZNISiw3wX3j7UgAtb2ph"></figure>' 
+      <p class="text">赶紧走到斗兽场西边入口处，看看几乎没有队伍，却被告知我们的票要在另一个入口进入。等我们绕到北边直接被里三层外三层的壮观队伍震惊，看这样子没有一个小时根本进不去啊，我们12点15分的团肯定来不及！好在我们立刻反应过来这应该是团队入口，于是直接一路向前想去问工作人员导览票从哪里进入。走到队伍最前方入口处有个工作人员说你就在这等着就行，我跟老布面面相觑，心里发出同一个疑问：这里？一个人都没有的“这里”？就在此地不要走开吗？</p>
+      <p class="text">与此同时还有另外一家四口，妈妈是白人爸爸看起来像是拉美人，也来到我们旁边拿他们的票问了，同样是被告知就在这里等。没过两分钟围栏里就过来一个工作人员开始让我们进，然后另一个工作人员开始检查我们的身份证明（护照）和预订好的票，再告知我们到哪一个集合处等。我前面的那个一家四口的妈妈用英语问的，检票大叔让他们去3号集合处等，然后查完我们的票也让我们去3号等，我就偷偷跟老布说，我感觉他们是英语导览团，说不定刚才检票大叔没看清楚我们是意大利语团，我们就跟着他们一家四口走，说不定能混个英语的呢！</p>
+      <p class="text">就在我自以为是的过了安检之后发现他们停了下来在一边说笑，我就感觉不对啊难道他们距离自己导览开始时间还早吗？于是我不情不愿的走到3号集合点，发现真的就是意大利语团。。。。。就说不要自作聪明，“买的不如卖的精”永远是个真理！</p>
+      <p class="text">集合点有一个工作人员确认票的种类并分发耳机，然后到点之后有另一个带团的导游来发接收器，到12点30才可以出发。发耳机的小姐姐还跟我们确认是意大利语的，我们是否能听懂，不能的话还要不要耳机。我想来想去还是要了耳机，不管怎么说我感觉装着听听的样子也是对人家的尊重。</p>
+      <p class="text">期间老布还去问了能不能调到英语团，被告知不行，于是我们就直接打消了这个念头。这之后我们看到有一波团被导游带走了。后来12点15分的时候有人来分发接收器，我们以为是我们团的，到最后几个就去拿，被告知不是意大利语团。老布说哦好的，但接收器不都是一样的吗，如果你有剩的话现在拿了待会儿就不用拿了。然后那个发耳机的小姐姐就过来有点不耐烦的说你不能参加英语团。老布说我没想参加英语团啊，这不是到点了我以为这个是我们团的嘛，这么多人我半天挤过来想说直接拿了剩下的接收器不就待会儿不用过来了嘛。然后小姐姐又很强硬的说不行，而且只说不行，也不说别的，老布就气呼呼的挤回来了。</p>
+      <p class="text">我听了之后觉得小姐姐可能是误会了我们还死心不改的要去英语团，就跟老布解释说他们可能挺忌讳类似投机取巧的事儿所以有点不耐烦，你别跟他们一般见识。老布还是很气，觉得他们小人之心度君子之腹，而且明明可以好好解释一句类似‘我们每个团接收器都是定量的’，非要搞得跟我们做错了什么似的。</p>
+      <p class="text">这一点我同意，可能是他们每个团真的有定量接收器，我们考虑不周，但确实是最后几个没人要了，远远看到那个导游布袋里至少还有五六个沉甸甸的，我跟老布担心是我们的团，心想着别错过了，才挤过去要的。明明可以跟我们解释一句话的事儿，那个发耳机的小姐姐的语气和态度都让人觉得很不舒服。</p>
+      <p class="text">但是好在她也没有真的跟我们黑脸，只是没那么礼貌而已，我家老布生个闷气也就算了。到12点25左右又有一个导游来发接收器的，这次我们确定是我们的团，于是分别去拿了。神奇的是之前那一家四口此时也出现了，犹犹豫豫的也上前拿了接收器，我感觉跟我们一样可能也是听不懂意大利语的哈哈哈！原来是难兄难弟呀！起码心理上不孤单啦！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1o135cqtNoJzMHFxq10QoHwn_U301b3ZZ"></figure>' 
+      <p class="text">这期间自从进了检票口就一直呆在斗兽场一楼外围大厅，所以还算是比较凉快的。等团的时候我顺便还在Google上给我们中午要去的Iari The Vino餐厅订了个2.30pm的位子，这个餐厅也是我之前搜到的，倒不是说有多好吃，就是离得近评分又不低还被其他人试过的，所以本来就打算去这个了。</p>
+      <p class="text">然后导游小姐姐就带着我们进入到了地下部分 ——出入口居然是要拿钥匙开门锁门的，可见没有人带领是不能随便进的。一路下楼就越来越凉快，到底层甚至有点过于凉爽了！停下之后会在甬道深处的屏幕看个短片，介绍各种角斗士的类型和地下甬道的基本用途。这一部分是有英语的不用担心。然后还有很多盔甲和兵器的展示柜，小姐姐讲的也很详细，可惜听不懂呀唉。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1su-mX6zHOrTNvAu3JUtO57jeGPOc9mqA">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1ZO23IG5sqxuBgkGlpGuQy146euRqHLk0">
+        </div></figure>
+      </div>
+      <p class="text">一路跟着在地下部分游览，个别地方是有导览小牌牌介绍的，所以参观起来不会很无聊。而且我感觉大多数人看过《角斗士》都知道地下部分是干什么的，因此对于我来说反而不那么新奇。我觉得夏天这一部分留给我最大的印象就是，不用晒！好凉快！</p>
+      <p class="text">地下部分快结束的时候路过一个无障碍通道斜坡，不知道是有水的缘故还是因为我穿了洞洞鞋，一脚就滑倒了！摔到地上之前老布眼疾手快的扶了我一把，结果因为他也穿了洞洞鞋所以他也一脚滑了出去！幸亏我手撑了一下，屁股才没有摔这么狠，但是小臂被蹭红了几道血印。好在我们几乎是在队伍末尾，只有那一家四口其中的爸爸因为拍照落在了我们后方，全程看了我们摔倒的过程。。。。不然这脸真是丢大了。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1Mp9IPWS6zBZRnWgpW8B409DYKqYM9NHk"></figure>' 
+      <p class="text">参观完地下部分就到了斗兽场二楼，导游小姐姐依然是带我们走了平时游客不让进的侧边平台。这个时候就非常晒了，感觉一整个团的人听讲解的时候都蔫蔫的。从侧面平台走到正面平台之后，我们的导览就结束了，剩下的时间可以参观一般游客去的斗兽场三层。</p>
+      <p class="text">我和老布在二楼晃了一圈还在纳闷哪个地方上楼，旁边一个好心 中国 大哥直接给我们大手一挥指了道：外面左拐上楼！于是我们就屁颠屁颠的出去了。出了二楼才发现人是真的多，上下楼基本摩肩接踵。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/14Dghpmpwq3mge13GoTdBY07CH0uaAgZF"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12jqcum3LbGrXm0wuoz8Jaqrk7z__IUu-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1AvIB36eLlSmMNZYQmqmPoNRDXi6FAz1N"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">上了三楼就看到了接水的地方，于是又是一通猛灌。三楼部分展品是有中文解说牌的，但整体我个人兴趣不大，不知道是天气的原因还是别的，感觉这些东西的话看纪录片或者虚拟纪录片会更有意思。可能最直接的原因是没有导游，因为我三楼逛了一圈下来之后又蹭了一个在旁边讲斗兽场厕所设置和使用情况的导游，虽然听着细节有点恶心但不妨碍我觉得的恶心得很有趣哈哈哈哈！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1VNadE0cO80m65IwHF-xSpRRWLklx6e0J"></figure>' 
+      <p class="text">于是我们的斗兽场之旅就在大概快两点的时候结束了。说实话是饿了但可能也饿过劲了，并没有觉得特别难受。出了门立刻往餐厅走，因为走了主路一路暴晒，好在没几分钟就到了。</p>
+      <p class="text">本来我还担心距离订位时间早到了半小时，会不会没有位子，结果到了之后根本没问我们订单的事情。说实话，看到那些餐厅门口室外用餐的人我其实是有点崩溃的，即便是有个带水雾的大风扇在吹，我还是觉得内心焦躁。好在侍应生在我们的要求下给了我们一个室内的位子，虽然没有我想象的凉快，但起码感受到了一丝空调！</p>
+      <p class="text">上来我就先点了一个Aperol spritz，也算是尝尝意大利“国酒”吧，颜色看着就让人心情舒畅的鸡尾酒。本来想选蛤蜊意面，被告知所有海鲜意面都要等很久，因为点的太多供不应求，要先给海鲜化冻啥的。于是果断换了Lasagne 和Carbonara（一种培根蛋酱意大利面），又点了一个酥炸小章鱼作为前菜。</p>
+      <p class="text">等了不算太久菜就上齐了，酥炸小章鱼滴了些蜂蜜，最好吃！两份意面都中规中矩，就是盐放的有点多。老布跟我开玩笑说，这是知道我们今天出汗出的太多了，给我们补补盐分呢！想想可不就是，我俩已经全身出了几遍汗，干了的皮肤上都能摸到小盐粒了！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1RDqoJmfxmkHPb1pA4IiM0Z5OwFIDZFBc"></figure>' 
+      <p class="text">大概吃了一个小时也歇够了，明显感觉空调越来越不凉快，3点左右我们就又出发了。时间还早，所以我们就直奔了 卡比托利欧博物馆 ，也就是传说中世界上第一座博物馆。顺着主干道走过去，有树荫，有僻静的斜坡小道，有唱歌的艺人，有安静的教堂，也有俯瞰整个古罗马遗迹的平台，美不胜收。</p>
+      
+      <h3 class="subtitle">卡比托利欧博物馆</h3>
+      <p class="text">到卡比托利欧博物馆，果然是没什么人，根本不用排队直接买票存包入馆。米开朗琪罗设计的卡比利欧广场一共三个建筑，据说建了400年才全部建成。我们是从右边的保守宫地下一层开始看起，基本都是古罗马的文物或者雕塑，还有另一个可以看到古罗马遗迹全景的平台。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1-1SFg9GyJ-GLG0sqzQluMJ-lpIQCcxq9"></figure>' 
+      <p class="text">上楼之后逛过各个房间和大厅的壁画和收藏的名画，贝尼尼的“美杜莎”，看到了镇馆之宝 “母狼乳婴”的雕塑。老布还跟另一个雕塑“拔刺的少年”来了个高仿合影，然后自己还不好意思了照完立刻一路跑走，真的是笑死我哈哈哈哈！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1aUEU85MpI2iRmBlcB20cW3MgPUL66uwr"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/16LLpoB8lF2I4VTdH2zVVf6OfjWXgk0Sq"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1iJ5OSgWAH-amXDVr9s7riEoodCCm6TNQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12lxwFXVGWHndcB5Y76NXH5Y4VvdFSQbJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/16G0W4ywhguRQTkBUi-eu7yMk2v_d_JPW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/16WF9ICXC67477QbBpXKh7GlS0HTtZlUF"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1i-aNbuV7CCRYW6p21gSyFx1eokG7a2NA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1taqGSotpLCLSXaJ_ArZs5p03duB85-c_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1W78Bm41cYSv0KqxXj3k2yDjN9v6ZrUJ8"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">在往上一层是绘画，主要是卡拉瓦乔的作品，还有鲁本斯和其他名家。院子里则是君士坦丁大帝巨大无比雕像的头和手残部。卡比利欧博物馆藏品众多，再加上建筑本身就很让人惊叹，所以感兴趣的小伙伴值得好好看。然而对于一个夏季高温的罗马来讲，还是同一个问题：空调太不给力了。基本90%的房间都晒了一天热的要命，空调风口那一丝丝不怎么凉的风基本等同于没有，所以就算是我想仔细逛也是有心无力，只能拖着老布走马观花，把几个感兴趣的认真看下了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Xr1w8dbjqhiL38neMwhWQ72uFb8F575W"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1YkjctOym3WDDt5FzXmDBke2NeuoiKOBJ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/190vREfi3cJf1c0fgyCjsszf6QS42nJG-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1RAEGHLRXIG7uYkk66oJpnyjwYkXA9VRv"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">然而即便如此，我们也是结结实实看了两个多小时，以至于保守宫逛完已经6点了，没有时间也没有精力去逛对面的 新宫 了。想到那里面也没有什么我们特别想看的，我也很释怀，于是坐在门口的广场上等老布去接个水回来再往回走。</p>
+      <p class="text">米开朗琪罗设计的这个卡比利欧广场不得不说还是让人觉得很惊叹的，尤其是广场入口高耸的台阶和两边巨大的雕像，这气势一下就上来了。我们走走停停拍拍照，眼看着夕阳西下，于是准备再去扫个小车车一路呼呼回去。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/16ivFBXj5y1IwkjvYmw0eReo66aYnmsiQ"></figure>' 
+      <p class="text">看到App上定位的小车车距离不远，我和老布一路走过去。经过了 威尼斯广场 ，发现一半搭着脚手架在修，也拍不到啥，于是决定别摸蹭了赶紧回去歇着吧。在威尼斯广场附近找电动滑板车的时候我和老布分开找，然后就看到一个十几岁的深色皮肤小孩一直打量我们，手里拿着个塑料袋来回逛，也不走，我来回找车的时候他也来回移动，我的防盗雷达就又竖起来了。在他瞟我的时候我立刻把本就牢固背在身上拉链抓在手里的帆布包直接捂在了胸前，不管是拿手机还是扫车的时候都一直用胳膊夹得紧紧的，没两分钟就看他走开了。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1YxENJI6Vw6v8vYYn79ffKV16xZv4CzZw"></figure>' 
+      <p class="text">来回试了几辆好歹扫到了两辆可以用的，我和老布就又呼啦啦的出发啦！因为来了两天还没吃上意式冰淇淋Gelato，而我们酒店周围就有一家挺有名的La Romana，所以直奔冰淇淋店！</p>
+      <p class="text">依然是 十分 钟左右到达，冰淇淋店里排了不少人。好在速度快，但还没等我翻译好要什么味道的，就快轮到我们了——是的，店里招牌上那些味道的选项都是意大利语，就我一个人拿着手机依靠不怎么快速的谷歌翻译艰难选择！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1lSJC094mDNdP5HdLh9IhAIlznKURt6S1">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Zr0qyyvy3u3_yVfwpdDtlKrpjAWwnXxg">
+        </div></figure>
+      </div>
+      <p class="text">于是只能匆匆选了无花果、巧克力以及开心果这几个味道。第一次吃无花果味道的，很新奇，但是居然是干无花果那种，感觉有点过甜了一丢丢；开心果依然是超好吃，因为之前就吃过，所以算是进阶版的好吃吧，不算惊喜型的。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1TSRAzpKpROz7TEKskZUP2XzSAyU6Y5SH"></figure>' 
+      <p class="text">吃完冰淇淋已经是7点了，走到酒店附近大概也就不到五分钟。昨天老板不在的 菲律宾 外卖店今天也正常开门，于是进去把昨天没吃成的炒粉点了。一开始以为老板只是亚裔，毕竟是菲律宾外卖店，结果英语沟通困难，老板听见我们自己说话直接来了句：中国人啊！然后认领了同胞哈哈哈。但实话实说，小店老板和大厨都是同一个人，Google上看起来很好吃的炒粉实际上味道一般，尤其是可能老板知道我们中午吃咸了，所以晚上直接没放盐。。。。</p>
+      <p class="text">我在等外卖的功夫老布去周围超市买了水，我们就浩浩荡荡的回酒店了。进门依旧是洗澡再吃饭，一通操作下来躺在床上居然也没有很晚。今天热的有点虚脱，想到明天38度的气温我就欲哭无泪。能怎么办呢，只能明天再说啦！</p>
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.罗马斗兽场 门票预订链接： https://ecm.coopculture.it/1HSNYZblM2A3QyiqXOf4XUB8RKZH7T0vy.php?option=com_snapp&view=products&snappTemplate=template3&catalogid=ADAE8874-AE4B-55B9-02FB-0167A81C0247&lang=en
+        <br>  其中16欧是标准票，22欧full experience是加地下部分的。不管任何的票都是有每人2欧的预订费。Full experience里面也包含了另一种英语/意大利语/ 西班牙 语的导览票，要再贵10欧，有条件的还是去个英语导览的，讲的真的很多，应该会很有趣。
+        <br>  旺季的时候提前一个月订票，如果实在没订上可以考虑意大利语，就当是多花10欧买免排队的pass了。但有精力的还是建议多刷票，确实会在提前一个月到当日之间不定期放票，比如说我写这篇游记的时候，就发现提前一个月的票和提前6天的票都能刷出来一些。
+        <br>2.去斗兽场记得带护照，别的票不知道，网上订的导览票进门要查ID。
+        <br>3.古罗马遗迹和帕拉丁山之间没有明显界限，两个部分是连着的，所以不会查票。只有进入帕丁顿山博物馆的时候会查一下。
+        <br>4.意大利街上很多地方都有接水喝的地方，自来水，可直饮，大家排队接水，因此带个瓶子很有用。景点周围或内部一般都有，比如古罗马遗迹1号出入口和斗兽场最高层（三楼），如果找不到可以看他们的地图标注或者问工作人员。
+        <br>5.卡比托利欧博物馆基本不用提前订票，尤其是下午不会人很多的，就是夏天部分房间有点热，记得自备折扇或者小电扇。
+      </div>
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">第三天 罗马–佛罗伦萨</h2>
+
+      <p class="text">经历了昨天的高温，今天又打算在市中心逛，所以早早就起了床收拾好行李在酒店寄存。第二次在这个酒店吃早餐，轻车熟路，不到8点就吃完了，于是就又租了个小车车向 西班牙阶梯 进发啦！</p>
+      <p class="text">我对这个电动滑板车简直上瘾，一般走路多于15分钟的话就直接考虑 租车 ，滑过去也就五六分钟，三欧元左右，真的是太划算了！值得注意的是也就是两个人比较划算，人多的话还是打车比较好。</p>
+      
+      <h3 class="subtitle">西班牙阶梯</h3>
+      <p class="text">于是乎我和老布就再次一路拉风的颠过去了。到了西班牙阶梯发现居然有趁着早上光线好来拍婚纱的。稀疏的人群，合适的温度，柔和的光线和本来就带些浪漫的色彩，让这个早晨的开篇瞬间变得美好又灵动了起来。</p>
+      <p class="text">对于我们这种纯打卡的人，西班牙阶梯拍拍就可以撤了。阶梯觉得旁边的粉色小楼和高大的棕榈树也 十分 合我的心意，时间允许的话这边吃个早餐或者喝个咖啡也是不错的选择。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1rwiPe_qyAfSQWblV7TtNfqePcFq7KqXe"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1FM52KNUXHkZdmWI3kdHhIwVwSa7tbleL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18oVDRtPrnnbzr2VTjaJpzR6OO3f2u7K9"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      
+      <h3 class="subtitle">许愿池</h3>
+      <p class="text">一路往南走，路上很多纪念品小店纷纷开门了，我自然是拔不动腿的，于是没走两步就把冰箱贴和明信片买了。到许愿池的时候刚好9点左右，很幸运的碰到了许愿池清理硬币！因为之前看到大家的许愿池都是人从众，拍个照还要等半天而且很难拍到没人的。但是清理硬币的时候整个许愿池旁边是拦住的，一个人都进不去！因此站在上面往下拍的话完全没人，而且上面拍的人也不多，所以我感觉特别好拍啊。当然，想坐在池边跟池水近距离接触的小伙伴除外，想许愿的也除外。我是不想许愿啦，我大概十年前来的时候忘记有没有许愿，但据说其中一个愿望是要再次回到罗马（怎么感觉跟强制还愿似的），所以就当是我之前许过了吧！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1b4XDUyN0myGwfqQurZBGa1unfPEibhjE">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1eJzbDFH2D9cUxS3nowiMI9cs6X5o7hRI">
+        </div></figure>
+      </div>
+
+      <h3 class="subtitle">圣依纳爵教堂</h3>
+      <p class="text">接下来继续往西走，没多久就是圣依纳爵教堂。我们慕名而来，一进门依然是被头顶的最强裸眼3D画作震撼了。太震撼了。想到安 德里 亚·波佐在将近四百年之前就运用绘画技术达到了如此的幻视效果，很难想象他怎么没有像达 芬奇 或者拉斐尔或者伦勃朗那样名誉世界。好吧也可能是我艺术修养不够，作为一个普通民众没有听说过，但任何人看到这些画作都不能不赞叹一句牛X！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1zCgnGx09KWTq4ed2p9wqExzVoap6wt64">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1ilYQV5mroMcaptZXg5NeoWw8y3SxiAK2">
+        </div></figure>
+      </div>
+      <p class="text">教堂中间有一面镜子可以让大家细细欣赏天花板上的画作，可惜就是人比较多，只能排队看，所以不好意思看太久。排队的功夫就听见教堂右前方的祭坛传来阵阵歌声，我没忍住跑过去一看，居然是一群修女在唱歌哎！而且也不都是那种悠扬空灵的呜~呜~哦~哦~的圣歌，也有欢快的打手鼓的那种，再加上他们明亮的蓝色修女裙，黑色闪耀的皮肤，感觉简直是现实版的《修女也疯狂》！（完蛋了又暴露年龄了）</p>
+      <p class="text">唱完几首之后貌似牧师就来了，三位也不知道是牧师还是主教的人来给修女们上早课，然后我们一堆游客就坐在比较远的后方默默地听。讲完课发圣餐，他们又一起祈祷，然后又一起唱歌，这时候就是比较舒缓的圣歌了。仰头看，上午的阳光正透过穹顶的玻璃洒落在大殿里，歌声回荡在一束束的光线中，让人感觉时间都不自觉的慢了下来，甚至马上就要静止在这一刻的温柔里。游客的脚步都变得轻了又轻，生怕惊扰了他们。直到早课结束，牧师们依次离去，修女们就又开始打着手鼓唱起歌来啦！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1R6sseSDdGQ1bmKxgFj0SgI5FYR9R6jbt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1JGshLhLNWjfmzpRw3qnQg9oaYNsWszaz"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_KGk2L1TNoMn87C_bZnxAhWymN-O4WDY"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">我们又在教堂流连了一会儿就出来了，一路走走晃晃到了 万神殿 。7月开始万神殿已经要收门票了，貌似是5欧，可以网上预订，但依然人山人海。我跟老布之前就都没啥兴趣，门口打卡照一拍就走了。</p>
+      <p class="text">再往西不到五分钟就是Piazza Navona 喷泉广场 ，此时太阳已经上来了，看着广场上晒的白花花的就没有什么动力，幸亏今天温度没有那么高，还能拍拍照，不然夏天的广场除了一个热我也就想不到什么别的了。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1oZiootDi8qkoWbcKkvEXce8xj5u_jbt8">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1phUb5GTAS8tObsxq66WfW-1R-FhRVW2K">
+        </div></figure>
+      </div>
+      <p class="text">看看时间已经是10点多了，打算搞个电动滑板小车车呼啦啦回去。只不过这边大部分都是景区，不让停放小车车，所以就打算一路走一路逛，直到能租小车车为止。路上还经过了St. Louis of the French教堂，进去看了看卡拉瓦乔的画作（要投币，画作上的灯才会亮）顺便歇口气，然后决定再去吃一个 意大利 冰淇淋！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1jOnVuhzFxBmDGmOTOIfGSpSR_NxSEsni"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1tkga3gxWaBMaRbH69bwD8MUNbcD_Iwm9"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-2UbxUSy81cShrRQj_zzXFrlKNxBydY_"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">这附近其实有不少好吃的店家，我们选了Giolitti，据说是罗马最古老的冰淇淋店。一路走过去的时候还碰到了貌似送外卖的小哥，那个大箱子背在身上简直像是圣衣的那个箱子！感觉是快递圣衣的人哈哈哈！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1xuJ8usW0GQI3EBPt-DRKFZX3o-p2ys6C"></figure>' 
+      <p class="text">到了店里发现座位比较少，因为同时也卖小蛋糕等其他甜品，所以也是人满为患。我们选了香槟和石榴，榛子和桃子味道的Gelato甜筒，站在角落里呼呼噜噜就吃完了，因为香槟和石榴味道的都化得太快了！吃了这两次Gelato感觉可能水果味道和带酒的都会化的快些，如果大家不想搞得满手都是就尽量大口吃吧！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1rMxTX1d4f4MK96na2vyU5bzBDCJvtLq-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1a7efPfF9XsaRhiDjZBoMh624in9PkoOZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1qxZnCtpYpRkTeBC6u1tq8-Wbc4qYkYFz"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">一通操作下来发现时间也差不多了，想到还要去我们一直心心念念的披萨店买午饭带着，我们就一点也不敢耽搁的去找小车车了。扫了车一路呼啦啦开到据说罗马最好吃又实惠的披萨店Pinsere，终于点上了一个无花果一个茄子的小披萨！</p>
+      <p class="text">点单小哥听说我们不堂食要带走还一脸夸张的皱起眉头问‘Why～～～?! Why not?! Come on!’我和老布都被逗笑了，就说没办法，我们也想在这里吃但是还要赶火车。小哥很遗憾说那没办法了，披萨最好吃的就是刚烤出来直接吃，但我们家的怎么样都最好吃，所以应该影响不大。然后在店外的座位上等披萨的这十分钟里我们就听到里面两位大嗓门小哥各种欢快的烤披萨、招呼客人、跟往来邻居打招呼聊天，嘴就没停过！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/15SXHhcOLKbvQw1LlPEvpj-JD76jFHlHf">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1O8UBPQEUYZFQJ6pinBV8xDxhIi0gxolB">
+        </div></figure>
+      </div>
+      <p class="text">拿到两个冒着热气的披萨盒，我和老布道谢离开，三分钟走回酒店的路上感觉盒子里不断飘出的披萨香味简直就是折磨。我们到酒店背好行李，端着两个小披萨一路走到Termini火车站，看看站台还没放出来，也不用排队买票（提前订了），就站在大厅里把披萨吃掉了。说实话我感觉有点不太仁义，因为实在是太香了！</p>
+      <p class="text">老布一边吃一边还在叨叨，不是说披萨上不能放水果吗？！放个菠萝块就好像要了意大利人的命一样，这个无花果算怎么回事？！真是欺负人家菠萝！双标！差评！</p>
+      <p class="text">我一边觉得好笑又一边看着他替 夏威夷 菠萝披萨鸣冤报屈，嘴却没停下，不到十分钟就分别吃完了两个披萨的各一半。就在我准备开吃的时候发现站台在大屏幕上出来了，于是又端着盒子一路走到车上，趁着等火车出发的时候赶紧吃完了！</p>
+      <p class="text">总体评价：好吃！没有什么特别浓重的味道，但茄子/奶酪/无花果/火腿这些各自搭配起来口感非常协调，香气四溢，面皮薄厚适中。唯一的美中不足就是感觉上面橄榄油撒的有点多，所以外卖打包吃的一手油，堂食会更好些，也可能会有脆脆的边边，外卖的话就都是软软的啦。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1GTPZoQyDfGc_htM9sQB-KVJaN7FkNfAu"></figure>' 
+      <p class="text">火车票我是提前两三个月在Italo官网订的，往返25欧/人左右，单程大约一个半小时。因为7月初意大利火车大罢工，小范围罢工余波震了好几次，所以一直搞得我心里慌慌的，在app上密切留意着车次动态。好在这次局部罢工不包括Italo，所以火车正点出发正点到达啦。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1nET5lFHf7MPUTmpDTdjFpnXcXBiTKJ1i"></figure>' 
+      <p class="text">大概两点半到达了佛罗伦萨，我和老布又开始了新一轮的防盗防坑。据说佛罗伦萨除了防止小偷，还有那种在地上摆好多画的，走的时候一定要看清楚不要碰到踩到，不然很可能会被讹一笔。我们一路按照导航找到酒店check-in，放下行李洗了洗脸，马不停蹄的向圣母百花教堂出发。</p>
+      
+      <h3 class="subtitle">圣母百花大教堂 穹顶</h3>
+      <p class="text">订票的时候订了下午3点45分登穹顶，来之前最担心的火车晚点并没有，其次担心的是时间紧张找不到入口，结果分分钟就找到了。直接导致我们3点半就排在了穹顶入口处，前面大概只有三四个人。具体各个入口我标在了下图：</p>
+      <p class="text">1. 穹顶入口</p>
+      <p class="text">2. 穹顶出口</p>
+      <p class="text">3. 免费参观教堂入口（无订票）</p>
+      <p class="text">4. 已订票的教堂和地宫入口</p>
+      <p class="text">5. 钟楼 入口</p>
+      <p class="text">6. 洗礼堂入口</p>
+      <p class="text">7.博物馆入口</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/134TRklDvX3dOB6AGSS0-MXcc2-2LfH_t"></figure>' 
+      <p class="text">圣母百花 大教堂 是免费的，但是排队的人非常非常多，目测至少一小时起，夏天真的分分钟晒死，所以还是建议大家直接买联票进。实际上我做攻略的时候感觉似乎这个景点也没有明显的淡旺季，可能冬天会好一些。</p>
+      <p class="text">联票票价有三种，一种是包含穹顶/钟楼/地宫/洗礼堂/博物馆这五部分的；一种是包含除了穹顶以外，其他四部分的；还有一种是包含除了穹顶和钟楼以外其他三部分的。全包含的这一种每人30欧，买票的时候就要定好参观穹顶的时间，然后其他四部分就三天内随便什么时候参观都可以不限制时间。如果买的第二种每人20欧，订票的时候就订的是参观钟楼的时间。订票链接在后面tips里。本着来都来了的原则，建议大家去看穹顶，虽然爬楼爬到我怀疑人生整个出透汗，但是近距离看穹顶壁画真的很震撼！</p>
+      <p class="text">看到这里可能大家发现了，联票是不包含圣母百花大教堂的（因为免费）。但是由于地宫入口是在圣母百花大教堂里面，所以相当于你买了联票就不用去排那个免费进入的队，直接从另一边单独的入口进入大教堂参观，参观完了再下地宫。要知道这个真的是旺季救命的选项，我们参观教堂的时候发现那个免费的队伍几乎都不怎么动，门口工作人员拦着很久才放进去几个人。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1ZQDaN7TEzbE0UQf5S9rg-rsPiw43t8b6">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1ilNrBC_1VnqXYrGri_NzQGnreb6_Ojh-">
+        </div></figure>
+      </div>
+      <p class="text">我们排队等待工作人员带领我们进入穹顶的时候，前面也有几个没有订到票来试试运气的，结果被工作人员无情拒绝，答曰没有现场票卖，没订票就不能进。时间一到入口大门就开了，进去之后就开始一轮一轮的在昏暗且十分狭窄的石砌楼梯上盘旋。463级台阶，没有电梯的选项，只能用脚一层层爬，我一开始觉得小意思，结果爬了没多久就感觉登顶遥遥无期：几乎很久才有一个小小的通风口，光线又很昏暗，后面的人跟的紧而且楼梯狭窄没有休息的空间，导致你没有办法停下来只能继续走，所以整个过程非常漫长且闷热，整个汗流浃背衣衫湿透。建议体力不好或者年纪太大或太小的不要来，天气太热太闷不要来，不然体验感真的扣大分。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1C3qa3VcqYWiTwMrGje-s9WG7NEm2yGa2">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1BoDprHb49xVCad_rtVWBBfghKDR4mskt">
+        </div></figure>
+      </div>
+      <p class="text">就这样浑浑噩噩的爬了好久终于到了，一出去就发现已经到了穹顶壁画的下方，每一个人物，每一笔细节都看得异常清楚，再加上穹顶本身的半圆球结构，相当于一个全景环绕，确实是在大厅看无法体会的震撼。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1SwAwRQO-2CN12FDWMq-AqvvKrx7WnJXU"></figure>' 
+      <p class="text">然而这并不是终点。围着穹顶绕半圈出去之后发现还要继续往上爬！虽然心里一整个问号但是因为单行线所以依然是没有退路。又爬了一阵子出来发现到了穹顶天台。此时什么远眺啊俯瞰城市啊都靠边站，心里就一个感觉！啊！有风了！凉快！</p>
+      <p class="text">露天天台是围绕穹顶的一圈，基本也是目之所及范围内的制高点了，所以360度无死角俯瞰了夕阳下的佛罗伦萨。我和老布坐在长椅上好久，远眺城市美不胜收，风吹得十分惬意，直到工作人员上来说你们这一批人的时间快到了哦该往下走了，我们才恋恋不舍的准备下楼。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1RaUXDGKTWG9TKDJNsWn7GkBReohf-W-5">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1qWizZFqeytlV1YhVfBMSL8qajvKknEhA">
+        </div></figure>
+      </div>
+      <p class="text">果然下楼的时候开始腿软了，典型的上坡容易下坡难。下了一段就会再次绕进穹顶壁画的部分走另外半圈，我才有时间好好站在那里拍了几张照片。下楼感觉确实是快一些，在上面吹了一会儿风感觉也不那么闷热难耐，出来以后发现居然开始阴天了！在穹顶露台的时候还是阳光灿烂，不得不说运气好呀！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1La4SwWlgAg-zFO8sIUOmszv3z8csnqLC">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1_iwex74_eEfIErt0_I-6W8TwxycjVMgS">
+        </div></figure>
+      </div>
+      <p class="text">看看表还不到5点，也实在是爬的累了，就想着去吃个佛罗伦萨有名的 牛肚包 尝一尝。 中央市场 那个早就关门了，好在不远的地方有个Da' Vinattieri，据说牛肚包也很好吃，我们就一路往那边走。路上还路过了一个美术用品专卖店进去逛了一圈，感觉佛罗伦萨真是一个充满艺术气息的城市。</p>
+      <p class="text">到了店里面发现没人在，也没有店员，研究了半天门口小黑板上的三明治，感觉都不是我们想要的。这时候店员小哥回来了，问我们要买啥，我们说想要牛肚包，他一副了然的样子，让我们拐出门去到另一个外卖窗口等。到那边我们就隔着一个小窗口看着他开始做，小哥英语真的不咋样，连比划带说半天我们才搞懂牛的“第二个胃”和“第四个胃”哪个是茄汁味，哪个是罗勒酱。我和老布每样要了一个，两个加起来才12欧左右，超级划算！唯一有点介意的就是小哥把手机放在旁边，一边给我们做一边还时不时的点一下屏幕，貌似是在玩儿游戏，搞得我有点崩溃，想直接跟他喊你能不能洗洗手啊这手机摸了还能回来摸这个面包吗？！</p>
+      <p class="text">做好拿到手我们就直接站在路边开吃了，中午吃得早现在已经饿了。主要是这个牛肚包太香了根本等不到拿回酒店再吃。两种味道的各有千秋，我更喜欢茄汁味的，有点稍微的酸甜，口感更丰富一些；另一个罗勒酱的更突出的是牛肚本身的香味，也很美味，老布就很喜欢这个。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1qhnxgpyOYoJVG75qCwlDHEEjvE6rXKge"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17io7QNI2qCe9BxdbccJBP7YDDtDSEF2V"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1trCPV5morY7KbVnSdhLviOHPW4XRscJU"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">吃完我俩还有点意犹未尽，就想着走去中央市场看看给肚子打打补。再次穿过圣母百花大教堂的广场，依然是熙熙攘攘，中央市场附近街道的摊位已经纷纷支起来了，一眼望去几乎全是卖皮具的，皮衣皮带皮包，应有尽有。我本身对这个就不感兴趣，再加上那个皮革味我也有点反胃，于是跟老布直接拐进了中央市场。</p>
+      
+      <h3 class="subtitle">中央市场</h3>
+      <p class="text">这个时间中央市场一楼已经关了，进门只能直接坐电梯上二楼。二楼有很多食肆，有卖意大利特有的甜点摊位，有酒吧摊位，也有 汉堡 披萨或者亚洲餐食。我和老布逛了一圈，其他都不是很感兴趣，就买了两个意大利特色的Arancine，感觉是包馅儿的炸米饭团子，还买了一个小的开心果cheesecake，算是尝尝鲜了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1nba8riYxMoVLBq8_EX-oR-U1vd3Nqm6M"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1EQTCwSZ6BC8kL2qEZPkZobW2CvozRAvY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wbL16srGm2iV_iBShdzmIT1ojQCaCkjW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Mk_9SVob2cdCqOAQL9-cJppHdqceXi-x"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bifeVpTZ0NeC-AhTxfXV1IO-qwl4GEKg"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">本来想再来一杯Aperol spritz，但是这一天给我累得够呛，所以就直接打道回府准备回酒店一起歇着了。路上还路过了小超市，回到酒店洗去一身汗，吹着空调喝着饮料，把我快废掉的双腿放到床上，真的不要太爽！</p>
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.我做攻略的时候看到据说许愿池一般是周一/周三/周五早晨8-10点清理硬币，想躲开人流的小伙伴可以这时候去。只亲测了周一的，其他时间无责任转述哦。
+        <br>2.要去吃Pinsere的小伙伴注意，门头比较小，基本像个外卖店，门外有大概不到十张两人小桌的用餐区域（夏天会比较热），而且最主要的是，周末不开！但工作日中午开的早，10点就开门。
+        <br>3.意大利火车主要就是Trenitalia和Italo两个公司，前面那个是国营的，后面是私营的。我没坐过Trenitalia所以没有发言权，不过就我做攻略的时候看到的评价，Italo火车条件稍好一丢丢，准时性也好一些，然后罢工的话我感觉反正这几次参与的不多。说实话票价真的不贵，建议大家 大城 市往返的话可以先考虑Italo。小城市之间线路可能不如国营覆盖的全，大家酌情选择。查看车次即时动态我用的Trenit这个app，实时更新。
+        <br>4.圣母百花大教堂订票链接： https://operaduomofirenze.skiperformance.com/en/store#/en/buy
+        <br>5.如果想吃中央市场那个牛肚包Da Nerbone要早点去，下午3点关门，周日不开。
+      </div>
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">第四天 佛罗伦萨</h2>
+
+      <p class="text">本来今天安排的是把 圣母百花大教堂 周边的那些联票景点看了，但是感觉貌似用不了一天的时间，再加上早上起床一看，下雨啦！于是决定乌菲兹美术馆走起！</p>
+      <p class="text">作为大热门美术馆，乌菲兹美术馆理应是提前订票的。但是由于我实在是不想赶景点，所以就决定到佛罗伦萨看情况再说。没想到我们这一天起得早，体力感觉OK，而且圣母百花 大教堂 + 钟楼 +地宫+博物馆怎么也不像是需要10个小时的样子，所以就决定一早直接杀去乌菲兹美术馆现场买票。</p>
+      <p class="text">走到酒店餐厅的时候路过走廊的半落地窗，窗户开着，外面的花园里全是淅淅沥沥雨打树叶的声音，感觉越下越大了。好处就是气温骤降，久违的凉爽让人精神一振。酒店早餐中规中矩，依然是欧陆式，但是那个开心果可颂真的是太好吃了！本来看颜色以为是抹茶的，结果我吃了两个根本停不下来，热乎乎软软的，还有开心果酱，超级美味！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1AJ1UyVm4W0XK67h4Eh6O6w-gKhyVOGSi">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1jaxeoJjt2wHczgo5hVAJtibWs1XDuVN5">
+        </div></figure>
+      </div>
+      
+      <h3 class="subtitle">乌菲兹美术馆</h3>
+      <p class="text">之前看了攻略是8点15分开始售票和参观，有的小伙伴是7点多就到门口排队，我们不想到的太早，本来这一天可能就会走很多路，如果还要站在那里等超过半小时的话我是拒绝的，毕竟能省点力气就省一点。7点半左右我们吃完饭收拾好行李存到前台，就打着伞出发了。走过去大概要10分钟，出门的时候还有一点小雨，走到一半就停了。收了伞到达乌菲兹美术馆的时候差不多7点40分，我和老布一开始还不知道售票处在哪，跟着人流还走错了，问了工作人员才去到对的地方（如下图），这时候售票处前面已经有不少人排队了。</p>
+      <p class="text">1. 已订票游客入口处</p>
+      <p class="text">2.售票处</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1wLaTHTxOOXeRIMyYgqW13QEpWKlncnHk"></figure>' 
+      <p class="text">看看前面也不过三四十人，而且我们排队站在河边连廊下，就算下雨也淋不到。清晨雨后的河边别有一番景色，水汽氤氲，随风摇曳。不远处就是 老桥 ，此时整个城市才在大雨过后慢慢醒来，透出不容言说的宁静与美好。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1SJylcpDOipIVT3aanrLzo932ZWDxZ_I1">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1aneENrmEruf-wzOqzt4yVcK4BR2sx1ob">
+        </div></figure>
+      </div>
+      <p class="text">等了不到20分钟就开始售票，一批一批放进去，我们第二批大概多等了五分钟左右的样子就买到了。出来直奔检票口，然后就开始参观啦！</p>
+      <p class="text">乌菲兹美术馆一层我感觉意思不大，有时候临展也会放在一楼。到了二楼才会觉得豁然开朗，古色古香的木质长廊两边各种让人惊叹的名家雕塑，阳光透过联排窗户照进来，和远处波光粼粼的河面反射的光芒交相呼应。由于名家名作太多，也为了避免审美疲劳，我和老布着重看的都是地图上每个展室重点标出的，其他的则选择性的重点浏览自己感兴趣的，不感兴趣且不重要的就会一眼略过。达 芬奇 、米开朗基罗、卡拉瓦乔、提香等等群英荟萃，超多名作，每一幅放到别处可能都是镇馆之宝级别了，以至于我们单看这些就看了三个小时，出来的时候感慨，我要去看点难看的东西洗洗眼睛！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/13ErHDqH9f8v9KTXyaBMn0Aph4gDDnfwg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1hGRledyCx65RVU9rrfCsLSv0LeJenjqm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mpyU1LT0Hvvsx-uXdVlpjorbLY_yzAuO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/146VudOEipZGQLQnsXehjbzI0TbOEThsA"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18kchc4vIazfzhg3Xx-agfcJuex_jhqAt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nI-WNWaSWbB7PVDcqIUTnSqzLzmsS0oW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1LS2C4sOofR9tx2nVd9YjSDCkgC65AWud"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Y2oL3-0OAI0IMzRcQRKk-NtAV96CCObP"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1c_lrB_Vs00JPY2aQIu84asqu49jgSvg5"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">中午打算去餐厅吃饭，所以看看表才11点多我们就打算先去圣母百花大教堂周边那几个联票景点看看。路过 市政厅广场 也是人山人海，于是我们就打消了去旧宫博物馆的念头。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1e5s-ItDFfFqHBEn5taQVAZa5xqf4k_GT">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1OaIinmAHrji215OUQfaqP9rwQ8WhI0c7">
+        </div></figure>
+      </div>
+      
+      <h3 class="subtitle">圣若望洗礼堂</h3>
+      <p class="text">走到大教堂钟楼果然队伍看起来不短，对于饥肠辘辘等着12点开饭的我们来说时间安排上不太现实，于是就去了旁边不怎么排队的小洗礼堂。洗礼堂正门就是被誉为“ 天堂之门 ”的镀金浮雕门，每一个格子里都是一个不同的圣经故事，是文艺复兴时期的著名杰作之一。洗礼堂这个是复制品，正品在圣母百花大教堂博物馆里。无奈进入里面之后发现装着脚手架，中心部分正在修护，所以转了一圈出来也就十几分钟。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1jsb0NfZ67snu_UbXD1jykY-7rEmZ5YTH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fDLGCRp58L_2f50miBCN8RH154F_gwdk"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1dFSOz7f22w1wEEgpH6wGq4Zn4TOIbj4k"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">然后我们就直奔Ristorante La Grotta Toscana去吃饭了。本来打算吃个牛排，后来发现牛排1kg起点，感觉实在是吃不了，就点了两个特色意面和一个头盘。头盘是四个crostini，但上面放的是不同的馅料。Aperol spritz是少不了的，这一餐吃的心满意足！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1Hisv8lVO30rDbnrVQ7ebORBxmQ7vYGgE">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1f0zjoUn15Vtj5-dSgeNg2msPfCw7_SfS">
+        </div></figure>
+      </div>
+      
+      <h3 class="subtitle">圣母百花大教堂和地宫</h3>
+      <p class="text">吃完出来我们惊讶的发现排队进入大教堂和地宫的队伍人数为0（非免费票），于是直接冲过去检票进去了。至此我们才看到大教堂的内部，很恢弘，却也是真的没办法跟外观相提并论。唯一就是可以在不同角度看到穹顶壁画，不过因为地面距离它太远了，很难仔细欣赏。教堂内部有地宫入口，就是旧教堂的残垣。地宫不大，主要是了解旧教堂的历史，所以基本上教堂加地宫半个小时妥妥的。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Y6RN5U8LUirqHFOqHgqow6W5Cd9J_2xY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1BR3gs5KxhgDXLz7nLKX7FepDMYJ8VSzm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1dDZFzQxnmAThk5Pmr0Jyyk3XbFYvr47R"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1g-Dx557bSAbPguYfWxPM-mEQOdJpKn_k"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      
+      <h3 class="subtitle">教堂博物馆</h3>
+      <p class="text">从教堂出来才1点半，正好是距离博物馆很近的出口，所以就直接去了教堂博物馆看“天堂之门”真迹。本来想着3点之前肯定能出来，还能去 中央市场 吃个 牛肚包 ，然后去爬钟楼，结果！不出意外的因为鸡毛蒜皮的小事吵架了。咱就是说情侣出门旅行至少吵一次架可能是是大自然给定的KPI，完成了才能朝着“真金不怕火炼”的情感再迈进一步。</p>
+      <p class="text">我属于来得快去得也快的性格，但老布属于别扭很久的那种，而我这次又特别嫌弃吵架耽误事，他心里又死活过不去，所以这次居然轮到我哄他了！于是乎我们俩说好坐在博物馆二楼长椅上“预备——开始”我就开始哄，但我也越说越委屈，最后怎么和好的我也忘记了，反正是我牺牲了很多付出了很多！（此处可能记忆有偏差）</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1A-mcMmK2NcxnoHFp2uIjjQJws5HHTGz8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12jRABP0OBHbZBKtyzYOLDEyZQRW2empO"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1OigRwUY_8ecF6Amwk52QW14XHKrg72QY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/14pzCFMTdW-aLI3QLEDbvIekvgtvVYnW2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fPQvL5AmwTiH-jocARtln429Nj4U-SE0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1RcK0FSdxNZPZdlP4BIIOzqcaYwDAx6Lx"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      
+      <h3 class="subtitle">乔托钟楼</h3>
+      <p class="text">吵完架手拉手继续把博物馆看完已经是3点了，牛肚包是别想了，幸好我还有备选项烤乳猪三明治，但也不急在这一时了。教堂博物馆有时间还是建议大家去看看的，虽然不大但是有天堂之门的真迹，也有很多圣母百花大教堂的建筑知识和历史，非常有意思。此时联票上只有钟楼一个还没去，想着可能还要排队所以就想先把钟楼爬了。结果幸运的是居然没有人排队直接就进去了！</p>
+      <p class="text">然后就开始了漫漫爬钟楼的路程，不过说实话爬钟楼比穹顶的体验好太多了，因为是一层一层的，虽然楼梯依旧狭窄昏暗，但每隔一段就会到一个开放平台，可以在平台上观景吹风，还可以休息够了再往上走，所以一直爬到最顶端也没有觉得特别累。尤其是近距离在高处看圣母百花大教堂非常震撼，阳光下白绿相间的外墙似乎闪着光，往远处看还可以跟穹顶天台上的人遥遥相望，另一侧城市景色也尽收眼底，再加上本身这一天温度也不是很高，整个过程感到非常的满意！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1UWuRoGCaAOrAr3fWXQKKuHPckToqTCDG"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZOSiouLFgPBIUDEyOg4zbNC-D4F0vY1y"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/18G-QwawqdrAxqGacacud5UFBmDo8Jeto"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nhrnurPi6H2_NeKeWhvilFfb9TvdP9-T"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1lGwxa7IPrlcSpF8qwLp5cIYRTx_l790E"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">从钟楼出来才刚过4点，距离我们的火车还有两个小时，我跟老布决定先去吃个冰淇淋然后晃悠晃悠。这时候发现钟楼和教堂旁边停着好多辆救护车，估计这高温的几天没少拉人走，所以昨天没有注意到。好在今天温度不高，估计没怎么用上，还停在这里排队呢。距离不远就是Grom，也是个很出名的意式冰淇淋店，我们直奔过去楦进两个甜筒，一个椰子+杏，一个芒果+开心果，都很好吃！就是化的有点快要早下嘴，要不怎么说“楦xuan”进去呢！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1B-MmAWNFyubkFThAIj6snUJW1c1kNyfu"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1g6eZrGjhlKbZwywNP9hgLlEw8PciDJTZ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1__K73TvQySH8hJXr9h0nlFbAfsrBgwBi"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1v6eX54HBMVfLk-kNuGjA7DMJsZuAxGGz"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">吃完甜筒看看距离出钟楼也不过就10来分钟，这两个小时干点什么呢。想来想去觉得可以去学院美术馆看看能不能买到现场票，这个时间了估计人应该不会很多了吧，结果一路晃过去这里拍拍那里拍拍半个小时，门口一看队伍排的恨不得拐了三圈，顿时劝退了。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1mc6s5eEfmgwT0Lnsn7tqdfGebJSiPymE"></figure>' 
+      <p class="text">于是我俩又一路晃悠回来到圣母百花大教堂门口拍了许多照片，逛逛附近纪念品小店，赫然发现已经五点多了。赶紧到Antica Porchetteria Granieri 1916去买了两个烤乳猪三明治准备带去火车站吃。幸运的是我们点单的时候一个人也没有，刚点完就陆陆续续来了好多人，所以我们很快就拿着自己的三明治往回走啦。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1kM7klJENx4Y-HHJsUJmhyDQcYJDi4IuF"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1caTCYOG9gwkvjRPJbBn51kFVGlfYh3__"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gbBFBe4h_Y_QHycEVfMUZzhLyQM448IH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1lMU-6bwvrvJOSmgueOVhOszzweHtx-zd"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1uWP4TQ-icY4woJfHmeRSnwN6tes27-k6"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">顺路回到酒店取了行李，一路畅行无阻的到了火车站。看看电子显示屏貌似站台还没有安排出来，我们就先把三明治吃了，不然拿在手里真的是太香了很难忍！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1VgM04ITAkO4rwfEVLycD1SysFAO1A9LK"></figure>' 
+      <p class="text">火车准时出发，我和老布今天都累坏了，感觉就是摊在座位上想摊到地老天荒。无奈一个半小时的时间转瞬即逝，走出车门已然是夕阳西下的 罗马 了。</p>
+      <p class="text">我和老布已然是扫了两辆电动滑板车，一路颠颠颠到了酒店。没想到这次给的房间有阳台，走出去一看正好是天边一缕残阳。无奈体力透支，无心欣赏，回屋洗完澡往床上一摊，就等着明天 梵蒂冈 啦！</p>
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1. 圣母百花大教堂旁边有接水的水龙头，带着瓶子就可以接水喝了。
+        <br>2.乌菲兹美术馆订票链接： https://www.uffizi.it/en/tickets ，夏天的时候八点早班会有折扣，不晓得现在还有没有。
+      </div>
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">第五天 梵蒂冈–罗马</h2>
+
+      <p class="text">今天的目标是梵蒂冈！</p>
+      <p class="text">我跟老布六点就起了床，天才蒙蒙亮。这个酒店早餐6.30就开了，而且是此行中最丰盛的！于是我们收拾妥当下楼吃早餐，各种面包火腿水果酸奶应有尽有，最好吃的是放了洋葱甜椒和菠菜的烘蛋！不愧是个四星级。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1arvhEnywv1HOJeP7_G_6oqlrZF-ae4sv"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1v4FZg4hzzsmsciOPLp3wRlpZ8QgziYNf"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gF-_EBIac5zWTRKYlElacsmqzOpabV5x"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1dZBgf5VvizGOci3DEkxnM0rn9ENufrmT"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">吃饱喝足之后，我和老布把行李寄存在前台，就打了个Uber直奔 圣彼得大教堂 了。教堂7点就开门，我们趁着早上人少的时候去，这样9点 梵蒂冈博物馆 开门的时候就可以直接去参观博物馆，两边都不耽误，逛完还能正好在博物馆吃饭！</p>
+      <p class="text">插一句梵蒂冈博物馆的门票：梵蒂冈博物馆大概是提前两个月开始订票，我订的是带午餐的门票，虽然是午餐，但是一开门就可以进了。我本来想买普通门票，结果想起来要买的时候已经是抢票当天的下午了，普通票早就卖光了。看攻略说带早餐的票也很好，还可以早点进去，但是我们酒店本来就包早餐啊，况且当时早餐票也卖没了，所以我就当机立断直接定了午餐票。事实证明这个决定是何等的正确！先不说我们四星级酒店的早餐那是超级丰盛，比那个早餐票好吃太多！然后就是早上我们想趁着还没人的时候去逛圣彼得 大教堂 ，没有时间提前进入梵蒂冈博物馆，而且逛完博物馆真的又饿又累，当场吃饭简直不要太方便！</p>
+      
+      <h3 class="subtitle">圣彼得大教堂</h3>
+      <p class="text">于是我们除了酒店打上Uber一共开了 十分 钟左右就到了大教堂前面的广场，车费也不贵，10欧冒头的样子，对于两个人来讲刚刚好。司机是个小姐姐（老布说不能叫小姐姐了，这得是大姐），下车前好心的告诉我们要看好自己的钱包手机，还有挎包啥的自己捂紧了，果然在本地人眼里罗马小偷也是很猖狂了。我们谢了她，捂紧挎包下了车，发现偌大的广场上几乎一个人也没有哈哈哈！也是想多了！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1q-pty97pMIa5GkRCtzf-D6MHcOcP0vfD"></figure>' 
+      <p class="text">一路朝着教堂走一路感慨，这个广场是真TM大啊！虽然是一览无余，但走了五分钟了还没看到安检在哪里。终于看到右手边（北边）长廊那里有四五个排队安检的人，于是跟着呼呼的就赶过去了，生怕进去晚了里面还要排队。结果不到五分钟安检完一路走到教堂大门口就直接进去了，好快！搞得我站在教堂门口还一脸懵，就这？</p>
+      <p class="text">甩甩脑袋驱散懵懵之后进入大厅，立刻被这个规模震撼。虽然是说我十年前来过一次，但是因为之前来的时候人群熙熙攘攘，又是跟着旅行团停留时间不长，所以已经几乎没有什么印象了。清晨的教堂好像是刚刚醒来一样，有种不同于白日喧嚣的沉静。大气与恢弘自不必多说，毕竟是天主教的权力中心，我想世界上再没有一个教堂能与它在雄伟上媲美了。教堂的内饰也跟我之前参观的那些不太一样，以金色为主，放眼望去一片金灿灿，让我整个感觉就是“财大气粗”！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1c75XUQUFrrwRDmyx3qqs4AsljxcjjZ5k"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nQA9HKmqYtHvsZTS_aF2y_AKYenpG_Ja"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1awm--dCQf2AWoRqzCqaiaB-Xnk1084UY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1U3uagmrnaHf1Zg4vXPdpzzpS8rDflr7Y"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">我们前前后后逛了一圈，拍了些照片，发现旁边好像有个教堂的珍宝馆，我不是很感兴趣就没进去了。然后又回到大厅去找《圣殇》，发现在进门右手边一侧。这些都参观完已经是快8点15分左右了，所以就直接去找登顶的地方啦。</p>
+      <p class="text">然而，来早了就是这一点不太好，没有队伍，很难一眼看到自己应该往哪里走。于是我就派出了老布从教堂出去问工作人员，我站在教堂门口等。结果我转来转去阴差阳错因缘际会跟他居然从两个不同的地方找到了同一个登顶检票口。第一批坐上了电梯直奔穹顶！</p>
+      <p class="text">小小的一个电梯只载了我和老布两个客人，电梯小哥不知道是有起床气还是别的啥，全程一副“好死不如赖活着”的表情，一个眼神都懒得给我们，“关门 – 按键 – 开门”一气呵成，我和老布说谢谢也是理都不理。不过我们也懒得理他，因为出了电梯是一个小平台，需要在另一头进去接着爬楼梯，而此时朝阳从云层里露出了头，红色的阳光照在露台和穹顶外壁，真是好不温柔。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1R7KCnjGAhfmWZVMjs4CpHupuRc3dNxAl"></figure>' 
+      <p class="text">没敢耽搁太久，我跟老布顺着另外的楼梯上去，走进穹顶，就开始另一轮的爬楼梯了！好在一早不是很热，爬了大概不到10分钟终于到了穹顶露台！</p>
+      <p class="text">这个登顶是没办法看到穹顶内部壁画的，只能俯瞰梵蒂冈城。前面的圣彼得大教堂广场俯瞰十分壮观，而且建筑对称的也让人莫名舒适。绕半圈到后面可以俯瞰梵蒂冈的花园，小巧而精致。侧面的两进院子就是待会儿要去的梵蒂冈博物馆啦，外表平平无奇，里面应该是大有乾坤。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1WhMM9ZPEQ2i34j0eM4qqYDVxH6zkL7gn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WJxZYfjQeL202VmRynJ96BkKtglAdFzB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1zdCHVejOgm-ujdSt3shcISULJd4TKv2o"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">我和老布在上面逛了一圈歇了一会儿，拍拍照，本来还想找地方坐下吹吹风发个呆，无奈人开始多起来了，而且这个露台空间太小，很难久留。所以我们就想着不如下去再说。一路楼梯下到露台，发现另一部电梯的小哥正守着空电梯站在门边发呆。因为没什么人我们就问了一句这个是往下的电梯吗？结果这一个也是懒得讲话，抬手往另一个门一指，依旧是连个眼神都懒得给我们。得嘞，这意思就是下楼要自己走呗，真是懒得理他。</p>
+      <p class="text">电梯这一段步行的话是斜坡下行，所以走起来不会太费膝盖，螺旋的下坡绕着绕着，就在你快晕的时候，就到头了。走到广场的时候发现边上的安检已经排起了小小的队伍，不过广场上还是没什么人，于是横着竖着又拍了一会儿照片我们才走。看看表赫然发现已经9点了，博物馆开门啦！</p>
+      
+      <h3 class="subtitle">梵蒂冈博物馆</h3>
+      <p class="text">出了广场立刻左转，顺着路一直走就可以看到梵蒂冈的 城墙 了。我跟老布期间还路过一家纪念品杂货店，进去买了两瓶水，结果出来走不到20米就发现路边接水的水龙头，哭死。</p>
+      <p class="text">水龙头后方高高的那个墙据说就是从梵蒂冈连接到圣天使堡的秘密通道，看起来好像就是一个极窄的城墙啊，不知道为什么感觉在上面安装一个脚踏人力转转车，就跟我们小时候在公园里坐的那种轨道在头顶上的 太空 车没啥区别。</p>
+      <p class="text">沿着城墙一直走，就会看到排队买梵蒂冈博物馆门票的队伍。我之前提前订了午餐票，所以跟老布手拉手跨过重重人海直接进去感觉不要太爽。进门安检之后二楼换纸质票，还有两张午餐券。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1bQqowWzZhcAHOaqIWUhs6l-_ByHWo6Le"></figure>' 
+      <p class="text">于是我们就直接检票进入了博物馆。总体来说就四个字：人山人海。我们跟着人流差点就走岔了，幸亏上楼梯之前及时止损，我想说这个样子不行啊，呼呼隆隆一大群，根本啥也看不到。于是回去导览租借信息台打算要一张地图，结果发现只有租导览才给地图。而且凭我多年逛博物馆的经验，先不说这种著名博物馆网上的信息有多么全面，就这么多人挤在一处，我真的没有办法好好享受导览。虽然这地图就是一张简陋的A4纸，打定主意不租之后，我还是礼貌问了一个刚租借完的女士可否给她手里的地图拍一张照片，爽快答应。于是“电子版地图”开开心心到手了。</p>
+      <p class="text">因为人口密度太大，此时博物馆大厅门廊楼梯已经有些闷热了。我们看了看地图，直接拐到了距离最近的松果庭院喘口气，顺便拍一拍“破碎的地球”雕塑。之所以一定要拍是因为我们跟另一个“破碎的地球”有不解之缘，因此也对这一个非常感兴趣。</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/12n0F64cP4TM_n6IKQWle0ekC-Bbdgk2O">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1YJc-WTVbI2gMqkKjTmHoKV5ecx_BMnHN">
+        </div></figure>
+      </div>
+      <p class="text">结果正拍着呢，就看到一个导游大妈跟自己的客人没说两句，就直接上手开始推这个地球，而地球也顺势转起，虽然需要点力气，但转得还算顺畅。我惊呆的同时看到周围所有的人眼里都写着“震惊！原来可以转的吗？原来可以推着转的吗？！”……然后导游大妈一脸自豪甩甩手就走了，只留下一个帅气的背影和一段江湖传奇。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1K4QDfatajeTQ86d669sEzUvjars3AuXK"></figure>' 
+      <p class="text">说实话梵蒂冈博物馆进来没半小时我就被拥挤的人流和迷宫般的结构搞得有点筋疲力尽，正好趁此在松果庭院的长椅上歇歇脚，呼吸一下新鲜空气，整理一下思路。我们研究了一下地图，规划好了路线，打算全部展室看完尽量不走回头路，然后感觉最重要的一点就是依照地图和指示牌，不要被人流带着走！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1NsvUQC04yj82drqhHNSDlEAOgZtVWbqn"></figure>' 
+      <p class="text">然后我们重新出发，依次参观了所有的展室，从 埃及 馆到八角庭院，到动物馆，到地图馆，到拉斐尔画室，到西斯廷教堂。其中有的展室，比如说雕塑长廊这种需要走回头路的不在主线上的展室，人就少很多，基本每个展品都可以细细的看；一旦回到主线展室，就基本是跟着人流往前走，只能走马观花的看了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/15gxJ2Ax4adRjR2NC7lfeih9FUMshhXqm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/16_RfVZ8IWwRi-GIf-DRlUq6ltlocqBGD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1R8nWALGnkOE7tArrQyjiGxNXAVE38URz"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1BNBtYBdnDyK6tqXcVCBoSckQv90sXRr_"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13zsAOZ6d-q9EcgpKEt_5Yk6WPR2wxRpL"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1U2N9es_I3SG9cE7_V8cMIBjF6fZH6IY5"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">当然，最震撼的对于我来讲还是拉斐尔的壁画。我一个外行也不懂具体技术，却也是能明显看出大师的水平。尤其是后来对着网上《 雅典 学院》的解说仰着头一个个认人，感觉像是拉斐尔画了个名人集体照，有趣得很。</p>
+      <p class="text">压轴的西斯廷教堂反而有些平平。究其原因我感觉一是顶部距离比较远，光线又很昏暗，很多东西看不真切；二是游客实在太多，大批旅游团在教堂内在工作人员的指导下成队列式站定，基本就是摩肩擦踵毫无缝隙，都不知道是看画还是看人。总之我俩基本上五分钟就出来了，长舒一口气！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1cmnLJyH6MAiHHlikfSro6qC9RqIbTOMG"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1mWcJcFFJFMki2fYwCrI912kuEbgfZFtd"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1jKgHmvSYV7RsGNEoMF8R-qzT9j2ynJg-"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">这里要注意的是中间貌似去西斯廷教堂有个捷径，是可以略过几个展室的，都有指示牌跟着走就好。我和老布没有走捷径，感觉中间展室的那几个壁画其实很好看哎！</p>
+      <p class="text">从西斯廷教堂出来基本就没什么大部队了，从长廊上一路逛 一路走，到双螺旋楼梯那边已经过了中午12点了。三个小时下来我们也累了，是时候祭出我们的午餐券了！</p>
+      <div class="two_pictures">
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1_gj82iiwa1oBUwCWZtvpYAYbGbll1Jch">
+        </div></figure>
+        <figure><div class="two_pictures-image">
+          <img src="https://lh3.googleusercontent.com/d/1kPsKq9FRW4DkKO9wXOm7tm3kAuHFwo4g">
+        </div></figure>
+      </div>
+      <p class="text">由于我们已然在里面绕糊涂了，索性也就不看地图直接一路问工作人员去哪里领午餐。双螺旋楼梯那边不要下去，右手边走廊出去就是一个小平台，远处可以看到圣彼得大教堂。右手边的玻璃门进去下楼梯，一路跟着Food Court的指示走就到啦！直接把午餐券给工作人员就可以啦！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1EClyF6wgWX8oe7F1lB81LaVi6qp9dxbY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1iPzS1BYQsTcuwYjbLllJ6cehhNxe3Jf0"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ftO9kWsWi0G5bWq6l1gasM1LYCkUDErK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1b3gWhNGlO5Y02x_d6gaJ885gkrs0aZ-L"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1b4l3ts1Ry9paANBY2yQCMGpx09IDse2j"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1kmzLIVbqm7VBIsfyxYNXgAC6PHDTugdJ"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">午餐的选择是一个前菜+一个主菜+面包+甜点+一瓶水。“前菜”基本就是不同种类的 意大利 面，我们选的这两个都不错，那个芝士的更好吃一些。主菜我们都要的鸡腿和四季豆，我感觉味道还是可以的，就是中规中矩的西式烤鸡腿，不要指望跟 新奥尔良 那种味道很多的烤鸡相提并论啦。“甜点”其实就是简易版的饭后小食，可以选酸奶或者水果，我们各选了一种（酸奶还可以挑味道）。总体而言，你要说这顿饭每人值不值19.5欧，那肯定是不值的；但是我觉得也好像差不太多哎，出去随随便便点个意面也要十几欧了呀。况且我们出门旅游在景点吃的不值的饭多了去了，这种可以让你在博物馆内当场吃上饭，省时省力，味道也没有出大错（甚至某些部分还算有点好吃）的，何乐而不为呢！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1QHhwFmTZM83MEmJgM-yZY4_VdCzE7Bq2"></figure>' 
+      <p class="text">等我们水足饭饱又歇够了，已经是1点了。顺着双螺旋楼梯下到出口，看看下午时间还剩不少，体力也恢复了一些，大手一挥，圣天使堡走着！</p>
+      <p class="text">于是乎我们走出了梵蒂冈外围一些，又一人搞了一辆电动滑板车，呼啦啦的往圣天使堡去啦！</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/1UUjYmbhLcBA0nyaY4aldVsNhBlthDASN"></figure>' 
+      
+      <h3 class="subtitle">圣天使堡</h3>
+      <p class="text">其实从梵蒂冈博物馆走过去圣天使堡也不过20分钟，但是顶着大太阳还是算了，小车车滑过去也就五分钟。门口现场买票要排队，好在是没几分钟就进去了。圣天使堡里面非常凉快，是夏天的好去处。作为一个堡垒要塞，里面蜿蜒曲折有好几层，但我感觉可看的东西不是很多，可能是从梵蒂冈博物馆出来有些麻木了吧。然而走到三层的时候沿着城墙走廊居高临下俯瞰 圣天使桥 和台伯河，景色简直不要太好。而且有一个小café可以边赏景边喝咖啡，连廊上的葡萄藤吹下来，小风再轻轻那么一吹，要不是人满为患真的可以消磨一整个下午。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1dlvHf56oxIsmBbnak8AZqe5Mf9SYdfFn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1szKtBTzkiw5EMWFvuSyPEs85nh9_Vtis"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1frd_6uVqySU7V6vXlE_N42_FhZhIfxoH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ixwj-a-kIy4Fq7VvbDz1fkkicnP0FQj8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1A4rO8tIDo-Mh2rZKNJNJD3xJsgevobZu"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1B8TNiAG0hd_Sz-dCFai7w-N0c-SeSRA5"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">一直往上走到大概第五层就是圣天使雕像平台了。青铜色手持利剑的天使雕像近在眼前，转身就是宽阔的平台，在这个河畔制高点俯瞰罗马 老城区 ，另一侧是梵蒂冈的圣彼得大教堂，于是就突然有了那么一点点君临天下的感觉。</p>
+      <p class="text">然而太阳晒得实在是太过分，我们没呆多久就往下走了。之前上来的时候没有找到城墙顶部那一层，因为那一层又通往梵蒂冈的暗道，于是又回去找，上上下下反复几次，终于是找到了。看着这一条一人多宽的红砖墙我也是陷入了沉思，难道不应该是个地道吗，怎么还地上了呢。暗道入口处其实还有重重机关，估计是查验身份的哨兵用的。后来我查资料才了解果然是地上的暗道，就是我们看到的这一条，据说历史上一共有两次教皇通过这条密道逃到圣天使堡避难，都是由于外国入侵罗马。可惜目前修复没有完成，不能对游客开放。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Y06YTrcGKIQNtw2KH49M7PjkVFC9tFaQ"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12P1nx5mn3Ur9Zo_N63Ip8jdbCCohJE4F"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1E_YDVJfI72DnLZ4JIkzxn26STxeKPzU6"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1CsYwmr2y1PC5wbPoC9vZMulrrvHrcjMn"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/177rjIiAn2-eCRY80YxqtdfJddJv37J6q"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">老布最想找的暗道也看了，我们完完整整把圣天使堡逛了一遍还多（都在找通暗道的城墙这一层了），于是准备打道回府。从正门出去，一路走过圣天使桥，拍拍照找找路，看看才3点多一点，时间很充裕，干脆不打车了，还是租个滑板车一路穿过老城区往回走，顺便去吃个提拉米苏吧。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1ajSMrowA5LiD_UeGy7UEfhveHaP6-GH-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1XmC967l6P2TqcZdEgrCNLex5qQFyoMxt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1gcjGilZeq2PjYDTWgc8TD-njiF_7-zh6"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">一路呼啦啦到老城区，那个石子路颠的啊，加上经过的基本都是步行街，游客太多，我们的小滑板基本就是龟速颠着前进。于是果断弃车，决定走走逛逛看看有没有好看的冰箱贴，然后到Pumpi吃完提拉米苏再说。</p>
+      <figure class="single-image"><img src="https://lh3.googleusercontent.com/d/16czjQBaVzHdNxGNtJ2fgMbyPjhEQsJym"></figure>' 
+      <p class="text">大概又走了十分钟就到了Pumpi，提拉米苏有很多种，我们选了经典款和开心果的，正好有个座位空出来，我和老布就直接堂食了。不得不说还是经典款的好一些，开心果的那个略微有点腻。吃完吹吹空调歇口气，我和老布就又出来租了滑板车回酒店拿行李去了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1RZweAD8mkKQhssNR24mL1q3GHU-6fbgK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1jS3dYw9IGPaeGPGZnDJTjbLhWvjcudXY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17jGUzhQeF2C_SiPEruaausPDCjBYeF1T"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">到酒店顺利取了行李，滑板车一路滑到火车站，立刻又拽紧了我的小包包，生怕一个晚节不保。跟来时一样在机器上买了机场快线Leonardo Express的车票，到机场一路排队安检完，瑞安不出意外的又延误了一丢丢，所以我们居然还有时间吃个晚餐。可惜的是看来看去没有什么喜欢吃又性价比合适的，就近找了一家三明治店打发了，谁知道竟然意外的味道很棒，怪不得排队排了这么长。吃的时候正好在二楼，一楼大厅不知道哪里的舞蹈团在候机，还免费看了一场表演彩排，很是快哉。</p>
+      <p class="text">到家得时候已然是过了午夜，困意袭来，几日时间变得如梦似幻。意大利的燥热似乎还未褪去，窗外的深夜雨声又似乎是敲打着灵台一片清明。狼狈不堪也好，酣畅淋漓也好，至此，属于我们的罗马假日便可封存在记忆中了。</p>
+      <div class="quote"><strong>今日Tips：</strong>
+        <br>1.圣彼得大教堂开放时间：夏季 (1 April - 30 September) 7.00 - 19.10；冬季(1 October - 31 March) 7.00 - 18.30。不想排队安检的可以早点去，又凉快人还少。登顶的话貌似是8点开始，虽然说买电梯票也还是要爬一段楼梯，但是还是建议大家买电梯票！我感觉电梯这一段免去了不少台阶！然而，电梯只有上去的时候可以坐，下来的时候电梯的部分是螺旋斜坡，要自己走下来。</p>
+        <br>2.梵蒂冈博物馆一定要早订票！建议提前两个月多一点的时候就到官网上去看一下，看看能买几号的票了，定个闹钟免得开票的时候错过。具体是零点放票还是什么时间我忘记了，建议零点左右刷一次，然后意大利当地时间7点或者9点左右的时候都刷刷看，总之就是第一时间订票。我当时订的时候忘记上闹钟，结果想起来的时候已经是下午了。</p>
+        <br>3.教堂登顶的入口在大门左侧（南侧），貌似是要出去教堂从台阶下去才能转过来到检票口。早上登顶的话俯拍圣彼得大教堂广场是逆光，如果不怕排队的话，下午拍可能会更好看一些。</p>
+        <br>4.从圣彼得大教堂广场出来左转到梵蒂冈博物馆的路上有接水的地方，记得带空瓶子。</p>
+      </div>
+
+
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>

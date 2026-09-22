@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --paper: #fff;
+      --text: #333;
+      --muted: #888;
+      --accent: #d45b4c;
+      --accent-dark: #b94336;
+      --border: #e5e2dc;
+      --soft: #f8f7f4;
+      --max-width: 1080px;
+      --content-width: 760px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* =========================================================
+       1. 顶部大横幅
+       换文章时只需要修改 background-image、标题和简介
+       ========================================================= */
+    .cover {
+      height: 620px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.68)),
+        url("https://lh3.googleusercontent.com/d/1e-jstnVckEiM-E7nFWiWHeb-ZucWj3Fs") center/cover;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+
+    .cover-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 70px 30px 65px;
+      /* --- 新增/修改以下 3 行 --- */
+      display: flex;
+      align-items: center;
+      gap: 25px; /* Logo 与右侧文字之间的间距 */
+    }
+    /* 新增 Logo 样式 */
+    .cover-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; /* 确保 Logo 图片按比例缩放不变形 */
+      flex-shrink: 0;      /* 防止屏幕缩小或内容挤压时 Logo 被压缩 */
+      border-radius: 50%;
+    }
+
+    /* 新增包裹右侧所有文字的容器样式 */
+    .cover-text {
+      flex: 1;
+    }
+    .cover-label {
+      display: inline-block;
+      padding: 5px 13px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 3px;
+      background: rgba(0,0,0,.15);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .cover h1 {
+      max-width: 850px;
+      margin: 0 0 16px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .cover-description {
+      max-width: 650px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: auto;
+      padding: 0 30px 100px;
+    }
+
+    /* =========================================================
+       2. 行程单
+       类似旅行网站的 Day 1 / Day 2 / Day 3 路线设计
+       ========================================================= */
+    .itinerary {
+      position: relative;
+      margin-top: -45px;
+      padding: 35px 40px;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      z-index: 2;
+    }
+
+    .itinerary-header {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .itinerary-title {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+    }
+
+    .itinerary-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .itinerary-list {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .itinerary-list::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      left: 54px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .itinerary-day {
+      position: relative;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      gap: 25px;
+      padding: 0 0 30px;
+    }
+
+    .itinerary-day:last-child {
+      padding-bottom: 0;
+    }
+
+    .day-number {
+      position: relative;
+      z-index: 1;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .day-number small {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: .85;
+    }
+
+    .day-number strong {
+      font-size: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .day-content {
+      padding-top: 2px;
+    }
+
+    .day-title {
+      margin: 0 0 5px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .day-route {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .route-place {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: var(--soft);
+    }
+
+    .route-arrow {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .day-note {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       3. 正文
+       ========================================================= */
+    .article {
+      max-width: var(--content-width);
+      margin: 75px auto 0;
+    }
+
+    /* 格式一：大标题 */
+    .title {
+      margin: 70px 0 25px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 格式二：副标题 */
+    .subtitle {
+      margin: 38px 0 15px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* 格式三：正文 */
+    .text {
+      margin: 0 0 18px;
+      color: #3f3f3f;
+      font-size: 16px;
+      line-height: 2;
+    }
+
+    /* 格式四：特殊格式 */
+    .quote {
+      margin: 35px 0;
+      padding: 22px 28px;
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      color: #555;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .quote strong {
+      color: var(--accent-dark);
+    }
+
+    /* =========================================================
+       4. 章节分隔符
+       ========================================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 60px 0;
+      color: var(--accent);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    .divider span {
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       5. 图片 Carousel
+       ========================================================= */
+    /* ===== Stand-alone Image ===== */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+   Two Pictures — 两张照片并排
+   ========================================================= */
+    .two_pictures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 40px 0;
+    }
+    .two_pictures figure {
+      margin: 0;
+    }
+    .two_pictures-image {
+      width: 100%;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .two_pictures-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .two_pictures figcaption {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    /* =========================================================
+        Carousel — one picture at a time
+       ========================================================= */
+    .carousel {
+      position: relative;
+      margin: 40px 0;
+      width: 100%;
+    }
+
+    .carousel-window {
+      position: relative;
+      width: 100%;
+      height: 520px; /* Fixed carousel height — change this if needed */
+      overflow: hidden;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Shows the ENTIRE image */
+      object-position: center;
+    }
+
+    /* Previous / Next arrows */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .45);
+      color: #fff;
+      font-size: 25px;
+      line-height: 42px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .carousel-button.prev {
+      left: 15px;
+    }
+
+    .carousel-button.next {
+      right: 15px;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .carousel-dot.active {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+    }
+
+    /* Caption */
+    .carousel-caption {
+      margin-top: 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       6. 文章结尾
+       ========================================================= */
+    .article-end {
+      margin-top: 100px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .article-end-mark {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    footer {
+      padding: 50px 20px;
+      background: #292725;
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       7. 手机端
+       ========================================================= */
+    @media (max-width: 700px) {
+      .cover { height: 520px;     }
+      .cover-inner {        padding: 50px 20px;      }
+      .page {        padding: 0 16px 80px;      }      
+      .itinerary {        margin-top: -25px;        padding: 25px 20px;      }
+      .itinerary-header {        display: block;      }
+      .itinerary-subtitle {        display: block;        margin-top: 3px;      }
+      .itinerary-list::before {        left: 39px;      }
+      .itinerary-day {        grid-template-columns: 55px 1fr;        gap: 15px;      }
+      .day-number {        width: 45px;        height: 45px;      }
+      .day-number strong {        font-size: 17px;      }
+      .article {        margin-top: 55px;      }
+      .title {        margin-top: 55px;        font-size: 29px;      }
+      .subtitle {
+        font-size: 19px;
+      }
+      .text {
+        font-size: 16px;
+        line-height: 1.9;
+      }
+      .quote {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+      .carousel-window {
+        height: 360px;
+      }
+      .carousel-button {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+        line-height: 36px;
+      }
+      .carousel-button.prev {
+        left: 10px;
+      }
+      .carousel-button.next {
+        right: 10px;
+      }
+      .two_pictures {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .two_pictures-image {
+        height: 300px;
+      }
+    }
+    @media (max-width: 420px) {
+      .cover h1 { font-size: 36px; }
+      .cover-description { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       封面
+       ========================================================= -->
+  <header class="cover">
+    <div class="cover-inner">
+      <img src="https://lh3.googleusercontent.com/d/1rlJTg7OiuMoD-eoD9UJc4S4LudNFoVgY" alt="Logo" class="cover-logo">
+      <div class="cover-text">
+        <span class="cover-label">塔库电台</span>
+        <h1>深秋时节的海陆套餐—</h1>
+        <p class="cover-description">仙娜度国家公园/蓝岭公路/威廉斯堡/Outer Banks外滩岸洲岛</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- =======================================================
+         行程单
+         每一天一个 .itinerary-day
+         可以自由增加 Day 4 / Day 5 / Day 6……
+         ======================================================= -->
+    <section class="itinerary">
+      <div class="itinerary-header">
+        <h2 class="itinerary-title">行程单</h2>
+        <span class="itinerary-subtitle"></span>
+      </div>
+
+      <ol class="itinerary-list">
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>1</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">蓝岭公路 Blue Ridge Parkway - 仙南渡国家公园</h3>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>2</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">仙南渡国家公园 - 威廉斯堡 Williamsburg</h3>
+            <div class="day-route">
+              <span class="route-place">天际线公路</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Dark Hollow瀑布</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Big Meadows</span>
+            </div>
+          </div>
+        </li>
+        <li class="itinerary-day">
+          <div class="day-number">
+            <small>DAY</small>
+            <strong>3</strong>
+          </div>
+          <div class="day-content">
+            <h3 class="day-title">Outer Banks</h3>
+            <div class="day-route">
+              <span class="route-place">莱特兄弟纪念馆 Wright Brothers National Memorial</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">宝迪岛灯塔 Bodie Island Lighthouse</span>
+              <span class="route-arrow">→</span>
+              <span class="route-place">Cape Hatteras National Seashore</span>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- =======================================================
+         正文
+         ======================================================= -->
+    <article class="article">
+
+      <!-- 格式 1：大标题 -->
+      <h2 class="title">前言</h2>
+
+      <p class="text">又是一年之秋，那些着急的树叶已经开始变黄又哗哗的往下落了。美帝的秋天大概是一年中最美的时节，尤其是在赏秋线路中名列前茅的蓝岭公路一带，漫山遍野绵延不绝的秋色，似乎给这个略显萧瑟的季节增添了许多明亮与温暖。前年赏秋去了蓝岭公路的下半段和 大烟山国家公园 ，再加上买了国家公园年票，因此去年秋天就瞄准了蓝岭公路的上半段和有“ 华盛顿 的 后花园 ”之称的仙娜度国家公园。趁着此时秋意未浓，把我和芝麻兄10月末这趟上山下海的深秋之旅搬出来，算是给计划赏秋的大家一点思路，也算是慰藉一下我们将近一年没出城的寂寞心灵吧。</p>
+      
+      <h2 class="title">准备篇</h2>
+      <p class="text">在美国，秋天进山似乎已经是个不成文的规定，因此蓝岭公路及其附近的各国家公园住宿价格也是水涨船高。仗着年轻开车可以多些时间，因此订酒店的时候订在了距离仙娜度国家公园出口大概45分钟车程的Culpeper小镇上，即便如此可选择的酒店也是少之又少，大部分已经被订满了。至于第三天要去海边的外滩岸洲岛，算是赶在那里的旅游旺季的尾巴上，因此也是凑合订了一家经济型酒店。两家都是通过 Booking.com 订的，价格都在60刀左右（稿费没打来生活很困苦哈哈哈）。至于后面出的幺蛾子，待会儿再细说。</p>
+      <p class="text">租车选了经济型的小车，毕竟蓝岭公路和仙娜度国家公园附近的路况都很好，虽然是进山但没必要非要租四驱。虽然没赶上Enterprise官网周末9.9刀的特价，但是价格也还不错一共加税和附加费三天只要60刀。</p>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 1 蓝岭公路和仙娜度国家公园</h2>
+      <p class="text">早上一早出门，空气里已经有凉凉的秋意。朝阳初升，透过稀稀落落的树叶，似乎预示着这次旅程的好天气。我和芝麻兄前一天就已经去把租的车提了出来，所以这会儿拎着行李就开车出发啦！</p>
+      <p class="text">一路上开的很顺，天气也好心情也好，零食管够吃，加上周末高速上车也不多，大概3个半小时左右就开到了蓝岭公路。第一站停在了James River Visitor Center，是一个很小的游客中心，不过问个路什么的还是有工作人员可以服务的。顺着栈道可以走到James River，坐在河边长椅上吃个零食喝个咖啡看个风景简直不要太惬意啊。</p>
+      <p class="text">一年之中总觉得秋季是最舒适的季节，阳光温暖，空气中却透着清澈的凉爽。晴好的天气里一丝萧瑟的感觉也没有，反倒是黄色的落叶映着正午金灿灿的太阳，恍惚的似乎睁不开眼，又不似夏天里的光线那般毒辣。沿着公路一直往北开，在各个观景点走走停停，或是远眺或是散步。十月末的山林之间已经是漫山遍野的五彩斑斓，加上万里无云湛蓝的天空，秋高气爽四个字才是真正渗透到了骨头里。</p>
+      <p class="text">眼看着已经过了中午，我和芝麻兄还没吃午饭，剩下的一小段蓝岭公路只能匆匆略过。开出蓝岭公路之后跟标志牌合了个影，然后发现附近并没有什么吃饭的地方，于是又沿着64号公路想去西边小镇上的Chicken-fil-A，结果还开反了方向，足足花了半个小时才吃上饭。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1DVSCxNIcIP84BB-t6wJogna95eufcOOh"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Tro78QkfDvuAkU-8sx5PpFp4Gm50dELm"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1MKySf8AZtquUFuAqJ8G2kdfvZvR2Tm3V"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1AMyaYdA8EYcfN52V9hyZTapWxhEkHWE8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1_CzmPozZKQUuT1qEJlIM55ESH9Wgat92"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1BQ-p9uYRR03pXVxDFzJGwDn1mILs_ZNt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WNUjDBZ3dy9iJTy8m7C2gUW8zGVtg6Z9"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">吃完饭开回蓝岭公路和仙娜度国家公园Skyline Drive的交接口只用了10分钟（这次没有走反方向）。下午时分进公园的人并不多，我们拿出之前去黄石的时候买的国家公园年票，终于在过期前又用了一次值回了票价（抠成这样也是没谁了）。</p>
+      <p class="text">Skyline Drive是Shenandoah National Park的主路，也是经典的 自驾 赏秋路线，可以说仙娜度整个公园就是被Skyline Drive串起来的，主要景点也都在主路附近。进入公园之后不知道是不是海拔变高了的缘故，虽然已经是下午两点多了，却觉得比上午更冷了些，于是果断换上大衣围上围巾。</p>
+      <p class="text">从进山开始就感觉仙娜度里面的秋色比蓝岭更浓些，可能也是树木的种类略有不同，树叶更黄落叶也更多，一路从林间穿越，感觉像是走过了整个秋天。主路上有很多可以远眺群山的观景点，秋意绵延于群山之间，目之所及一片绚烂。</p>
+      <p class="text">由于阿巴拉契亚山脊小径的徒步路线跟Skyline有很多交叉的地方，因此来之前我和芝麻兄就信心满满的想要走一段。考虑到今天时间略紧，这一项目就放到明天继续，今天只是在有阿巴拉契亚山脊小径标记的木桩前合影留念，至此还不知道明天居然因为种种磨难未能成行。当然这是后话。</p>
+      <p class="text">十月末的白昼开始变得短暂，傍晚五点左右的时候夕阳已经是斜斜的挂在天边一角，感觉分分钟就要消失不见。此时的光线变得柔和多变，白色的云朵在山间浮过，形成远处山林表面大片流动的倒影。我和芝麻兄依旧是边开边停边逛，一路上围观了黑熊捡到了核桃，在最后一抹夕阳中开车从Swift Run Gap Entrance Station离开了公园向Culpeper小镇进发。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/14o1UVsGyh0wtMMONFhdYmGpZdQyIlqRT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1WKbNioW-o7xgv37-B43cNvIBMbJcYo0a"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1-jz8vTmwbVUpBw3d7d4uTs1AwK-YN5Jj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1htZHolf3fLhieelmrgltKUT_vdEaAEb8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15l6WfVyOcBytEQusE3obc0EDfBRA57lb"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13Ed4hS1RoL9yNb9blV-mLPDQ0-jK58Xl"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1t2KmwltOxueJn3KkU-AAUBe6b8tQfi4p"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Mu4ALrggCi41044c1WK0UNvMo83h2T6q"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">到Culpeper已经是晚上7点多了，找了家美式中餐馆点了木须肉和叉烧炒饭。在此奉劝大家在美帝的中餐馆点木须肉时要有心理准备，这不是传统意义上北方木须肉，而是将卷心菜丝肉丝粉丝合起来炒熟，然后卷饼吃的一种炒菜。之前芝麻兄忠告过我一次我没听，上菜之后我才大开眼界。。。</p>
+      <p class="text">吃完了这顿美味的晚餐（并不），开车5分钟到订的旅馆发现居然没有房间了！不知道为什么会出现超订的状况，前台也很无奈的告诉我们所有房间均已经有人入住了。虽然很负责任的帮我们联系附近可以入住的旅馆，但是我其实还是有点不想去的，因为之前预订的时候看到过另外一家旅馆，价格相同但是条件不如这一家好。再说超订了并不是我的错啊！于是我在月黑风高的晚上（真的是月黑风高，小镇没什么路灯一片黑，同时外面风大的感觉车都在摇晃）窝在车里给 Booking.com 的客服打电话说明情况，客服连连道歉并取消了我们在这家酒店的预订，同时查询附近酒店的空房情况进行调剂。</p>
+      <p class="text">折腾了半天依旧是调剂到同一家酒店，看样子只有这个选择了。我和芝麻兄深知这个小镇并没有多少旅馆，怕去晚了连这间房也没有了，只好委屈入住了。好在星级依然摆在那里，中规中矩也不算特别吃亏。外面依然是狂风大作，山林间居然有轰隆隆的响声，我和芝麻兄却是太过疲惫竟不知不觉睡着了。</p>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.沿着蓝岭公路北上到仙娜度国家公园的话，最好提前准备好午饭或者零食，这一路找个合适的餐厅有点困难，野餐营地倒是很多。
+        <br>2.蓝岭公路很长，如果想要全部逛完要计划好时间，该停的地方停，不该停的地方就直接略过。
+        <br>3.酒店超订的原因有很多，这次是因为酒店把房间分给了不同的订房网站，结果不知道为什么分出去的订房总数多于了酒店实际房间数，所以劝大家即便是订好了酒店也要尽量早点入住，尤其是不用提前交订金押金的这一种。
+      </div>
+      
+      <div class="divider"><span>✦</span></div>
+      
+      <h2 class="title">Day 2 仙娜度国家公园和威廉斯堡</h2>
+
+      <p class="text">不知道是不是刮了一晚上大风的缘故，第二天清晨的阳光格外透彻，空气中冷冷的水分子似乎预示着冬天的提前来临，温度一下子降了好几度，看样子是寒潮初现，正好让我们赶上了。早早在Culpeper小镇的麦当劳吃完早饭，迎着朝阳我们就沿着522号公路向仙娜度国家公园北边的入口出发啦！</p>
+      <p class="text">租车 的好处就是可以带很多东西——比如说羽绒服！毛帽子大围巾齐上阵，一路上开着暖气芝麻兄不住的赞叹我英明神武居然带了防寒的衣物。大概半小时就到了公园Thorton Gap Entrance Station，早上7点多的仙娜度沐浴在橙色的光线中，昨晚的大风已经过去，远眺群山间隐隐的水汽，到处弥漫着宁静而祥和的美感。虽然空气里有种清冽的寒意，却止不住我和芝麻兄兴奋的心情，因为大概是突降寒潮的缘故，树叶似乎一夜之间全部变黄变红了，在山道间开车经过，各种颜色的树叶开始纷纷随微风飘落，感觉似乎是一场华丽的舞蹈，朝阳里简直不能再美！</p>
+      <p class="text">沿Skyline Drive向南开了一小时，免不了走走停停在各观景点流连，消耗了不少体力的我们打算在Skyland这片较大的景区稍作休息。停下车就发现这边的落叶已经在地上厚厚的铺了几层，踩上去软绵绵的像是金黄的毛毯一般。沿着周围走了一圈发现这里有餐厅、住宿和纪念品店，是个歇脚的好选择。</p>
+      <p class="text">逛纪念品店的时候发现它跟Café连在一起，到处弥漫着咖啡和早餐的香气，尤其是在这种清冷的早晨，满屋暖暖的咖啡香简直就是瘫躺在沙发上的利器。即便是刚吃完早饭的我们，闻着空气中氤氲的各种食物味道，都忍不住想再大吃一顿。好在排队的人太多迫使我们作罢了，不然不知道要多摄入多少卡路里。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1KPrOANqvZFMRtEdINvJFU7UWQusY-e16"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1CjigCIDI_WMQVVgHnO1Tsx0qeKy_sdIW"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1S4PcF5w8loTn9rhOr0DGBEsQTk8TOBHF"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Yce6YsyNbaTkgHKmmWqW6-_clxOL4pIc"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">歇够了继续出发向南，没多久就到了Big Meadows景区附近。来之前看过一些仙娜度的信息，感觉这附近的Dark Hallow瀑布很吸引人，而徒步的坡度和长度都在合理范围内，于是停车开始顺着徒步小径向里走。不得不说一路踩着五彩缤纷的落叶，旁边的溪水哗哗流淌，先不提累不累，就这氛围也够让人陶醉。</p>
+      <p class="text">于是乎我和芝麻兄就开始忘乎所以的边走边玩水。。。走了大概20分钟的时候小溪出现了一个大概落差30厘米的小高台（小瀑布？），鉴于之前在Zion国家公园翡翠池的教训（详情参阅http://bbs.qyer.com/thread-1119903-1.html），我们认为这又是一个在网站上“图片仅供参考”的坑人景点，于是一边吐槽一边往回走。走到停车场看看立在入口处的徒步路线地图，越看越觉得不对劲，感觉即便是水量减少这瀑布也不应该萎缩成这个样子，再看看距离，明显还没走到瀑布我们就回来了！无奈又一次原路返回继续向前走，这次足足走了将近一小时，途中各种上坡下坡，无数次怀疑“这里应该就是那个瀑布了吧”，在偶遇的路人的不断指点和鼓励下，终于到了看起来颇为像样的Dark Hallow瀑布跟前！期间因为实在憋不住感觉膀胱要炸了跑到树林里解决了一下个人问题我会说吗。。。羞愧。。。</p>
+      <p class="text">跟网站上的图片比起来此时瀑布水量是减少了不少，不过还算是让人觉得不虚此行，一点没有失望的感觉，倒不如说看着瀑布下方水面上铺了一层的落叶被水花层层溅开，再加上旁边湿漉漉的青石和白色的湍流，确是有些惊喜的。返程没有了不知目的地在何处的焦躁，所以感觉快了许多，就算如此再坐上车也已经过了两个多小时了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/11Tm3UYL9aQOeD0acTxM7sldZJ2wM-PmH"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1YB497xW-e5XxJA0QfRHpNm22j4Lk46QT"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1xWYbasd9SMqaCL-r8eZM349rrWoK0Yiv"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1aSnGxnLDwuEEs5D0yykc6ByROpRut1M2"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">Dark Hallow瀑布往南一点就是Byrd Visitor Center，这个游客中心稍具规模，里面有一块相当大小的博物馆展区展示仙娜度国家公园的历史与发展。游客中心后面的巨大露台可以将近在眼前的Big Meadows区域一览无余，在这片大草甸上时常有各种动物出没，也是抱着一杯暖暖的咖啡远眺风景的好地方。</p>
+      <p class="text">在游客中心的餐厅里顺便把午饭解决了，排队入座的人多到没盆友，所以果断选择了外带站在旁边吧台式小桌前面吃完。逛完游客中心再次向南出发出发的时候天空变得有些多云，但我和芝麻兄看过天气预报所以都没有在意。在Lewis Mountain 附近我们打算在Skyline Drive与阿巴拉契亚山脊小径交汇的地方徒步一段，结果刚走上小径没几十米天空就阴暗了下来，然后开始狂风大作恨不得把羽绒服都吹透。在有零星的雨滴飘落的时候我和芝麻兄面面相觑了一下，颇为无奈的同时转身往回走。然后互相约定一定不能把这件事说出去因为太丢人。往回走的路上我还跟芝麻兄说快给我拍两张徒步在这条小径上的照片不然没机会了！至此我们在这条著名徒步路线上的旅程就正式结束了。</p>
+      <p class="text">剩下的路段观景点相对稀疏一些，太阳又再次探出头来，让我们觉得可能天命如此不让我们徒步阿巴拉契亚山脊小径。大概又一小时再次从Swift Run Gap Entrance Station开出了公园。整个山路的秋叶在寒潮和大风的作用下簌簌下落，不得不感慨我和芝麻兄真是赶在赏秋时节的尾巴上沾了个光，再晚半天左右大部分树冠都秃了根本也就没什么好看的了。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1Qy4Jj8_c3f5I5bl3Qik9N6mViVtR4nKc"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UNY6L_rtRauKr5OJXOIZNeEyclo_WrPc"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1doCXe8Ctw1Uk7JsVZt19AVicYHIbzH-S"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1rptAolrqKsf38ihEkCceF5Zc66B71Dno"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1pdGIsaQ0IRC7wBrzrIHmGnxIlf9bMVxb"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1wjL5vSfDbYbleo8JBh1X8J9ZcjI9Iq3D"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/13rwQylx0LMRCLgF8XwnGv8wRYl1F4o1x"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1w9gJhWQ-vjwzM7JhCWnBxKWVL5dCEFWa"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ptTv43xD42NocbTVpOo_kj6a6lfv_m93"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1oyVFRzNncj8yD5Nf079q4q9cKQzuWKv-"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">如此我们上山赏秋的部分就告一段落，接下来就奔着海边出发了。由于途中会经过 美国 历史最悠久的城市之一威廉斯堡，打算在这个小城停留几小时。芝麻兄之前开会来过这座城市，可是因为太匆忙竟然完全没逛过，所以这次也算是带着我弥补一下遗憾啦。</p>
+      <p class="text">下午三点半左右我们已经到了 老城区 颇具规模的游客中心，看了看这里晚上才关门，所以可以回来再看展览。顺着天桥出去脚下就有画有一条步行观光路线，顺着走就会到达所谓的历史老街区。我和芝麻兄虽然爬了半天的山已经有点累，但看地图觉得老城区并不很大，本着“来都来了”的心态又开始了逛逛逛。先走到了Governor's Palace，正准备进去的时候突然听到远处有鼓号队的声音，然后路人都开始往一个方向跑。我和芝麻兄互相看了一眼都读出了对方眼中不明所以的“What？”，然后我们也跟着一起往那个方向跑。。。</p>
+      <p class="text">能听到军乐声就说明距离并不远。果然拐过街角就发现在历史老街区的一片大 草坪 上有殖民时期的军乐表演，旁边居然还有穿着旧时军服骑着马巡逻的帅大叔。几乎所有在老城区的游人都跑来围观了，虽然是很小的军乐队，复古的装扮倒是让人觉得很有味道。几首军乐表演之后还有礼炮，淡淡的青烟在夕阳里散开，人群慢慢散去，整个街区渐渐归于平静。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1mUNgqJ2rBfsDcD7pB7lgsD12A6YBTPj-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/12qmBGxnLL0ytSbPhz23iM-bxVgXDEStB"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fbQ1v5Ne3bv6z4X23uiCf8m-k8pdvXB5"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1nJBZ3z8uijbga0vij_t6eG2sBpRkNmJj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1P1G3NwQck_7ShAO8agCPRSZhvRPNiOy7"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">我和芝麻兄跟着逐渐稀少的游人逛了一遍威廉斯堡的历史街区，其实就是复原的殖民时期住宅、各种商店和政府建筑。最后走到The Capitol，进去兜了一圈，以沐浴在夕阳中坐在门口的台阶上等芝麻兄去找厕所归来作为完美的结束。</p>
+      <p class="text">本来我们两个都已经走到虚脱，打算在老街区随便找一家进去吃晚餐，结果看看门口的菜单发现真心是吃的历史情怀，动辄人均40刀以上的价位让我们的腿部肌肉不得已还要再工作一会儿。回到游客中心也没心思好好看展览，yelp搜了一家附近好评的 意大利 餐馆就去了。到了之后发现餐馆不大却是人满为患，居然还看到之前在历史街区碰到过的一群中年人在这里吃生日晚宴。由于实在是不想折腾所以索性就等位吧，终于在晚上7点的时候吃上了我心心念念的Lasagne，也终于知道了为什么客人这么多，因为真的很好吃！（餐馆名Antonio's Ristorante Italiano）</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1msby64MvjIJZPKz_h83TqmbFZxIqsRcg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1do15YefvzGDIBh6QN2MREWGKax4cAex2"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1evxvaPQdsnTaGpamY7mkPe14a3KLNHd-"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/15gLeEffmQzBX4VhZws8bRKw8jxdJe4uD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1y8PJGkP2MxVYizRh5xCICrzblJCHo80P"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1ZWxM03-TSJrv3Pc_KIEPwOJXacHMPx_E"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1miHsRBGdRdjKnK4Cw3Pn-nAUepWxOpfY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17oXcGF4SuqVtbQ7uFh-3E4iv74si0Yct"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1KajqUj62i873IMVctmj8lizm0jImKJnG"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1R1zvoUev89PhRAQkSWWXBYJFw089YXU7"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1HUkdZYCvLXmLaDbEyWp7wQoYRahShSpt"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1h4M6dBQ1s3XuyZRmalVTdaoB4ELOgRmD"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1UrAIxUCAce4a6v1lelbWploi-eFWEhCG"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1Jy9cENKBezu1qxQbctZpWgF8rEDEFfCY"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">心满意足的饱餐了一顿出来已经八点多了。夜晚的风已经开始变得有点猛烈，芝麻兄开车我坐在副驾，竟然在呼呼的风声中迷迷糊糊睡了一会儿。晚上11点多的时候终于到了位于北卡州Outer Banks的酒店，对于快浑身散架的我们来说没有什么比一个热水澡和一张柔软干净的大床更能体会生命的美好啦。</p>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.如果是临时起意出门赏秋，看好天气预报很重要。十月末寒潮说来就来，先不说要带好防寒衣物，主要是寒潮一过树叶都落没了根本赏不了秋了好吗！这次我们也是人品爆发，行程过半正好赶上寒潮第一天，既看到了“落英缤纷”又赶在树叶掉光之前结束了行程，感觉再晚半天就真没什么好看了！
+        <br>2.威廉斯堡历史街区可以花半天时间好好逛逛，游客中心的停车场是免费停车的。另外这里的William & Mary也是美国历史最悠久的大学之一。
+        <br>3.秋天不管上山还是去海边，带好棉衣棉帽很重要！
+      </div>
+      
+      <div class="divider"><span>✦</span></div>
+
+      <h2 class="title">Day 3 外滩岸洲岛Outer Banks</h2>
+
+      <p class="text">Outer Banks是将 美国 大陆和大西洋隔开来的一系列狭长的岛屿和半岛，像一条线一样包裹着北卡州的海岸线，线内是内海和大陆，线外是大西洋。因此可以说外滩岸洲岛是海岸线之外的海岸线，也可谓是美国本土在中纬度地区的最东端。绵延数十公里的沙滩和海洋性的温和气候，零星的 灯塔 ，再加上这里是美国第一个国家海滨的所在地，这里每年夏天都成为游人如织的度假胜地。</p>
+      <p class="text">北卡州这里的纬度，使得Outer Banks几乎正对着欧洲和非洲交界处的 直布罗陀 海峡。我和芝麻兄因为想去海边看 日出 ，5点左右就早早起来收拾好，开车出去随便找了个临海的酒店停下车，绕到前面去直接就是海滩了。</p>
+      <p class="text">此时天边才刚刚有点亮光，大片的云朵层层叠叠，秋末的海风正劲，海浪一层接着一层，发出轰隆的响声。等了许久眼看就快到日出的时间，天空中还是云层密布，看样子可能看不到一轮红日跳出海平面的画面了。果不其然又过了一阵子，也只是微微大亮了些，海空交界处已经变成一片粉红，然而太阳还是躲在云朵后不肯露头。我和芝麻兄都觉得无所谓了。本来就是看个情怀，单是面对着这片辽阔的深蓝海洋和漫天的朝霞，似乎也已经足够浪漫。</p>
+      <p class="text">我们又在沙滩上得瑟了半天，终于抵挡不住冰冷的海风赶紧跑回车上去找早餐。麦当劳的早餐依旧是旅途的忠实伴侣。吃完早餐发现灿烂的阳光已经普照大地，想想一个半小时之前没看成的日出，感觉真是不给面子。看看表发现只有7点多，莱特兄弟纪念馆8点才开门，因此决定往南开去看灯塔。</p>
+      <p class="text">Outer Banks有很多灯塔，离我们最近的Bodie Island Lighthouse大概开车20分钟左右就到了。灯塔只能在夏天攀登至顶端，因此现在已经不开放给游客了，只能在外面参观。灯塔下面还有一个小型游客中心，当然时间太早也是不开的啦。</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1n_9qBMEdHCLr-S2NOZrlpcT5y9us1qtN"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1XRhancmGVmXSvJTBeOs_-L1_rnXnc32m"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fuIV_ZeMDFSrvBwZ2sjHZ8s-pBs_2Vvg"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17mFC2seKV4_T4v0kyuL8jsYBPbn7_eY6"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <p class="text">在灯塔附近散了个步，初升的朝阳和不远处吹来的清新海风感觉让整个世界都变得晴朗起来。往北顺着主路开回去，到达莱特兄弟纪念馆的时候正好赶上开门。国家公园的年票再一次发挥了作用，我和芝麻兄都连连惊呼不虚此行。</p>
+      <p class="text">Outer Banks这里是莱特兄弟第一架飞机试飞成功的地方，对于现代航空可谓有着划时代的意义。纪念馆外的草地上有第一次试飞成功的距离标志和他们当时组装飞机的工作间。想想没有这些就没有现在的我们站在这里，更加难以实现我们“去看看世界”的梦想，居然有种莫名的感激。</p>
+      <p class="text">纪念馆内部是复原的第一架试飞成功的飞机，以及各种关于当时莱特兄弟试飞时的照片和资料展览。九点整的时候有工作人员进行专门的讲解，整个session大概半小时，建议大家有时间的话都听一听，能了解到很多试飞第一架飞机过程中的有趣故事，包括给这次试飞拍照的摄影师成为了第一个在飞机事故中受伤的人。听完讲解开车绕到后面山坡上巨大的纪念碑兜了一圈，又跟远处的各种雕塑玩了一把，就准备打道回府啦。</p>
+      <p class="text">临走之前正好到了午饭的时间，搜了一家评价颇高的海鲜店，6.99刀一份，可选择虾、鱼或者扇贝一类的海鲜，包括一个side和酱料，性价比超高！吃饱喝足已经是下午，一路狂奔赶着天黑前回家休息准备第二天继续为生活奋斗！</p>
+      <div class="carousel">
+        <div class="carousel-window">
+          <figure class="carousel-slide active"> <img src="https://lh3.googleusercontent.com/d/1UVDo86qUDysoXo6w6A1TKIazVwJIFtbk"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/11_mLTmSQGsHjsvwYBA2f1WKRN37LQ5dh"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1vrI0Z_h4ftQc3klmWmAEEGkgPZSvBLFh"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1bHqEpy6XiARs01ZLU1UeexR9dZY5ZJlM"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/17b2WGFrk9lfpdgTN5kZxUqPaj9S1JVyY"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1fPydv1iWABbwyeZdMi5SxsC60xQnNkp8"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1R-SBpUtQT101R5pKnYWmgJGP9kwD0CzK"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1pTA6wv1ilReaHyEkcmm4-BX5QUxkJ22u"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1QaRDxwPpKD6P7K-V3OlqVcnsDoH5XVLj"> </figure>
+          <figure class="carousel-slide"> <img src="https://lh3.googleusercontent.com/d/1vYid8s2xCgjhDQgUcm8D_zfQbwS3J0xw"> </figure>
+          <button class="carousel-button prev" onclick="changeSlide(this, -1)">‹</button>
+          <button class="carousel-button next" onclick="changeSlide(this, 1)">›</button>
+        </div>
+        <div class="carousel-dots"></div>
+        <div class="carousel-caption"></div>
+      </div>
+      <div class="quote"><strong>今日Tips</strong>
+        <br>1.Outer Banks 十分 狭长，只有一条主路，有些岛只能通过轮渡到达，建议游玩时提前规划好时间以免误事。
+        <br>2.整个Outer Banks从北向南大概有三四座灯塔，夏季开放攀登，有些需要提前订票。一般在Labor Day之后就不允许登顶了。
+        <br>3.秋天尤其是寒潮过后的海边分分钟冻死人啊！
+      </div>  
+      
+      <h2 class="title">后记</h2>
+      <p class="text">转眼间一年又过去，到现在已经有将近一年没有旅行过了。仙娜度的赏秋之行作为在美帝的收官之旅，不管是景色还是意义，都很让人欣慰。这一年来经历了种种忙碌和辛苦，支撑我们努力前进的，除了对生活的信念，就是这些旅途中的美好回忆。阿拉斯加是没时间去了。西雅图和芝加哥也是。除此之外，我和芝麻兄三年里携手走过了小半个美国。心满意足。</p>
+      <p class="text">但愿将来有一天，带着我们的两只嘟嘟一起，重新回来。</p>
+
+
+
+
+
+      <div class="article-end">
+        <div class="article-end-mark">✦</div>
+        MISSION ACCOMPLISHED
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Travel Journal
+  </footer>
+
+<script>
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
+    const caption = carousel.querySelector('.carousel-caption');
+    let current = 0;
+
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', `查看第 ${index + 1} 张图片`);
+      dot.onclick = () => showSlide(carousel, index);
+      dotsContainer.appendChild(dot);
+    });
+
+    showSlide(carousel, 0);
+  });
+
+  function showSlide(carousel, index) {
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const caption = carousel.querySelector('.carousel-caption');
+
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+
+    const image = slides[index].querySelector('img');
+    caption.textContent = image.alt || '';
+
+    carousel.dataset.current = index;
+  }
+
+  function changeSlide(button, direction) {
+    const carousel = button.closest('.carousel');
+    const current = Number(carousel.dataset.current || 0);
+    showSlide(carousel, current + direction);
+  }
+</script>  
+</body>
+</html>
