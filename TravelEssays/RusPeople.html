@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>俄罗斯民族和国家的起源与历史</title>
+
+  <style>
+    :root {
+      --bg: #F2F0E8;
+      --paper: #FFFFFF;
+      --ink: #2C3E45;
+      --muted: #7A8580;
+      --accent: #68A097;
+      --accent-dark: #2B5278;
+      --gold: #D4AF37;
+      --line: #7B3F4B;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(184, 134, 59, 0.08), transparent 30%),
+        var(--bg);
+      font-family:
+        "Noto Serif SC",
+        "Songti SC",
+        "STSong",
+        "SimSun",
+        serif;
+      line-height: 1.9;
+    }
+
+    .hero {
+      min-height: 70vh;
+      padding: 90px 24px 70px;
+      display: flex;
+      align-items: center;
+      background:
+        linear-gradient(
+          rgba(0, 0, 0, 0.55),
+          rgba(0, 0, 0, 0.55)
+        ),
+        url("https://lh3.googleusercontent.com/d/1EqnLNtV9a5hcBMzR3vHQXQjdQPwLyVEl") center/cover no-repeat;
+      color: #0036A7 ;
+    }
+
+    .hero-inner {
+      width: min(100%, 1000px);
+      margin: auto;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: #FFFFFF;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 850px;
+      font-size: clamp(2.4rem, 6vw, 5.2rem);
+      line-height: 1.15;
+      letter-spacing: 0.04em;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 28px 0 0;
+      color: #D62718 ;
+      font-size: 1.1rem;
+    }
+
+    .hero-line {
+      width: 80px;
+      height: 3px;
+      background: var(--gold);
+      margin: 30px 0;
+    }
+
+    .layout {
+      width: min(100% - 40px, 1200px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 48px;
+      padding: 60px 0 100px;
+    }
+
+    nav {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      background: var(--paper);
+      backdrop-filter: blur(12px);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    nav strong {
+      display: block;
+      margin-bottom: 16px;
+      color: var(--accent-dark);
+    }
+
+    nav a {
+      display: block;
+      padding: 8px 0;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 2px solid var(--gold);
+      font-size: 0.92rem;
+      transition: 0.2s ease;
+    }
+
+    nav a:last-child {
+      border-bottom: 0;
+    }
+
+    nav a:hover {
+      color: var(--accent-dark);
+      padding-left: 6px;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .intro,
+    .chapter {
+      background: var(--paper);
+      border: 2px solid var(--gold);
+      border-radius: 20px;
+      padding: clamp(28px, 5vw, 56px);
+      margin-bottom: 28px;
+      box-shadow: 0 15px 45px rgba(30, 41, 59, 0.04);
+    }
+
+    .chapter-number {
+      color: var(--gold);
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-family: system-ui, sans-serif;
+      font-weight: 700;
+    }
+
+    h2 {
+      margin: 6px 0 28px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1.3;
+      color: var(--accent);
+    }
+
+    h3 {
+      margin: 34px 0 12px;
+      color: var(--accent-dark);
+      font-size: 1.25rem;
+    }
+
+    p {
+      margin: 0 0 18px;
+    }
+
+    .quote {
+      margin: 28px 0;
+      padding: 22px 24px;
+      border-left: 4px solid var(--gold);
+      background: #dfecea;
+      color: var(--ink);
+      border-radius: 0 12px 12px 0;
+    }
+
+    .quote p:last-child {
+      margin-bottom: 0;
+    }
+
+    .note {
+      margin: 24px 0;
+      padding: 18px 20px;
+      background: #dae6f1;
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      color: #041a18;
+    }
+
+    .timeline {
+      margin-top: 25px;
+      border-left: 2px solid var(--gold);
+      padding-left: 25px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 26px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -32px;
+      top: 10px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid var(--paper);
+    }
+
+    .year {
+      color: var(--gold);
+      font-weight: bold;
+      font-family: system-ui, sans-serif;
+      font-size: 0.9rem;
+    }
+
+    /* ===== Stand-alone Image =====   */
+    .single-image {
+      margin: 40px 0;
+    }
+    .single-image img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+    }
+    .single-image figcaption {
+      margin-top: 9px;
+      color: var(--accent);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    
+    .cite {
+      float: right;
+      clear: both;
+    }
+
+    footer {
+      padding: 45px 24px;
+      text-align: center;
+      color: #8a8178;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 850px) {
+      .layout {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+
+      nav {
+        position: static;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 80px 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">History · Ethnicity · State Formation</div>
+      <h1>俄罗斯和俄罗斯民族起源和历史</h1>
+      <div class="hero-line"></div>
+      <p>
+        从斯拉夫人的迁徙与融合，到罗斯、基辅罗斯、弗拉基米尔大公国、
+        莫斯科大公国，再到俄罗斯沙皇国与俄罗斯帝国。
+      </p>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <nav>
+      <strong>目录</strong>
+      <a href="#Intro" target="_self">引言</a>
+      <a href="#Slavs" target="_self">01 斯拉夫人</a>
+      <a href="#Rus" target="_self">02 罗斯人与罗斯</a>
+      <a href="#Kievan_Rus" target="_self">03 基辅罗斯</a>
+      <a href="#GP_Vladimir" target="_self">04 弗拉基米尔大公国</a>
+      <a href="#GP_Moscow" target="_self">05 莫斯科大公国</a>
+      <a href="#Tsardom" target="_self">06 沙皇俄国与俄罗斯帝国</a>
+      <a href="#USSR" target="_self">07 苏联</a>
+      <a href="#Christian" target="_self">天主教与东正教</a>
+      <a href="#Afterword" target="_self">后记</a>
+    </nav>
+
+    <main>
+
+      <section class="intro" id="Intro">
+        <span class="chapter-number">A Note</span>
+        <h2>写在前面的话</h2>
+        
+        <p>2026年夏天，我们先后去了土耳其和俄罗斯旅游，参观景点时自然会捎带一些背景的历史知识。然后就意识到自己关于俄罗斯的历史所知甚少。甚至在游览圣彼得堡之前，我居然不知道它做了200年的俄国首都。</p>
+
+        <p>无论是在学生时代的历史课上，还是影视剧、网络中，西欧的曝光度都更高一些。从古希腊、古罗马，到法兰克的崛起，三分国土奠定现代欧洲的雏形，英国的君主立宪，法国大革命、拿破仑，都是我们耳熟能详的。再加上我们已经在欧洲住了一段时间，每次旅游都会再积攒一点了解。</p>
+        
+        <p>反观俄罗斯，课本中的第一次出场就是尼布楚条约，还讲到了叶卡捷琳娜二世女王。那时俄罗斯已经是一个巨大无比的帝国了。相比于沙皇时期甚至在早的俄国，因为政治上的原因，中国人对苏联时期的历史可能还更熟悉一些。俄罗斯人是哪里来的？俄罗斯这个国家又是如何建立发展的？今天我们就试着来梳理一下。</p>
+        
+      </section>
+      
+      
+      
+      <section class="chapter" id="Slavs">
+        <span class="chapter-number">01 Slavs</span>
+        <h2>斯拉夫人</h2>
+
+        <p>大家可能都知道俄罗斯人是斯拉夫人。</p>
+
+        <div class="quote">
+          <p>
+            “斯拉夫人(Slavic peoples)是欧洲各民族和语言集团中人数最多的之一，有三亿四千万人。主要分布于东欧和中欧，语言属于斯拉夫语族。 斯拉夫人发源于今波兰东南部维斯杜拉河上游一带，于一世纪时开始向外迁徙，六世纪前后，斯拉夫人出现在东欧平原上，那时的他们介于游牧民族与农耕民族之间，有时还靠劫掠为生。六世纪的民族大迁徙使得他们的居地已经遍布欧洲中东部。近代随着俄罗斯对西伯利亚与中亚的殖民，斯拉夫人也向西伯利亚及中亚地区迁徙。
+            <span class="cite">----[Wiki]: "斯拉夫人"</span>
+          </p>
+        </div>
+        <div class="quote">
+          <p>
+           东斯拉夫人指讲斯拉夫语族东斯拉夫语支语言的斯拉夫人，今已主要逐渐演变为俄罗斯人、乌克兰人和白俄罗斯人三大主要民族。
+          </p>  
+          <p> 
+           在俄罗斯民族形成初期，俄罗斯、白俄罗斯、乌克兰还是同一个民族，基辅罗斯被认为是三个现代东斯拉夫人国家的前身。弗拉基米尔·斯维亚托斯拉维奇和他的儿子雅罗斯拉夫统治的时期，被认为是基辅的黄金时期。当时他们接纳了基督信仰(东正教)，也创立了罗斯法典。
+          <span class="cite">----[Wiki]: "东斯拉夫民族"</span>
+          </p>
+        </div>
+        <div class="quote">
+          <p>
+          “古罗马文献将早期斯拉夫民族称为“Veneti”，他们居住在公元1至2世纪中欧Suebi人以东，伊朗Sarmatians人以西的地区，即维斯瓦河上游和第聂伯河之间。斯拉夫人，被称为“Antes”和“Sclaveni”，最早出现在公元6世纪初的拜占庭文献中。
+          <span class="cite">----[Wiki]: "Early_Slavs"</span>
+          <p>
+        </div>
+        <figure class="single-image">
+          <img src="https://lh3.googleusercontent.com/d/1_2uIF-3LG9EA0BTUXALFHYUvhFUKUQIc" >
+          <figcaption class="image-caption">早期斯拉夫部落的迁徙和扩张</figcaption>
+        </figure>    
+        <div class="quote">
+          <p>
+          “东斯拉夫人的起源可以追溯到早期的斯拉夫部落，他们与芬兰人、波罗的海人以及哥特人的残余势力混合和接触。他们的早期斯拉夫成分Antes混合或吸收了伊朗人，后来又受到Khazars和维京人的影响。”
+          <span class="cite">----[Wiki]: "Slavs"</span>
+          </p>
+        </div>
+        <div class="quote">  
+          <p><i>
+           Khazars：可萨人，也译作卡扎人、哈扎尔。是一个半游牧的突厥语民族，他们在公元6世纪末建立了一个突厥语部落联邦，形成了覆盖今天俄罗斯欧洲部分南部的一个大型商贸帝国。</i>
+          <span class="cite">----[Wiki]: "Khazars）"</span>
+          </p>
+        </div>
+        
+        <p> 
+          公元一世纪斯拉夫人在东欧发源时，中国处在东汉，欧洲的罗马帝国已经完成环地中海的扩张即将进入鼎盛的五贤帝时期。从一世纪到九世纪末基辅罗斯成立，在基辅附近的地区先后出现过的政权有哥特，东哥特，匈人帝国，可萨汗国，阿瓦尔汗国，马扎尔(匈牙利人)。北部的莫斯科和圣彼得堡附近则一直是游牧部落的领地，没有形成过有规模的政权。
+        </p>
+
+        <div class="note">
+          <strong>民族的血源</strong>
+          <br>所以东斯拉夫人是斯拉夫人的一支，他们大约1世纪发源于波兰(维斯杜拉河)，随着迁徙，融合，他们分布于欧洲中东部。俄罗斯人的祖先就是居住在东欧，现今俄罗斯接近欧洲部分、白俄罗斯和乌克兰附近的斯拉夫人。
+        </div>
+       
+      </section>
+
+
+
+      <section class="chapter" id="Rus">
+        <span class="chapter-number">02 Rus' and Rus' people</span>
+        <h2>罗斯人和罗斯</h2>
+
+        <figure class="single-image">
+          <img src="https://lh3.googleusercontent.com/d/14IhVbAUHvWqslZfkV6gOyKXWivmNZUAI" >
+          <figcaption class="image-caption">814年的欧洲形势</figcaption>
+        </figure>
+
+        <p>罗斯人的出身和身份有很大的争议，大部分西方史家认为他们是来自北欧瑞典一带的维京人。罗斯(Rus)一词据信是来自芬兰语Ruotsi，该词既指船上的划桨手，也是芬兰语里瑞典的意思。罗斯人自八世纪起，控制沃尔霍夫(Volkhov)河两端及其河运通道，沃尔霍夫河在诺夫哥罗德(Novgorod)注入伊尔门(Ilmen)湖。这一地区靠近圣彼得堡，距离芬兰瑞典较近。此地还混居着许多芬兰部落和斯拉夫部落。</p>
+        
+        <figure class="single-image">
+          <img src="https://lh3.googleusercontent.com/d/1So9jsulDYCES4JNyBJL9Zmx8ygExFJQM" >
+          <figcaption class="image-caption">Nicholas Roerich, "Guests from Overseas"</figcaption>
+        </figure>    
+        
+        <p>据俄罗斯最早的史书(成书于基辅罗斯创立后两百多年，有半神话性质，不能完全当作信史研究)《往年纪事》记载：</p>
+        <div class="quote">
+          <p>
+            (之前在此地) 征贡的瓦良格人被驱赶回海的那边。各部落之间相互斗争，纷争不断。于是他们决定寻找一位君主。他们前往海外找到了瓦良格的罗斯人。<b><i>这些瓦良格人被称为罗斯人，就像有些人被称为瑞典人，有些人被称为诺曼人、英国人和哥特兰人一样，因为他们就是这样被命名的。</i></b>……就这样，他们选出了三兄弟及其亲属，他们带着所有罗斯人迁徙而来。长子留里克定居在诺夫哥罗德；次子是西涅乌斯，驻扎在别洛泽罗；第三子是特鲁沃尔，驻扎在伊兹博尔斯克。由于这些瓦良格人的存在，诺夫哥罗德地区被称为罗斯之地。
+            <span class="cite">----[Wiki]: "Rus'_people"</span>
+          </p>
+        </div>
+
+        <p>
+        这个半传奇性质的故事里说，包括芬兰人和斯拉夫人在内的各部落之间纷争不断，决定请一位贤能的君主，于是请来了留里克(Rurik)。现实则是有一批被称作罗斯人的人，生活在沃尔霍夫河。在九世纪末，一位被叫做留里克的罗斯人被接受为领袖统治当地的斯拉夫和芬兰等部落。至于留里克是从海外乘船而来，还是在本地罗斯人中选出的，还是留里克领导的罗斯人武力强迫周围部落服从，不得而知。
+        </p>
+        
+        <p>留里克在位时主要统治诺夫哥罗德地区。他去世时，他的儿子伊戈尔(Igor)年纪尚幼，奥列格(Oleg)取得了权力。奥列格在位期间，夺取了基辅，建立了第一个可以称为国家的罗斯政权。奥列格去世之后，权力回到伊戈尔手中。《往年纪事》记载奥列格是忠诚的摄政王，保护并教导伊戈尔，在自己死后交还了政权。然而，并没有明确证据说明奥列格到底是暂摄国政，还是趁机窃取政权。之后他是自愿归还，还是死后被迫归还，还是曾经和早已成年的伊戈尔共同执政多年。</p>
+
+        <p></p>
+
+        <div class="note">
+          <strong>国家的形成</strong>
+          <br>但无论如何，奥列格开创了基辅罗斯。一个来自北部的部落联盟，入主东斯拉夫人的中心地带。随着基辅罗斯的扩张和强大，把一个外来的，少数，但居于统治地位的民族名字，带给了整个地区的东斯拉夫人。
+        </div>
+        
+
+      </section>
+
+
+      <section class="chapter" id="Kievan_Rus">
+        <span class="chapter-number">03 Kievan Rus</span>
+        <h2>基辅罗斯</h2>
+
+        <p>基辅罗斯是讨论俄罗斯和俄罗斯民族起源绕不开的话题，东斯拉夫三族，现今的国家疆域，地缘政治纷争，一切的一切，都源于基辅罗斯。</p>
+
+        <div class="quote">
+          <p>
+            基辅罗斯是中世纪东欧及北欧地带一个由众部落公国组成的联邦。其由诺斯族瓦良格人留里克建立的留里克王朝所统治，但主体民族为东斯拉夫人，亦有一定数量的少数民族芬兰人。其以基辅为首都，国祚自奥列格882年建国始，至1240年被蒙古帝国拔都西征攻灭而终，极盛时疆域北抵白海、南通黑海、东至塔曼半岛、西达维斯瓦河河源。基辅罗斯之正式国号为罗斯，“基辅罗斯”此一名词是19世纪俄罗斯史学界为了表明该时期政权中心位于基辅而创造的。
+            <span class="cite">----[Wiki]: "基辅罗斯"</span>
+          </p>
+        </div>
+
+        <p>也就是说在历史的当时，世上只有罗斯，而没有基辅罗斯。就像西汉东汉的人只会说自己是大汉子民，君士坦丁堡的居民也不会说自己的国家拜占庭帝国。</p>
+        
+        <h3>罗斯领导层的斯拉夫化</h3>
+        <div class="quote">
+          <p>907 年，罗斯-拜占庭条约的十四位罗斯签字人全部都是北欧名字。到了 945 年签订条约时，已经有一些签字人的名字变成了斯拉夫名字，而绝大多数签署人的名字还是北欧名字。
+          <span class="cite">----[Wiki]: "Rus'_people"</span>
+          </p>
+        </div>
+        <p>仅仅不到40年，领导层就加入了若干斯拉夫人，更不用说之后在漫长的岁月里演化。</p>
+        
+        <h3>宗教和语言</h3>
+        <p>拜占庭对罗斯人的传教开始的很早。个别统治阶级被认为信奉基督教，比如伊戈尔的妻子奥尔加(Olga of Kiev)。但信仰基督教的罗斯人一直非常少，绝大多数人依旧信仰在部族中流传的传统多神教。大约在988年，弗拉基米尔一世(Vladimir I)在克里米亚的克森尼索受洗。返回基辅后，他为皇室的家人和基辅罗斯的人民施洗。东正教正式进入基辅罗斯。为此弗拉基米尔被冠以圣人(Saint)头衔</p>
+        <p>伴随基督教一同传入基辅罗斯的是来自保加利亚第一帝国的大批宗教典籍。</p>
+        <p>拜占庭传教士基里尔和美多德兄弟在对斯拉夫人的传教中发明了西里尔字母，用于书写斯拉夫语言。大约和基辅罗斯同时期建立的保加利亚第一帝国很快接受了基督教和一同传入的西里尔字母。拥有了文字，保加利亚很快印刷了大量斯拉夫语言的各类书籍。当基辅罗斯接受基督教时，同样讲斯拉夫语言的他们自然选择了这种字母</p>
+
+        <h3>政权</h3>
+        <p>创立初期的基辅罗斯政权并不稳定。伊戈尔的儿子斯维亚托斯拉夫一世(Sviatoslav I)四处征战，极大的扩张了基辅罗斯的面积。他的最大战绩是彻底消灭了东面可萨汗国。</p>
+        <p>前面提到的弗拉基米尔则首先赢得了内战，然后建立了有效的中央集权，将基辅罗斯整合成一个稳固的国家。因此他获得了大帝称号(Vladimir the Great)</p>
+        <p>智者雅罗斯拉夫(Yaroslav the Wise)在位期间，基辅罗斯达到其最大面积。但随着他在1054去世，基辅罗斯政权开始封建化。1132年基辅罗斯中央集权正式衰落，诸侯四起。其中一个重要的诸侯国是弗拉基米尔大公国(Grand Principality of Vladimir)，因为它就是日后横贯欧亚的俄罗斯帝国的前身。
+        </p>
+
+        <p>基辅罗斯建国之时，中国的唐朝已经并入膏肓，黄巢起义正处在高潮。欧洲的法兰克帝国分为的三部分，中间的部分都已经被瓜分殆尽。基辅罗斯发展壮大，获得宗教和文字时。中国五代十国经历了70年的混乱，已经进入宋朝。欧洲的神圣罗马帝国成立。教皇要处理入侵的诺曼人，试图向东罗马帝国求援，最终却造成了教会大分裂。方面维京人的时代进入尾声，北欧诸国纷纷建国。诺曼人即将入侵英国。</p>
+
+        <div class="note">
+          <strong>国家、宗教和民族</strong>
+          <br>一代代统治者扩大疆域，将周边土地上的小部族收入基辅罗斯，巩固政权。引入基督教信仰和文字，极大的凝聚了罗斯人国家和民族的认同。即使统一的国家政权不复存在，罗斯民族的认同永远烙印在历史中。
+        </div>
+
+      </section>
+
+      <section class="chapter" id="GP_Vladimir">
+        <span class="chapter-number">04 Grand Principality of Vladimir</span>
+        <h2>弗拉基米尔大公国</h2>
+        
+        <p>弗拉基米尔-苏兹达尔大公国于988年第一次见诸文献，Yaroslav Vladimirovich被其父亲 Vladimir I of Kiev任命为prince of Rostov。1054，Yaroslav获得了Rostov和 Suzdal的土地。1125当时的大公Yuri迁都苏兹达尔，1169 年，大公安德烈·博戈柳布斯基(Andrey Bogolyubsky)迁都弗拉基米尔，同年攻陷基辅，在基辅罗斯的权力斗争中取得主导，但并未迁都基辅。伴随着大公国内部的纷争和对外战争，领导人和疆域均不断发生变化。</p>
+        
+        <h3>蒙古入侵</h3>
+        
+        <p>1223年，蒙古首次入侵罗斯。1237年正式入侵。1240年本就行将就木的基辅罗斯灭亡。</p>
+        
+        <p>铁木真长子术赤的次子拔都，建立了金帐汗国。基辅以南的大片区域都包括在金帐汗国的范围内。</p>
+        <figure class="single-image">
+          <img src="https://lh3.googleusercontent.com/d/11SKYdr16RajxNgsqSkjpVQzVVHAFpi7j" >
+          <figcaption class="image-caption">金帐汗国疆域图1300年</figcaption>
+        </figure>
+        
+        <div class="quote">
+          <p>钦察汗国（1242年－1502年），又称钦察部、金帐汗国. 于13世纪建立，蒙古四大汗国之一，是蒙古帝国西北部分支，后期突厥化，控制着连接中国和中世纪欧洲的丝绸之路。由拔都创立并由其后人管理。
+          <span class="cite">----[Wiki]: "钦察汗国"</span>
+          </p>
+        </div>
+
+        <p>弗拉基米尔大公国成为附庸，需要向金帐汗国纳贡，但可以从蒙古控制的贸易路线中获利。亚历山大·涅夫斯基(Alexander Nevsky)是弗拉基米尔大公雅罗斯拉夫二世(Yaroslav II)的儿子。他曾被封为Novgorod大公，在北部地区战胜入侵的瑞典人，涅夫斯基的意思就是涅瓦河的。后来又战胜条顿骑士团，使得该地区免于天主教势力的征服。在蒙古入侵之后巧妙地与蒙古人周旋，被金帐汗国先后封为基辅大公和弗拉基米尔大公。他和他的父亲都曾亲自前往蒙古帝国的首都哈拉和林(Karakorum)接受册封。</p>
+
+        <p><i>有趣的是,雅罗斯拉夫二世在哈拉和林受封后返回途中于1246年去世。他的儿子安德烈(Andrey)和涅夫斯基产生了继承权纷争，他们先前往金帐汗国拔都汗处，随后被要求前往哈拉和林。此时蒙古的大汗是贵由汗，他于1248去世，蒙古自己的汗位也陷入了争夺之中。此时兄弟二人还在途中，继承权问题因此耽搁，直到1249年两人才返回公国。哥哥安德烈获封弗拉基米尔大公国，弟弟涅夫斯基反而获得基辅和全罗斯大公的称号。安德烈自然十分不满，回国之后两人发生冲突，最终涅夫斯基于1252年获得弗拉基米尔大公的称号。</i></p>
+        
+        <p><i>而蒙古这边1251年蒙哥汗即位，继续攻打南宋，1259年被杨过飞石打死(大误)……</i></p>
+
+        <p>涅夫斯基在1263年去世后，大公国迅速分裂为11个以城市为中心的行政区域。到了13世纪末，仅有三个城市的执政者还在争夺弗拉基米尔大公的称号：莫斯科，特维尔(Tver)，下诺夫哥罗德(Nizhny Novgorod)。到了14世纪末，莫斯科大公国实际上取代了原弗拉基米尔大公国。</p>
+
+        
+        <div class="note">
+        <strong>国家的留存和转移</strong>
+        <br>面对横扫整个欧亚大陆的蒙古大军，弗拉基米尔大公国保存了罗斯人的国家。这一时期，由于基辅的陷落，罗斯人的政治中心向东北移动，现今俄罗斯的国家核心得以孕育和发展。基辅罗斯的覆灭，也造就了东斯拉夫人分裂成为现今俄罗斯，白俄罗斯和乌克兰三个民族。
+        </div>
+
+      </section>
+
+
+      <section class="chapter" id="GP_Moscow">
+        <span class="chapter-number">05 Grand Principality of Moscow</span>
+        <h2>莫斯科大公国</h2>
+
+        <p>莫斯科是在弗拉基米尔公国时期新兴的几个城市之一。涅夫斯基在1263年去世时，最小的儿子丹尼尔(Danial)年仅两岁，分到了在当时价值最低的城市莫斯科。当时许多城市的统治者疲于稳定其统治，尚且自顾不暇，有的还卷入了金帐汗国的派系斗争中。</p>
+
+        <p>丹尼尔和他的继任者们巧妙地避免大规模战争的，不引入注目地逐渐扩大其领地，包括通过购买的方式获取破产领主的土地。控制整条莫斯科河的水路运输，继而控制和促进商业，积累财富。</p> 
+        
+        <p>莫斯科修建教堂和修道院，与都主教建立良好的关系，使得莫斯科逐渐成为宗教中心。1325年，基辅都主教Peter（1300年已从基辅迁至弗拉基米尔）迁往莫斯科，该事件进一步促进了莫斯科大公势力的上升。</p>
+
+        <p>1327年，在特维尔起义武装反抗金帐汗国暴力征税的背景下，莫斯科的钱袋子伊凡一世(Ivan I Kalita)趁机向金帐汗国献媚，沉重打击了竞争对手特维尔公国。更重要的是，金帐汗国将大公头衔和向各公国收取税金的权力交给了莫斯科。</p>  
+
+        <p>发达的商业，税收权和金帐汗国的支持，使得莫斯科积累了大量财富。</p>
+
+        <h3>反抗蒙古</h3>
+        
+        <p>14世纪末到15世纪初，金帐汗国衰落。莫斯科大公国开始试图摆脱金帐汗国对其的控制。</p>
+        <p>德米特里(Dmitry)停止缴税，引发了来金帐汗国的大举进攻。1380年德米特里率军在顿河流域大胜金帐汗国马麦汗大军，打破了蒙古骑兵不可战胜的神话。为德米特里赢得了顿斯科伊的称号。类似涅夫斯基，顿斯科伊的意思是顿河的。</p>
+        <p>虽然三年后面对金帐汗国的进攻，莫斯科输掉了战争。1389，德米特里去世前，在没有金帐汗国许可的情况下，直接将大公头衔传给了儿子，原弗拉基米尔大公的称号永久归于莫斯科大公。</p>
+        
+        <figure class="single-image">
+          <img src="https://lh3.googleusercontent.com/d/1zC-ao1JsqOBR6QGgWBkwAmcrmgQtLM2a" >
+          <figcaption class="image-caption">莫斯科公国的扩张</figcaption>
+        </figure>
+
+        <h3>第三罗马</h3> 
+        
+        <p>除了宗主国金帐汗国，莫斯科还要应付来自西面立陶宛的威胁。在对金帐汗国的初次挑战之后，新任大公瓦西里一世(Vasily I)小心地处理与两国的关系，并不断增强自己的实力。</p>
+
+        <p>于此同时，随着东罗马帝国的衰落，君士坦丁堡在开始丧失在宗教事务上的话语权。1448年，莫斯科牧首宣告独立，脱离君士坦丁牧区。1473年，时任大公伊凡三世(Ivan III)和亡国的东罗马公主索菲娅结婚。索菲娅是末代东罗马皇帝君士坦丁十一世的侄女。莫斯科公国开始使用拜占庭仪制，宣称延续罗马帝国的道统。</p>
+        <p>1480年，伊凡三世兵不血刃逼退金帐汗国的军队，为莫斯科迎来了彻底的独立。</p>
+        <p>1547年，伊凡四世(Ivan IV)加冕沙皇，建立俄罗斯沙皇国。</p>
+
+        <div class="note">
+        <strong>再次崛起和独立</strong>
+        <br>莫斯科大公国通过精明的运作，经济、领土和地位全面崛起。同时面对来自东西方的压力，他们抓住了历史带来的每一个风口，将一个独立统一的罗斯人国家重新带回世界舞台。
+        </div>
+
+      </section>
+
+
+
+      <section class="chapter" id="Tsardom">
+        <span class="chapter-number">06 Tsardom and Empire</span>
+        <h2>沙皇俄国和俄罗斯帝国</h2>
+
+        <p>伊凡四世于1547加冕沙皇。国号则从莫斯科大公国改为俄罗斯沙皇国(Tsardom of Russia)。他没有选择古称Rus，而是选取了更具拜占庭特色的名字Rossiya(Россия)。这是基辅罗斯覆灭300年后，罗斯人再次把民族放入国家的名字。</p>
+        <p><i>莫斯科红场旁边著名的圣瓦西里大教堂就是在伊凡四世执政期间修建的为了纪念对喀山的征服而兴建的。</i></p>
+        <p>1581年他的长子在一次家庭内部的冲突中被他杀死，1584年次子费奥多一世(Feodor I)即位，大权很快落入摄政妹夫的手中，1598年费奥多一世无嗣而终，留里克王朝终结。</p>
+
+        <h3>Time of trouble。</h3>
+        <p>费奥多一世没有子嗣，沙皇国的王位继承陷入巨大的混乱。1598年到1613年间，沙皇宝座在若干人中传递，甚至有冒充留里克后人的骗子。期间不仅皇位继承一片混乱，帝国还面临外敌入侵，如1609波兰立陶宛干涉。</p>
+
+        <h3>罗曼诺夫王朝</h3>
+
+        <p>1613年，罗曼诺夫王朝开启。米哈伊尔罗曼诺夫(Michael Romanov)被贵族选为沙皇。他母亲有留里克家族的血统。他被推上皇位时年仅16岁，是贵族们对权力派系和皇位血统的妥协产物，因此最初米哈伊尔十分惧怕这顶被人按在头上的皇冠。</p>
+        
+        <p>1682, 米哈伊尔的孙子彼得一世(Peter I)同父异母的哥哥伊凡五世(Ivan V)同时坐上沙皇宝座，但权力却在姐姐索菲亚手中。1689年通过政变彼得一世取得权力。彼得一世一生传奇，年轻时甚至微服去西欧游历，学习各种知识技术。他对现代科技非常痴迷和推崇，致力于建立一个全面现代化的俄国。在位期间，建立新式海军，发动亚速远征，夺取奥斯曼帝国的土地，要求守旧贵族移装易服，和瑞典进行了旷日持久的战争最终获胜，下令兴建圣彼得堡作为通向西欧的窗口并迁都至此，发动对波斯的战争并取得胜利。</p>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="year">1721</div>
+            彼得一世正式将俄国从沙皇国改为帝国。借助对瑞典的战争胜利，世界开始改称俄罗斯帝国。
+          </div>
+          <div class="timeline-item">
+            <div class="year">1725</div>
+            彼得一世去世，他的第二任妻子叶卡捷琳娜一世(Catherine I)即位，俄罗斯历史上第一位女皇。
+          </div>
+          <div class="timeline-item">
+            <div class="year">1727</div>
+            彼得一世十四岁的孙子彼得二世(Peter II)即位。他的祖母是彼得一世的第一任妻子，他的父亲则早年被害。仅仅三年之后，彼得二世死于天花，他成为罗曼诺夫王朝最后一位直系/父系皇帝。
+          </div>
+          <div class="timeline-item">
+            <div class="year">1730</div>
+            彼得一世的妹妹安娜(Anna)女王即位。
+          </div>
+          <div class="timeline-item">
+            <div class="year">1741</div>
+            彼得一世的女儿伊丽莎白(Elizabeth)女王即位。克宫的“武器库”展示着几架属于她的马车。
+          </div>
+          <div class="timeline-item">
+            <div class="year">1762</div>
+            伊丽莎白女王的侄子彼得三世(Peter III)即位，他是彼得一世的外孙，母亲也叫安娜，但不是之前的安娜女王。仅仅半年之后，彼得三世被妻子策划的宫廷政变推翻，并被杀死。登基成为女王的他的妻子就是大名鼎鼎的叶卡捷琳娜二世(Catherine II)。彼得三世虽然通过保留罗曼诺夫的姓氏延续其王朝，但本质上沙皇血统已经改朝换代。有趣的是叶卡捷琳娜二世身上也保留有一些留里克王朝的血统，她的某个祖先是特维尔大公的女儿。
+          </div>
+          <div class="timeline-item">
+            <div class="year">1881</div>
+            这年遇刺的沙皇亚历山大II，是叶卡捷琳娜II的重孙。滴血大教堂就是为了纪念他的遇刺而修建。
+          </div>
+          <div class="timeline-item">
+            <div class="year">1917</div>
+            两代之后，亚历山大II的孙子尼古拉斯II被布尔什维克杀死，超过300多年的罗曼诺夫王朝和370年的沙皇俄国画上了句号。
+          </div>
+        </div>
+
+        <figure class="single-image">
+          <img src="https://lh3.googleusercontent.com/d/1_PxVms_Dcu1Ix9s24P0zYfxy-nBHYleh" >
+          <figcaption class="image-caption">沙皇俄国的扩张</figcaption>
+        </figure>
+
+        <div class="note">
+        <strong>扩张与强大</strong>
+        <br>俄国开始吸收西欧的科学技术、制度和文化，国家日益强大。同时，俄国的领土持续进行大规模扩张。这一时期的俄国开始接近我们所熟悉的形象：一个横跨欧亚的强大帝国。
+        </div>
+
+      </section>
+
+      <section class="chapter" id="USSR">
+        <span class="chapter-number">07 USSR</span>
+        <h2>苏联</h2>
+
+        
+
+        <h3>革命之前</h3>
+        <p>参见上一章最后的地图，1914年，俄国的领土包括全部波罗的海三国，一部分现今波兰的土地和外高加索地区的一小块土地。其中波兰的土地100多年前俄普奥三家瓜分波兰-立陶宛时得到的。</p>
+        
+        <h3>十月革命</h3>
+        <p>十月革命爆发后，俄国急于退出一战，与德国签订了一些吃亏的条约，吐出了波罗地海三国和波兰，并失去了白俄罗斯。</p>
+
+        <p>十月革命爆发后，被俄国政府的地区纷纷爆发独立运动。红军采取了一系列军事行动，收复失地。</p>
+        <p>苏联收复这些地区之后，采取了和沙皇俄国不同的策略，加盟共和国。赋予这些地区名义上和一定程度上实际的自主权，希望借此减少当地人的反抗情绪。</p>
+        
+        <p>继续扩张。</p>
+        <p>1919-1921年，苏联迅速收复了借沙皇倒台宣布独立的各个国家，包括白俄罗斯和乌克兰在内的诸多苏联加盟共和国。但芬兰，波兰和波罗的海三国赢得了独立。</p>
+        
+        <p>1939年8月23日苏德秘密签署《苏德互不侵犯条约》(Molotov-Ribbentrop Pact)，波罗的海三国重新被苏联吞并。这个条约中国的历史书是不会讲的，至少在我们的学生时代，绝无可能。希望将来有一天，中国能够正视历史。</p>
+        <p>1939年9月1日，德过同时闪击波兰。9月17日，苏联出兵波兰，裂土而分之。</p>
+        <p>1941年6月22日，德国入侵苏联。这一天之前的历史，也绝不可能出现在莫斯科的1418纪念馆中。</p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+
+
+
+
+        <p>苏联时期，在他们所拥有的加盟共和国之间，进行了一些各种目的的领土调整。造成了一些列的历史遗留问题！比如克里米亚，比如亚美尼亚。</p>
+
+
+        
+        <figure class="single-image">
+          <img src="https://lh3.googleusercontent.com/d/" >
+          <figcaption class="image-caption"></figcaption>
+        </figure>
+
+        <div class="note">
+        <strong></strong>
+        <br>
+        </div>
+      </section>
+
+
+
+      <section class="chapter" id="Christian">
+        <span class="chapter-number">Excursus: Christian Church</span>
+        <h2>天主教 和 东正教</h2>
+
+        <p>罗马帝国选择基督教之初，帝国境内分为五大教区，教区的最高领袖称为宗主教(Patriarch)，宗主教原则上地位平等，但由管辖区域是首都，罗马宗主教为五人之长。随着东西罗马分裂，和领土的丧失，其中亚历山大，安条克和耶路撒冷的三个宗主教势力迅速削弱，但道统延续至今。他们的座堂分别在大马士革，埃及亚历山大和耶路撒冷。罗马宗主教后世逐渐改成教皇(Pope),下文单独提到他时，改称教皇。东西教会分裂后，东正教的宗主教常被中文翻译成牧首，下文提到他们是改称牧首。</p>
+        <p>灭亡西罗马帝国的所谓蛮族，其实也是基督教的信徒，只不过他们信奉的大多是被认为异端的小众教派。因此教皇的地位得以保留。因为保护周边地区不收蛮族侵扰，教皇得到了很大的世俗权力。在西罗马灭亡之后不久，法兰克皇帝选择皈依基督教“正统”，得到教皇的支持并因此获得巨大政治利益。</p>
+
+        <p>东罗马帝国一度夺回西部大片领土。教皇因宗教问题(比如捣毁圣像运动)和经济问题与东罗马皇帝查士丁尼一世(Justinian I)产生矛盾。教皇和君士坦丁堡决裂，并在法兰克皇帝(查理曼大帝的父亲)的帮助下成立了教皇国。</p>
+         <div class="quote">
+          <p>捣毁圣像运动。第一次726-787，第二次814-842。主要原因是皇帝本人的宗教立场，以及对战场失利和自然灾害的迷信。</p>
+        </div>
+
+        <p>1054东西教会大分裂。双方的矛盾有宗教方面的：圣餐的面饼是否发酵，神职人员的婚姻，圣子究竟是不是圣父等问题。也有政治层面的：教皇需要东罗马帝国军事支援，解决意大利南部的诺曼人。教皇使者红衣主教Humbert在谈判未果之后，在索菲亚大教堂公然将君士坦丁牧首开除教籍。之后君士坦丁堡反制，也将教皇开除教籍。</p>
+        <p>1096 第一次十字军东征开始。</p>
+        <p>随着国土的减少，君士坦丁牧首势力持续下降。1439左右，东罗马帝国灭亡前夕，为获得欧洲天主教势力的支持，双方签署条约《佛罗伦萨协定(Council of Florence)》合并教会，认教皇为尊。东罗马皇帝约翰八世(John VIII Palaeologus)亲自签字。由于君士坦丁牧首在正式签字前夕病逝，由代表代签。回国之后教徒和教会完全不认可：宁可亡国，不认异端。1453年，君士坦丁堡陷落。1484年，条约正式废除。攻陷君士坦丁堡的奥斯曼土耳其因为担心欧洲干涉，支持废除条约。</p>
+
+        <p>时间回到10世纪，当东正教最初传入基辅罗斯时，最高领为都主教(Metropolis)，称为基辅和全罗斯的都主教。随着基辅罗斯政治、疆土的变化，基辅主教最终迁入莫斯科。1448年，出于对罗伦萨协定的不认可，莫斯科方便罢免了支持协定的基辅都主教，自行选举并宣布“自治”。东罗马帝国灭亡之后，莫斯科自认东罗马道统，第三罗马，世界最后一片正教净土。</p>
+
+        <p>1461年，莫斯科方面将都主教名字改为莫斯科和全罗斯，但维持了都主教的级别。</p>
+        <p>100年后于政治和经济利益，君士坦丁牧首正式同意抬升莫斯科都主教为第五大教区牧首（1590年、1593年）。由于罗马教皇之前已经脱离，牧首数量恢复到五个。</p>
+        <p>1686，俄罗斯帝国取得现在包括基辅的乌克兰领土后，基辅的宗教管辖权，比如基辅都主教的任命，移交莫斯科牧首。此时的掌权者是前面提到的索菲亚。而最初取得基辅周边土地的是她和彼得大帝的父亲。2022俄乌战争之后这又成了一笔糊涂账，基辅都主教希望脱离莫斯科大牧首的管辖。俄方认为是永久移交，君士坦丁堡方面则辩称是暂时移交。</p>
+        <p>东正教随着国家的兴衰，疆域的变化，宗教管辖呈现一种诡异可笑的状态，比如君士坦丁堡牧首名义上是五大牧首之首，管理全世界“无主”东正教徒。实际上君士坦丁堡仅剩几千名东正教信徒。再加上没有采用罗马教皇“高于一切”式的管辖方式，有实力的教区可以在最高领袖为都主教的情况下，脱离牧首管理，高度自治。比如希腊北部属于君士坦丁堡管辖，但南部属于希腊自己的教会。保加利亚，罗马尼亚这样的东正教大国，都不直属于君士坦丁堡管理。反而远在天边的南美洲教徒，属于君士坦丁牧首的管辖范围。</p>
+               
+      </section>
+
+      <section class="chapter" id="Afterword">
+        <span class="chapter-number">Afterword</span>
+        <h2>后记</h2>
+        <p>这篇文章的结构整体是按照时间顺序来写的，值得注意的是历史从来不是简单的线性关系，比如弗拉基米尔作为一个封建政权长期和基辅罗斯共存，而莫斯科作为一个城市也早就存在。</p>
+        <p>本文刻意忽略了来西欧的影响，比如瑞典，波兰，立陶宛以及德意志的国家和地区的政治力量，俄国与他们的关系和战争等。我们也没有深度触及宗教因素在俄国国家发展中的影响。</p>
+        <p>历史中关于苏联的部分在这里没有涉及，这一段对更好的理解现在的国际形势和地缘政治是非常重要的。希望以后能够补齐。</p>    
+      </section>
+      
+
+    </main>
+  </div>
+
+  <footer>
+  俄罗斯和俄罗斯民族的起源和历史
+  </footer>
+<script>
+  document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', function (event) {
+      event.preventDefault();
+
+      const target = document.querySelector(this.getAttribute('href'));
+
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+</script>
+</body>
+</html>

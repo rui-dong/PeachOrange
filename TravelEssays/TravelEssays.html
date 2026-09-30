@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知行拾遗 | 幸福生活个人数字档案馆</title>
+    
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 引入 Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;600;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- 引入 Lucide Icons 图标库 -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind 统一 Token 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        archiveBg: '#FAF5EF',
+                        archiveCard: '#F3ECE2',
+                        archiveBorder: '#E6DCCE',
+                        terracotta: {
+                            DEFAULT: '#D96B43',
+                            hover: '#C85A32',
+                            light: '#E87A5D',
+                            soft: 'rgba(217, 107, 67, 0.12)',
+                        },
+                        charcoal: {
+                            900: '#1E1B18',
+                            800: '#2C2825',
+                            600: '#5C544E',
+                            400: '#8C827A',
+                        },
+                        darkBlue: {
+                            950: '#050D14',
+                            900: '#081622',
+                            800: '#0D2131',
+                            700: '#133045',
+                        }
+                    },
+                    fontFamily: {
+                        serifSC: ['Noto Serif SC', 'Cinzel', 'serif'],
+                        brand: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background-color: #FAF5EF;
+            color: #2C2825;
+            overflow-x: hidden;
+        }
+
+        .font-serif-sc {
+            font-family: 'Noto Serif SC', 'Cinzel', serif;
+        }
+
+        .font-brand {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* 统一自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF5EF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D96B43;
+            border-radius: 3px;
+        }
+
+        /* 分类 Filter 按钮激活样式 */
+        .category-btn.active {
+            background-color: #D96B43;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(217, 107, 67, 0.25);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-terracotta selection:text-white flex flex-col min-h-screen">
+
+    <!-- HEADER 头部导航（与 index.html & TravelBlogs.html 保持高度统一） -->
+    <header class="sticky top-0 z-40 bg-archiveBg/95 backdrop-blur-md border-b border-archiveBorder/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <!-- Brand Logo (修改后的代码) -->
+            <a href="index.html" class="flex items-center gap-3.5 group -my-4 py-4">
+                <!-- 方形 Logo 图片：h-12 w-12 保持方形，且通过 -my-4 与 header 内边距抵消以填满整个导航栏高度 -->
+                <img src="https://lh3.googleusercontent.com/d/1g_fPq6aH8zfrXEgfaNK7r0Ll2MzyfZvr" 
+                     alt="Logo" 
+                     class="h-10 w-16 object-cover rounded-none shrink-0">
+                <span class="font-serif-sc font-bold tracking-wider text-charcoal-900 text-base leading-none">幸福生活</span>
+            </a>
+
+            <!-- Navigation Links to External Sub-homepages -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-charcoal-600">
+                <a href="../AboutUs.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>关于我们</span>
+                </a>
+                <a href="../TravelBlogs/TravelBlogs.html" class="text-terracotta font-semibold flex items-center gap-1.5 hover:text-terracotta-hover">
+                    <span class="font-brand text-xs uppercase tracking-wider">TakuRadio</span><span>旅行博客</span>
+                </a>
+                <a href="TravelEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>知行拾遗</span>
+                </a>
+                <a href="../NotesEssays/NotesEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>手记/随笔</span>
+                </a>
+                <a href="../Gallery/Gallery.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>光影胶片</span>
+                </a>
+                <a href="../Cuisine/Cuisine.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>烟火厨房</span>
+                </a>
+            </nav>
+
+
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobileMenuBtn" class="md:hidden p-2 text-charcoal-800 hover:text-terracotta">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileDrawer" class="hidden md:hidden bg-archiveBg border-b border-archiveBorder px-6 py-4 space-y-2 text-sm">
+            <a href="AboutUs.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>关于我们</span>
+            </a>
+            <a href="TravelBlogs/TravelBlogs.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span class="font-brand text-xs uppercase tracking-wider">TakuRadio</span><span>旅行博客</span>
+            </a>
+            <a href="TravelEssays/TravelEssays.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>知行拾遗</span>
+            </a>
+            <a href="NotesEssays/NotesEssays.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>手记/随笔</span>
+            </a>
+            <a href="Gallery/Gallery.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>光影胶片</span>
+            </a>
+            <a href="Cuisine/Cuisine.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>烟火厨房</span>
+            </a>
+        </div>
+    </header>
+
+
+    <!-- HERO HEADLINE Banner -->
+    <section class="relative w-full py-12 lg:py-16 bg-archiveBg border-b border-archiveBorder/60">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="max-w-3xl space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta/10 border border-terracotta/20 text-terracotta text-xs font-semibold">
+                    <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+                    <span>ESSAYS & REFLECTIONS</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-serif-sc text-charcoal-900 tracking-tight leading-tight">
+                    知行拾遗
+                </h1>
+                <p class="text-charcoal-600 text-base sm:text-lg font-light leading-relaxed">
+                    旅途见闻带来的命题，以及对历史、文化与民族演进的思考碎片。知行合一，于岁月中拾遗。
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- MAIN CONTENT SECTION: TABLE OF CONTENTS LIST -->
+    <main class="flex-grow py-12 lg:py-16">
+        <div class="max-w-7xl mx-auto px-6 space-y-8">
+
+            <!-- Controls Toolbar (Search & Category Filters) -->
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-archiveBorder">
+                
+                <!-- Category Filter Pills -->
+                <div class="flex flex-wrap items-center gap-2" id="categoryContainer">
+                    <button class="category-btn active px-4 py-1.5 rounded-full text-xs font-medium text-charcoal-600 bg-archiveCard hover:bg-terracotta/10 transition-all" data-category="ALL">
+                        全部文章 (<span id="countAll">0</span>)
+                    </button>
+                    <button class="category-btn px-4 py-1.5 rounded-full text-xs font-medium text-charcoal-600 bg-archiveCard hover:bg-terracotta/10 transition-all" data-category="Russia">
+                        俄罗斯 (Russia)
+                    </button>
+                    <button class="category-btn px-4 py-1.5 rounded-full text-xs font-medium text-charcoal-600 bg-archiveCard hover:bg-terracotta/10 transition-all" data-category="Turkey">
+                        突厥/土耳其 (Turkey)
+                    </button>
+                    <button class="category-btn px-4 py-1.5 rounded-full text-xs font-medium text-charcoal-600 bg-archiveCard hover:bg-terracotta/10 transition-all" data-category="Greece">
+                        古希腊罗马 (Greece)
+                    </button>
+                    <button class="category-btn px-4 py-1.5 rounded-full text-xs font-medium text-charcoal-600 bg-archiveCard hover:bg-terracotta/10 transition-all" data-category="Thoughts">
+                        生活随感 (Thoughts)
+                    </button>
+                </div>
+
+                <!-- Search Input Box -->
+                <div class="relative w-full md:w-64">
+                    <input type="text" id="searchInput" placeholder="搜索文章标题或关键词..." 
+                           class="w-full pl-9 pr-4 py-1.5 text-xs bg-archiveCard border border-archiveBorder rounded-full focus:outline-none focus:border-terracotta transition-colors text-charcoal-800 placeholder-charcoal-400">
+                    <i data-lucide="search" class="w-3.5 h-3.5 text-charcoal-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                </div>
+            </div>
+
+
+            <!-- Book Table of Contents / 书籍目录形式列表 -->
+            <div class="space-y-3" id="essayList">
+                <!-- 文章列表将由 JavaScript 依据下方数组动态渲染 -->
+            </div>
+
+            <!-- Empty Search State -->
+            <div id="emptyState" class="hidden py-16 text-center space-y-3">
+                <i data-lucide="file-x" class="w-10 h-10 mx-auto text-charcoal-400"></i>
+                <p class="text-sm text-charcoal-600 font-light">未找到符合条件的文章条目</p>
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- FOOTER 页脚 -->
+    <footer class="bg-charcoal-900 text-archiveBg py-12 border-t border-charcoal-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-charcoal-400">
+            <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-terracotta text-white flex items-center justify-center font-bold font-brand text-xs">
+                    幸福
+                </span>
+                <span class="font-serif-sc">幸福生活 · 个人数字档案馆 © 2026</span>
+            </div>
+            <div>
+                <span>妥善保存于数字云端 · 静默记录</span>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // 文章数据库（包含主页已有文章及新扩展条目）
+        const ESSAYS_DATA = [
+            {
+                id: "01",
+                title: "俄罗斯和俄罗斯民族的起源和历史",
+                category: "Russia",
+                date: "2026.07",
+                url: "RusPeople.html",
+                summary: "从基辅罗斯到沙皇俄国，探讨东欧平原上的民族迁徙与帝国崛起。"
+            },
+            {
+                id: "02",
+                title: "突厥民族的前世今生",
+                category: "Turkey",
+                date: "2026.05",
+                url: "TurkicHistory.html",
+                summary: "跨越蒙古高原至小亚细亚半岛，解密突厥语族游牧民族的历史嬗变。"
+            },
+            {
+                id: "03",
+                title: "古希腊和古罗马的影响范围",
+                category: "Greece",
+                date: "2019.03",
+                url: "GrecoRomanLegacy.html",
+                summary: "地中海文明双璧如何重塑西方政治、法律、建筑与哲学基石。"
+            },
+            {
+                id: "04",
+                title: "拜占庭帝国的千年余晖与文明遗产",
+                category: "Greece",
+                date: "2024.11",
+                url: "ByzantineHeritage.html",
+                summary: "君士坦丁堡的陷落与东正教文化圈在东欧的延续与演变。"
+            },
+            {
+                id: "05",
+                title: "安纳托利亚高原的文明交叠",
+                category: "Turkey",
+                date: "2023.08",
+                url: "AnatoliaCivilizations.html",
+                summary: "赫梯、希腊、罗马与奥斯曼帝国在小亚细亚留下的遗迹层叠。"
+            },
+            {
+                id: "06",
+                title: "关于空间、时间与旅途意义的思考碎片",
+                category: "Thoughts",
+                date: "2022.09",
+                url: "SpaceTimeThoughts.html",
+                summary: "当物理距离被现代交通缩短，地理探索带来的精神冲击发生了怎样的转变。"
+            }
+        ];
+
+        let currentCategory = 'ALL';
+        let currentSearchQuery = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            initMobileMenu();
+            renderEssays();
+            initFiltersAndSearch();
+        });
+
+        // 移动端抽屉菜单逻辑
+        function initMobileMenu() {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const drawer = document.getElementById('mobileDrawer');
+            if (mobileBtn && drawer) {
+                mobileBtn.addEventListener('click', () => {
+                    drawer.classList.toggle('hidden');
+                });
+            }
+        }
+
+        // 渲染符合主页“知行拾遗”风格的书籍目录形式列表
+        function renderEssays() {
+            const container = document.getElementById('essayList');
+            const emptyState = document.getElementById('emptyState');
+            
+            // 过滤文章
+            const filtered = ESSAYS_DATA.filter(item => {
+                const matchesCategory = (currentCategory === 'ALL' || item.category === currentCategory);
+                const matchesSearch = item.title.toLowerCase().includes(currentSearchQuery.toLowerCase()) ||
+                                      item.category.toLowerCase().includes(currentSearchQuery.toLowerCase()) ||
+                                      item.summary.toLowerCase().includes(currentSearchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            // 更新总数统计
+            document.getElementById('countAll').textContent = ESSAYS_DATA.length;
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            // 渲染 HTML：采用与 index.html 完全一致的自适应破折号 (dots/dashes) 目录格式
+            container.innerHTML = filtered.map(item => `
+                <a href="${item.url}" class="py-2.5 flex items-baseline gap-2 group cursor-pointer hover:opacity-80 transition-opacity">
+                    <!-- 1. 左侧编号 -->
+                    <span class="font-mono text-xs text-terracotta font-semibold shrink-0">${item.id}</span>
+
+                    <!-- 2. 破折号自动填充：利用 flex-1 填满所有剩余空白 -->
+                    <div class="flex-1 overflow-hidden whitespace-nowrap text-xs text-charcoal-300 font-mono tracking-tighter select-none">
+                        ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    </div>
+
+                    <!-- 3. 文章标题 -->
+                    <h3 class="w-[320px] sm:w-[460px] text-base sm:text-lg font-bold font-serif-sc text-charcoal-900 group-hover:text-terracotta transition-colors truncate text-left shrink-0">
+                        ${item.title}
+                    </h3>
+
+                    <!-- 4. 分类列 -->
+                    <div class="w-24 text-xs text-terracotta font-medium font-mono shrink-0 text-left pl-2">
+                        ${item.category}
+                    </div>
+
+                    <!-- 5. 日期列 -->
+                    <div class="w-24 sm:w-28 text-xs text-charcoal-400 font-mono shrink-0 text-left">
+                        ${item.date}
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        // 初始化分类按钮点击与搜索框输入事件
+        function initFiltersAndSearch() {
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            const searchInput = document.getElementById('searchInput');
+
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.getAttribute('data-category');
+                    renderEssays();
+                });
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                currentSearchQuery = e.target.value.trim();
+                renderEssays();
+            });
+        }
+    </script>
+</body>
+</html>

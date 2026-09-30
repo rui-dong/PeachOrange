@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私房菜谱 | 幸福生活个人数字档案馆</title>
+    
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 引入 Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;600;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- 引入 Lucide Icons 图标库 -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind 统一 Token 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        archiveBg: '#FAF5EF',
+                        archiveCard: '#F3ECE2',
+                        archiveBorder: '#E6DCCE',
+                        terracotta: {
+                            DEFAULT: '#D96B43',
+                            hover: '#C85A32',
+                            light: '#E87A5D',
+                            soft: 'rgba(217, 107, 67, 0.12)',
+                        },
+                        charcoal: {
+                            900: '#1E1B18',
+                            800: '#2C2825',
+                            600: '#5C544E',
+                            400: '#8C827A',
+                        }
+                    },
+                    fontFamily: {
+                        serifSC: ['Noto Serif SC', 'Cinzel', 'serif'],
+                        brand: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background-color: #FAF5EF;
+            color: #2C2825;
+            overflow-x: hidden;
+        }
+
+        .font-serif-sc {
+            font-family: 'Noto Serif SC', 'Cinzel', serif;
+        }
+
+        .font-brand {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* 统一自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF5EF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D96B43;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-terracotta selection:text-white flex flex-col min-h-screen">
+
+    <!-- HEADER 头部导航 -->
+    <header class="sticky top-0 z-40 bg-archiveBg/95 backdrop-blur-md border-b border-archiveBorder/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <!-- Brand Logo (修改后的代码) -->
+            <a href="index.html" class="flex items-center gap-3.5 group -my-4 py-4">
+                <!-- 方形 Logo 图片：h-12 w-12 保持方形，且通过 -my-4 与 header 内边距抵消以填满整个导航栏高度 -->
+                <img src="https://lh3.googleusercontent.com/d/1g_fPq6aH8zfrXEgfaNK7r0Ll2MzyfZvr" 
+                     alt="Logo" 
+                     class="h-10 w-16 object-cover rounded-none shrink-0">
+                <span class="font-serif-sc font-bold tracking-wider text-charcoal-900 text-base leading-none">幸福生活</span>
+            </a>
+
+            <!-- Navigation Links to External Sub-homepages -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-charcoal-600">
+                <a href="AboutUs.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>关于我们</span>
+                </a>
+                <a href="TravelBlogs/TravelBlogs.html" class="text-terracotta font-semibold flex items-center gap-1.5 hover:text-terracotta-hover">
+                    <span class="font-brand text-xs uppercase tracking-wider">TakuRadio</span><span>旅行博客</span>
+                </a>
+                <a href="TravelEssays/TravelEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>知行拾遗</span>
+                </a>
+                <a href="NotesEssays/NotesEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>手记/随笔</span>
+                </a>
+                <a href="Gallery/Gallery.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>光影胶片</span>
+                </a>
+                <a href="Cuisine/Cuisine.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>烟火厨房</span>
+                </a>
+            </nav>
+
+
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobileMenuBtn" class="md:hidden p-2 text-charcoal-800 hover:text-terracotta">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileDrawer" class="hidden md:hidden bg-archiveBg border-b border-archiveBorder px-6 py-4 space-y-2 text-sm">
+            <a href="AboutUs.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>关于我们</span>
+            </a>
+            <a href="TravelBlogs/TravelBlogs.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span class="font-brand text-xs uppercase tracking-wider">TakuRadio</span><span>旅行博客</span>
+            </a>
+            <a href="TravelEssays/TravelEssays.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>知行拾遗</span>
+            </a>
+            <a href="NotesEssays/NotesEssays.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>手记/随笔</span>
+            </a>
+            <a href="Gallery/Gallery.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>光影胶片</span>
+            </a>
+            <a href="Cuisine/Cuisine.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>烟火厨房</span>
+            </a>
+        </div>
+    </header>
+
+
+    <!-- HERO BANNER -->
+    <section class="relative w-full py-12 lg:py-16 bg-archiveBg border-b border-archiveBorder/60">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="max-w-3xl space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta/10 border border-terracotta/20 text-terracotta text-xs font-semibold">
+                    <i data-lucide="utensils" class="w-3.5 h-3.5"></i>
+                    <span>CULINARY ARCHIVE</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-serif-sc text-charcoal-900 tracking-tight leading-tight">
+                    私房菜谱
+                </h1>
+                <p class="text-charcoal-600 text-base sm:text-lg font-light leading-relaxed">
+                    柴米油盐中的温暖滋味。点击任意菜品图片，查阅制作步骤与秘制配方。
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- MAIN RECIPE GRID SECTION -->
+    <main class="flex-grow py-12 lg:py-16">
+        <div class="max-w-7xl mx-auto px-6 space-y-10">
+
+            <!-- FILTER BAR -->
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-archiveBorder pb-6">
+                <div class="flex flex-wrap items-center gap-2">
+                    <button class="recipe-filter active px-4 py-1.5 rounded-full text-xs font-semibold bg-terracotta text-white transition-all" data-type="all">全部菜品</button>
+                    <button class="recipe-filter px-4 py-1.5 rounded-full text-xs font-semibold bg-archiveCard text-charcoal-600 hover:bg-archiveBorder transition-all" data-type="hot">热炒佳肴</button>
+                    <button class="recipe-filter px-4 py-1.5 rounded-full text-xs font-semibold bg-archiveCard text-charcoal-600 hover:bg-archiveBorder transition-all" data-type="soup">浓汤炖品</button>
+                    <button class="recipe-filter px-4 py-1.5 rounded-full text-xs font-semibold bg-archiveCard text-charcoal-600 hover:bg-archiveBorder transition-all" data-type="dessert">烘焙甜点</button>
+                </div>
+                <div class="text-xs text-charcoal-400 font-mono">
+                    已收录 <span id="recipeCount">6</span> 道佳肴
+                </div>
+            </div>
+
+            <!-- RECIPE GRID: 每行 6 张方形图片 (在 lg 屏幕下) -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6" id="recipeGrid">
+
+                <!-- Item 1 -->
+                <div class="recipe-item group cursor-pointer" data-type="hot" onclick="openRecipeModal('0')">
+                    <div class="bg-archiveCard rounded-xl border border-archiveBorder p-2.5 shadow-sm group-hover:border-terracotta group-hover:shadow-md transition-all duration-300">
+                        <div class="relative aspect-square overflow-hidden rounded-lg bg-charcoal-200">
+                            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=600" 
+                                 alt="经典秘制红烧肉" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-charcoal-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium gap-1">
+                                <i data-lucide="book-open" class="w-4 h-4"></i> 查看菜谱
+                            </div>
+                        </div>
+                        <div class="mt-3 text-center">
+                            <h3 class="font-serif-sc font-bold text-sm text-charcoal-900 truncate group-hover:text-terracotta transition-colors">经典秘制红烧肉</h3>
+                            <div class="flex items-center justify-center gap-2 mt-1 text-[10px] text-charcoal-400">
+                                <span><i data-lucide="clock" class="w-3 h-3 inline"></i> 45分钟</span>
+                                <span>•</span>
+                                <span class="text-terracotta">中等难度</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="recipe-item group cursor-pointer" data-type="soup" onclick="openRecipeModal('1')">
+                    <div class="bg-archiveCard rounded-xl border border-archiveBorder p-2.5 shadow-sm group-hover:border-terracotta group-hover:shadow-md transition-all duration-300">
+                        <div class="relative aspect-square overflow-hidden rounded-lg bg-charcoal-200">
+                            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=600" 
+                                 alt="日式浓郁豚骨拉面" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-charcoal-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium gap-1">
+                                <i data-lucide="book-open" class="w-4 h-4"></i> 查看菜谱
+                            </div>
+                        </div>
+                        <div class="mt-3 text-center">
+                            <h3 class="font-serif-sc font-bold text-sm text-charcoal-900 truncate group-hover:text-terracotta transition-colors">日式浓郁豚骨拉面</h3>
+                            <div class="flex items-center justify-center gap-2 mt-1 text-[10px] text-charcoal-400">
+                                <span><i data-lucide="clock" class="w-3 h-3 inline"></i> 60分钟</span>
+                                <span>•</span>
+                                <span class="text-terracotta">进阶高难</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="recipe-item group cursor-pointer" data-type="dessert" onclick="openRecipeModal('2')">
+                    <div class="bg-archiveCard rounded-xl border border-archiveBorder p-2.5 shadow-sm group-hover:border-terracotta group-hover:shadow-md transition-all duration-300">
+                        <div class="relative aspect-square overflow-hidden rounded-lg bg-charcoal-200">
+                            <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=600" 
+                                 alt="草莓提拉米苏" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-charcoal-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium gap-1">
+                                <i data-lucide="book-open" class="w-4 h-4"></i> 查看菜谱
+                            </div>
+                        </div>
+                        <div class="mt-3 text-center">
+                            <h3 class="font-serif-sc font-bold text-sm text-charcoal-900 truncate group-hover:text-terracotta transition-colors">草莓提拉米苏</h3>
+                            <div class="flex items-center justify-center gap-2 mt-1 text-[10px] text-charcoal-400">
+                                <span><i data-lucide="clock" class="w-3 h-3 inline"></i> 30分钟</span>
+                                <span>•</span>
+                                <span class="text-terracotta">简单易做</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="recipe-item group cursor-pointer" data-type="hot" onclick="openRecipeModal('3')">
+                    <div class="bg-archiveCard rounded-xl border border-archiveBorder p-2.5 shadow-sm group-hover:border-terracotta group-hover:shadow-md transition-all duration-300">
+                        <div class="relative aspect-square overflow-hidden rounded-lg bg-charcoal-200">
+                            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=600" 
+                                 alt="轻食地中海沙拉" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-charcoal-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium gap-1">
+                                <i data-lucide="book-open" class="w-4 h-4"></i> 查看菜谱
+                            </div>
+                        </div>
+                        <div class="mt-3 text-center">
+                            <h3 class="font-serif-sc font-bold text-sm text-charcoal-900 truncate group-hover:text-terracotta transition-colors">轻食地中海沙拉</h3>
+                            <div class="flex items-center justify-center gap-2 mt-1 text-[10px] text-charcoal-400">
+                                <span><i data-lucide="clock" class="w-3 h-3 inline"></i> 15分钟</span>
+                                <span>•</span>
+                                <span class="text-terracotta">零失败</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="recipe-item group cursor-pointer" data-type="hot" onclick="openRecipeModal('4')">
+                    <div class="bg-archiveCard rounded-xl border border-archiveBorder p-2.5 shadow-sm group-hover:border-terracotta group-hover:shadow-md transition-all duration-300">
+                        <div class="relative aspect-square overflow-hidden rounded-lg bg-charcoal-200">
+                            <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=600" 
+                                 alt="香辣海鲜意面" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-charcoal-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium gap-1">
+                                <i data-lucide="book-open" class="w-4 h-4"></i> 查看菜谱
+                            </div>
+                        </div>
+                        <div class="mt-3 text-center">
+                            <h3 class="font-serif-sc font-bold text-sm text-charcoal-900 truncate group-hover:text-terracotta transition-colors">香辣海鲜意面</h3>
+                            <div class="flex items-center justify-center gap-2 mt-1 text-[10px] text-charcoal-400">
+                                <span><i data-lucide="clock" class="w-3 h-3 inline"></i> 25分钟</span>
+                                <span>•</span>
+                                <span class="text-terracotta">中等难度</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="recipe-item group cursor-pointer" data-type="dessert" onclick="openRecipeModal('5')">
+                    <div class="bg-archiveCard rounded-xl border border-archiveBorder p-2.5 shadow-sm group-hover:border-terracotta group-hover:shadow-md transition-all duration-300">
+                        <div class="relative aspect-square overflow-hidden rounded-lg bg-charcoal-200">
+                            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=600" 
+                                 alt="手作法式欧包" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-charcoal-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium gap-1">
+                                <i data-lucide="book-open" class="w-4 h-4"></i> 查看菜谱
+                            </div>
+                        </div>
+                        <div class="mt-3 text-center">
+                            <h3 class="font-serif-sc font-bold text-sm text-charcoal-900 truncate group-hover:text-terracotta transition-colors">手作法式欧包</h3>
+                            <div class="flex items-center justify-center gap-2 mt-1 text-[10px] text-charcoal-400">
+                                <span><i data-lucide="clock" class="w-3 h-3 inline"></i> 120分钟</span>
+                                <span>•</span>
+                                <span class="text-terracotta">考验耐心</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+
+    <!-- RECIPE DETAIL MODAL (菜谱大图与说明弹窗) -->
+    <div id="recipeModal" class="fixed inset-0 z-50 bg-charcoal-900/80 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div class="bg-archiveBg border border-archiveBorder rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative flex flex-col md:flex-row my-auto">
+            
+            <!-- Close Button -->
+            <button onclick="closeRecipeModal()" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-charcoal-900/60 text-white hover:bg-terracotta flex items-center justify-center transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
+            <!-- Left Image Container -->
+            <div class="md:w-1/2 relative bg-charcoal-900 min-h-[250px] md:min-h-full">
+                <img id="modalImg" src="" alt="Recipe image" class="w-full h-full object-cover">
+                <div class="absolute bottom-4 left-4 bg-charcoal-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-white text-xs flex items-center gap-3">
+                    <span id="modalTime"><i data-lucide="clock" class="w-3.5 h-3.5 inline mr-1 text-terracotta"></i></span>
+                    <span id="modalDiff"><i data-lucide="chef-hat" class="w-3.5 h-3.5 inline mr-1 text-terracotta"></i></span>
+                </div>
+            </div>
+
+            <!-- Right Recipe Detail Container -->
+            <div class="md:w-1/2 p-6 sm:p-8 space-y-6 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div>
+                        <span id="modalCategory" class="text-[10px] uppercase font-bold tracking-widest text-terracotta"></span>
+                        <h2 id="modalTitle" class="text-2xl font-bold font-serif-sc text-charcoal-900 mt-1"></h2>
+                        <p id="modalDesc" class="text-xs text-charcoal-600 font-light leading-relaxed mt-2"></p>
+                    </div>
+
+                    <!-- Ingredients -->
+                    <div class="border-t border-archiveBorder pt-4">
+                        <h4 class="text-xs font-bold font-serif-sc text-charcoal-900 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-terracotta"></i> 食材清单 (Ingredients)
+                        </h4>
+                        <ul id="modalIngredients" class="grid grid-cols-2 gap-2 text-xs text-charcoal-600 font-light">
+                            <!-- Dynamic -->
+                        </ul>
+                    </div>
+
+                    <!-- Steps -->
+                    <div class="border-t border-archiveBorder pt-4">
+                        <h4 class="text-xs font-bold font-serif-sc text-charcoal-900 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="list-ordered" class="w-3.5 h-3.5 text-terracotta"></i> 制作步骤 (Instructions)
+                        </h4>
+                        <ol id="modalSteps" class="space-y-2 text-xs text-charcoal-600 font-light list-decimal list-inside leading-relaxed">
+                            <!-- Dynamic -->
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-archiveBorder/60 flex items-center justify-between text-[11px] text-charcoal-400">
+                    <span>幸福私房味 · 独家研制记录</span>
+                    <button onclick="closeRecipeModal()" class="text-terracotta font-semibold hover:underline">关闭窗口</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- FOOTER 页脚 -->
+    <footer class="bg-charcoal-900 text-archiveBg py-12 border-t border-charcoal-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-charcoal-400">
+            <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-terracotta text-white flex items-center justify-center font-bold font-brand text-xs">
+                    幸福
+                </span>
+                <span class="font-serif-sc">幸福生活 · 个人数字档案馆 © 2026</span>
+            </div>
+            <div>
+                <span>妥善保存于数字云端 · 静默记录</span>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JAVASCRIPT DATA & LOGIC -->
+    <script>
+        // 菜谱数据库
+        const recipeData = [
+            {
+                title: '经典秘制红烧肉',
+                category: '热炒佳肴',
+                time: '45 分钟',
+                difficulty: '中等难度',
+                img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1000',
+                desc: '肥而不腻，入口即化。秘诀在于先将五花肉煸出多余油脂，再以冰糖慢火熬制糖色。',
+                ingredients: ['五花肉 500g', '冰糖 30g', '生抽 2汤匙', '老抽 1汤匙', '八角/桂皮 适量', '黄酒 100ml'],
+                steps: [
+                    '五花肉切成3厘米见方的块，冷水下锅焯水备用。',
+                    '热锅下少量油，加入冰糖小火慢熬至焦糖色出泡。',
+                    '倒入肉块快速翻炒上色，加入八角、桂皮和黄酒爆香。',
+                    '倒入开水没过肉块，小火慢炖 35 分钟后大火收汁。'
+                ]
+            },
+            {
+                title: '日式浓郁豚骨拉面',
+                category: '浓汤炖品',
+                time: '60 分钟',
+                difficulty: '进阶高难',
+                img: 'https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=1000',
+                desc: '经过长达数小时熬制的浓郁高汤，搭配流心溏心蛋与厚切叉烧，是一碗治愈身心的灵魂料理。',
+                ingredients: ['猪筒骨 1000g', '拉面 1份', '溏心蛋 1个', '日式叉烧 2片', '海苔/葱花 适量'],
+                steps: [
+                    '筒骨洗净焯水，加入大葱与姜片，大火持续沸腾熬煮出乳白色高汤。',
+                    '拉面入沸水煮 2 分钟，捞出沥干放入碗底。',
+                    '浇入滚烫的豚骨高汤，铺上叉烧、溏心蛋与海苔片即可。'
+                ]
+            },
+            {
+                title: '草莓提拉米苏',
+                category: '烘焙甜点',
+                time: '30 分钟',
+                difficulty: '简单易做',
+                img: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=1000',
+                desc: '将传统咖啡换成新鲜草莓果酱，马斯卡彭芝士的浓郁与草莓的酸甜完美融合。',
+                ingredients: ['马斯卡彭芝士 250g', '淡奶油 150ml', '手指饼干 1包', '新鲜草莓 200g', '糖粉 30g'],
+                steps: [
+                    '草莓切丁加少量糖熬成浓郁果酱备用。',
+                    '打发淡奶油与马斯卡彭芝士至顺滑无颗粒。',
+                    '手指饼干蘸取草莓汁，与芝士糊交替铺入容器中，冷藏4小时。'
+                ]
+            },
+            {
+                title: '轻食地中海沙拉',
+                category: '热炒佳肴',
+                time: '15 分钟',
+                difficulty: '零失败',
+                img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1000',
+                desc: '清爽无负担的低卡美味，橄榄油与柠檬汁的微酸凸显食材本身的鲜甜。',
+                ingredients: ['羽衣甘蓝/芝麻菜', '樱桃番茄 80g', '油橄榄 10粒', '特级初榨橄榄油 2匙', '柠檬汁 1匙'],
+                steps: [
+                    '蔬菜洗净甩干水分，樱桃番茄对半切开。',
+                    '将所有食材放入沙拉碗中。',
+                    '淋上特级初榨橄榄油与新鲜柠檬汁，撒少许黑胡椒拌匀。'
+                ]
+            },
+            {
+                title: '香辣海鲜意面',
+                category: '热炒佳肴',
+                time: '25 分钟',
+                difficulty: '中等难度',
+                img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=1000',
+                desc: '鲜美的大虾与蛤蜊在蒜香与橄榄油中爆炒，每一根面条都裹满了海洋的气息。',
+                ingredients: ['意面 150g', '大虾 6只', '蛤蜊 100g', '大蒜 4瓣', '干辣椒 2个', '白葡萄酒 30ml'],
+                steps: [
+                    '意面入加盐沸水煮 8 分钟至8分熟。',
+                    '平底锅橄榄油炒香蒜片与干辣椒，加入海鲜与白葡萄酒大火翻炒。',
+                    '倒入意面与半碗煮面水，大火乳化收汁。'
+                ]
+            },
+            {
+                title: '手作法式欧包',
+                category: '烘焙甜点',
+                time: '120 分钟',
+                difficulty: '考验耐心',
+                img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1000',
+                desc: '外壳脆硬，内部柔软且充满漂亮的蜂窝气孔，天然酵母带来的风味令人沉醉。',
+                ingredients: ['高筋面粉 300g', '水 220ml', '干酵母 3g', '盐 5g', '坚果碎 50g'],
+                steps: [
+                    '面粉加水水解 30 分钟后加入酵母与盐折叠揉匀。',
+                    '室温发酵 2 小时，期间每 30 分钟折叠一次面团。',
+                    '割花后放入带有石板与蒸汽的烤箱，230度烘烤 35 分钟。'
+                ]
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            initMobileMenu();
+            initRecipeFilter();
+        });
+
+        // 移动端菜单
+        function initMobileMenu() {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const drawer = document.getElementById('mobileDrawer');
+            if (mobileBtn && drawer) {
+                mobileBtn.addEventListener('click', () => {
+                    drawer.classList.toggle('hidden');
+                });
+            }
+        }
+
+        // 菜谱筛选
+        function initRecipeFilter() {
+            const buttons = document.querySelectorAll('.recipe-filter');
+            const items = document.querySelectorAll('.recipe-item');
+            const countDisplay = document.getElementById('recipeCount');
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => {
+                        b.classList.remove('bg-terracotta', 'text-white');
+                        b.classList.add('bg-archiveCard', 'text-charcoal-600');
+                    });
+                    btn.classList.remove('bg-archiveCard', 'text-charcoal-600');
+                    btn.classList.add('bg-terracotta', 'text-white');
+
+                    const type = btn.getAttribute('data-type');
+                    let count = 0;
+
+                    items.forEach(item => {
+                        if (type === 'all' || item.getAttribute('data-type') === type) {
+                            item.style.display = 'block';
+                            count++;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    if (countDisplay) {
+                        countDisplay.innerText = count;
+                    }
+                });
+            });
+        }
+
+        // 打开菜谱 Modal
+        function openRecipeModal(index) {
+            const data = recipeData[index];
+            if (!data) return;
+
+            document.getElementById('modalImg').src = data.img;
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('modalCategory').innerText = data.category;
+            document.getElementById('modalDesc').innerText = data.desc;
+            document.getElementById('modalTime').innerHTML = `<i data-lucide="clock" class="w-3.5 h-3.5 inline mr-1 text-terracotta"></i>${data.time}`;
+            document.getElementById('modalDiff').innerHTML = `<i data-lucide="chef-hat" class="w-3.5 h-3.5 inline mr-1 text-terracotta"></i>${data.difficulty}`;
+
+            // 渲染食材
+            const ingContainer = document.getElementById('modalIngredients');
+            ingContainer.innerHTML = data.ingredients.map(item => `
+                <li class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-terracotta/60"></span>
+                    <span>${item}</span>
+                </li>
+            `).join('');
+
+            // 渲染步骤
+            const stepContainer = document.getElementById('modalSteps');
+            stepContainer.innerHTML = data.steps.map(step => `
+                <li class="pl-1">${step}</li>
+            `).join('');
+
+            // 重新初始化 Modal 内的图标
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            const modal = document.getElementById('recipeModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRecipeModal() {
+            const modal = document.getElementById('recipeModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Esc 按键支持
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeRecipeModal();
+            }
+        });
+    </script>
+</body>
+</html>

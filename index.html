@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Serif+SC:wght@300;400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <script>
@@ -19,16 +19,16 @@
                         archiveCard: '#F3ECE2',
                         archiveBorder: '#E6DCCE',
                         terracotta: {
-                            DEFAULT: '#D96B43',
-                            hover: '#C85A32',
-                            light: '#E87A5D',
-                            soft: 'rgba(217, 107, 67, 0.12)',
+                            DEFAULT: '#E9826A',
+                            hover: '#E24C00',
+                            light: '#F7B89C',
+                            soft: 'rgba(233, 130, 106, 0.12)',
                         },
                         charcoal: {
-                            900: '#1E1B18',
-                            800: '#2C2825',
-                            600: '#5C544E',
-                            400: '#8C827A',
+                            900: '#49352F',
+                            800: '#75554b',
+                            600: '#b78576',
+                            400: '#ffbfa9',
                         },
                         darkBlue: {
                             950: '#050D14',
@@ -117,29 +117,23 @@
 
             <!-- Navigation Links to External Sub-homepages -->
             <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-charcoal-600">
-                <a href="travel.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                <a href="AboutUs.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
                     <span>关于我们</span>
-                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-charcoal-400"></i>
                 </a>
-                <a href="travel.html" class="text-terracotta font-semibold flex items-center gap-1.5 hover:text-terracotta-hover">
+                <a href="TravelBlogs/TravelBlogs.html" class="text-terracotta font-semibold flex items-center gap-1.5 hover:text-terracotta-hover">
                     <span class="font-brand text-xs uppercase tracking-wider">TakuRadio</span><span>旅行博客</span>
-                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-charcoal-400"></i>
                 </a>
-                <a href="journal.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                <a href="TravelEssays/TravelEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
                     <span>知行拾遗</span>
-                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-charcoal-400"></i>
                 </a>
-                <a href="photography.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                <a href="NotesEssays/NotesEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>手记/随笔</span>
+                </a>
+                <a href="Gallery/Gallery.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
                     <span>光影胶片</span>
-                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-charcoal-400"></i>
                 </a>
-                <a href="reading.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
-                    <span>纸墨荧屏</span>
-                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-charcoal-400"></i>
-                </a>
-                <a href="reading.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
-                    <span>家传秘方</span>
-                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-charcoal-400"></i>
+                <a href="Cuisine/Cuisine.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>烟火厨房</span>
                 </a>
             </nav>
 
@@ -152,25 +146,23 @@
 
         <!-- Mobile Drawer Menu -->
         <div id="mobileDrawer" class="hidden md:hidden bg-archiveBg border-b border-archiveBorder px-6 py-4 space-y-2 text-sm">
-            <a href="travel.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
-                <span>旅行博客 (Travel Blog)</span>
-                <i data-lucide="external-link" class="w-4 h-4"></i>
+            <a href="AboutUs.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>关于我们</span>
             </a>
-            <a href="journal.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
-                <span>日常随笔 (Journal)</span>
-                <i data-lucide="external-link" class="w-4 h-4"></i>
+            <a href="TravelBlogs/TravelBlogs.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span class="font-brand text-xs uppercase tracking-wider">TakuRadio</span><span>旅行博客</span>
             </a>
-            <a href="photography.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
-                <span>光影胶片 (Photography)</span>
-                <i data-lucide="external-link" class="w-4 h-4"></i>
+            <a href="TravelEssays/TravelEssays.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>知行拾遗</span>
             </a>
-            <a href="reading.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
-                <span>书单影单 (Reading & Film)</span>
-                <i data-lucide="external-link" class="w-4 h-4"></i>
+            <a href="NotesEssays/NotesEssays.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>手记/随笔</span>
             </a>
-            <a href="about.html" class="flex items-center justify-between py-2 text-charcoal-800">
-                <span>关于本站 (About)</span>
-                <i data-lucide="external-link" class="w-4 h-4"></i>
+            <a href="Gallery/Gallery.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>光影胶片</span>
+            </a>
+            <a href="Cuisine/Cuisine.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>烟火厨房</span>
             </a>
         </div>
     </header>
@@ -199,7 +191,7 @@
                     
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta/10 border border-terracotta/20 text-terracotta text-xs font-semibold">
                         <i data-lucide="archive" class="w-3.5 h-3.5"></i>
-                        <span>私人生活数字记录库 No. 008</span>
+                        <span>私人生活数字档案馆</span>
                     </div>
 
                     <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-sc text-charcoal-900 leading-tight">
@@ -254,7 +246,7 @@
                     </div>
 
                     <div class="pt-2">
-                        <a href="about.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-terracotta hover:bg-terracotta-hover text-white font-medium text-sm transition-all shadow-md shadow-terracotta/20 hover:gap-3">
+                        <a href="AboutUs.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-terracotta hover:bg-terracotta-hover text-white font-medium text-sm transition-all shadow-md shadow-terracotta/20 hover:gap-3">
                             <span>了解更多故事</span>
                             <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </a>
@@ -271,9 +263,9 @@
                             alt="小桃子头像" 
                             class="w-24 h-24 rounded-full object-cover border border-archiveBorder shadow-sm shrink-0">
                         <h3 class="text-xl font-bold font-serif-sc text-charcoal-900">小桃子</h3>
-                        <p class="text-xs text-terracotta font-mono">“旅行是生活的解药”</p>
+                        <p class="text-xs text-terracotta font-mono">“快乐的蜜桃兔超平和”</p>
                         <p class="text-xs text-charcoal-600 leading-relaxed font-light">
-                            热爱探索未知的风景，喜欢记录旅途中的温暖时刻与感动。
+                            多才多艺，美商惊人。热爱探索不同的风景，喜欢旅途中的惊喜时刻与感动。
                         </p>
                     </div>
 
@@ -284,9 +276,9 @@
                             alt="小橘子头像" 
                             class="w-24 h-24 rounded-full object-cover border border-archiveBorder shadow-sm shrink-0">
                         <h3 class="text-xl font-bold font-serif-sc text-charcoal-900">小橘子</h3>
-                        <p class="text-xs text-terracotta font-mono">“旅行会激发思考”</p>
+                        <p class="text-xs text-terracotta font-mono">“呆呆的橘色松鼠很拧巴”</p>
                         <p class="text-xs text-charcoal-600 leading-relaxed font-light">
-                            沉迷于思考与知识的汲取，用镜头与文字定格生活细节。
+                            好奇心满格，喜欢追根朔源，搞懂一切可以搞懂的问题。
                         </p>
                     </div>
                 </div>
@@ -314,11 +306,11 @@
         <!-- 全屏左右铺满的动态背景图片 (带亮色蒙皮滤镜) -->
         <div class="absolute inset-0 z-0">
             <div id="wanderBg" class="w-full h-full bg-cover bg-center transition-all duration-700 ease-in-out" 
-                 style="background-image: url('https://images.unsplash.com/photo-1504893524553-b855bce32c67?auto=format&fit=crop&w=1600&q=80');"></div>
+                 style="background-image: url('https://lh3.googleusercontent.com/d/1xiZdUePR7t0oFJkqdDrkkHI6oIr28HdV');"></div>
             
             <!-- 亮色/暖米色渐变蒙皮：确保左侧文字极高可读性，同时留出右侧背景细节 -->
-            <div class="absolute inset-0 bg-gradient-to-r from-archiveBg/95 via-archiveBg/75 via-40% to-archiveBg/20 to-80%"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-archiveBg/80 via-transparent to-archiveBg/40"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-archiveBg/100 via-archiveBg/85 via-20% to-archiveBg/10 to-50%"></div>
+            <!-- <div class="absolute inset-0 bg-gradient-to-t from-archiveBg/80 via-transparent to-archiveBg/40"></div> -->
         </div>
 
         <div class="max-w-7xl mx-auto px-6 relative z-10 w-full">
@@ -332,7 +324,7 @@
                     </div>
 
                     <div class="font-brand text-terracotta font-bold tracking-widest text-lg sm:text-xl uppercase">
-                        <span class="text-terracotta-light font-normal">TAKU</span>RADIO
+                        TAKU<span class="text-terracotta-light font-normal"> - RADIO</span>
                     </div>
 
                     <h2 class="text-3xl sm:text-4xl font-black text-charcoal-900 font-serif-sc tracking-tight leading-tight">
@@ -341,10 +333,7 @@
 
                     <div class="space-y-3 text-charcoal-600 text-sm sm:text-base font-light leading-relaxed max-w-md">
                         <p>
-                            小桃子说：旅行是生活的解药，可以让人跨越时空的限制。
-                        </p>
-                        <p>
-                            小橘子说：旅行会激发思考，带来意想不到的知识。
+                            旅行是生活的解药，随机开启跨越时空的通道。
                         </p>
                     </div>
 
@@ -373,12 +362,12 @@
                         <div onclick="switchWanderBg(0)" id="wanderCard-0" 
                              class="wander-card cursor-pointer transition-all duration-300 transform hover:-translate-y-1 group">
                             <div class="relative h-72 rounded-2xl overflow-hidden border-2 border-terracotta shadow-xl ring-4 ring-terracotta/20 transition-all">
-                                <img src="https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=600&q=80" alt="冰岛" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <img src="https://lh3.googleusercontent.com/d/1xiZdUePR7t0oFJkqdDrkkHI6oIr28HdV" alt="关东" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/85 via-charcoal-900/20 to-transparent p-4 flex flex-col justify-between">
-                                    <span class="text-xs font-brand tracking-widest text-white/90">ICELAND</span>
+                                    <span class="text-xs font-brand tracking-widest text-white/90">FuJiSan</span>
                                     <div>
-                                        <h4 class="text-lg font-bold font-serif-sc text-white">冰岛</h4>
-                                        <p class="text-[11px] text-terracotta-light mt-1 font-mono">2025.02 · 极夜冰川</p>
+                                        <h4 class="text-lg font-bold font-serif-sc text-white">东京·富士山·长野</h4>
+                                        <p class="text-[11px] text-terracotta-light mt-1 font-mono">2026.01 · 日升日落素雪温泉</p>
                                     </div>
                                 </div>
                             </div>
@@ -388,12 +377,12 @@
                         <div onclick="switchWanderBg(1)" id="wanderCard-1" 
                              class="wander-card cursor-pointer transition-all duration-300 transform hover:-translate-y-1 opacity-70 hover:opacity-100 group">
                             <div class="relative h-72 rounded-2xl overflow-hidden border-2 border-transparent transition-all">
-                                <img src="https://images.unsplash.com/photo-1509356843151-3e7d96241e11?auto=format&fit=crop&w=600&q=80" alt="斯德哥尔摩" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <img src="https://lh3.googleusercontent.com/d/1ks09it9OvEjThMRVigsHkYLwBsnbihAQ" alt="中西部国家公园之旅" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/85 via-charcoal-900/20 to-transparent p-4 flex flex-col justify-between">
-                                    <span class="text-xs font-brand tracking-widest text-white/90">STOCKHOLM</span>
+                                    <span class="text-xs font-brand tracking-widest text-white/90">The Wave</span>
                                     <div>
-                                        <h4 class="text-lg font-bold font-serif-sc text-white">斯德哥尔摩</h4>
-                                        <p class="text-[11px] text-terracotta-light mt-1 font-mono">2024.10 · 老城漫步</p>
+                                        <h4 class="text-lg font-bold font-serif-sc text-white">中西部国家公园</h4>
+                                        <p class="text-[11px] text-terracotta-light mt-1 font-mono">2015.06 · 大自然的鬼斧神工</p>
                                     </div>
                                 </div>
                             </div>
@@ -403,12 +392,12 @@
                         <div onclick="switchWanderBg(2)" id="wanderCard-2" 
                              class="wander-card cursor-pointer transition-all duration-300 transform hover:-translate-y-1 opacity-70 hover:opacity-100 group">
                             <div class="relative h-72 rounded-2xl overflow-hidden border-2 border-transparent transition-all">
-                                <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80" alt="京都" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <img src="https://lh3.googleusercontent.com/d/1FR536V0MI5DXbWGZwNBHX9O-LG7cKO-W" alt="土耳其" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/85 via-charcoal-900/20 to-transparent p-4 flex flex-col justify-between">
-                                    <span class="text-xs font-brand tracking-widest text-white/90">KYOTO</span>
+                                    <span class="text-xs font-brand tracking-widest text-white/90">Göreme</span>
                                     <div>
-                                        <h4 class="text-lg font-bold font-serif-sc text-white">京都</h4>
-                                        <p class="text-[11px] text-terracotta-light mt-1 font-mono">2024.04 · 晚春樱吹雪</p>
+                                        <h4 class="text-lg font-bold font-serif-sc text-white">土耳其环线</h4>
+                                        <p class="text-[11px] text-terracotta-light mt-1 font-mono">2026.06 · 跨越千年的触碰</p>
                                     </div>
                                 </div>
                             </div>
@@ -424,9 +413,9 @@
     <!-- 配套 JS 函数 -->
     <script>
         const wanderBgs = [
-            'https://images.unsplash.com/photo-1504893524553-b855bce32c67?auto=format&fit=crop&w=1600&q=80', // 冰岛
-            'https://images.unsplash.com/photo-1509356843151-3e7d96241e11?auto=format&fit=crop&w=1600&q=80', // 斯德哥尔摩
-            'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1600&q=80'  // 京都
+            'https://lh3.googleusercontent.com/d/1xiZdUePR7t0oFJkqdDrkkHI6oIr28HdV', 
+            'https://lh3.googleusercontent.com/d/1ks09it9OvEjThMRVigsHkYLwBsnbihAQ', 
+            'https://lh3.googleusercontent.com/d/1FR536V0MI5DXbWGZwNBHX9O-LG7cKO-W' 
         ];
 
         function switchWanderBg(index) {
@@ -454,7 +443,7 @@
     </script>
 
     <!-- SESSION SEPARATOR WITH LINE -->
-    <div class="w-full max-w-7xl mx-auto px-6 my-12 lg:my-16">
+    <div class="w-full max-w-7xl mx-auto px-6 my-0 lg:my-0">
         <div class="relative flex items-center justify-center">
             <!-- 渐变分隔线 -->
             <div class="w-full h-px bg-gradient-to-r from-transparent via-archiveBorder to-transparent"></div>
@@ -468,8 +457,8 @@
     </div>
 
     
-    <!-- MAIN MODULE 2: JOURNAL & ESSAYS (日常随笔) -->
-    <section id="journal" class="py-20 bg-archiveBg border-t border-archiveBorder/60">
+    <!-- MAIN MODULE 2: JOURNAL & ESSAYS  -->
+    <section id="E" class="py-20 bg-archiveBg border-t border-archiveBorder/60">
         <div class="max-w-7xl mx-auto px-6">
             <div class="space-y-4 mb-10">
                 <div class="flex items-center justify-between mb-5">
@@ -487,6 +476,14 @@
                     <span class="text-sm sm:text-base text-charcoal-500 font-light tracking-wide">
                         旅途见闻带来的命题
                     </span>
+
+                    <!-- 进入主页按钮 -->
+                    <div class="shrink-0">
+                        <a href="TravelEssays/TravelEssays.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-terracotta hover:bg-terracotta-hover text-white font-medium text-sm transition-all shadow-md shadow-terracotta/20 hover:gap-3">
+                            <span>探索更多专题</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
                     
@@ -495,7 +492,7 @@
             <div class="space-y-2">
                 
                 <!-- Entry 01 -->
-                <a href="Essays/RusPeople.html" class="py-1.5 flex items-baseline gap-2 group cursor-pointer hover:opacity-80 transition-opacity">
+                <a href="TravelEssays/RusPeople.html" class="py-1.5 flex items-baseline gap-2 group cursor-pointer hover:opacity-80 transition-opacity">
                     <!-- 1. 左侧编号 -->
                     <span class="font-mono text-xs text-terracotta font-semibold shrink-0">01</span>
 
@@ -576,14 +573,89 @@
         </div>
     </section>
 
-
-    <!-- MAIN MODULE 3: VISUAL GALLERY (光影胶片) -->
-    <section id="gallery" class="py-20 bg-archiveBg border-t border-archiveBorder/60">
+    <!-- MODULE 03: NOTES & ESSAYS (手记/随笔) -->
+    <section id="reading" class="py-20 bg-archiveBg border-t border-archiveBorder/60">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="mb-10">
-                <div class="text-terracotta font-brand font-bold text-xs tracking-widest uppercase">MODULE 03 / GALLERY</div>
-                <h2 class="text-3xl font-bold font-serif-sc text-charcoal-900 mt-1">日常光影定格</h2>
-                <p class="text-charcoal-600 text-sm mt-1">没有刻意的构图，只有真实发生的瞬息</p>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+                
+                <!-- 左侧：标题与文字描述 + 进入主页按钮 -->
+                <div class="lg:col-span-5 space-y-5">
+                    <div class="inline-flex items-center gap-2">
+                        <div class="text-terracotta font-brand font-bold text-xs tracking-widest uppercase">MODULE 03 / NOTES & ESSAYS</div>
+                    </div>
+
+                    <h2 class="text-3xl sm:text-4xl font-black text-charcoal-900 font-serif-sc tracking-tight leading-tight">
+                        手记 / 随笔
+                    </h2>
+
+                    <p class="text-charcoal-600 text-sm sm:text-base font-light leading-relaxed">
+                        摘录阅读时的警句灵感，记录日常闪现的思考片段。在文字的静谧空间里，留存与自我深度对话的印迹。
+                    </p>
+
+                    <div class="pt-2">
+                        <a href="NotesEssays/NotesEssays.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-terracotta hover:bg-terracotta-hover text-white font-medium text-sm transition-all shadow-md shadow-terracotta/20 hover:gap-3">
+                            <span>查看更多</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 右侧：摘录与卡片展示 -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="p-6 rounded-2xl bg-archiveCard border border-archiveBorder shadow-sm">
+                        <i data-lucide="quote" class="w-5 h-5 text-terracotta mb-3"></i>
+                        <p class="text-base text-charcoal-800 font-serif-sc italic leading-relaxed">
+                            “故乡永远是故乡。在我吐字的气息中，在我的舌尖上，在我的梦里。
+                            远方也永远是远方。在诗里，在夜里，在一望无际的雨里。”
+                        </p>
+                        <div class="text-xs text-charcoal-400 mt-4 font-mono">《八杯酒的前半生》· 2018.01 随笔</div>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-archiveCard border border-archiveBorder shadow-sm">
+                        <i data-lucide="quote" class="w-5 h-5 text-terracotta mb-3"></i>
+                        <p class="text-base text-charcoal-800 font-serif-sc italic leading-relaxed">
+                            “早期手搓的人工智障没有高深的模型，纯粹是模仿人类解决问题的步骤。”
+                        </p>
+                        <div class="text-xs text-charcoal-400 mt-4 font-mono">《扫雷人工智障》· 2009.08 项目</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- MODULE 04: PHOTOGRAPHY GALLERY (光影胶片) -->
+    <section id="photography" class="py-20 bg-archiveBg border-t border-archiveBorder/60">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-10 space-y-3">
+                <!-- 容器 1：顶部小标单独占一行 -->
+                <div>
+                    <div class="text-terracotta font-brand font-bold text-xs tracking-widest uppercase">
+                        MODULE 04 / PHOTOGRAPHY
+                    </div>
+                </div>
+
+                <!-- 容器 2：下方左右分布（紧挨排列：左侧标题+副标题，右侧按钮） -->
+                <div class="flex flex-col sm:flex-row sm:items-end justify-start gap-6">
+                    <!-- 左侧容器：大标题与副标题上下分布 -->
+                    <div class="space-y-1">
+                        <h2 class="text-3xl sm:text-4xl font-black text-charcoal-900 font-serif-sc tracking-tight">
+                            光影胶片
+                        </h2>
+                        <p class="text-charcoal-600 text-sm font-light">
+                            没有刻意的构图，只有真实发生的瞬息与温度
+                        </p>
+                    </div>
+
+                    <!-- 右侧容器：紧挨在标题副标题右侧的按钮 -->
+                    <div class="shrink-0">
+                        <a href="Gallery/Gallery.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-terracotta hover:bg-terracotta-hover text-white font-medium text-sm transition-all shadow-md shadow-terracotta/20 hover:gap-3">
+                            <span>全部相册</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Photo Masonry Grid -->
@@ -591,33 +663,33 @@
                 <!-- Photo 1 -->
                 <div class="bg-archiveCard rounded-2xl p-3 border border-archiveBorder hover:shadow-lg transition-all group">
                     <div class="overflow-hidden rounded-xl h-64">
-                        <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=600&q=80" alt="Ocean Light" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="https://lh3.googleusercontent.com/d/1jgy39YquG7lseM2xSoUSqVYbn71htOSm" alt="西湖夜景" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-3">
-                        <div class="text-xs font-mono text-terracotta">2025.10 · 冰岛极光</div>
-                        <div class="text-sm font-serif-sc font-bold text-charcoal-900 mt-1">夜幕初垂时的深蓝色调</div>
+                        <div class="text-xs font-mono text-terracotta">2026.06 · 夜赏西湖</div>
+                        <div class="text-sm font-serif-sc font-bold text-charcoal-900 mt-1">夜幕初垂时的水天同景</div>
                     </div>
                 </div>
 
                 <!-- Photo 2 -->
                 <div class="bg-archiveCard rounded-2xl p-3 border border-archiveBorder hover:shadow-lg transition-all group">
                     <div class="overflow-hidden rounded-xl h-64">
-                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80" alt="Foggy Forest" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="https://lh3.googleusercontent.com/d/1vZfrRcyoxCZg4kwdIr4AoDyRHWhKaCLx" alt="潮汐湖" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-3">
-                        <div class="text-xs font-mono text-terracotta">2025.07 · 森林晨雾</div>
-                        <div class="text-sm font-serif-sc font-bold text-charcoal-900 mt-1">清晨第一缕穿透树冠的光</div>
+                        <div class="text-xs font-mono text-terracotta">2025.07 · 华府赏樱</div>
+                        <div class="text-sm font-serif-sc font-bold text-charcoal-900 mt-1">一夜雨疏风骤 花落知多少</div>
                     </div>
                 </div>
 
                 <!-- Photo 3 -->
                 <div class="bg-archiveCard rounded-2xl p-3 border border-archiveBorder hover:shadow-lg transition-all group">
                     <div class="overflow-hidden rounded-xl h-64">
-                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="Beach Dusk" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="https://lh3.googleusercontent.com/d/1--89YlZh8tW2gKCLMclbF0Y7Y-n6Vofu" alt="山中秘境" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-3">
-                        <div class="text-xs font-mono text-terracotta">2024.12 · 海滩晚霞</div>
-                        <div class="text-sm font-serif-sc font-bold text-charcoal-900 mt-1">退潮后湿润沙滩上的倒影</div>
+                        <div class="text-xs font-mono text-terracotta">2023.04 · 静湖谧镇</div>
+                        <div class="text-sm font-serif-sc font-bold text-charcoal-900 mt-1">山雨欲来的阿尔卑斯</div>
                     </div>
                 </div>
             </div>
@@ -625,65 +697,55 @@
     </section>
 
 
-    <!-- MODULE 4 & 5 GRID: INSPIRATION & LIFE TIMELINE -->
-    <section id="inspiration" class="py-20 bg-archiveBg border-t border-archiveBorder/60">
+    <!-- MODULE 05: RECIPE & CUISINE (烟火厨房) -->
+    <section id="recipe" class="py-20 bg-archiveBg border-t border-archiveBorder/60">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
                 
-                <!-- Left: Inspiration & Reading List (MODULE 04) -->
-                <div class="lg:col-span-6 space-y-6">
-                    <div>
-                        <div class="text-terracotta font-brand font-bold text-xs tracking-widest uppercase">MODULE 04 / READS & QUOTES</div>
-                        <h2 class="text-2xl font-bold font-serif-sc text-charcoal-900 mt-1">书单与灵感摘录</h2>
+                <!-- 左侧：模块介绍 + 进入主页按钮 -->
+                <div class="lg:col-span-5 space-y-5">
+                    <div class="inline-flex items-center gap-2">
+                        <div class="text-terracotta font-brand font-bold text-xs tracking-widest uppercase">MODULE 05 / KITCHEN & RECIPES</div>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="p-5 rounded-2xl bg-archiveCard border border-archiveBorder">
-                            <i data-lucide="quote" class="w-5 h-5 text-terracotta mb-2"></i>
-                            <p class="text-sm text-charcoal-800 font-serif-sc italic leading-relaxed">
-                                “旅行并不是为了逃避生活，而是为了不让生活逃离我们。”
-                            </p>
-                            <div class="text-xs text-charcoal-400 mt-3 font-mono">摘自《遥远的房屋》 · 2025.09 笔记</div>
-                        </div>
+                    <h2 class="text-3xl sm:text-4xl font-black text-charcoal-900 font-serif-sc tracking-tight leading-tight">
+                        烟火厨房
+                    </h2>
 
-                        <div class="p-5 rounded-2xl bg-archiveCard border border-archiveBorder">
-                            <i data-lucide="quote" class="w-5 h-5 text-terracotta mb-2"></i>
-                            <p class="text-sm text-charcoal-800 font-serif-sc italic leading-relaxed">
-                                “美并不存在于物体之中，而在于物与物产生的阴翳与明暗之中。”
-                            </p>
-                            <div class="text-xs text-charcoal-400 mt-3 font-mono">谷崎润一郎《阴翳礼赞》 · 2025.03 笔记</div>
-                        </div>
+                    <p class="text-charcoal-600 text-sm sm:text-base font-light leading-relaxed">
+                        人间烟火气，最抚凡人心。这里记录有我们的私房菜谱，以及旅行中见识的各种美食。用色香味留存家的温馨与美好记忆。
+                    </p>
+
+                    <div class="pt-2">
+                        <a href="Cuisine/Cuisine.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-terracotta hover:bg-terracotta-hover text-white font-medium text-sm transition-all shadow-md shadow-terracotta/20 hover:gap-3">
+                            <span>进入烟火厨房</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
                     </div>
                 </div>
 
-                <!-- Right: Life Milestone Timeline (MODULE 05) -->
-                <div id="timeline" class="lg:col-span-6 space-y-6">
-                    <div>
-                        <div class="text-terracotta font-brand font-bold text-xs tracking-widest uppercase">MODULE 05 / MILESTONES</div>
-                        <h2 class="text-2xl font-bold font-serif-sc text-charcoal-900 mt-1">岁月大事记刻度</h2>
+                <!-- 右侧：精选菜谱展示卡片 -->
+                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="p-5 rounded-2xl bg-archiveCard border border-archiveBorder shadow-sm space-y-3">
+                        <div class="h-40 rounded-xl overflow-hidden">
+                            <img src="https://lh3.googleusercontent.com/d/1j502Mzs-7uKbE8QrTAb2qMZieneSzJA_" alt="Delicious Food" class="w-full h-full object-cover">
+                        </div>
+                        <span class="text-xs font-mono text-terracotta">Seafood Risotto</span>
+                        <h3 class="text-lg font-bold font-serif-sc text-charcoal-900">世界美食</h3>
+                        <p class="text-xs text-charcoal-600 font-light leading-relaxed">
+                            伊比利亚半岛风味独特的海鲜饭。
+                        </p>
                     </div>
 
-                    <div class="relative pl-6 border-l border-terracotta/30 space-y-8">
-                        <div class="relative">
-                            <div class="w-3 h-3 rounded-full bg-terracotta absolute -left-[31px] top-1.5 ring-4 ring-archiveBg"></div>
-                            <div class="text-xs font-mono text-terracotta font-bold">2026.01</div>
-                            <h4 class="text-base font-bold font-serif-sc text-charcoal-900">“林深履痕” 个人档案馆系统重建完成</h4>
-                            <p class="text-xs text-charcoal-600 mt-1">整合旅行目录 Wanderlust 与写作随笔。</p>
+                    <div class="p-5 rounded-2xl bg-archiveCard border border-archiveBorder shadow-sm space-y-3">
+                        <div class="h-40 rounded-xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" alt="Kitchen Moments" class="w-full h-full object-cover">
                         </div>
-
-                        <div class="relative">
-                            <div class="w-3 h-3 rounded-full bg-charcoal-400 absolute -left-[31px] top-1.5 ring-4 ring-archiveBg"></div>
-                            <div class="text-xs font-mono text-charcoal-400">2025.02</div>
-                            <h4 class="text-base font-bold font-serif-sc text-charcoal-900">完成北极圈冰岛冬季环岛漫游</h4>
-                            <p class="text-xs text-charcoal-600 mt-1">深度探访蓝冰洞与黑沙滩，记录极夜光影。</p>
-                        </div>
-
-                        <div class="relative">
-                            <div class="w-3 h-3 rounded-full bg-charcoal-400 absolute -left-[31px] top-1.5 ring-4 ring-archiveBg"></div>
-                            <div class="text-xs font-mono text-charcoal-400">2024.10</div>
-                            <h4 class="text-base font-bold font-serif-sc text-charcoal-900">斯堪的纳维亚老城建筑考察</h4>
-                            <p class="text-xs text-charcoal-600 mt-1">漫步斯德哥尔摩与哥本哈根，收集设计灵感。</p>
-                        </div>
+                        <span class="text-xs font-mono text-terracotta">Family Banquet</span>
+                        <h3 class="text-lg font-bold font-serif-sc text-charcoal-900">节庆家宴</h3>
+                        <p class="text-xs text-charcoal-600 font-light leading-relaxed">
+                            每逢节日，亲手烹制的丰盛筵席是刻在中国人骨子里的传统。
+                        </p>
                     </div>
                 </div>
 
@@ -706,39 +768,6 @@
             </div>
         </div>
     </footer>
-
-
-    <!-- ARTICLE MODAL FOR TRAVEL & ESSAY PREVIEWS -->
-    <div id="articleModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-archiveBg w-full max-w-3xl max-h-[90vh] rounded-3xl overflow-hidden flex flex-col shadow-2xl border border-archiveBorder animate-in fade-in zoom-in-95 duration-200">
-            <!-- Modal Header Image -->
-            <div class="relative h-60 bg-darkBlue-950 shrink-0">
-                <img id="modalImg" src="" alt="Cover" class="w-full h-full object-cover">
-                <button id="closeModalBtn" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-                <div class="absolute bottom-4 left-6 right-6 text-white">
-                    <span id="modalMeta" class="text-xs font-mono bg-terracotta px-2.5 py-0.5 rounded-full font-bold">2025.02 · 游记</span>
-                    <h3 id="modalTitle" class="text-2xl sm:text-3xl font-bold font-serif-sc mt-2">冰岛：极夜与蓝冰洞</h3>
-                </div>
-            </div>
-
-            <!-- Modal Body Text -->
-            <div class="p-6 sm:p-8 overflow-y-auto space-y-4 text-charcoal-800 leading-relaxed font-light">
-                <p id="modalContent" class="text-base">
-                    此处展示详细的归档内容...
-                </p>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="p-4 bg-archiveCard border-t border-archiveBorder flex justify-between items-center text-xs text-charcoal-600">
-                <span>档案馆条目编号: #WANDER-2026</span>
-                <button onclick="closeModal()" class="px-5 py-2 rounded-full bg-charcoal-900 text-white hover:bg-terracotta transition-colors font-medium">
-                    关闭预览
-                </button>
-            </div>
-        </div>
-    </div>
 
 
     <script>

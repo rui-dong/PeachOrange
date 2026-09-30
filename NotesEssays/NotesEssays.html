@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手记/随笔 | 幸福生活个人数字档案馆</title>
+    
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 引入 Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;600;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- 引入 Lucide Icons 图标库 -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind 统一 Token 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        archiveBg: '#FAF5EF',
+                        archiveCard: '#F3ECE2',
+                        archiveBorder: '#E6DCCE',
+                        terracotta: {
+                            DEFAULT: '#D96B43',
+                            hover: '#C85A32',
+                            light: '#E87A5D',
+                            soft: 'rgba(217, 107, 67, 0.12)',
+                        },
+                        charcoal: {
+                            900: '#1E1B18',
+                            800: '#2C2825',
+                            600: '#5C544E',
+                            400: '#8C827A',
+                        }
+                    },
+                    fontFamily: {
+                        serifSC: ['Noto Serif SC', 'Cinzel', 'serif'],
+                        brand: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background-color: #FAF5EF;
+            color: #2C2825;
+            overflow-x: hidden;
+        }
+
+        .font-serif-sc {
+            font-family: 'Noto Serif SC', 'Cinzel', serif;
+        }
+
+        .font-brand {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* 统一自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF5EF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D96B43;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-terracotta selection:text-white flex flex-col min-h-screen">
+
+    <!-- HEADER 头部导航 -->
+    <header class="sticky top-0 z-40 bg-archiveBg/95 backdrop-blur-md border-b border-archiveBorder/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <!-- Brand Logo (修改后的代码) -->
+            <a href="../index.html" class="flex items-center gap-3.5 group -my-4 py-4">
+                <!-- 方形 Logo 图片：h-12 w-12 保持方形，且通过 -my-4 与 header 内边距抵消以填满整个导航栏高度 -->
+                <img src="https://lh3.googleusercontent.com/d/1g_fPq6aH8zfrXEgfaNK7r0Ll2MzyfZvr" 
+                     alt="Logo" 
+                     class="h-10 w-16 object-cover rounded-none shrink-0">
+                <span class="font-serif-sc font-bold tracking-wider text-charcoal-900 text-base leading-none">幸福生活</span>
+            </a>
+
+            <!-- Navigation Links to External Sub-homepages -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-charcoal-600">
+                <a href="../AboutUs.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>关于我们</span>
+                </a>
+                <a href="../TravelBlogs/TravelBlogs.html" class="text-terracotta font-semibold flex items-center gap-1.5 hover:text-terracotta-hover">
+                    <span class="font-brand text-xs uppercase tracking-wider">TakuRadio</span><span>旅行博客</span>
+                </a>
+                <a href="../TravelEssays/TravelEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>知行拾遗</span>
+                </a>
+                <a href="NotesEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>手记/随笔</span>
+                </a>
+                <a href="../Gallery/Gallery.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>光影胶片</span>
+                </a>
+                <a href="../Cuisine/Cuisine.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>烟火厨房</span>
+                </a>
+            </nav>
+
+
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobileMenuBtn" class="md:hidden p-2 text-charcoal-800 hover:text-terracotta">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileDrawer" class="hidden md:hidden bg-archiveBg border-b border-archiveBorder px-6 py-4 space-y-2 text-sm">
+            <a href="../AboutUs.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>关于我们</span>
+            </a>
+            <a href="../TravelBlogs/TravelBlogs.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span class="font-brand text-xs uppercase tracking-wider">TakuRadio</span><span>旅行博客</span>
+            </a>
+            <a href="../TravelEssays/TravelEssays.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>知行拾遗</span>
+            </a>
+            <a href="NotesEssays.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>手记/随笔</span>
+            </a>
+            <a href="../Gallery/Gallery.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>光影胶片</span>
+            </a>
+            <a href="../Cuisine/Cuisine.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>烟火厨房</span>
+            </a>
+        </div>
+    </header>
+
+
+    <!-- HERO HEADLINE Banner -->
+    <section class="relative w-full py-12 lg:py-16 bg-archiveBg border-b border-archiveBorder/60">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="max-w-3xl space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta/10 border border-terracotta/20 text-terracotta text-xs font-semibold">
+                    <i data-lucide="feather" class="w-3.5 h-3.5"></i>
+                    <span>NOTES & REFLECTIONS</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-serif-sc text-charcoal-900 tracking-tight leading-tight">
+                    手记与随笔
+                </h1>
+                <p class="text-charcoal-600 text-base sm:text-lg font-light leading-relaxed">
+                    读书笔记、观影心得以及日常生活中的灵光一现。用文字在此刻抛锚，抵御时光的消散与遗忘。
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- MAIN CONTENT SECTION: BLOG LAYOUT -->
+    <main class="flex-grow py-12 lg:py-16">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            <!-- LEFT COLUMN: BLOG FEED -->
+            <div class="lg:col-span-8 space-y-12">
+                
+                <!-- Article 1 -->
+                <article class="group pb-10 border-b border-archiveBorder">
+                    <div class="flex items-center gap-3 text-xs text-charcoal-400 font-mono mb-4">
+                        <time datetime="2026-08-15">AUGUST 15, 2026</time>
+                        <span>•</span>
+                        <a href="#" class="text-terracotta hover:underline font-sans font-medium">读书心得</a>
+                    </div>
+                    <a href="article-detail.html" class="block space-y-4">
+                        <h2 class="text-2xl sm:text-3xl font-bold font-serif-sc text-charcoal-900 group-hover:text-terracotta transition-colors leading-snug">
+                            浅谈黑塞《悉达多》中的自我放逐与回归
+                        </h2>
+                        <p class="text-charcoal-600 font-light leading-relaxed text-sm sm:text-base line-clamp-3">
+                            在经历了沙门苦修、堕入尘网、再到河边倾听水声的漫长旅途后，悉达多终于找到了内心的宁静。黑塞在这本书里试图告诉我们，智慧是无法传授的，唯有通过亲身经历的“痛”与“迷失”，才能实现最终的自洽与统一。结合最近半年的心境，重读此书有了截然不同的感悟。
+                        </p>
+                    </a>
+                    <div class="mt-6">
+                        <a href="article-detail.html" class="inline-flex items-center gap-1 text-xs font-semibold text-terracotta hover:text-terracotta-hover transition-colors">
+                            阅读全文 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Article 2 -->
+                <article class="group pb-10 border-b border-archiveBorder">
+                    <div class="flex items-center gap-3 text-xs text-charcoal-400 font-mono mb-4">
+                        <time datetime="2026-05-22">MAY 22, 2026</time>
+                        <span>•</span>
+                        <a href="#" class="text-terracotta hover:underline font-sans font-medium">生活志</a>
+                    </div>
+                    <a href="article-detail.html" class="block space-y-4">
+                        <h2 class="text-2xl sm:text-3xl font-bold font-serif-sc text-charcoal-900 group-hover:text-terracotta transition-colors leading-snug">
+                            2026年初夏：关于断舍离的一些微小实践
+                        </h2>
+                        <p class="text-charcoal-600 font-light leading-relaxed text-sm sm:text-base line-clamp-3">
+                            随着搬家的契机，我开始审视储物间里那些经年不用的物品。其实那些舍不得扔掉的，不是物品本身，而是对过去某段时光的执念。当我们真正清理掉冗余的物理物件时，数字世界里的精神空间似乎也随之变得通透。这是一份长达30天的断舍离记录。
+                        </p>
+                    </a>
+                    <div class="mt-6">
+                        <a href="article-detail.html" class="inline-flex items-center gap-1 text-xs font-semibold text-terracotta hover:text-terracotta-hover transition-colors">
+                            阅读全文 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Article 3 -->
+                <article class="group pb-10 border-b border-archiveBorder">
+                    <div class="flex items-center gap-3 text-xs text-charcoal-400 font-mono mb-4">
+                        <time datetime="2026-02-10">FEBRUARY 10, 2026</time>
+                        <span>•</span>
+                        <a href="#" class="text-terracotta hover:underline font-sans font-medium">观影与艺术</a>
+                    </div>
+                    <!-- 可选配图，体现博客特点 -->
+                    <a href="article-detail.html" class="block overflow-hidden rounded-xl mb-6">
+                        <div class="h-48 sm:h-64 bg-charcoal-200 border border-archiveBorder w-full relative">
+                            <!-- 占位图，实际可换成真实图片 -->
+                            <div class="absolute inset-0 bg-archiveCard/50 flex items-center justify-center text-charcoal-400">
+                                <i data-lucide="image" class="w-8 h-8 opacity-50"></i>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="article-detail.html" class="block space-y-4">
+                        <h2 class="text-2xl sm:text-3xl font-bold font-serif-sc text-charcoal-900 group-hover:text-terracotta transition-colors leading-snug">
+                            十年后重温《星际穿越》：引力、爱与第四维度
+                        </h2>
+                        <p class="text-charcoal-600 font-light leading-relaxed text-sm sm:text-base line-clamp-3">
+                            “爱是唯一能够超越时间与空间的事物”。曾经以为这只是一句煽情的台词，当拥有了更深的人生阅历后，才体会到诺兰兄弟在冰冷硬科幻背后注入的极致温情。本文试从量子力学与情感哲学的双重视角，探讨电影中的那些不可言喻的羁绊。
+                        </p>
+                    </a>
+                    <div class="mt-6">
+                        <a href="article-detail.html" class="inline-flex items-center gap-1 text-xs font-semibold text-terracotta hover:text-terracotta-hover transition-colors">
+                            阅读全文 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Pagination 分页组件 -->
+                <div class="flex items-center justify-center gap-2 pt-6">
+                    <button class="w-8 h-8 rounded-full border border-archiveBorder flex items-center justify-center text-charcoal-400 hover:bg-terracotta hover:border-terracotta hover:text-white transition-all disabled:opacity-50" disabled>
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    </button>
+                    <span class="w-8 h-8 flex items-center justify-center text-sm font-bold bg-terracotta text-white rounded-full">1</span>
+                    <a href="#" class="w-8 h-8 flex items-center justify-center text-sm font-medium text-charcoal-600 hover:text-terracotta transition-colors">2</a>
+                    <a href="#" class="w-8 h-8 flex items-center justify-center text-sm font-medium text-charcoal-600 hover:text-terracotta transition-colors">3</a>
+                    <span class="text-charcoal-400">...</span>
+                    <button class="w-8 h-8 rounded-full border border-archiveBorder flex items-center justify-center text-charcoal-600 hover:bg-terracotta hover:border-terracotta hover:text-white transition-all">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: SIDEBAR (右侧边栏) -->
+            <aside class="lg:col-span-4 space-y-10 lg:sticky lg:top-28">
+                
+                <!-- Widget: About Column -->
+                <div class="bg-archiveCard border border-archiveBorder rounded-2xl p-6">
+                    <div class="w-12 h-12 bg-terracotta/10 rounded-full flex items-center justify-center text-terracotta mb-4">
+                        <i data-lucide="pen-tool" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-serif-sc font-bold text-lg text-charcoal-900 mb-2">关于本栏目</h3>
+                    <p class="text-xs text-charcoal-600 leading-relaxed font-light">
+                        此专栏为私人博客的核心枢纽。不追求宏大的叙事，只保留生活里的切片、阅读带来的反思，以及偶尔发散的碎碎念。保持写作，是为了确立自我的存在。
+                    </p>
+                </div>
+
+                <!-- Widget: Categories -->
+                <div>
+                    <h3 class="text-xs font-brand text-charcoal-400 tracking-widest uppercase mb-4 font-semibold border-b border-archiveBorder pb-2">Categories (分类)</h3>
+                    <ul class="space-y-2 text-sm text-charcoal-600 font-light">
+                        <li>
+                            <a href="#" class="flex justify-between items-center group hover:text-terracotta transition-colors py-1">
+                                <span>读书心得</span>
+                                <span class="bg-archiveCard px-2 py-0.5 rounded-full text-[10px] text-charcoal-400 group-hover:text-terracotta group-hover:bg-terracotta/10">12</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex justify-between items-center group hover:text-terracotta transition-colors py-1">
+                                <span>观影与艺术</span>
+                                <span class="bg-archiveCard px-2 py-0.5 rounded-full text-[10px] text-charcoal-400 group-hover:text-terracotta group-hover:bg-terracotta/10">8</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex justify-between items-center group hover:text-terracotta transition-colors py-1">
+                                <span>生活志</span>
+                                <span class="bg-archiveCard px-2 py-0.5 rounded-full text-[10px] text-charcoal-400 group-hover:text-terracotta group-hover:bg-terracotta/10">24</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex justify-between items-center group hover:text-terracotta transition-colors py-1">
+                                <span>效率与工具</span>
+                                <span class="bg-archiveCard px-2 py-0.5 rounded-full text-[10px] text-charcoal-400 group-hover:text-terracotta group-hover:bg-terracotta/10">5</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Widget: Tag Cloud -->
+                <div>
+                    <h3 class="text-xs font-brand text-charcoal-400 tracking-widest uppercase mb-4 font-semibold border-b border-archiveBorder pb-2">Tags (标签云)</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white hover:border-terracotta transition-colors">极简主义</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white hover:border-terracotta transition-colors">黑塞</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white hover:border-terracotta transition-colors">科幻电影</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white hover:border-terracotta transition-colors">断舍离</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white hover:border-terracotta transition-colors">自我探索</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white hover:border-terracotta transition-colors">年度总结</a>
+                    </div>
+                </div>
+
+                <!-- Widget: Newsletter/Subscribe (Optional flair) -->
+                <div class="bg-terracotta/5 border border-terracotta/20 rounded-2xl p-6 text-center">
+                    <i data-lucide="mail-plus" class="w-6 h-6 text-terracotta mx-auto mb-3"></i>
+                    <h4 class="text-sm font-bold font-serif-sc text-charcoal-900 mb-2">订阅更新</h4>
+                    <p class="text-xs text-charcoal-600 font-light mb-4">通过邮件获取最新随笔文章推送，静默无扰。</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email..." class="w-full text-xs px-3 py-2 bg-white border-y border-l border-archiveBorder rounded-l-md focus:outline-none">
+                        <button class="bg-terracotta hover:bg-terracotta-hover text-white px-3 py-2 rounded-r-md transition-colors">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+
+    <!-- FOOTER 页脚 -->
+    <footer class="bg-charcoal-900 text-archiveBg py-12 border-t border-charcoal-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-charcoal-400">
+            <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-terracotta text-white flex items-center justify-center font-bold font-brand text-xs">
+                    幸福
+                </span>
+                <span class="font-serif-sc">幸福生活 · 个人数字档案馆 © 2026</span>
+            </div>
+            <div>
+                <span>妥善保存于数字云端 · 静默记录</span>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化图标
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            initMobileMenu();
+        });
+
+        // 移动端抽屉菜单逻辑
+        function initMobileMenu() {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const drawer = document.getElementById('mobileDrawer');
+            if (mobileBtn && drawer) {
+                mobileBtn.addEventListener('click', () => {
+                    drawer.classList.toggle('hidden');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

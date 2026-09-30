@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 | 幸福生活个人数字档案馆</title>
+    
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 引入 Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;600;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- 引入 Lucide Icons 图标库 -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind 统一 Token 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        archiveBg: '#FAF5EF',
+                        archiveCard: '#F3ECE2',
+                        archiveBorder: '#E6DCCE',
+                        terracotta: {
+                            DEFAULT: '#E9826A',
+                            hover: '#E24C00',
+                            light: '#F7B89C',
+                            soft: 'rgba(233, 130, 106, 0.12)',
+                        },
+                        charcoal: {
+                            900: '#49352F',
+                            800: '#75554b',
+                            600: '#b78576',
+                            400: '#ffbfa9',
+                        },
+                        darkBlue: {
+                            950: '#050D14',
+                            900: '#081622',
+                            800: '#0D2131',
+                            700: '#133045',
+                        }
+                    },
+                    fontFamily: {
+                        serifSC: ['Noto Serif SC', 'serif'],
+                        brand: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background-color: #FAF5EF;
+            color: #2C2825;
+            overflow-x: hidden;
+        }
+
+        .font-serif-sc {
+            font-family: 'Noto Serif SC', 'Cinzel', serif;
+        }
+
+        .font-brand {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* 统一自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF5EF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D96B43;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-terracotta selection:text-white flex flex-col min-h-screen">
+
+    <!-- HEADER 头部导航 -->
+    <header class="sticky top-0 z-40 bg-archiveBg/95 backdrop-blur-md border-b border-archiveBorder/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <!-- Brand Logo (修改后的代码) -->
+            <a href="index.html" class="flex items-center gap-3.5 group -my-4 py-4">
+                <!-- 方形 Logo 图片：h-12 w-12 保持方形，且通过 -my-4 与 header 内边距抵消以填满整个导航栏高度 -->
+                <img src="https://lh3.googleusercontent.com/d/1g_fPq6aH8zfrXEgfaNK7r0Ll2MzyfZvr" 
+                     alt="Logo" 
+                     class="h-10 w-16 object-cover rounded-none shrink-0">
+                <span class="font-serif-sc font-bold tracking-wider text-charcoal-900 text-base leading-none">幸福生活</span>
+            </a>
+
+            <!-- Navigation Links to External Sub-homepages -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-charcoal-600">
+                <a href="AboutUs.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>关于我们</span>
+                </a>
+                <a href="TravelBlogs/TravelBlogs.html" class="text-terracotta font-semibold flex items-center gap-1.5 hover:text-terracotta-hover">
+                    <span class="font-brand text-xs uppercase tracking-wider">TakuRadio</span><span>旅行博客</span>
+                </a>
+                <a href="TravelEssays/TravelEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>知行拾遗</span>
+                </a>
+                <a href="NotesEssays/NotesEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>手记/随笔</span>
+                </a>
+                <a href="Gallery/Gallery.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>光影胶片</span>
+                </a>
+                <a href="Cuisine/Cuisine.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                    <span>烟火厨房</span>
+                </a>
+            </nav>
+
+
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobileMenuBtn" class="md:hidden p-2 text-charcoal-800 hover:text-terracotta">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileDrawer" class="hidden md:hidden bg-archiveBg border-b border-archiveBorder px-6 py-4 space-y-2 text-sm">
+            <a href="AboutUs.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>关于我们</span>
+            </a>
+            <a href="TravelBlogs/TravelBlogs.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span class="font-brand text-xs uppercase tracking-wider">TakuRadio</span><span>旅行博客</span>
+            </a>
+            <a href="TravelEssays/TravelEssays.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>知行拾遗</span>
+            </a>
+            <a href="NotesEssays/NotesEssays.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>手记/随笔</span>
+            </a>
+            <a href="Gallery/Gallery.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>光影胶片</span>
+            </a>
+            <a href="Cuisine/Cuisine.html" class="flex items-center justify-between py-2 text-charcoal-800 border-b border-archiveBorder/50">
+                <span>烟火厨房</span>
+            </a>
+        </div>
+    </header>
+
+
+    <!-- HERO SECTION -->
+    <section class="relative w-full py-12 lg:py-16 bg-archiveBg border-b border-archiveBorder/60">
+        <div class="max-w-4xl mx-auto px-6 text-center space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta/10 border border-terracotta/20 text-terracotta text-xs font-semibold">
+                <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                <span>MEET THE CREATORS</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-serif-sc text-charcoal-900 tracking-tight leading-tight">
+                故事里的两位主角
+            </h1>
+            <p class="text-charcoal-600 text-base sm:text-lg font-light leading-relaxed max-w-2xl mx-auto">
+                这里是小桃子和小橘子共同搭建的角落。记录旅途、美食、思考与生活中的细微光芒。
+            </p>
+        </div>
+    </section>
+
+
+    <!-- MAIN CREATOR SECTION -->
+    <main class="flex-grow py-12 lg:py-20">
+        <div class="max-w-5xl mx-auto px-6 space-y-16">
+
+            <!-- BLOGGER INTRO CARDS (双人介绍) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                
+                <!-- 博主 1: 小桃子 -->
+                <div class="bg-archiveCard rounded-2xl border border-archiveBorder p-8 relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
+                    <div class="absolute -top-12 -right-12 w-40 h-40 bg-pink-200/30 rounded-full blur-2xl pointer-events-none"></div>
+                    
+                    <div class="space-y-6 relative z-10">
+                        <!-- Head Portrait & Basic Info -->
+                        <div class="flex items-center gap-5">
+                            <div class="relative w-20 h-20 rounded-full overflow-hidden border-2 border-terracotta/40 p-1 shrink-0 bg-white">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400" 
+                                     alt="小桃子" 
+                                     class="w-full h-full object-cover rounded-full group-hover:scale-105 transition-transform duration-500">
+                            </div>
+                            <div>
+                                <div class="inline-block px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-700 text-[11px] font-bold tracking-wider mb-1">
+                                    🍑 首席生活记录官
+                                </div>
+                                <h2 class="text-2xl font-bold font-serif-sc text-charcoal-900">小桃子</h2>
+                                <p class="text-xs text-charcoal-400 font-mono mt-0.5">@Peach_Diary</p>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="text-sm text-charcoal-600 leading-relaxed font-light space-y-3">
+                            <p>
+                                热爱摄影与文字，对世界保有永无止境的好奇心。总是习惯带着相机穿行于大街小巷，捕捉那些稍纵即逝的光影与人间烟火。
+                            </p>
+                            <p>
+                                在这个档案馆里，主要负责“知行拾遗”、“光影胶片”与手记文章的撰写。希望能用温暖的镜头和文字，把平凡日子变成熠熠发光的诗。
+                            </p>
+                        </div>
+
+                        <!-- Tags -->
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <span class="px-3 py-1 rounded-md bg-archiveBg border border-archiveBorder text-[11px] text-charcoal-600 font-medium">📷 胶片摄影控</span>
+                            <span class="px-3 py-1 rounded-md bg-archiveBg border border-archiveBorder text-[11px] text-charcoal-600 font-medium">☕ 咖啡重度依赖</span>
+                            <span class="px-3 py-1 rounded-md bg-archiveBg border border-archiveBorder text-[11px] text-charcoal-600 font-medium">✈️ 漫无目的徒步</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 博主 2: 小橘子 -->
+                <div class="bg-archiveCard rounded-2xl border border-archiveBorder p-8 relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
+                    <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-200/30 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <div class="space-y-6 relative z-10">
+                        <!-- Head Portrait & Basic Info -->
+                        <div class="flex items-center gap-5">
+                            <div class="relative w-20 h-20 rounded-full overflow-hidden border-2 border-terracotta/40 p-1 shrink-0 bg-white">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400" 
+                                     alt="小橘子" 
+                                     class="w-full h-full object-cover rounded-full group-hover:scale-105 transition-transform duration-500">
+                            </div>
+                            <div>
+                                <div class="inline-block px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-700 text-[11px] font-bold tracking-wider mb-1">
+                                    🍊 私房美食品鉴家
+                                </div>
+                                <h2 class="text-2xl font-bold font-serif-sc text-charcoal-900">小橘子</h2>
+                                <p class="text-xs text-charcoal-400 font-mono mt-0.5">@Orange_Taste</p>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="text-sm text-charcoal-600 leading-relaxed font-light space-y-3">
+                            <p>
+                                相信“唯有美食与爱不可辜负”。热衷于在厨房里钻研各种美味配方，把柴米油盐变成抚慰心灵的艺术。
+                            </p>
+                            <p>
+                                在这里，主要主理“私房菜谱”和“旅行博客”中的路线探索。无论是山川湖海还是厨房灶台，都希望找到最真实、最温暖的滋味。
+                            </p>
+                        </div>
+
+                        <!-- Tags -->
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <span class="px-3 py-1 rounded-md bg-archiveBg border border-archiveBorder text-[11px] text-charcoal-600 font-medium">🍳 厨艺研究员</span>
+                            <span class="px-3 py-1 rounded-md bg-archiveBg border border-archiveBorder text-[11px] text-charcoal-600 font-medium">🗺️ 自驾游爱好者</span>
+                            <span class="px-3 py-1 rounded-md bg-archiveBg border border-archiveBorder text-[11px] text-charcoal-600 font-medium">🎧 播客电台发烧友</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- OUR ORIGIN SECTION (制作网站初衷) -->
+            <div class="relative rounded-2xl bg-gradient-to-b from-archiveCard to-archiveBg border border-archiveBorder p-8 sm:p-12 overflow-hidden text-center">
+                <div class="max-w-2xl mx-auto space-y-6 relative z-10">
+                    
+                    <div class="w-12 h-12 mx-auto rounded-full bg-terracotta/10 text-terracotta flex items-center justify-center">
+                        <i data-lucide="heart" class="w-6 h-6"></i>
+                    </div>
+
+                    <h3 class="text-2xl font-bold font-serif-sc text-charcoal-900">
+                        搭建这个小站的初衷
+                    </h3>
+
+                    <div class="h-0.5 w-12 bg-terracotta/40 mx-auto"></div>
+
+                    <p class="text-charcoal-600 text-sm sm:text-base leading-relaxed font-light">
+                        信息泛滥的时代，社交平台上的动态总是转瞬即逝。我们希望能有一个真正属于我们自己的“数字档案馆”——不追求流量，不受算法打扰。
+                    </p>
+                    <p class="text-charcoal-600 text-sm sm:text-base leading-relaxed font-light">
+                        在这里，我们可以妥善珍藏一起走过的路、一起尝过的味道、一起拍摄的胶片以及深夜里的胡思乱想。时间会流逝，但这些真实存在过的美好，将在云端静默而长久地伫立。
+                    </p>
+
+                    <div class="pt-4 font-brand text-xs tracking-widest text-terracotta font-semibold uppercase">
+                        — PEACH & ORANGE ARCHIVE —
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- FOOTER 页脚 -->
+    <footer class="bg-charcoal-900 text-archiveBg py-12 border-t border-charcoal-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-charcoal-400">
+            <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-terracotta text-white flex items-center justify-center font-bold font-brand text-xs">
+                    幸福
+                </span>
+                <span class="font-serif-sc">幸福生活 · 个人数字档案馆 © 2026</span>
+            </div>
+            <div>
+                <span>妥善保存于数字云端 · 静默记录</span>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const drawer = document.getElementById('mobileDrawer');
+            if (mobileBtn && drawer) {
+                mobileBtn.addEventListener('click', () => {
+                    drawer.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
