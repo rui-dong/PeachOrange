@@ -982,25 +982,150 @@
       }
     ).addTo(map);
 
-    // 绘制完整路线（浅色底线）
-    const allCoords = destinations.map(d => d.coords);
+    
+/* ======================================
+   获取真实道路路线
+   Leaflet 坐标格式：[纬度, 经度]
+   OSRM 请求格式：[经度, 纬度]
+====================================== */
 
-    L.polyline(allCoords, {
-      color: "#aeb9a8",
-      weight: 3,
-      opacity: 0.7,
-      dashArray: "5 8",
-      lineCap: "round"
-    }).addTo(map);
+// 原始打卡点
+const allCoords = destinations.map(d => d.coords);
 
-    // 动态点亮的路线
-    const activeRoute = L.polyline([], {
-      color: "#526b59",
-      weight: 4,
-      opacity: 0.95,
-      lineCap: "round",
-      lineJoin: "round"
-    }).addTo(map);
+// 用于存放每一段真实道路的完整坐标
+let roadRoutes = [];
+
+// 所有道路合并后的完整轨迹
+let fullRoadCoords = [];
+
+// 尚未点亮的道路：浅灰绿色
+const fullRoute = L.polyline([], {
+  color: "#c5cdbf",
+  weight: 3,
+  opacity: 0.8,
+  lineCap: "round",
+  lineJoin: "round"
+}).addTo(map);
+
+// 已经走过的道路：深绿色
+const activeRoute = L.polyline([], {
+  color: "#526b59",
+  weight: 4,
+  opacity: 1,
+  lineCap: "round",
+  lineJoin: "round"
+}).addTo(map);
+
+// 请求 OSRM，获取实际公路路线
+async function loadRoadRoutes() {
+  try {
+    // 经纬度顺序必须是 longitude,latitude
+    const coordinates = destinations
+      .map(d => `${d.coords[1]},${d.coords[0]}`)
+      .join(";");
+
+    const url =
+      "https://router.project-osrm.org/route/v1/driving/" +
+      coordinates +
+      "?overview=full&geometries=geojson&steps=false";
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("道路路线请求失败：" + response.status);
+    }
+
+    const data = await response.json();
+
+    if (data.code !== "Ok" || !data.routes?.length) {
+      throw new Error("没有找到可用的道路路线");
+    }
+
+    // OSRM GeoJSON 返回 [经度, 纬度]
+    // Leaflet 需要 [纬度, 经度]
+    fullRoadCoords = data.routes[0].geometry.coordinates.map(
+      ([lng, lat]) => [lat, lng]
+    );
+
+    // 按各个途经点拆分成独立的路段
+    const waypointLocations = data.waypoints.map(
+      point => [point.location[1], point.location[0]]
+    );
+
+    roadRoutes = [];
+
+    for (let i = 0; i < waypointLocations.length - 1; i++) {
+      const start = waypointLocations[i];
+      const end = waypointLocations[i + 1];
+
+      const startIndex = findNearestIndex(fullRoadCoords, start);
+      const endIndex = findNearestIndex(fullRoadCoords, end);
+
+      roadRoutes.push(
+        fullRoadCoords.slice(startIndex, endIndex + 1)
+      );
+    }
+
+    // 绘制完整路线
+    fullRoute.setLatLngs(fullRoadCoords);
+
+    // 更新当前章节的路线
+    updateActiveRoadRoute(activeIndex < 0 ? 0 : activeIndex);
+
+    // 根据真实道路范围调整地图
+    map.fitBounds(fullRoute.getBounds(), {
+      padding: [35, 35]
+    });
+
+  } catch (error) {
+    console.error("无法加载实际道路路线：", error);
+
+    // 失败时退回直线，避免地图完全没有路线
+    roadRoutes = destinations.slice(0, -1).map((d, i) => [
+      d.coords,
+      destinations[i + 1].coords
+    ]);
+
+    fullRoadCoords = roadRoutes.flat();
+
+    fullRoute.setLatLngs(fullRoadCoords);
+    updateActiveRoadRoute(activeIndex < 0 ? 0 : activeIndex);
+  }
+}
+
+// 在完整路线中寻找距离指定点最近的坐标索引
+function findNearestIndex(coords, target) {
+  let bestIndex = 0;
+  let bestDistance = Infinity;
+
+  coords.forEach((point, index) => {
+    const distance =
+      (point[0] - target[0]) ** 2 +
+      (point[1] - target[1]) ** 2;
+
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = index;
+    }
+  });
+
+  return bestIndex;
+}
+
+// 根据当前阅读章节，点亮之前的实际道路路段
+function updateActiveRoadRoute(index) {
+  const visibleCoords = roadRoutes
+    .slice(0, index)
+    .flat();
+
+  // 当前章节的目的地也要连接到对应道路终点
+  if (roadRoutes[index]) {
+    visibleCoords.push(...roadRoutes[index]);
+  }
+
+  activeRoute.setLatLngs(visibleCoords);
+}
+
 
     // ==========================================
     // 3. 创建自定义 Marker
