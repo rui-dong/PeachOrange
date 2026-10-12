@@ -1183,7 +1183,7 @@ function updateActiveRoadRoute(index) {
       });
 
       // 更新地图路线：仅点亮已走过的部分
-      activeRoute.setLatLngs(allCoords.slice(0, index + 1));
+      updateActiveRoadRoute(index);
 
       // 更新每个打卡点的状态
       destinations.forEach((item, i) => {
@@ -1241,7 +1241,11 @@ function updateActiveRoadRoute(index) {
     });
 
     // 默认状态
-    activateChapter(0);
+    // 默认状态
+activateChapter(0);
+
+// 加载真实道路路线
+loadRoadRoutes();
   </script>
 </body>
 </html>
