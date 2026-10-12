@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北纬64°的冰与火诗篇 — Scrollytelling Travelogue</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        terracotta: {
+                            DEFAULT: '#B85B35',
+                            50: '#FDF7F4',
+                            100: '#F8EBE5',
+                            600: '#B85B35',
+                            700: '#9B4725',
+                            900: '#5C240E',
+                        },
+                        sand: {
+                            50: '#FAF8F5',
+                            100: '#F3EFEA',
+                            200: '#E7DFD5',
+                            800: '#4A433A',
+                            900: '#2C2722',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Noto Serif SC', 'Georgia', 'serif'],
+                        sans: ['Inter', 'PingFang SC', 'Hiragino Sans GB', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+            background-color: #FAF8F5;
+            color: #2C2722;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Drop cap styling */
+        .drop-cap::first-letter {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            float: left;
+            font-size: 3.8rem;
+            line-height: 0.85;
+            padding-top: 4px;
+            padding-right: 10px;
+            font-weight: 700;
+            color: #B85B35;
+        }
+
+        /* Marker animation pulse */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.4); opacity: 0.2; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .animate-pulse-ring {
+            animation: pulse-ring 2s infinite cubic-bezier(0.45, 0, 0.55, 1);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9D2C7;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #3A3A3A;
+        }
+
+        /* SVG Map transitions */
+        .map-route-bg {
+            stroke-dasharray: 4, 4;
+        }
+        
+        .map-route-active {
+            transition: stroke-dashoffset 0.8s ease-in-out, stroke 0.3s ease;
+        }
+
+        /* Lightbox transitions */
+        .lightbox-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-terracotta-100 selection:text-terracotta-900 dark:bg-zinc-950 dark:text-zinc-200">
+
+    <!-- Top Reading Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-1 z-50 bg-sand-200/50 dark:bg-zinc-800/50 backdrop-blur-sm">
+        <div id="progress-bar" class="h-full bg-terracotta w-0 transition-all duration-150"></div>
+    </div>
+
+    <!-- Editorial Header Navigation -->
+    <header class="sticky top-0 z-40 w-full border-b border-sand-200/80 dark:border-zinc-800/80 bg-sand-50/90 dark:bg-zinc-950/90 backdrop-blur-md transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="#" class="font-serif text-xl sm:text-2xl font-bold tracking-widest text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                <i class="fa-solid fa-compass text-terracotta"></i>
+                <span class="font-serif">NOMADIC</span> <span class="text-xs font-sans tracking-widest uppercase text-terracotta font-semibold">Travelogue</span>
+            </a>
+
+            <!-- Right Controls -->
+            <div class="flex items-center space-x-3">
+                <!-- Theme Switcher -->
+                <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-sand-200/60 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition" title="切换暗黑模式">
+                    <i class="fa-solid fa-moon text-sm dark:hidden"></i>
+                    <i class="fa-solid fa-sun text-sm hidden dark:block"></i>
+                </button>
+
+                <!-- Mobile Map Toggle Button -->
+                <button onclick="toggleMobileMap()" class="lg:hidden px-3 py-1.5 rounded-full bg-terracotta text-white text-xs font-medium flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span id="mobile-map-btn-text">查看地图</span>
+                </button>
+
+                <!-- Share Button -->
+                <button onclick="shareArticle()" class="hidden sm:inline-flex items-center gap-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-4 py-1.5 rounded-full text-xs font-medium hover:bg-terracotta dark:hover:bg-terracotta dark:hover:text-white transition">
+                    <i class="fa-solid fa-share-nodes"></i>
+                    <span>分享行程</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cover Article Header -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8 border-b border-sand-200 dark:border-zinc-800">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta-100 dark:bg-terracotta-900/40 text-terracotta text-xs font-semibold tracking-widest uppercase mb-4">
+                <i class="fa-solid fa-route"></i> ICELAND RING ROAD • 7 DAYS
+            </div>
+            <h1 class="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 dark:text-zinc-50 leading-[1.12] mb-6">
+                北纬64°的冰与火诗篇：冰岛环岛自驾散记
+            </h1>
+            <p class="font-serif italic text-lg sm:text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
+                “从雷克雅未克的微风，到黑沙滩咆哮的巨浪，再到羽状冰川下的静止时光。跟随这条沉浸轨迹，重走这场孤独而炽热的荒野之旅。”
+            </p>
+            
+            <div class="flex flex-wrap items-center gap-6 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
+                <span class="flex items-center gap-2">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" class="w-7 h-7 rounded-full object-cover">
+                    <strong class="text-zinc-800 dark:text-zinc-200">林栖 (Explorer)</strong>
+                </span>
+                <span>•</span>
+                <span><i class="fa-regular fa-calendar text-terracotta mr-1"></i> 2026年9月15日 - 9月22日</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-location-dot text-terracotta mr-1"></i> 1,332 公里里程</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Container: Split View (60% Story / 40% Sticky Map) -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative">
+            
+            <!-- LEFT COLUMN: Scrollable Timeline Story Container (60% width -> 7 cols) -->
+            <div class="lg:col-span-7 space-y-20 pb-24 relative">
+                
+                <!-- Vertical Timeline Guide Line -->
+                <div class="absolute left-4 sm:left-6 top-8 bottom-12 w-0.5 bg-sand-200 dark:bg-zinc-800 -z-10"></div>
+
+                <!-- ==================== WAYPOINT 1 ==================== -->
+                <article id="step-1" data-waypoint="1" class="timeline-step relative pl-10 sm:pl-16 scroll-mt-24">
+                    <!-- Timeline Node Icon -->
+                    <div class="node-indicator absolute left-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-sand-100 dark:bg-zinc-900 border-2 border-sand-300 dark:border-zinc-700 text-zinc-400 flex items-center justify-center font-serif text-xs sm:text-sm font-bold transition-all duration-300">
+                        01
+                    </div>
+
+                    <!-- Meta Pill Badge -->
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="px-2.5 py-1 rounded-md bg-terracotta-100 dark:bg-terracotta-900/40 text-terracotta font-semibold text-xs tracking-wider uppercase">
+                            DAY 01
+                        </span>
+                        <span class="text-xs text-zinc-500 dark:text-zinc-400">
+                            <i class="fa-solid fa-location-arrow text-terracotta mr-1"></i> 雷克雅未克 (Reykjavík)
+                        </span>
+                        <span class="text-xs text-zinc-400 dark:text-zinc-500">| 64.1466° N, 21.9426° W</span>
+                    </div>
+
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+                        起点：北大西洋风暴中的色彩与温柔
+                    </h2>
+
+                    <p class="drop-cap text-base sm:text-lg leading-relaxed text-zinc-700 dark:text-zinc-300 mb-6">
+                        航班降落在凯夫拉维克机场时，天空正下着冷冽的细雨。雷克雅未克并不是一座庞大的首都，却有着令人着迷的低调活力。街道两旁屋顶涂满鲜艳的彩虹色，与远处阴云密布的冰冷海湾形成强烈的对比。
+                    </p>
+
+                    <!-- Photo Card -->
+                    <div class="my-6 rounded-2xl overflow-hidden shadow-lg border border-sand-200 dark:border-zinc-800 group relative">
+                        <img src="https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&q=80&w=1200" 
+                             alt="Reykjavík Church" 
+                             class="w-full h-72 sm:h-96 object-cover group-hover:scale-105 transition duration-500 cursor-pointer"
+                             onclick="openLightbox(this.src, '哈尔格林姆教堂（Hallgrímskirkja）耸立在市中心，设计灵感来自柱状玄武岩。')">
+                        <div class="p-4 bg-white dark:bg-zinc-900 text-xs text-zinc-600 dark:text-zinc-400 flex items-center justify-between border-t border-sand-200 dark:border-zinc-800">
+                            <span><i class="fa-solid fa-camera mr-1"></i> 哈尔格林姆教堂玄武岩立面</span>
+                            <span class="italic">气温：9°C / 阴微雨</span>
+                        </div>
+                    </div>
+
+                    <p class="text-base sm:text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">
+                        我们在旧港口吃了一碗热气腾腾的龙虾汤，顺便整理好了接下来六天的自驾装备。当暮色降临，海边大教堂的灯光在湿漉漉的地面投下金黄色的倒影，这便是我们冰岛环岛故事的序章。
+                    </p>
+                </article>
+
+                <!-- ==================== WAYPOINT 2 ==================== -->
+                <article id="step-2" data-waypoint="2" class="timeline-step relative pl-10 sm:pl-16 scroll-mt-24">
+                    <div class="node-indicator absolute left-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-sand-100 dark:bg-zinc-900 border-2 border-sand-300 dark:border-zinc-700 text-zinc-400 flex items-center justify-center font-serif text-xs sm:text-sm font-bold transition-all duration-300">
+                        02
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="px-2.5 py-1 rounded-md bg-terracotta-100 dark:bg-terracotta-900/40 text-terracotta font-semibold text-xs tracking-wider uppercase">
+                            DAY 02
+                        </span>
+                        <span class="text-xs text-zinc-500 dark:text-zinc-400">
+                            <i class="fa-solid fa-location-arrow text-terracotta mr-1"></i> 辛格维利尔 (Þingvellir)
+                        </span>
+                        <span class="text-xs text-zinc-400 dark:text-zinc-500">| 64.2559° N, 21.1299° W</span>
+                    </div>
+
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+                        大地的裂痕：欧亚与北美板块交界
+                    </h2>
+
+                    <p class="text-base sm:text-lg leading-relaxed text-zinc-700 dark:text-zinc-300 mb-6">
+                        沿1号公路向东行驶，车窗外的景象迅速切换为苍凉的火山苔原。在辛格维利尔国家公园，巨大的地壳裂谷在脚下延伸——左侧是北美板块，右侧是欧亚板块。两大板块正以每年约2厘米的速度无声撕裂。
+                    </p>
+
+                    <!-- Editorial Callout Box -->
+                    <div class="my-6 p-6 rounded-2xl bg-terracotta-50 dark:bg-terracotta-900/20 border-l-4 border-terracotta text-zinc-800 dark:text-zinc-200">
+                        <h4 class="font-serif font-bold text-base mb-2 flex items-center gap-2 text-terracotta">
+                            <i class="fa-solid fa-mountain text-sm"></i> 地理知识随笔
+                        </h4>
+                        <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300 italic">
+                            “走在大峡谷（Almannagjá）的通道中，你所踩踏的土地是地球上极少数能够肉眼清晰看见板块张裂的奇观。这里的湖水清澈透底，能见度可达100米以上。”
+                        </p>
+                    </div>
+
+                    <!-- Gallery Pair -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                        <img src="https://images.unsplash.com/photo-1504893524553-b855bce32c67?auto=format&fit=crop&q=80&w=800" 
+                             alt="Thingvellir Fault" 
+                             class="w-full h-56 object-cover rounded-xl shadow cursor-pointer hover:opacity-90 transition"
+                             onclick="openLightbox(this.src, '辛格维利尔板块大裂谷的苔原路段')">
+                        <img src="https://images.unsplash.com/photo-1529963183134-61a90db47eaf?auto=format&fit=crop&q=80&w=800" 
+                             alt="Gullfoss Waterfall" 
+                             class="w-full h-56 object-cover rounded-xl shadow cursor-pointer hover:opacity-90 transition"
+                             onclick="openLightbox(this.src, '黄金瀑布 (Gullfoss) 的汹涌水汽与双层阶梯结构')">
+                    </div>
+
+                    <p class="text-base sm:text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">
+                        下午造访了黄金瀑布（Gullfoss），咆哮的水汽升腾至半空中，在午后短暂出现的阳光下织出一道明亮的双彩虹。
+                    </p>
+                </article>
+
+                <!-- ==================== WAYPOINT 3 ==================== -->
+                <article id="step-3" data-waypoint="3" class="timeline-step relative pl-10 sm:pl-16 scroll-mt-24">
+                    <div class="node-indicator absolute left-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-sand-100 dark:bg-zinc-900 border-2 border-sand-300 dark:border-zinc-700 text-zinc-400 flex items-center justify-center font-serif text-xs sm:text-sm font-bold transition-all duration-300">
+                        03
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="px-2.5 py-1 rounded-md bg-terracotta-100 dark:bg-terracotta-900/40 text-terracotta font-semibold text-xs tracking-wider uppercase">
+                            DAY 03 - 04
+                        </span>
+                        <span class="text-xs text-zinc-500 dark:text-zinc-400">
+                            <i class="fa-solid fa-location-arrow text-terracotta mr-1"></i> 维克与黑沙滩 (Vík í Mýrdal)
+                        </span>
+                        <span class="text-xs text-zinc-400 dark:text-zinc-500">| 63.4194° N, 19.0060° W</span>
+                    </div>
+
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+                        黑沙、巨浪与玄武岩风风雨雨
+                    </h2>
+
+                    <p class="text-base sm:text-lg leading-relaxed text-zinc-700 dark:text-zinc-300 mb-6">
+                        车子继续沿着南海岸行驶，经过著名的森林瀑布（Skógafoss）后，空气里多了咸咸的海水味道。维克小镇拥有世界闻名的 Reynisfjara 黑沙滩。这里的沙子并非尘土，而是古代火山熔岩遇冰冷海水剧烈凝固后粉碎形成的纯黑玄武岩颗粒。
+                    </p>
+
+                    <!-- Quote Block -->
+                    <blockquote class="my-8 py-4 border-l-2 border-terracotta pl-6 italic font-serif text-xl sm:text-2xl text-zinc-800 dark:text-zinc-200">
+                        “这里的海浪有一种危险的魔力，从北大西洋无遮挡滚滚而来的巨浪撞击在六角形玄武岩柱上，溅起高达十米的白色水雾。”
+                    </blockquote>
+
+                    <!-- Large Image Card -->
+                    <div class="my-6 rounded-2xl overflow-hidden shadow-lg border border-sand-200 dark:border-zinc-800">
+                        <img src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&q=80&w=1200" 
+                             alt="Reynisfjara Black Sand Beach" 
+                             class="w-full h-80 object-cover cursor-pointer hover:scale-105 transition duration-500"
+                             onclick="openLightbox(this.src, '维克镇附近的玄武岩海蚀柱（Reynisdrangar）')">
+                        <div class="p-4 bg-white dark:bg-zinc-900 text-xs text-zinc-600 dark:text-zinc-400 flex items-center justify-between">
+                            <span><i class="fa-solid fa-wind mr-1"></i> 维克红顶教堂与远方海蚀柱</span>
+                            <span>阵风：45 km/h</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- ==================== WAYPOINT 4 ==================== -->
+                <article id="step-4" data-waypoint="4" class="timeline-step relative pl-10 sm:pl-16 scroll-mt-24">
+                    <div class="node-indicator absolute left-0 top-1 w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-sand-100 dark:bg-zinc-900 border-2 border-sand-300 dark:border-zinc-700 text-zinc-400 flex items-center justify-center font-serif text-xs sm:text-sm font-bold transition-all duration-300">
+                        04
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="px-2.5 py-1 rounded-md bg-terracotta-100 dark:bg-terracotta-900/40 text-terracotta font-semibold text-xs tracking-wider uppercase">
+                            DAY 05 - 06
+                        </span>
+                        <span class="text-xs text-zinc-500 dark:text-zinc-400">
+                            <i class="fa-solid fa-location-arrow text-terracotta mr-1"></i> 杰古沙龙冰河湖 (Jökulsárlón)
+                        </span>
+                        <span class="text-xs text-zinc-400 dark:text-zinc-500">| 64.0784° N, 16.2306° W</span>
+                    </div>
+
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+                        亿年晶莹：钻石沙滩与瓦特纳冰川
+                    </h2>
+
+                    <p class="text-base sm:text-lg leading-relaxed text-zinc-700 dark:text-zinc-300 mb-6">
+                        行程的最高潮属于瓦特纳冰川国家公园（Vatnajökull）。在杰古沙龙冰河湖，巨大的蓝色冰山从冰川舌脱落，缓缓漂向大海。几经海浪冲刷后，这些被磨去棱角的冰块又被冲上黑沙滩，如同散落在黑天鹅绒上的巨大钻石。
+                    </p>
+
+                    <!-- Single Full Card -->
+                    <div class="my-6 rounded-2xl overflow-hidden shadow-lg border border-sand-200 dark:border-zinc-800">
+                        <img src="https://images.unsplash.com/photo-1508873696983-2df50772ed14?auto=format&fit=crop&q=80&w=1200" 
+                             alt="Glacier Iceberg" 
+                             class="w-full h-80 object-cover cursor-pointer hover:scale-105 transition duration-500"
+                             onclick="openLightbox(this.src, '静止在冰河湖中的千年前蓝色冰山')">
+                        <div class="p-4 bg-white dark:bg-zinc-900 text-xs text-zinc-600 dark:text-zinc-400">
+                            <i class="fa-solid fa-snowflake text-blue-400 mr-1"></i> 瓦特纳冰川舌每年因全球变暖退缩约数百米，此景弥足珍贵。
+                        </div>
+                    </div>
+
+                    <p class="text-base sm:text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">
+                        穿上冰爪跟着导游踏上冰川徒步，冰爪刺入坚冰发出嘎吱声。站在数百米厚的冰层之上，周围是幽深的冰缝与幽蓝色的冰洞，那一刻时间仿佛彻底凝固。
+                    </p>
+                </article>
+
+                <!-- Conclusion -->
+                <article class="pl-10 sm:pl-16 pt-8 border-t border-sand-200 dark:border-zinc-800">
+                    <h3 class="font-serif text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+                        归途：荒野教给我们的事
+                    </h3>
+                    <p class="text-base sm:text-lg leading-relaxed text-zinc-700 dark:text-zinc-300 mb-6">
+                        7天，1332公里，我们穿过了苔原、火山、瀑布与冰川。冰岛的辽阔并不令人感到恐惧，反而给人一种前所未有的安宁。当你的眼睛习惯了广袤的无边无际，城市里的焦虑与琐碎似乎都在北大西洋的风中烟消云散了。
+                    </p>
+                    <div class="flex items-center gap-2 text-xs text-zinc-400 italic font-serif">
+                        <span>— 记录于 2026年秋 末次极光预测日</span>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- RIGHT COLUMN: Sticky Interactive Canvas Map (40% width -> 5 cols) -->
+            <div id="sticky-map-wrapper" class="hidden lg:block lg:col-span-5">
+                <div class="sticky top-24 rounded-3xl overflow-hidden border border-sand-200 dark:border-zinc-800 bg-sand-100 dark:bg-zinc-900 shadow-xl transition-all duration-300">
+                    
+                    <!-- Map Top Header Bar -->
+                    <div class="px-5 py-3.5 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm border-b border-sand-200 dark:border-zinc-800 flex items-center justify-between text-xs font-semibold">
+                        <div class="flex items-center gap-2 text-zinc-800 dark:text-zinc-200">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                            <span class="font-serif tracking-wider uppercase">Interactive Route Map</span>
+                        </div>
+                        <span id="map-current-loc" class="text-terracotta font-sans text-[11px] bg-terracotta-50 dark:bg-terracotta-900/30 px-2.5 py-1 rounded-full border border-terracotta/20">
+                            1. 雷克雅未克
+                        </span>
+                    </div>
+
+                    <!-- Map SVG Canvas Container -->
+                    <div class="relative w-full h-[540px] bg-[#EBE5DB] dark:bg-[#1A1E24] overflow-hidden transition-colors">
+                        
+                        <!-- Decorative SVG Topo Overlay -->
+                        <svg class="absolute inset-0 w-full h-full opacity-15 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+                            <pattern id="topo-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <path d="M 0 10 L 40 10 M 10 0 L 10 40 M 0 30 L 40 30 M 30 0 L 30 40" fill="none" stroke="currentColor" stroke-width="0.5" class="text-zinc-600 dark:text-zinc-400"/>
+                            </pattern>
+                            <rect width="100%" height="100%" fill="url(#topo-grid)" />
+                        </svg>
+
+                        <!-- Main Interactive Map Canvas (SVG Vector Representation of Iceland Route) -->
+                        <svg id="svg-map" class="w-full h-full transition-transform duration-700 cubic-bezier(0.25, 1, 0.5, 1)" viewBox="0 0 600 500">
+                            <!-- Stylized Iceland Island Outline Path -->
+                            <path d="M 80,240 C 90,180 150,150 220,130 C 280,110 380,120 460,150 C 520,180 540,240 510,310 C 480,380 400,410 320,400 C 240,390 140,380 90,320 C 60,280 70,260 80,240 Z" 
+                                  fill="#DDD5C7" class="dark:fill-[#242A33] transition-colors" stroke="#C3B8A7" class="dark:stroke-[#343D4B]" stroke-width="2"/>
+                            
+                            <!-- North Atlantic Ocean Label -->
+                            <text x="300" y="80" text-anchor="middle" fill="#A89F91" class="dark:fill-[#4A5568] text-[10px] font-serif tracking-[0.3em] uppercase">North Atlantic Ocean</text>
+                            
+                            <!-- Background Route Dash Line -->
+                            <path id="route-bg" d="M 120,280 Q 200,240 230,250 T 360,330 T 480,310" 
+                                  fill="none" stroke="#B8AD9C" class="dark:stroke-[#3A4454]" stroke-width="3" stroke-dasharray="6,6"/>
+
+                            <!-- Active Route Animated Line -->
+                            <path id="route-active" d="M 120,280 Q 200,240 230,250 T 360,330 T 480,310" 
+                                  fill="none" stroke="#B85B35" stroke-width="4" stroke-linecap="round" stroke-dasharray="600" stroke-dashoffset="600" class="map-route-active"/>
+
+                            <!-- Map Waypoint Markers -->
+                            <!-- Waypoint 1: Reykjavik -->
+                            <g id="marker-1" class="map-marker cursor-pointer transition-transform duration-300 hover:scale-125" onclick="scrollToStep(1)">
+                                <circle cx="120" cy="280" r="14" fill="#B85B35" opacity="0.25" class="animate-pulse-ring"/>
+                                <circle cx="120" cy="280" r="7" fill="#B85B35" stroke="#FFFFFF" stroke-width="2"/>
+                                <text x="120" y="304" text-anchor="middle" fill="#2C2722" class="dark:fill-zinc-200 text-[11px] font-bold font-serif">1. 雷克雅未克</text>
+                            </g>
+
+                            <!-- Waypoint 2: Thingvellir -->
+                            <g id="marker-2" class="map-marker cursor-pointer transition-transform duration-300 hover:scale-125" onclick="scrollToStep(2)">
+                                <circle cx="230" cy="250" r="14" fill="#B85B35" opacity="0" class="marker-pulse"/>
+                                <circle cx="230" cy="250" r="6" fill="#71717A" stroke="#FFFFFF" stroke-width="2" class="marker-dot"/>
+                                <text x="230" y="235" text-anchor="middle" fill="#2C2722" class="dark:fill-zinc-200 text-[11px] font-bold font-serif">2. 辛格维利尔</text>
+                            </g>
+
+                            <!-- Waypoint 3: Vik -->
+                            <g id="marker-3" class="map-marker cursor-pointer transition-transform duration-300 hover:scale-125" onclick="scrollToStep(3)">
+                                <circle cx="360" cy="330" r="14" fill="#B85B35" opacity="0" class="marker-pulse"/>
+                                <circle cx="360" cy="330" r="6" fill="#71717A" stroke="#FFFFFF" stroke-width="2" class="marker-dot"/>
+                                <text x="360" y="354" text-anchor="middle" fill="#2C2722" class="dark:fill-zinc-200 text-[11px] font-bold font-serif">3. 维克黑沙滩</text>
+                            </g>
+
+                            <!-- Waypoint 4: Jokulsarlon -->
+                            <g id="marker-4" class="map-marker cursor-pointer transition-transform duration-300 hover:scale-125" onclick="scrollToStep(4)">
+                                <circle cx="480" cy="310" r="14" fill="#B85B35" opacity="0" class="marker-pulse"/>
+                                <circle cx="480" cy="310" r="6" fill="#71717A" stroke="#FFFFFF" stroke-width="2" class="marker-dot"/>
+                                <text x="480" y="292" text-anchor="middle" fill="#2C2722" class="dark:fill-zinc-200 text-[11px] font-bold font-serif">4. 冰河湖</text>
+                            </g>
+                        </svg>
+
+                        <!-- Dynamic Tooltip Hover Card -->
+                        <div id="map-tooltip" class="absolute bottom-4 left-4 right-4 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md p-3.5 rounded-2xl border border-sand-200 dark:border-zinc-800 shadow-lg flex items-center justify-between text-xs transition-opacity duration-300">
+                            <div>
+                                <p id="tooltip-title" class="font-bold text-zinc-900 dark:text-zinc-100 font-serif text-sm">1. 雷克雅未克 (Reykjavík)</p>
+                                <p id="tooltip-desc" class="text-zinc-500 dark:text-zinc-400 mt-0.5">坐标: 64.1466° N | 气温: 9°C</p>
+                            </div>
+                            <button id="tooltip-btn" onclick="scrollToCurrentStep()" class="px-3 py-1.5 rounded-xl bg-terracotta text-white font-medium hover:bg-terracotta-700 transition">
+                                跳转段落
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Map Bottom Controls Footer -->
+                    <div class="px-4 py-2.5 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm border-t border-sand-200 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-500">
+                        <span><i class="fa-solid fa-arrows-to-eye mr-1"></i> 滚动文章自动聚焦地图</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="resetMapZoom()" class="hover:text-terracotta transition"><i class="fa-solid fa-compress mr-1"></i>重置视角</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Image Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 transition-opacity duration-300" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-white text-2xl hover:text-terracotta transition" onclick="closeLightbox()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="max-w-4xl max-h-[90vh] text-center" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="Preview" class="max-w-full max-h-[80vh] mx-auto rounded-lg shadow-2xl object-contain">
+            <p id="lightbox-caption" class="mt-4 text-neutral-300 text-sm font-serif italic"></p>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic for Scrollytelling, Map Animations, and Theme Switching -->
+    <script>
+        // Waypoints Metadata Map
+        const waypointsData = {
+            1: {
+                title: "1. 雷克雅未克 (Reykjavík)",
+                coords: "64.1466° N, 21.9426° W",
+                desc: "起点站 • 彩色屋顶与温暖龙虾汤",
+                zoomTransform: "scale(1.2) translate(80px, 40px)",
+                strokeOffset: 450
+            },
+            2: {
+                title: "2. 辛格维利尔 (Þingvellir)",
+                coords: "64.2559° N, 21.1299° W",
+                desc: "欧亚与北美地壳大裂谷",
+                zoomTransform: "scale(1.35) translate(-10px, 80px)",
+                strokeOffset: 300
+            },
+            3: {
+                title: "3. 维克黑沙滩 (Vík í Mýrdal)",
+                coords: "63.4194° N, 19.0060° W",
+                desc: "黑沙、咆哮海浪与玄武岩柱",
+                zoomTransform: "scale(1.4) translate(-130px, -30px)",
+                strokeOffset: 150
+            },
+            4: {
+                title: "4. 杰古沙龙冰河湖 (Jökulsárlón)",
+                coords: "64.0784° N, 16.2306° W",
+                desc: "钻石沙滩与瓦特纳千古冰川",
+                zoomTransform: "scale(1.3) translate(-220px, 10px)",
+                strokeOffset: 0
+            }
+        };
+
+        let currentActiveStep = 1;
+
+        /* 1. Scroll-triggered Scrollytelling Mechanics */
+        window.addEventListener('scroll', () => {
+            // Update Top Progress Bar
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progress-bar').style.width = scrolled + '%';
+
+            // Detect Active Timeline Step
+            const steps = document.querySelectorAll('.timeline-step');
+            let activeId = 1;
+
+            steps.forEach(step => {
+                const rect = step.getBoundingClientRect();
+                // Trigger when step top is near center of viewport
+                if (rect.top <= window.innerHeight * 0.45) {
+                    activeId = parseInt(step.getAttribute('data-waypoint'));
+                }
+            });
+
+            if (activeId !== currentActiveStep) {
+                currentActiveStep = activeId;
+                updateMapState(activeId);
+            }
+        });
+
+        /* 2. Map Visual State Synchronizer */
+        function updateMapState(stepId) {
+            const data = waypointsData[stepId];
+            if (!data) return;
+
+            // A. Update Top Tag & Tooltip Card
+            document.getElementById('map-current-loc').innerText = data.title;
+            document.getElementById('tooltip-title').innerText = data.title;
+            document.getElementById('tooltip-desc').innerText = `${data.coords} | ${data.desc}`;
+
+            // B. Animate SVG Zoom/Pan Viewport
+            const svgMap = document.getElementById('svg-map');
+            svgMap.style.transform = data.zoomTransform;
+
+            // C. Animate Route Dash Offset (Line Drawing Effect)
+            const activeRoute = document.getElementById('route-active');
+            activeRoute.style.strokeDashoffset = data.strokeOffset;
+
+            // D. Highlight Markers and Nodes
+            for (let i = 1; i <= 4; i++) {
+                const marker = document.getElementById(`marker-${i}`);
+                const dot = marker.querySelector('.marker-dot') || marker.querySelectorAll('circle')[1];
+                const pulse = marker.querySelector('.animate-pulse-ring') || marker.querySelector('.marker-pulse');
+
+                const stepElem = document.getElementById(`step-${i}`);
+                const nodeIndicator = stepElem ? stepElem.querySelector('.node-indicator') : null;
+
+                if (i <= stepId) {
+                    // Passed or Active Waypoints
+                    dot.setAttribute('fill', '#B85B35');
+                    if (nodeIndicator) {
+                        nodeIndicator.classList.add('bg-terracotta', 'text-white', 'border-terracotta');
+                        nodeIndicator.classList.remove('bg-sand-100', 'dark:bg-zinc-900', 'text-zinc-400');
+                    }
+                } else {
+                    // Future Waypoints
+                    dot.setAttribute('fill', '#71717A');
+                    if (nodeIndicator) {
+                        nodeIndicator.classList.remove('bg-terracotta', 'text-white', 'border-terracotta');
+                        nodeIndicator.classList.add('bg-sand-100', 'dark:bg-zinc-900', 'text-zinc-400');
+                    }
+                }
+
+                if (i === stepId) {
+                    pulse.classList.add('animate-pulse-ring');
+                    pulse.setAttribute('opacity', '0.3');
+                } else {
+                    pulse.classList.remove('animate-pulse-ring');
+                    pulse.setAttribute('opacity', '0');
+                }
+            }
+        }
+
+        /* 3. Smooth Scroll Helpers */
+        function scrollToStep(stepId) {
+            const elem = document.getElementById(`step-${stepId}`);
+            if (elem) {
+                elem.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function scrollToCurrentStep() {
+            scrollToStep(currentActiveStep);
+        }
+
+        function resetMapZoom() {
+            const svgMap = document.getElementById('svg-map');
+            svgMap.style.transform = 'scale(1) translate(0px, 0px)';
+        }
+
+        /* 4. Lightbox Handlers */
+        function openLightbox(src, caption) {
+            const lightbox = document.getElementById('lightbox');
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-caption').innerText = caption || '';
+            lightbox.classList.remove('hidden');
+            document.body.classList.add('lightbox-open');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.add('hidden');
+            document.body.classList.remove('lightbox-open');
+        }
+
+        /* 5. Dark Mode Toggle */
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        /* 6. Mobile Map Drawer Toggle */
+        let mobileMapOpen = false;
+        function toggleMobileMap() {
+            const mapWrapper = document.getElementById('sticky-map-wrapper');
+            const btnText = document.getElementById('mobile-map-btn-text');
+            mobileMapOpen = !mobileMapOpen;
+
+            if (mobileMapOpen) {
+                mapWrapper.classList.remove('hidden');
+                mapWrapper.classList.add('block', 'fixed', 'inset-x-4', 'top-20', 'z-50');
+                btnText.innerText = '关闭地图';
+            } else {
+                mapWrapper.classList.add('hidden');
+                mapWrapper.classList.remove('block', 'fixed', 'inset-x-4', 'top-20', 'z-50');
+                btnText.innerText = '查看地图';
+            }
+        }
+
+        /* 7. Share link helper */
+        function shareArticle() {
+            const temp = document.createElement('input');
+            temp.value = window.location.href;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            alert('行程链接已成功复制，可直接粘贴分享！');
+        }
+
+        // Initialize state
+        window.onload = () => {
+            updateMapState(1);
+        }
+    </script>
+</body>
+</html>
