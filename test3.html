@@ -12,6 +12,21 @@
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
+  .leaflet-control-attribution a[href*="leaflet"] {
+    display: none !important;
+  }
+  .leaflet-control-attribution {
+    background: rgba(255, 255, 255, 0.55) !important;
+    color: #777 !important;
+    font-size: 9px !important;
+    padding: 2px 5px !important;
+    border-radius: 3px 0 0 0;
+  }
+  
+  .leaflet-control-attribution a {
+    color: #777 !important;
+    text-decoration: none;
+  }
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -527,6 +542,30 @@
       font-weight: 500;
       margin-bottom: 10px;
     }
+    
+    .site-footer {
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      border-top: 1px solid #e8e5df;
+      background: #faf9f6;
+    }
+    
+    .site-footer p {
+      margin: 0;
+    }
+    
+    .site-footer a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    
+    .site-footer a:hover {
+      color: #333;
+    }
+
 
     footer {
       padding: 27px 6%;
@@ -1008,6 +1047,7 @@
     // ==================================================
 
     const map = L.map("map", {
+      attributionControl: false
       dragging: false,
       scrollWheelZoom: false,
       doubleClickZoom: false,
@@ -1458,5 +1498,15 @@
       map.invalidateSize();
     });
   </script>
+  <footer class="site-footer">
+    <p>
+      Map data ©
+      <a href="https://www.openstreetmap.org/copyright"
+         target="_blank"
+         rel="noopener noreferrer">
+        OpenStreetMap contributors
+      </a>
+    </p>
+  </footer>
 </body>
 </html>
