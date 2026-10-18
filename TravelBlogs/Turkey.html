@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>跨越千年的触碰 土耳其旅记 | 塔库电台</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;600;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- 网站统一 Token 配置 -->
+  <script>
+      tailwind.config = {
+          theme: {
+              extend: {
+                  colors: {
+                      archiveBg: '#FAF5EF',
+                      archiveCard: '#F3ECE2',
+                      archiveBorder: '#E6DCCE',
+                      terracotta: {
+                          DEFAULT: '#E9826A',
+                          hover: '#E24C00',
+                          light: '#F7B89C',
+                          soft: 'rgba(233, 130, 106, 0.12)',
+                      },
+                      charcoal: {
+                          900: '#49352F',
+                          800: '#75554b',
+                          600: '#b78576',
+                          400: '#ffbfa9',
+                      },
+                      darkBlue: {
+                          950: '#050D14',
+                          900: '#081622',
+                          800: '#0D2131',
+                          700: '#133045',
+                      }
+                  },
+                  fontFamily: {
+                      serifSC: ['Noto Serif SC', 'serif'],
+                      brand: ['Cinzel', 'serif'],
+                      sans: ['Plus Jakarta Sans', 'sans-serif'],
+                  }
+              }
+          }
+      }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: #FAF5EF;
+      color: #2C2825;
+      overflow-x: hidden;
+    }
+
+    .font-serif-sc {
+      font-family: 'Noto Serif SC', 'Cinzel', serif;
+    }
+
+    .font-brand {
+      font-family: 'Cinzel', serif;
+    }
+
+    /* 隐藏地图缩放控件，禁止用户交互 */
+    #map .leaflet-control-zoom {
+      display: none;
+    }
+    #map .leaflet-interactive {
+      pointer-events: none;
+    }
+    #map .leaflet-marker-icon {
+      cursor: default !important;
+    }
+
+    /* 自定义滚动条 */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #FAF5EF;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #D96B43;
+        border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body class="antialiased selection:bg-terracotta selection:text-white flex flex-col min-h-screen">
+
+
+  <!-- HERO 顶部简介 -->
+  <header class="max-w-7xl mx-auto px-6 pt-12 pb-8 w-full">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta/10 border border-terracotta/20 text-terracotta text-xs font-semibold mb-4">
+        <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+        <span>AN INTERACTIVE~TRAVEL~JOURNAL </span>
+    </div>
+    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold font-serif-sc text-charcoal-900 tracking-tight leading-tight">
+      跨越千年的触碰 <br><span class="text-terracotta font-normal italic">土耳其自驾环线</span>
+    </h1>
+    <p class="max-w-xl text-charcoal-600 font-serif-sc text-sm sm:text-base leading-relaxed mt-4">
+      在欧亚大陆的交界处，追寻风穿过千年遗迹的回响。从清真寺的穹顶到地中海的尽头，在文明交错的褶皱里，收藏那些时间未曾带走的浪漫。
+    </p>
+    <div class="flex flex-wrap gap-6 mt-6 text-xs text-charcoal-600 font-mono">
+      <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-terracotta"></span> TURKEY</span>
+      <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-terracotta"></span> 10 DAYS / 9 NIGHTS</span>
+      <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-terracotta"></span> MAY/JUNE 2026</span>
+    </div>
+  </header>
+
+  <!-- MAIN 左右分栏布局（左侧黏性地图，右侧时间轴文章） -->
+  <main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start flex-grow w-full" id="journey">
+
+    <!-- 左侧：交互式地图组件 -->
+    <aside class="lg:col-span-5 lg:sticky lg:top-4 space-y-4" id="map-section">
+      <div class="bg-archiveCard border border-archiveBorder rounded-2xl overflow-hidden shadow-sm">
+        <div class="p-5 flex justify-between items-center border-b border-archiveBorder/60">
+          <h2 class="text-xs font-bold font-brand tracking-widest uppercase text-charcoal-900">OUR FOOTPRINTS</h2>
+          <div class="flex items-center gap-2 text-[10px] text-terracotta font-mono">
+            <span class="w-2 h-2 rounded-full bg-terracotta animate-pulse"></span>
+            STORY IN MOTION
+          </div>
+        </div>
+
+        <!-- Leaflet 地图容器 -->
+        <div id="map" class="w-full h-[360px] sm:h-[420px] bg-archiveBg"></div>
+
+        <div id="map-status" class="hidden p-3 bg-terracotta/10 text-terracotta text-xs">
+          无法获取道路路线，目前显示示意路线。
+        </div>
+
+        <div class="p-4 flex justify-between items-center border-t border-archiveBorder/60 text-xs">
+          <div>
+            <div class="text-[10px] text-charcoal-400 font-mono mb-0.5">DESTINATIONS</div>
+            <div class="font-serif-sc font-bold text-charcoal-900 text-sm" id="current-place">全景总览 / 初始导言</div>
+          </div>
+          <div class="bg-terracotta/15 text-terracotta font-mono px-2.5 py-1 rounded text-[11px]" id="current-day">
+            Complete routes
+          </div>
+        </div>
+
+        <div class="px-5 pb-5 flex flex-wrap gap-4 text-[11px] text-charcoal-600 font-mono">
+          <div class="flex items-center gap-1.5"><span class="w-4 h-1 bg-[#F7B89C] rounded"></span> 完整路线</div>
+          <div class="flex items-center gap-1.5"><span class="w-4 h-1 bg-[#E24C00] rounded"></span> 当天路线</div>
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#E24C00] inline-block"></span> 目的地</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 右侧：时间轴叙事文章主体 -->
+    <article class="lg:col-span-7 space-y-12">
+      <div class="border-b border-archiveBorder pb-6 mb-8">
+        <div class="text-xs font-brand text-terracotta uppercase tracking-widest mb-2 font-semibold">THE STORY SO FAR</div>
+        <h2 class="text-2xl font-serif-sc font-bold text-charcoal-900">旅程，从夜幕下的吟唱开始。</h2>
+        <p class="text-xs text-charcoal-600 font-light mt-1">分段精彩行程与每日探索。向下滚动，查看每一天完整的路段与故事。</p>
+      </div>
+
+      <div class="relative pl-6 space-y-16 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-px before:bg-archiveBorder">
+
+        <!-- INTRODUCTION / DAY 0 -->
+        <section class="chapter active relative pl-6" id="day-0" data-index="0">
+          <span class="timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-archiveBg border-2 border-archiveBorder transition-all duration-300"></span>
+          
+          <div class="chapter-content space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-terracotta font-bold tracking-wider">INTRODUCTION — 旅程总览</span>
+              <span class="text-charcoal-400">DAY 00</span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-serif-sc font-bold text-charcoal-900 leading-snug">
+              欧亚大陆交汇处的神奇旅程，探索东西文明的碰撞。
+            </h3>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              在踏上这片承载着数千年文明交融的土地前，让我们先纵览全局。从横跨海峡的伊斯坦布尔，到苍茫的特洛伊与佩加蒙，再到内陆奇幻的格莱梅岩石秘境……每一处坐标都写满故事。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/1KeKGQ7KuH4icC0Q0YWV2Tarqa5UTHXYR" alt="土耳其风景" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+            <div class="flex justify-between text-[11px] font-mono text-charcoal-400">
+              <span>OVERVIEW OF ANATOLIA</span>
+              <span>TURKEY ROUTE</span>
+            </div>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              向下滚动将开启按天细分的深度行程。此时左侧地图已将全部途经点与全线公路全景高亮呈现。
+            </p>
+
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-terracotta font-mono">全景总览 -> 多地联动</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">全线高亮激活</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DAY 1 -->
+        <section class="chapter relative pl-6" id="day-1" data-index="1">
+          <span class="timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-archiveBg border-2 border-archiveBorder transition-all duration-300"></span>
+          
+          <div class="chapter-content space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-terracotta font-bold tracking-wider">DAY 01 - EXPLORING INSTANBUL</span>
+              <span class="text-charcoal-400">01 / 10</span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-serif-sc font-bold text-charcoal-900 leading-snug">
+              初见世界的十字路口
+            </h3>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              到达索菲亚大教堂外的时候，整个城市还未完全醒来，阳光和海风尚且慵懒。参观老皇宫，深宫，高塔、庭院，宗教的圣物与权利的大殿。考古博物馆里零距离接触希腊罗马的碎片
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/1LLzkFKNhO6ErDkS8VRmBzviH9xIktKlL" alt="" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+            <div class="flex justify-between text-[11px] font-mono text-charcoal-400">
+              <span></span>
+              <span></span>
+            </div>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              午饭后融入大道上熙熙攘攘的人群，品尝红茶和软糖。追寻书中大侦探的轨迹。加拉塔塔下一撇。在游船上欣赏暮色中的海峡。
+            </p>
+
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-terracotta font-mono">伊斯坦布尔老城</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">独立大道</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">博斯普鲁斯海峡</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DAY 2 -->
+        <section class="chapter relative pl-6" id="day-2" data-index="2">
+          <span class="timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-archiveBg border-2 border-archiveBorder transition-all duration-300"></span>
+          
+          <div class="chapter-content space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-terracotta font-bold tracking-wider">DAY 02 - EXPLORING INSTANBUL</span>
+              <span class="text-charcoal-400">02 / 09</span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-serif-sc font-bold text-charcoal-900 leading-snug">
+              伊斯坦布尔第二日
+            </h3>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              登加拉塔塔，鸟瞰千年古城。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/1iQtLUDE_qiCMX3ysxIO6Ph-b0oPIaPXj" alt="" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <div class="p-5 rounded-2xl bg-terracotta/5 border-l-4 border-terracotta space-y-2 font-serif-sc">
+              <p class="text-base italic text-charcoal-900">
+                “肤色，语言，来处，信仰，战争，奇迹。千年古城像一块画布，任由一代又一代人在它身上挥洒颜色。”
+              </p>
+            </div>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              再次乘船跨越海峡，体验亚洲区的美食。取车，暂时告别这座充满魅力的都市。前往特洛伊，开启历史探寻之旅。
+            </p>
+
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-terracotta font-mono">伊斯坦布尔</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">海峡轮渡</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">开始征途</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DAY 3 -->
+        <section class="chapter relative pl-6" id="day-3" data-index="3">
+          <span class="timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-archiveBg border-2 border-archiveBorder transition-all duration-300"></span>
+          
+          <div class="chapter-content space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-terracotta font-bold tracking-wider">DAY 03 — TROY & PERGAMON</span>
+              <span class="text-charcoal-400">03 / 09</span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-serif-sc font-bold text-charcoal-900 leading-snug">
+              消失的特洛伊 和 被劫掠的佩加蒙 
+            </h3>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              特洛伊：曾经拥有九条命的城邦。扼守在海峡古道上的城邦，最早的历史甚至可以追溯到古埃及之前。因为荷马史诗而被全人类知晓。最终因为地质变迁，遗失在历史的长河中。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/1iYuynnfuXSRcyqJXUH6h3lQDiSM8mPbX" alt="" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              在土耳其风情的中心市场，享受一顿颇具风情的早午餐。再次踏上路途，翻山越岭。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/1_QGSrkwCxDAiJclzEYAuw--978cyxTys" alt="" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              佩加蒙古城整体轮廓依旧挺立。抚摸着雅典娜神殿的残垣断壁，仿佛能想象到两千年前石匠们的心事。然而空空的宙斯祭坛基座，仿佛进行着无声的嘲讽。
+              <br>饱餐一顿当地特色烤肉丸之后，我们再次出发前往以弗所。
+            </p>
+
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-terracotta font-mono">特洛伊</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">情调早餐</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">佩加蒙</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DAY 4 -->
+        <section class="chapter relative pl-6" id="day-4" data-index="4">
+          <span class="timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-archiveBg border-2 border-archiveBorder transition-all duration-300"></span>
+          
+          <div class="chapter-content space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-terracotta font-bold tracking-wider">DAY 04 — EPHESUS</span>
+              <span class="text-charcoal-400">04 / 09</span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-serif-sc font-bold text-charcoal-900 leading-snug">
+              以弗所古城遗迹。
+            </h3>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              漫步在由大理石铺就的古罗马街道上，残垣断壁间仿佛还能听见昔日集市的喧嚣。塞尔苏斯图书馆在阳光下依旧挺拔。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/1PuSSh-B3hlL5IeUUDKFqQB0yblwIIMrh" alt="" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              历史的厚重感在这一刻具象化，每一块刻着希腊文的石头都在诉说着过往。
+            </p>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              午餐之后前往丹尼利兹。
+            </p>
+            
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-terracotta font-mono">以弗所</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">文物博物馆</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">前往棉花堡</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DAY 5 -->
+        <section class="chapter relative pl-6" id="day-5" data-index="5">
+          <span class="timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-archiveBg border-2 border-archiveBorder transition-all duration-300"></span>
+          
+          <div class="chapter-content space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-terracotta font-bold tracking-wider">DAY 05 - PAMUKKALE</span>
+              <span class="text-charcoal-400">05 / 09</span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-serif-sc font-bold text-charcoal-900 leading-snug">
+              棉花堡：古迹与大自然的瑰丽。
+            </h3>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              纯白的石灰岩阶梯层层叠叠，如同凝固的瀑布。赤脚走在温热的泉水中，背后的古城在讲述它所见证的历史。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/1cFGZnQ36v0IDDskBp3CoiD1d4XDiE1XD" alt="棉花堡" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              途中经停阿凡提小镇阿克谢希尔。这里是一个小众目的地，可以体验本地人原生态的热情，见识我们耳熟能详的故事和人物原本的样子。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/1VghfCfSAYqA9GQLqOvt1fte3QRpZpz-q" alt="棉花堡" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              到达科尼亚已经是傍晚，品尝过木地板做餐盘的超长披萨之后，我们欣赏了神秘主义教派的奇怪仪式。
+            </p>
+
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-terracotta font-mono">棉花堡</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">阿克谢希尔</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">科尼亚</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DAY 6 -->
+        <section class="chapter relative pl-6" id="day-6" data-index="6">
+          <span class="timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-archiveBg border-2 border-archiveBorder transition-all duration-300"></span>
+          
+          <div class="chapter-content space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-terracotta font-bold tracking-wider">DAY 05 — KONYA & CARAVANSERAI</span>
+              <span class="text-charcoal-400">06 / 09</span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-serif-sc font-bold text-charcoal-900 leading-snug">
+              清真寺 丝路驿站 和 格莱梅初体验
+            </h3>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              清晨的阳光中参观了苏菲教派的圣地：梅夫拉那清真寺。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/13FQdaNi3Rj3RbiR-s311OC0z0SRJlP_f" alt="" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              穿行于古代丝绸之路的苏丹汉驿站，触摸巨石垒砌的拱顶。傍晚抵达格莱梅，奇特的火山凝灰岩地貌让人仿佛置身外星球。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/1QKiBrOv0PRCziCmsfDZ5klMSTtnsNTUp" alt="" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-terracotta font-mono">梅夫拉那清真寺</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">苏丹汉驿站</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">阿孜卡拉汗驿站</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">格莱梅</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DAY 7 -->
+        <section class="chapter relative pl-6" id="day-7" data-index="7">
+          <span class="timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-archiveBg border-2 border-archiveBorder transition-all duration-300"></span>
+          
+          <div class="chapter-content space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-terracotta font-bold tracking-wider">DAY 07 — CAPPADOCIA</span>
+              <span class="text-charcoal-400">07 / 09</span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-serif-sc font-bold text-charcoal-900 leading-snug">
+              晨曦中的热气球盛宴与卡帕多奇亚秘境。
+            </h3>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              天还未亮便出发，伴随着喷燃器的轰鸣，热气球缓缓升空。当第一缕阳光洒在奇石谷地上，成百上千只色彩斑斓的热气球点缀着黎明的天空。置身于漫天飞舞的热气球群中，迎接第一缕阳光。一切都美得如此不真实。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/1ioLBnCE1nVOfjs_cAFzwDgn_Uubg_I3N" alt="晨曦中的热气球之旅" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              赶在毒辣的太阳展现威力之前，探索隐士们的居所。
+            </p>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              暗无天日的地下城中，不敢想象居民们忍受的逼仄和局促。
+            </p>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              离开洞穴酒店，搬入了一栋土耳其特色的建筑，天台上欣赏夜幕降临时格莱梅小镇的另一面。
+            </p>
+
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-terracotta font-mono">热气球之旅</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">岩洞教堂群</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">地下城</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DAY 8 -->
+        <section class="chapter relative pl-6" id="day-8" data-index="8">
+          <span class="timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-archiveBg border-2 border-archiveBorder transition-all duration-300"></span>
+          
+          <div class="chapter-content space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-terracotta font-bold tracking-wider">DAY 08 — ANKARA</span>
+              <span class="text-charcoal-400">08 / 09</span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-serif-sc font-bold text-charcoal-900 leading-snug">
+              安卡拉的回望
+            </h3>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              依旧是黑暗中出发，依旧是漫天飞舞的热气球。今天换我们在陆地上欣赏这壮丽的奇景，用快门定格下无数个奇妙的瞬间。
+            </p>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              离开卡帕多奇亚，途径枯水期的粉色盐湖，我们并未停留。直奔首都安卡拉。在这里，有介绍赫悌古国的博物馆，土耳其旧日的街道，对我们充满好奇的小学生们，以及美味的羊肉抓饭。
+            </p>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              再次上路，翻山越岭的同时，经历一场又一场的瓢泼大雨，山间也有郁郁葱葱，又是另一番景色。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/1qUiK93Fm0Wko7iS7FjRr87oPnAToA99i" alt="安卡拉" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-terracotta font-mono">热气球</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">历史街区</span>
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 font-mono">博物馆</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DAY 9 -->
+        <section class="chapter relative pl-6" id="day-9" data-index="9">
+          <span class="timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-archiveBg border-2 border-archiveBorder transition-all duration-300"></span>
+          
+          <div class="chapter-content space-y-4">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-terracotta font-bold tracking-wider">DAY 09 — BEYLERBEYI PALACE</span>
+              <span class="text-charcoal-400">09 / 09</span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-serif-sc font-bold text-charcoal-900 leading-snug">
+              贝勒贝伊宫 | 未完的旅程
+            </h3>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              从住宿的小镇出发，一点小意外，却让我们再次见证了土耳其人的淳朴和热情。
+            </p>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              略微耽误的形成，连续的意外虽然稍稍打乱我们的计划。难掩摄人心魄的海边的美景和独具一格的宫殿。
+            </p>
+
+            <p class="text-charcoal-600 font-serif-sc text-sm sm:text-base font-light leading-relaxed">
+              再次驶回机场，要和这个历史与文化都充满冲突和融合的过度说再见了，然而我们的旅程并未结束。
+            </p>
+
+            <div class="overflow-hidden rounded-xl border border-archiveBorder my-4">
+              <img src="https://lh3.googleusercontent.com/d/10ArB4grvhGeeNadakAsvDF9-l6Oc2b0D" alt="" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-700">
+            </div>
+
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-terracotta font-mono">贝勒贝伊宫</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- 底部结语 -->
+      <div class="text-center pt-12 border-t border-archiveBorder">
+        <div class="text-xs font-serif-sc font-bold text-terracotta uppercase tracking-widest mb-2">SOMEWHERE BETWEEN THE MAP & MEMORY</div>
+        <div class="text-lg font-serif-sc font-bold text-charcoal-900">旅程并未结束。</div>
+      </div>
+    </article>
+  </main>
+
+  <!-- FOOTER 页脚 -->
+  <footer class="bg-charcoal-900 text-archiveBg py-12 border-t border-charcoal-800 mt-auto">
+      <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-charcoal-400">
+          <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-terracotta text-white flex items-center justify-center font-bold font-brand text-xs">
+                  幸福
+              </span>
+              <span class="font-serif-sc">幸福生活 · 个人数字档案馆 © 2026</span>
+          </div>
+          <div>
+              <span>妥善保存于数字云端 · 静默记录</span>
+          </div>
+      </div>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- 地图与滚动交互逻辑（支持 Introduction / Day 0 全景高亮） -->
+  <script>
+    // 定义每天包含多个地点（途径点构成的路线）
+    const dailyItineraries = [
+      { day: "DAY 00", name: "完整路线", title: "Introduction", stops: [] }, // 占位，对应 Day 0
+      { day: "DAY 01", name: "伊斯坦布尔", title: "Instanbul Explore",
+        stops: [
+          { name: "伊斯坦布尔", coords: [ +41.008238, +28.978359 ] }]
+      },
+      { day: "DAY 02", name: "伊斯坦布尔", title: "Instanbul Explore",
+        stops: [
+          { name: "伊斯坦布尔", coords: [ +41.008238, +28.978359 ] },
+          { name: "特洛伊", coords: [ +39.957500, +26.238889 ] } ]
+      },
+      { day: "DAY 03", name: "特洛伊和佩加蒙", title: "Troy & Pergamon",
+        stops: [
+          { name: "特洛伊", coords: [ +39.957500, +26.238889 ] },
+          { name: "佩加蒙", coords: [ +39.132222, +27.183056 ] },
+          { name: "以弗所", coords: [ +37.939722, +27.340556 ] } ]
+      },
+      { day: "DAY 04", name: "以弗所古城", title: "EPHESUS",
+        stops: [
+          { name: "以弗所", coords: [ +37.939722, +27.340556 ] },
+          { name: "丹尼利兹", coords: [ +37.78333, +29.09639 ] } ]
+      },
+      { day: "DAY 05", name: "棉花堡(希拉波利斯) 阿凡提小镇 旋转舞", title: "Pamukkale & Akşehir",
+        stops: [
+          { name: "丹尼利兹", coords: [ +37.78333, +29.09639 ] },
+          { name: "棉花堡", coords: [ +37.923056, +29.121944 ] },
+          { name: "阿克谢希尔", coords: [ +38.355278, +31.415833 ] },
+          { name: "科尼亚", coords: [ +37.874640, +32.493156 ] } ]
+      },
+      { day: "DAY 06", name: "科尼亚 和 奥斯曼驿站", title: "Konya & Caravanserai",
+        stops: [
+          { name: "科尼亚", coords: [ +37.874640, +32.493156 ] },
+          { name: "苏丹汗驿站", coords: [ +38.363889, +33.522222 ] },
+          { name: "阿孜卡拉汗驿站", coords: [ 38.445306, 34.140409 ] },
+          { name: "格莱梅", coords: [ +38.643056, +34.828611 ] } ]
+      },
+      { day: "DAY 07", name: "热气球之旅 洞穴教堂 地下城", title: "Ballons, Open-Air Museum and Underground Cities",
+        stops: [
+          { name: "热气球", coords: [ +38.653449, +34.839317 ] },
+          { name: "洞穴教堂", coords: [ +38.641652, +34.843938 ] },
+          { name: "德林库尤地下城", coords: [ 38.377865, 34.733456 ] },
+          { name: "卡伊马克利地下城", coords: [ 38.463948, 34.751401 ] },
+          { name: "格莱梅", coords: [ +38.643056, +34.828611 ] } ]
+      },
+      { day: "DAY 08", name: "安卡拉", title: "Ankara",
+        stops: [
+          { name: "追拍热气球", coords: [ 38.66594119833694, 34.81903958846677 ] },
+          { name: "安卡拉", coords: [ +39.933333, +32.859722 ] }, 
+          { name: "阿达帕扎勒住宿", coords: [ 40.796364, 30.394804 ] } ]
+      },
+      { day: "DAY 09", name: "安卡拉", title: "Ankara",
+        stops: [
+          { name: "阿达帕扎勒住宿", coords: [ 40.796364, 30.394804 ] },
+          { name: "贝勒贝伊宫", coords: [ +41.042548, 29.040063 ] }, 
+          { name: "伊斯坦布尔机场", coords: [ 41.257785, 28.742594 ] } ]
+      }
+    ];
+
+    const map = L.map("map", {
+      dragging: true,
+      scrollWheelZoom: true,
+      doubleClickZoom: true,
+      touchZoom: true,
+      boxZoom: true,
+      keyboard: true,
+      zoomControl: true,
+      minZoom: 6,
+      maxZoom: 11,
+      maxBounds: [[35.0, 25.0], [43.5, 37.0]],
+      maxBoundsViscosity: 1
+    });
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      minZoom: 6,
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap',
+      noWrap: true
+    }).addTo(map);
+
+    // 收集所有有效坐标用于展示全图总路线
+    const allCoords = dailyItineraries.slice(1).flatMap(d => d.stops.map(s => s.coords));
+
+    // 初始化路线图层
+    const fullRoute = L.polyline(allCoords, { color: "#F7B89C", weight: 3, opacity: 0.9 }).addTo(map);
+    const activeRoute = L.polyline(allCoords, { color: "#E24C00", weight: 4, opacity: 1 }).addTo(map);
+
+    let activeIndex = -1;
+    let dayRouteSegments = [];
+    dayRouteSegments[0] = allCoords;
+
+    function createPinIcon(isCurrent = false) {
+      const color = isCurrent ? "#E24C00" : "#F7B89C";
+      return L.divIcon({
+        className: "destination-pin",
+        html: `<svg width="26" height="34" viewBox="0 0 30 38" xmlns="http://www.w3.org/2000/svg"><path d="M15 1C7.3 1 1 7.3 1 15C1 24 15 37 15 37S29 24 29 15C29 7.3 22.7 1 15 1Z" fill="${color}" stroke="#FAF5EF" stroke-width="1.5"/><circle cx="15" cy="15" r="4" fill="#FAF5EF"/></svg>`,
+        iconSize: [26, 34],
+        iconAnchor: [13, 34]
+      });
+    }
+
+    // 去重创建 Marker，防止重复地点的图层互相覆盖
+    const markerMap = new Map();
+    dailyItineraries.forEach((dayItem, dIndex) => {
+      if (dIndex === 0) return;
+      dayItem.stops.forEach((stop) => {
+        const key = `${stop.coords[0].toFixed(6)},${stop.coords[1].toFixed(6)}`;
+        if (!markerMap.has(key)) {
+          const marker = L.marker(stop.coords, {
+            icon: createPinIcon(true),
+            interactive: false
+          }).addTo(map);
+          markerMap.set(key, { marker, dayIndices: new Set([dIndex]) });
+        } else {
+          markerMap.get(key).dayIndices.add(dIndex);
+        }
+      });
+    });
+    const allMarkers = Array.from(markerMap.values());
+
+    // 异步加载真实公路路线
+    async function loadRoadRoutes() {
+      try {
+        const flatStops = dailyItineraries.slice(1).flatMap(d => d.stops);
+        const coordinatesStr = flatStops.map(s => `${s.coords[1]},${s.coords[0]}`).join(";");
+        const url = `https://router.project-osrm.org/route/v1/driving/${coordinatesStr}?overview=full&geometries=geojson&steps=false`;
+        
+        const res = await fetch(url);
+        const data = await res.json();
+
+        let globalRouteCoords = allCoords;
+        if (data.routes && data.routes[0]) {
+          globalRouteCoords = data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+          fullRoute.setLatLngs(globalRouteCoords);
+        }
+
+        dayRouteSegments[0] = globalRouteCoords;
+        if (activeIndex === 0) {
+          activeRoute.setLatLngs(globalRouteCoords);
+        }
+
+        const subSegments = await Promise.all(
+          dailyItineraries.slice(1).map(async (d) => {
+            if (d.stops.length === 1) {
+              return [d.stops[0].coords, d.stops[0].coords];
+            }
+            try {
+              const dayCoordsStr = d.stops.map(s => `${s.coords[1]},${s.coords[0]}`).join(";");
+              const dayUrl = `https://router.project-osrm.org/route/v1/driving/${dayCoordsStr}?overview=full&geometries=geojson&steps=false`;
+              const dayRes = await fetch(dayUrl);
+              const dayData = await dayRes.json();
+              if (dayData.routes && dayData.routes[0]) {
+                return dayData.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+              }
+            } catch (err) {}
+            return [];
+          })
+        );
+        
+        subSegments.forEach((seg, idx) => {
+          if (seg && seg.length > 0) {
+            dayRouteSegments[idx + 1] = seg;
+          }
+        });
+
+        activateChapter(activeIndex >= 0 ? activeIndex : 0, true);
+      } catch (e) {
+        dayRouteSegments[0] = allCoords;
+        activateChapter(activeIndex >= 0 ? activeIndex : 0, true);
+      }
+    }
+
+    function activateChapter(index, force = false) {
+      if (index < 0 || index >= dailyItineraries.length) return;
+      if (index === activeIndex && !force) return;
+      activeIndex = index;
+      const currentDayData = dailyItineraries[index];
+
+      document.querySelectorAll(".chapter").forEach((ch, i) => {
+        ch.classList.toggle("active", i === index);
+        const marker = ch.querySelector(".timeline-marker");
+        if (i === index) {
+          marker.className = "timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-terracotta border-2 border-archiveBg ring-4 ring-terracotta/20 transition-all duration-300";
+        } else {
+          marker.className = "timeline-marker absolute -left-[21px] top-1.5 w-3.5 h-3.5 rounded-full bg-archiveBg border-2 border-archiveBorder transition-all duration-300";
+        }
+      });
+
+      document.getElementById("current-place").textContent = currentDayData.name;
+      document.getElementById("current-day").textContent = currentDayData.day;
+
+      const isDayZero = (index === 0);
+
+      // 更新去重后的所有图钉高亮状态
+      allMarkers.forEach(item => {
+        const isCurrentDayPin = isDayZero || item.dayIndices.has(index);
+        item.marker.setIcon(createPinIcon(isCurrentDayPin));
+      });
+
+      const routeCoords = (dayRouteSegments[index] && dayRouteSegments[index].length > 0)
+        ? dayRouteSegments[index]
+        : (activeRoute.getLatLngs().length > 0 ? activeRoute.getLatLngs() : allCoords);
+      
+      activeRoute.setLatLngs(routeCoords);
+
+      const bounds = L.latLngBounds(isDayZero ? allCoords : routeCoords);
+      map.fitBounds(bounds, { padding: [50, 50], animate: true, duration: 0.8 });
+    }
+
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries.filter(e => e.isIntersecting).sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top));
+      if (visible.length > 0) activateChapter(Number(visible[0].target.dataset.index));
+    }, { root: null, rootMargin: "-25% 0px -50% 0px", threshold: 0 });
+
+    document.querySelectorAll(".chapter").forEach(ch => observer.observe(ch));
+
+    map.fitBounds(L.latLngBounds(allCoords), { padding: [30, 30], animate: false, maxZoom: 8 });
+    activateChapter(0);
+    loadRoadRoutes();
+  </script>
+</body>
+</html>
