@@ -26,22 +26,28 @@
                         archiveCard: '#F3ECE2',
                         archiveBorder: '#E6DCCE',
                         terracotta: {
-                            DEFAULT: '#D96B43',
-                            hover: '#C85A32',
-                            light: '#E87A5D',
-                            soft: 'rgba(217, 107, 67, 0.12)',
+                            DEFAULT: '#E9826A',
+                            hover: '#E24C00',
+                            light: '#F7B89C',
+                            soft: 'rgba(233, 130, 106, 0.12)',
                         },
                         charcoal: {
-                            900: '#1E1B18',
-                            800: '#2C2825',
-                            600: '#5C544E',
-                            400: '#8C827A',
+                            900: '#49352F',
+                            800: '#75554b',
+                            600: '#b78576',
+                            400: '#ffbfa9',
+                        },
+                        darkBlue: {
+                            950: '#050D14',
+                            900: '#081622',
+                            800: '#0D2131',
+                            700: '#133045',
                         }
                     },
                     fontFamily: {
-                        serifSC: ['Noto Serif SC', 'Cinzel', 'serif'],
+                        serifSC: ['Noto Serif SC', 'serif'],
                         brand: ['Cinzel', 'serif'],
-                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
                     }
                 }
             }
@@ -84,32 +90,32 @@
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <!-- Brand Logo -->
             <!-- Brand Logo (修改后的代码) -->
-            <a href="index.html" class="flex items-center gap-3.5 group -my-4 py-4">
+            <a href="../index.html" class="flex items-center gap-3.5 group -my-4 py-4">
                 <!-- 方形 Logo 图片：h-12 w-12 保持方形，且通过 -my-4 与 header 内边距抵消以填满整个导航栏高度 -->
                 <img src="https://lh3.googleusercontent.com/d/1g_fPq6aH8zfrXEgfaNK7r0Ll2MzyfZvr" 
                      alt="Logo" 
                      class="h-10 w-16 object-cover rounded-none shrink-0">
-                <span class="font-serif-sc font-bold tracking-wider text-charcoal-900 text-base leading-none">幸福生活</span>
+                <span class="font-serif-sc font-bold tracking-wider text-charcoal-900 text-base leading-none">回到主页</span>
             </a>
 
             <!-- Navigation Links to External Sub-homepages -->
             <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-charcoal-600">
-                <a href="AboutUs.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                <a href="../AboutUs.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
                     <span>关于我们</span>
                 </a>
-                <a href="TravelBlogs/TravelBlogs.html" class="text-terracotta font-semibold flex items-center gap-1.5 hover:text-terracotta-hover">
+                <a href="../TravelBlogs/TravelBlogs.html" class="text-terracotta font-semibold flex items-center gap-1.5 hover:text-terracotta-hover">
                     <span class="font-brand text-xs uppercase tracking-wider">TakuRadio</span><span>旅行博客</span>
                 </a>
-                <a href="TravelEssays/TravelEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                <a href="../TravelEssays/TravelEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
                     <span>知行拾遗</span>
                 </a>
-                <a href="NotesEssays/NotesEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                <a href="../NotesEssays/NotesEssays.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
                     <span>手记/随笔</span>
                 </a>
-                <a href="Gallery/Gallery.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                <a href="Gallery.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
                     <span>光影胶片</span>
                 </a>
-                <a href="Cuisine/Cuisine.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
+                <a href="../Cuisine/Cuisine.html" class="flex items-center gap-1.5 hover:text-terracotta transition-colors px-2 py-1 rounded-md hover:bg-archiveCard">
                     <span>烟火厨房</span>
                 </a>
             </nav>
@@ -150,7 +156,7 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="max-w-3xl space-y-4">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta/10 border border-terracotta/20 text-terracotta text-xs font-semibold">
-                    <i data-lucide="aperture" class="w-3.5 h-3.5"></i>
+                    <i data-lucide="film" class="w-3.5 h-3.5"></i>
                     <span>VISUAL ARCHIVE & GALLERY</span>
                 </div>
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-serif-sc text-charcoal-900 tracking-tight leading-tight">
@@ -164,169 +170,72 @@
     </section>
 
 
-    <!-- MAIN GALLERY CONTENT -->
-    <main class="flex-grow py-12 lg:py-16">
-        <div class="max-w-7xl mx-auto px-6 space-y-10">
+    <!-- 相册网格 (ALBUMS GRID) -->
+    <main class="flex-grow py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
 
-            <!-- FILTER TABS & CATEGORIES -->
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-archiveBorder pb-6">
-                <div class="flex flex-wrap items-center gap-2" id="filterContainer">
-                    <button class="filter-btn active px-4 py-2 rounded-full text-xs font-semibold bg-terracotta text-white transition-all" data-category="all">
-                        全部画集 (ALL)
-                    </button>
-                    <button class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-archiveCard text-charcoal-600 hover:bg-archiveBorder transition-all" data-category="street">
-                        人文胶片
-                    </button>
-                    <button class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-archiveCard text-charcoal-600 hover:bg-archiveBorder transition-all" data-category="nature">
-                        自然风光
-                    </button>
-                    <button class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-archiveCard text-charcoal-600 hover:bg-archiveBorder transition-all" data-category="architecture">
-                        建筑与古迹
-                    </button>
-                </div>
-                <div class="text-xs text-charcoal-400 font-mono hidden sm:block">
-                    SHOWING <span id="photoCount">6</span> EXHIBITS
-                </div>
-            </div>
-
-            <!-- GALLERY GRID (画廊网格) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="galleryGrid">
-
-                <!-- Photo Item 1 -->
-                <div class="gallery-item group cursor-pointer" data-category="street" onclick="openLightbox('https://images.unsplash.com/photo-1513407030348-c983a97b98d8?q=80&w=1200', '东京街头的静谧雨夜', '35mm · ISO 400 · f/2.0')">
-                    <div class="bg-archiveCard p-4 rounded-2xl border border-archiveBorder shadow-sm group-hover:shadow-md transition-all duration-300">
-                        <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-charcoal-800">
-                            <img src="https://images.unsplash.com/photo-1513407030348-c983a97b98d8?q=80&w=800" 
-                                 alt="东京街头的静谧雨夜" 
+                <!-- 相册卡片 1 -->
+                <div class="album-card group cursor-pointer" onclick="openAlbumModal(0)">
+                    <!-- 多层相片堆叠容器 -->
+                    <div class="relative w-full aspect-[4/3]">
+                        <!-- 第 3 层底层相片（轻微右旋） -->
+                        <div class="absolute inset-0 bg-archiveBorder rounded-2xl transform rotate-3 translate-y-2 opacity-60 transition-all duration-300 group-hover:rotate-6 group-hover:translate-y-3"></div>
+                        <!-- 第 2 层中层相片（轻微左旋） -->
+                        <div class="absolute inset-0 bg-archiveCard rounded-2xl transform -rotate-2 translate-y-1 opacity-80 transition-all duration-300 group-hover:-rotate-4 group-hover:translate-y-1.5 border border-archiveBorder"></div>
+                        
+                        <!-- 第 1 层主图 -->
+                        <div class="relative w-full h-full rounded-2xl overflow-hidden border border-archiveBorder shadow-md group-hover:shadow-xl transition-all duration-300">
+                            <img src="https://lh3.googleusercontent.com/d/1PrQXD3uRhfiiywERMe_J6UEp8mge6JVg" 
+                                 alt="情调日本" 
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <span class="text-white text-xs font-light flex items-center gap-1.5">
-                                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> 查看大图
+                            
+                            <!-- 遮罩与状态标 -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/70 via-transparent to-transparent"></div>
+                            <div class="absolute top-3 right-3 px-2.5 py-1 bg-charcoal-900/80 backdrop-blur-md rounded-full text-[10px] font-mono text-white flex items-center gap-1 border border-white/20">
+                                <i data-lucide="image" class="w-3 h-3"></i> 47 张照片
+                            </div>
+                            <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+                                <span class="text-xs font-mono tracking-wider opacity-90">网图</span>
+                                <span class="text-xs flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-terracotta-light font-semibold">
+                                    打开相册 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                                 </span>
                             </div>
                         </div>
-                        <div class="mt-4 flex items-start justify-between">
-                            <div>
-                                <h3 class="font-serif-sc font-bold text-base text-charcoal-900 group-hover:text-terracotta transition-colors">东京街头的静谧雨夜</h3>
-                                <p class="text-xs text-charcoal-400 font-mono mt-1">35mm · ISO 400 · f/2.0</p>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 bg-archiveBg rounded border border-archiveBorder text-terracotta shrink-0">人文</span>
-                        </div>
+                    </div>
+
+                    <!-- 相册描述区 -->
+                    <div class="mt-4 space-y-1">
+                        <h3 class="font-serif-sc font-bold text-lg text-charcoal-900 group-hover:text-terracotta transition-colors">东京雨夜与霓虹流光</h3>
+                        <p class="text-xs text-charcoal-600 line-clamp-1 font-light">捕捉繁华都市下雨夜的安宁与色彩斑斓的倒影。</p>
                     </div>
                 </div>
 
-                <!-- Photo Item 2 -->
-                <div class="gallery-item group cursor-pointer" data-category="nature" onclick="openLightbox('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200', '优胜美地晨雾与凛冬', '50mm · ISO 100 · f/8.0')">
-                    <div class="bg-archiveCard p-4 rounded-2xl border border-archiveBorder shadow-sm group-hover:shadow-md transition-all duration-300">
-                        <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-charcoal-800">
+                <!-- 相册卡片 2 -->
+                <div class="album-card group cursor-pointer" onclick="openAlbumModal(1)">
+                    <div class="relative w-full aspect-[4/3]">
+                        <div class="absolute inset-0 bg-archiveBorder rounded-2xl transform rotate-3 translate-y-2 opacity-60 transition-all duration-300 group-hover:rotate-6 group-hover:translate-y-3"></div>
+                        <div class="absolute inset-0 bg-archiveCard rounded-2xl transform -rotate-2 translate-y-1 opacity-80 transition-all duration-300 group-hover:-rotate-4 group-hover:translate-y-1.5 border border-archiveBorder"></div>
+                        
+                        <div class="relative w-full h-full rounded-2xl overflow-hidden border border-archiveBorder shadow-md group-hover:shadow-xl transition-all duration-300">
                             <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800" 
-                                 alt="优胜美地晨雾与凛冬" 
+                                 alt="优胜美地" 
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <span class="text-white text-xs font-light flex items-center gap-1.5">
-                                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> 查看大图
+                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/70 via-transparent to-transparent"></div>
+                            <div class="absolute top-3 right-3 px-2.5 py-1 bg-charcoal-900/80 backdrop-blur-md rounded-full text-[10px] font-mono text-white flex items-center gap-1 border border-white/20">
+                                <i data-lucide="image" class="w-3 h-3"></i> 3 张照片
+                            </div>
+                            <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+                                <span class="text-xs font-mono tracking-wider opacity-90">2025.07 · 美国优胜美地</span>
+                                <span class="text-xs flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-terracotta-light font-semibold">
+                                    打开相册 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                                 </span>
                             </div>
-                        </div>
-                        <div class="mt-4 flex items-start justify-between">
-                            <div>
-                                <h3 class="font-serif-sc font-bold text-base text-charcoal-900 group-hover:text-terracotta transition-colors">优胜美地晨雾与凛冬</h3>
-                                <p class="text-xs text-charcoal-400 font-mono mt-1">50mm · ISO 100 · f/8.0</p>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 bg-archiveBg rounded border border-archiveBorder text-terracotta shrink-0">风光</span>
                         </div>
                     </div>
-                </div>
-
-                <!-- Photo Item 3 -->
-                <div class="gallery-item group cursor-pointer" data-category="architecture" onclick="openLightbox('https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200', '罗马斗兽场的千古夕照', '28mm · ISO 200 · f/5.6')">
-                    <div class="bg-archiveCard p-4 rounded-2xl border border-archiveBorder shadow-sm group-hover:shadow-md transition-all duration-300">
-                        <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-charcoal-800">
-                            <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=800" 
-                                 alt="罗马斗兽场的千古夕照" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <span class="text-white text-xs font-light flex items-center gap-1.5">
-                                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> 查看大图
-                                </span>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-start justify-between">
-                            <div>
-                                <h3 class="font-serif-sc font-bold text-base text-charcoal-900 group-hover:text-terracotta transition-colors">罗马斗兽场的千古夕照</h3>
-                                <p class="text-xs text-charcoal-400 font-mono mt-1">28mm · ISO 200 · f/5.6</p>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 bg-archiveBg rounded border border-archiveBorder text-terracotta shrink-0">建筑</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Photo Item 4 -->
-                <div class="gallery-item group cursor-pointer" data-category="street" onclick="openLightbox('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200', '京都老街的早茶风味', '35mm · ISO 200 · f/2.8')">
-                    <div class="bg-archiveCard p-4 rounded-2xl border border-archiveBorder shadow-sm group-hover:shadow-md transition-all duration-300">
-                        <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-charcoal-800">
-                            <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=800" 
-                                 alt="京都老街的早茶风味" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <span class="text-white text-xs font-light flex items-center gap-1.5">
-                                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> 查看大图
-                                </span>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-start justify-between">
-                            <div>
-                                <h3 class="font-serif-sc font-bold text-base text-charcoal-900 group-hover:text-terracotta transition-colors">京都老街的早茶风味</h3>
-                                <p class="text-xs text-charcoal-400 font-mono mt-1">35mm · ISO 200 · f/2.8</p>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 bg-archiveBg rounded border border-archiveBorder text-terracotta shrink-0">人文</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Photo Item 5 -->
-                <div class="gallery-item group cursor-pointer" data-category="nature" onclick="openLightbox('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200', '雾霭迷茫的古老森林', '85mm · ISO 100 · f/1.8')">
-                    <div class="bg-archiveCard p-4 rounded-2xl border border-archiveBorder shadow-sm group-hover:shadow-md transition-all duration-300">
-                        <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-charcoal-800">
-                            <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=800" 
-                                 alt="雾霭迷茫的古老森林" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <span class="text-white text-xs font-light flex items-center gap-1.5">
-                                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> 查看大图
-                                </span>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-start justify-between">
-                            <div>
-                                <h3 class="font-serif-sc font-bold text-base text-charcoal-900 group-hover:text-terracotta transition-colors">雾霭迷茫的古老森林</h3>
-                                <p class="text-xs text-charcoal-400 font-mono mt-1">85mm · ISO 100 · f/1.8</p>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 bg-archiveBg rounded border border-archiveBorder text-terracotta shrink-0">风光</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Photo Item 6 -->
-                <div class="gallery-item group cursor-pointer" data-category="architecture" onclick="openLightbox('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200', '现代建筑的几何与光影', '24mm · ISO 100 · f/11')">
-                    <div class="bg-archiveCard p-4 rounded-2xl border border-archiveBorder shadow-sm group-hover:shadow-md transition-all duration-300">
-                        <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-charcoal-800">
-                            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800" 
-                                 alt="现代建筑的几何与光影" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <span class="text-white text-xs font-light flex items-center gap-1.5">
-                                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> 查看大图
-                                </span>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-start justify-between">
-                            <div>
-                                <h3 class="font-serif-sc font-bold text-base text-charcoal-900 group-hover:text-terracotta transition-colors">现代建筑的几何与光影</h3>
-                                <p class="text-xs text-charcoal-400 font-mono mt-1">24mm · ISO 100 · f/11</p>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 bg-archiveBg rounded border border-archiveBorder text-terracotta shrink-0">建筑</span>
-                        </div>
+                    <div class="mt-4 space-y-1">
+                        <h3 class="font-serif-sc font-bold text-lg text-charcoal-900 group-hover:text-terracotta transition-colors">凛冬晨雾与山谷探险</h3>
+                        <p class="text-xs text-charcoal-600 line-clamp-1 font-light">记录国家公园内原始森林与晨曦交织的壮丽。</p>
                     </div>
                 </div>
 
@@ -334,125 +243,163 @@
         </div>
     </main>
 
-
-    <!-- LIGHTBOX PREVIEW MODAL (全屏灯箱预览组件) -->
-    <div id="lightbox" class="fixed inset-0 z-50 bg-charcoal-900/95 backdrop-blur-lg hidden flex flex-col items-center justify-between p-6">
-        <div class="w-full flex justify-between items-center text-white">
-            <span id="lightboxInfo" class="font-mono text-xs text-archiveBorder"></span>
-            <button onclick="closeLightbox()" class="p-2 rounded-full hover:bg-white/10 text-white transition-colors">
-                <i data-lucide="x" class="w-6 h-6"></i>
+    <!-- ================= 全屏相册弹窗 (ALBUM FULLSCREEN MODAL) ================= -->
+    <div id="albumModal" class="fixed inset-0 z-50 bg-charcoal-900/90 backdrop-blur-xl hidden flex-col transition-all duration-300">
+        
+        <!-- Modal 头部导航栏 -->
+        <div class="w-full px-6 py-5 border-b border-white/10 flex items-center justify-between shrink-0 bg-charcoal-900/50">
+            <div class="space-y-0.5">
+                <div class="flex items-center gap-3">
+                    <h2 id="modalAlbumTitle" class="text-xl sm:text-2xl font-serif-sc font-bold text-white">相册标题</h2>
+                    <span id="modalPhotoCount" class="px-2.5 py-0.5 rounded-full bg-terracotta/20 border border-terracotta/40 text-terracotta-light text-xs font-mono">0 张照片</span>
+                </div>
+                <p id="modalAlbumMeta" class="text-xs font-mono text-archiveBorder/70">时间 · 地点</p>
+            </div>
+            
+            <button onclick="closeAlbumModal()" class="p-2.5 rounded-full bg-white/5 hover:bg-white/15 text-white transition-colors border border-white/10 flex items-center gap-1">
+                <i data-lucide="x" class="w-5 h-5"></i>
+                <span class="text-xs font-medium hidden sm:inline">关闭</span>
             </button>
         </div>
 
-        <div class="max-w-5xl max-h-[75vh] my-auto overflow-hidden flex flex-col items-center">
-            <img id="lightboxImg" src="" alt="Enlarged preview" class="max-h-[65vh] object-contain rounded-lg shadow-2xl">
-            <h3 id="lightboxTitle" class="text-white font-serif-sc font-bold text-lg mt-4 text-center"></h3>
-        </div>
+        <!-- Modal 主体相册网格 (滚动区域) -->
+        <div class="flex-grow overflow-y-auto p-6 sm:p-10">
+            <div class="max-w-7xl mx-auto space-y-8">
+                <!-- 相册简介/引言 -->
+                <p id="modalAlbumDesc" class="text-sm font-light text-archiveBorder/90 max-w-3xl leading-relaxed border-l-2 border-terracotta pl-4">
+                    相册描述...
+                </p>
 
-        <div class="text-xs text-charcoal-400">
-            按 Esc 或点击右上角关闭
+                <!-- 照片流网格 (Photos Grid) -->
+                <div id="modalPhotoGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- 照片动态插入位置 -->
+                </div>
+            </div>
         </div>
     </div>
 
-
-    <!-- FOOTER 页脚 -->
-    <footer class="bg-charcoal-900 text-archiveBg py-12 border-t border-charcoal-800">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-charcoal-400">
-            <div class="flex items-center gap-3">
-                <span class="w-7 h-7 rounded-full bg-terracotta text-white flex items-center justify-center font-bold font-brand text-xs">
-                    幸福
-                </span>
-                <span class="font-serif-sc">幸福生活 · 个人数字档案馆 © 2026</span>
-            </div>
-            <div>
-                <span>妥善保存于数字云端 · 静默记录</span>
-            </div>
-        </div>
-    </footer>
-
-
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
+        // 相册数据定义 (Album Data)
+        const albums = [
+            {
+                title: "东京雨夜与霓虹流光",
+                locationDate: "2025.10 · 日本东京",
+                description: "漫步在雨后的歌舞伎町与涩谷街头，积水的地面映射出繁华霓虹。快门记录下的不仅是光影，更是大都市角落里的安宁瞬间。",
+                photos: [
+                    { url: "https://lh3.googleusercontent.com/d/1PrQXD3uRhfiiywERMe_J6UEp8mge6JVg" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1c60M9zQ0DZFvjn7FbV4zQzqQtBraIfy5" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1yfny8uQ6Qas6jUgn9JVDBUHNt5T4ep0h" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1GWNBOzs5cR-xu2dF7mAftVpErz-bAXcO" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1cAZoHxXTDtzfs1lwzmsxdEtSiwlBSTUQ" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1CdACKuTdrVWq-obbEYDe4ZVt2judYK6r" } ,
+                    { url: "https://lh3.googleusercontent.com/d/12B7dOwzw_qbZinArEyl90KkLqnBOL1hL" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1lreFKIygeBk1hKmP9iT4O5ZDNwp0WR7v" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1SVXta9TJm4mIPjEOcW89nLkqbZq26yj4" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1lq2VLdeQFdsNd8TVYh9aJC36thnFF57t" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1bB3ZKe_PUktpLtpsaQQveE2WHSDjdON_" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1k2NcpE1T-V5CwXNmZ197F3uVFlZR4coU" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1TloJEZoK8MEPSfFKdqQdv6OaCstpIao7" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1U1pc0QO9XF0TgF9BsmGQU1c4qfdhvBCP" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1IPtulXWon35lh8aQdfxs-FXLUOqSuNKl" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1-0mGzOgz6KZmcPNMEzOwYHq5dlPOuwYM" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1mk4JeuOz3yRl0VA9IjIPy-UwiqQK7Yg5" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1GowCaxumyuDgKihnoBQRCp9JBPydragV" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1Jgv7xpqal-6daCdPmcfazNsC0fAIDoj7" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1qg3G0GbRqZptmujonItW_SkTyIcY0vQu" } ,
+                    { url: "https://lh3.googleusercontent.com/d/103U62gq-V5QCxCi1r_R49GIojQt_gTKM" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1r0ZwhG2EhaMICI7r0wIy5F-viO2dfVWi" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1MffzeIPC6WEiZ5sjZNiFfyAJVjYhQu4a" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1bY6kRD7kR8HqR3049nFo0X32YYzSLkhl" } ,
+                    { url: "https://lh3.googleusercontent.com/d/13TSfX37kmeIKEpxguK39jragrLZwmSFb" } ,
+                    { url: "https://lh3.googleusercontent.com/d/195AM7FrD-_yvJ1Uf7kNythXpnSoxbwew" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1cBtZ8LgEHWBo7hZdeO5yceoIraOAYdEY" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1kyPAb26wsyylyOZS0PXkJaIHaQazshWD" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1bjuQebwKxD33ZwjUcpwZ-09BmgAvTIQV" } ,
+                    { url: "https://lh3.googleusercontent.com/d/12Fh8yA5SP4Z2kFP_zo9arHAfNa3nzExb" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1Ny_krjddc8M-PMiDmHXMbqdjIXlcLJQE" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1sEn9J-1v5Wl3ykY8--v6_YMzyM6eHDoY" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1HaOQaoOMs-iMjTGHno01p5rlZ7EAqOKP" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1K7NNduCWyvNazHmfounfQPxLCCwUSubt" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1JZ2sQW-LS3BjpcjBP8vxb6yqIR05nMzX" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1UzbQ6VlqGFf2jkHcY8efj5QWZCKzQnBu" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1wI7FRXslHcQxcvIUfBEKeAGTBQ0fNW9R" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1PQWl0ELZnZh59UXscoSPMjf1eW5WqmE-" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1DI1TJghaTSq4BwgEys6vFfS38LelmjoS" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1qP_6hxgKtHfYKIjUwW804P8mtKopgmPQ" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1q08i6WdCN6byD0SLA3OLc5_vhJHCIYOR" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1GBaoC1LzKdPO8r23Y0hzTZYBazIVaH0U" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1-Uw0-D5jm5Rknv2ErhMn48YCYYWk6pgu" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1Jd1axjE2KwgUnXLBIzFoWgDR19id8KjS" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1VlJ6DMKVBrY4XYYQGmHdKQK04wAiWXXb" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1OAzbnzI8rAhgHiZ--_WbZPjE92V-AH0x" } ,
+                    { url: "https://lh3.googleusercontent.com/d/1fUQgkfEO81lKrIPPOInkYl9C-I5zjiQ6" } 
+                ]
+            },
+            {
+                title: "凛冬晨雾与山谷探险",
+                locationDate: "2025.07 · 美国优胜美地",
+                description: "清晨五点穿行在原始森林间，薄雾笼罩着巨大的花岗岩岩壁。寒冷空气中透出的第一缕阳光带来无与伦比的震撼。",
+                photos: [
+                    { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200", caption: "晨雾中的山谷巨岩", meta: "50mm · ISO 100 · f/8.0" },
+                    { url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1200", caption: "雾霭迷茫的古老森林", meta: "85mm · ISO 100 · f/1.8" },
+                    { url: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1200", caption: "溪流与远山倒影", meta: "24mm · ISO 200 · f/5.6" }
+                ]
             }
+        ];
 
-            initMobileMenu();
-            initFilter();
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         });
 
-        // 移动端抽屉菜单
-        function initMobileMenu() {
-            const mobileBtn = document.getElementById('mobileMenuBtn');
-            const drawer = document.getElementById('mobileDrawer');
-            if (mobileBtn && drawer) {
-                mobileBtn.addEventListener('click', () => {
-                    drawer.classList.toggle('hidden');
-                });
-            }
-        }
+        // 打开相册弹窗
+        function openAlbumModal(albumIndex) {
+            const album = albums[albumIndex];
+            if (!album) return;
 
-        // 标签筛选逻辑
-        function initFilter() {
-            const buttons = document.querySelectorAll('.filter-btn');
-            const items = document.querySelectorAll('.gallery-item');
-            const countDisplay = document.getElementById('photoCount');
+            document.getElementById('modalAlbumTitle').innerText = album.title;
+            document.getElementById('modalAlbumMeta').innerText = album.locationDate;
+            document.getElementById('modalAlbumDesc').innerText = album.description;
+            document.getElementById('modalPhotoCount').innerText = `${album.photos.length} 张照片`;
 
-            buttons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    buttons.forEach(b => {
-                        b.classList.remove('bg-terracotta', 'text-white');
-                        b.classList.add('bg-archiveCard', 'text-charcoal-600');
-                    });
-                    btn.classList.remove('bg-archiveCard', 'text-charcoal-600');
-                    btn.classList.add('bg-terracotta', 'text-white');
+            const grid = document.getElementById('modalPhotoGrid');
+            grid.innerHTML = '';
 
-                    const category = btn.getAttribute('data-category');
-                    let visibleCount = 0;
-
-                    items.forEach(item => {
-                        if (category === 'all' || item.getAttribute('data-category') === category) {
-                            item.style.display = 'block';
-                            visibleCount++;
-                        } else {
-                            item.style.display = 'none';
-                        }
-                    });
-
-                    if (countDisplay) {
-                        countDisplay.innerText = visibleCount;
-                    }
-                });
+            // 渲染照片
+            album.photos.forEach((photo) => {
+                const photoCard = `
+                    <div class="group relative bg-white/5 border border-white/10 rounded-xl overflow-hidden shadow-lg transition-all hover:border-terracotta/50">
+                        <div class="aspect-[4/3] overflow-hidden bg-charcoal-900">
+                            <img src="${photo.url}" alt="${photo.caption}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="p-4 flex items-center justify-between bg-charcoal-900/80 backdrop-blur-md">
+                            <div>
+                                <h4 class="text-sm font-serif-sc font-bold text-white">${photo.caption}</h4>
+                                <p class="text-[11px] font-mono text-archiveBorder/60 mt-0.5">${photo.meta}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += photoCard;
             });
+
+            const modal = document.getElementById('albumModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // 禁止背景滚动
         }
 
-        // 灯箱全屏预览逻辑
-        function openLightbox(imgUrl, title, info) {
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightboxImg');
-            const lightboxTitle = document.getElementById('lightboxTitle');
-            const lightboxInfo = document.getElementById('lightboxInfo');
-
-            lightboxImg.src = imgUrl;
-            lightboxTitle.innerText = title;
-            lightboxInfo.innerText = info;
-
-            lightbox.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeLightbox() {
-            const lightbox = document.getElementById('lightbox');
-            lightbox.classList.add('hidden');
+        // 关闭相册弹窗
+        function closeAlbumModal() {
+            const modal = document.getElementById('albumModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
             document.body.style.overflow = 'auto';
         }
 
-        // 键盘 Esc 键关闭灯箱
+        // 按 Esc 关闭
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeLightbox();
-            }
+            if (e.key === 'Escape') closeAlbumModal();
         });
     </script>
 </body>
