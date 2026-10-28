@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随笔：新的一年 | 幸福生活个人数字档案馆</title>
+    
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 引入 Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+SC:wght@300;400;600;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- 引入 Lucide Icons 图标库 -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind 统一 Token 配置（严格保持与主页及随笔页一致） -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        archiveBg: '#FAF5EF',
+                        archiveCard: '#F3ECE2',
+                        archiveBorder: '#E6DCCE',
+                        terracotta: {
+                            DEFAULT: '#E9826A',
+                            hover: '#E24C00',
+                            light: '#F7B89C',
+                            soft: 'rgba(233, 130, 106, 0.12)',
+                        },
+                        charcoal: {
+                            900: '#49352F',
+                            800: '#75554b',
+                            600: '#b78576',
+                            400: '#ffbfa9',
+                        },
+                        darkBlue: {
+                            950: '#050D14',
+                            900: '#081622',
+                            800: '#0D2131',
+                            700: '#133045',
+                        }
+                    },
+                    fontFamily: {
+                        serifSC: ['Noto Serif SC', 'serif'],
+                        brand: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background-color: #FAF5EF;
+            color: #2C2825;
+            overflow-x: hidden;
+        }
+
+        .font-serif-sc {
+            font-family: 'Noto Serif SC', 'Cinzel', serif;
+        }
+
+        .font-brand {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* 首字下沉效果 */
+        .drop-cap::first-letter {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3.8rem;
+            float: left;
+            line-height: 0.85;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-bottom: 2px;
+            color: #E9826A;
+            font-weight: 700;
+        }
+
+        /* 统一自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF5EF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D96B43;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-terracotta selection:text-white flex flex-col min-h-screen">
+
+    <!-- ARTICLE HEADER / HERO SECTION (杂志风非对称 Header) -->
+    <header class="pt-12 pb-10 lg:pt-16 lg:pb-12 bg-archiveBg border-b border-archiveBorder/60">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <!-- 面包屑与分类标记 -->
+            <div class="flex items-center gap-2 text-xs font-mono text-terracotta uppercase tracking-wider mb-6">
+                <a href="../index.html" class="hover:underline">首页</a>
+                <span>/</span>
+                <a href="../NotesEssays/NotesEssays.html" class="hover:underline">手记与随笔</a>
+            </div>
+
+            <!-- 非对称两栏标题区 -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
+                
+                <!-- 左栏：大标题与文章元数据 -->
+                <div class="lg:col-span-8 space-y-6">
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-serif-sc text-charcoal-900 tracking-tight leading-tight">
+                        一个无法成为新年寄语的新年寄语<br>
+                        <span class="text-1xl sm:text-2xl lg:text-3xl text-terracotta font-normal italic">心血来潮的公众号，大洋彼岸的第八年与新的一年</span>
+                    </h1>
+                    
+
+                    <div class="flex items-center gap-2">
+                            <img src="https://lh3.googleusercontent.com/d/1U0oZVC805-K154HgLtcuJCcRlhSe3hnF" 
+                                class="w-12 h-12 rounded-full object-cover border border-archiveBorder shadow-sm shrink-0">
+                            <span class="font-sans font-medium text-lg text-charcoal-900">塔库电台</span>
+                    </div>
+
+                    <!-- 作者、日期、阅读时长 -->
+                    <div class="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-charcoal-600 font-mono pt-2 border-t border-archiveBorder/60">
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="party-popper" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>新年寄语</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <time datetime="2018-01-06">2018.01.06</time>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>预计阅读 4 分钟</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="bookmark" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>约 1,200 字</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右栏：导语/摘要摘要卡片 -->
+                <div class="lg:col-span-4 bg-archiveCard/70 border-l-2 border-terracotta p-5 rounded-r-xl space-y-2">
+                    <div class="text-lg font-brand text-terracotta font-bold tracking-widest uppercase">
+                        年纪慢慢变大，也就越来越相信凡事皆有缘分这回事。努力，但不强求。人生不如意十之八九，更豁达些，也许就能活得更简单些了吧。
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- ARTICLE HERO IMAGE (可选主图) -->
+    <div class="max-w-7xl mx-auto px-6 mt-8 lg:mt-10">
+        <div class="relative rounded-2xl overflow-hidden border border-archiveBorder shadow-sm">
+            <img src="https://lh3.googleusercontent.com/d/16rsFO8UZIhKqx--cfe3Chw1OMmmfLVbL"
+                 alt="文章封面图" 
+                 class="w-full h-[320px] sm:h-[450px] object-cover">
+            <!-- 图片底部的说明文字 -->
+            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-charcoal-900/80 via-charcoal-900/30 to-transparent p-4 sm:p-6 flex justify-between items-end text-white/90 text-xs font-mono">
+                <span></span>
+                <span class="hidden sm:inline opacity-75"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA (主栏 + 悬浮侧边栏) -->
+    <main class="flex-grow py-12 lg:py-16">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            <!-- LEFT MAIN COLUMN: 文章正文区域 -->
+            <article class="lg:col-span-8 space-y-8 font-serif-sc text-charcoal-900 text-base sm:text-lg leading-relaxed">
+                
+                <!-- 引言段落（带首字下沉 Drop Cap） -->
+                <p class="drop-cap text-charcoal-800 leading-loose">
+                    心血来潮开了个公众号，但写点什么呢。到现在也是没有想好。就随便聊聊吧。元旦刚刚过去。新的一年，感觉并没有什么不同。愿望自然也是许了的，每一年都大同小异罢了。
+                </p>
+
+                <p>
+                    记得以前还有校内网的时候，每年最后一天都跟年终总结似的写些感悟，唏嘘着时光飞逝岁月如梭，还差点因此牵出一段姻缘。而如今感悟还在，却是迟迟懒得动笔了。现在想来这一年，除了每天为琐事焦头烂额，似乎再也没有什么其他的记忆了。
+                </p>
+
+                <p>
+                    这已经是身在大洋彼岸的第八年。不同的是，从一个能在夏天甜西瓜吃到饱的国家，来到了一个几乎没有夏天的国家。又不同的是，慢慢习惯了生活中多了这么几口人，跟布先生两个人安静的喝个咖啡成了最惬意的事情。
+                </p>
+
+                <!-- 金句拉标（Pull Quote） -->
+                <div class="my-8 p-6 sm:p-8 rounded-2xl bg-terracotta/5 border-l-4 border-terracotta space-y-3">
+                    <p class="text-lg sm:text-xl font-bold italic text-charcoal-900 leading-normal">
+                        “搜索的过程中也是各种吐槽自己怎么能叫‘星期二的苏门答腊’这么二的博客名。但却没搜到自己……取代那些所谓华丽文字的这一通大笑，也许就是天意了吧。”
+                    </p>
+                    <div class="text-xs font-mono text-terracotta uppercase tracking-wider">— 碎碎念</div>
+                </div>
+
+                <p>
+                    就在我写下上面这些话的时候，很自然的想起青春年少的时候也曾是个伪文艺女青年，写得一手哀而不伤的博客，于是便想搜来看看。搜索的过程中也是各种吐槽自己怎么能叫“星期二的苏门答腊”这么二的博客名。但却没搜到自己。
+                </p>
+
+                <p>
+                    于是从“星期一的苏门答腊”一直搜到“星期日的苏门答腊”，一边搜索一边笑到岔气。最后依旧是没搜到。然而已经觉得不甚要紧。取代那些所谓华丽文字的这一通大笑，也许就是天意了吧。
+                </p>
+
+                <p>
+                    年纪慢慢变大，也就越来越相信凡事皆有缘分这回事。努力，但不强求。人生不如意十之八九，无二三可与人言。更豁达些，也许就能活的更简单些了吧。
+                </p>
+
+                <!-- 高亮总结段落 -->
+                <div class="my-8 p-5 sm:p-6 bg-archiveCard border border-archiveBorder rounded-xl font-sans space-y-2">
+                    <div class="flex items-center gap-2 text-terracotta font-bold text-sm">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span>新年寄语</span>
+                    </div>
+                    <p class="text-sm sm:text-base text-charcoal-800 leading-relaxed font-serif-sc font-medium">
+                        新的一年要多读点书。多读点书。再多读点书。
+                    </p>
+                </div>
+
+                <div class="text-right text-sm font-mono text-charcoal-600 pt-4">
+                    --------2018年元月六日
+                </div>
+
+                <!-- 文章底部标签与分享 -->
+                <div class="pt-8 mt-12 border-t border-archiveBorder font-sans flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <!-- 文章标签 -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs text-charcoal-400 font-mono mr-1">TAGS:</span>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">生活随笔</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">海外岁月</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">年度感悟</a>
+                    </div>
+
+
+                </div>
+
+            </article>
+
+            <!-- RIGHT SIDEBAR: 悬浮侧边栏 -->
+            <aside class="lg:col-span-4 space-y-8 lg:sticky lg:top-28 font-sans">
+                
+                
+
+
+                <!-- Widget 3: 相关精选随笔 -->
+                <div class="space-y-4">
+                    <div class="text-xs font-brand text-charcoal-400 tracking-widest uppercase font-semibold border-b border-archiveBorder pb-2">
+                        RELATED READING
+                    </div>
+                    <div class="space-y-3">
+                        <a href="NewYear2019.html" class="block p-3 rounded-xl hover:bg-archiveCard/50 border border-transparent hover:border-archiveBorder transition-all group">
+                            <div class="text-[10px] font-mono text-charcoal-400">2026.05 · 生活志</div>
+                            <h4 class="text-xs font-bold font-serif-sc text-charcoal-900 group-hover:text-terracotta transition-colors mt-0.5">
+                                啰啰嗦嗦2019新年寄语
+                            </h4>
+                        </a>
+                        <a href="EightGlasses.html" class="block p-3 rounded-xl hover:bg-archiveCard/50 border border-transparent hover:border-archiveBorder transition-all group">
+                            <div class="text-[10px] font-mono text-charcoal-400">2026.02 · 观影与艺术</div>
+                            <h4 class="text-xs font-bold font-serif-sc text-charcoal-900 group-hover:text-terracotta transition-colors mt-0.5">
+                                八杯酒的人生
+                            </h4>
+                        </a>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER 页脚 -->
+    <footer class="bg-charcoal-900 text-archiveBg py-12 border-t border-charcoal-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-charcoal-400">
+            <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-terracotta text-white flex items-center justify-center font-bold font-brand text-xs">
+                    幸福
+                </span>
+                <span class="font-serif-sc">幸福生活 · 个人数字档案馆 © 2026</span>
+            </div>
+            <div>
+                <span>妥善保存于数字云端 · 静默记录</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化图标
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

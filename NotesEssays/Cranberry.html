@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>当You're Gone - 那些属于小红莓的夜晚 | 幸福生活个人数字档案馆</title>
+    
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 引入 Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+SC:wght@300;400;600;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- 引入 Lucide Icons 图标库 -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind 统一 Token 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        archiveBg: '#FAF5EF',
+                        archiveCard: '#F3ECE2',
+                        archiveBorder: '#E6DCCE',
+                        terracotta: {
+                            DEFAULT: '#E9826A',
+                            hover: '#E24C00',
+                            light: '#F7B89C',
+                            soft: 'rgba(233, 130, 106, 0.12)',
+                        },
+                        charcoal: {
+                            900: '#49352F',
+                            800: '#75554b',
+                            600: '#b78576',
+                            400: '#ffbfa9',
+                        },
+                        darkBlue: {
+                            950: '#050D14',
+                            900: '#081622',
+                            800: '#0D2131',
+                            700: '#133045',
+                        }
+                    },
+                    fontFamily: {
+                        serifSC: ['Noto Serif SC', 'serif'],
+                        brand: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background-color: #FAF5EF;
+            color: #2C2825;
+            overflow-x: hidden;
+        }
+
+        .font-serif-sc {
+            font-family: 'Noto Serif SC', 'Cinzel', serif;
+        }
+
+        .font-brand {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* 首字下沉效果 */
+        .drop-cap::first-letter {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3.8rem;
+            float: left;
+            line-height: 0.85;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-bottom: 2px;
+            color: #E9826A;
+            font-weight: 700;
+        }
+
+        /* 统一自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF5EF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D96B43;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-terracotta selection:text-white flex flex-col min-h-screen">
+
+    <!-- ARTICLE HEADER / HERO SECTION (杂志风非对称 Header) -->
+    <header class="pt-12 pb-10 lg:pt-16 lg:pb-12 bg-archiveBg border-b border-archiveBorder/60">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <!-- 面包屑与分类标记 -->
+            <div class="flex items-center gap-2 text-xs font-mono text-terracotta uppercase tracking-wider mb-6">
+                <a href="../index.html" class="hover:underline">首页</a>
+                <span>/</span>
+                <a href="../NotesEssays/NotesEssays.html" class="hover:underline">手记与随笔</a>
+            </div>
+
+            <!-- 非对称两栏标题区 -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
+                
+                <!-- 左栏：大标题与文章元数据 -->
+                <div class="lg:col-span-8 space-y-6">
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-serif-sc text-charcoal-900 tracking-tight leading-tight">
+                        When You're Gone <br>
+                        <span class="text-1xl sm:text-2xl lg:text-3xl text-terracotta font-normal italic">那些属于小红莓的夜晚</span>
+                    </h1>
+
+                    <div class="flex items-center gap-2">
+                            <img src="https://lh3.googleusercontent.com/d/1U0oZVC805-K154HgLtcuJCcRlhSe3hnF" 
+                                class="w-12 h-12 rounded-full object-cover border border-archiveBorder shadow-sm shrink-0">
+                            <span class="font-sans font-medium text-lg text-charcoal-900">塔库电台</span>
+                    </div>
+
+                    <!-- 作者、阅读时长等元数据 -->
+                    <div class="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-charcoal-600 font-mono pt-2 border-t border-archiveBorder/60">
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="music" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>音乐人生</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <time datetime="2018-01-15">2018.01.15</time>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>预计阅读 5 分钟</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="bookmark" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>约 1,400 字</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右栏：导语/摘要卡片 -->
+                <div class="lg:col-span-4 bg-archiveCard/70 border-l-2 border-terracotta p-5 rounded-r-xl space-y-2">
+                    <div class="text-lg font-brand text-terracotta font-bold tracking-widest uppercase">
+                      都说时光如水，而流水无情。明明知道怀念也只能是怀念，却还是忍不住感伤。一首歌，一片日光，一抹味道，就会从记忆里生拉硬扯出无数的画面和感觉。”
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- ARTICLE HERO IMAGE (封面图) -->
+    <div class="max-w-7xl mx-auto px-6 mt-8 lg:mt-10">
+        <div class="relative rounded-2xl overflow-hidden border border-archiveBorder shadow-sm">
+             <img src="https://lh3.googleusercontent.com/d/1bfkax51E5uPUUVM2RjN1SIz7a6nRgo5L"
+                 alt="文章封面图" 
+                 class="w-full h-[320px] sm:h-[450px] object-cover">
+            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-charcoal-900/80 via-charcoal-900/30 to-transparent p-4 sm:p-6 flex justify-between items-end text-white/90 text-xs font-mono">
+                <span>夏夜微风与耳机里的旋律 · The Cranberries</span>
+                <span class="hidden sm:inline opacity-75">Photo by Unsplash</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA (主栏 + 悬浮侧边栏) -->
+    <main class="flex-grow py-12 lg:py-16">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            <!-- LEFT MAIN COLUMN: 文章正文区域 -->
+            <article class="lg:col-span-8 space-y-8 font-serif-sc text-charcoal-900 text-base sm:text-lg leading-relaxed">
+                
+                <!-- 新闻引言区块 -->
+                <div class="p-6 rounded-2xl bg-archiveCard/80 border border-archiveBorder italic text-sm sm:text-base text-charcoal-800 space-y-3 shadow-sm">
+                    <p class="leading-relaxed">
+                        “爱尔兰传奇乐队小红莓乐队（The Cranberries）主唱Dolores O’Riordan在伦敦突然离世，享年46岁。她的发言人证实但并未公布死因，只说‘一切发生得很突然’。爱尔兰总统发表声明，表示对于她的离世感到‘巨大的悲痛’，‘她和小红莓乐队对于爱尔兰乃至世界摇滚音乐带来深远影响，她的逝世是一次莫大损失。’”
+                    </p>
+                </div>
+
+                <!-- 引言正文 -->
+                <p class="drop-cap text-charcoal-800 leading-loose">
+                    看到这则新闻的时候，我脑子突然一抽，然后整个《Zombie》的声音漫山地袭来。我对小红莓，是不很熟悉的。
+                </p>
+
+                <p>
+                    大概高中到大学的那会儿，循环过他们的两首歌，《Zombie》和《Dying in the sun》。前者是从晚自习的教室出来，脖子酸痛眼睛困乏，脑子几乎已经不会思考。然而一路迎着初夏温暖的夜风走回宿舍，Dolores特有的唱腔在耳机里清晰地冲出来，脚下每一步都踩在鼓点上，畅快淋漓。而后者则是在寂静的夜里，有时在床上辗转反侧，这首歌总是能让我沉下心来，温暖且安静。
+                </p>
+
+                <p>
+                    至于其他，我便不怎么了解了。毕竟不是铁粉，没有关注过整个乐队的历史和每张专辑。甚至连听过的几首歌，也是因为缘分偶然听到，然后搜了小红莓的另外一些歌曲，把中意的留下来，才有了上面循环的这特别中意的两首。
+                </p>
+
+                <!-- 金句拉标（Pull Quote） -->
+                <div class="my-8 p-6 sm:p-8 rounded-2xl bg-terracotta/5 border-l-4 border-terracotta space-y-3">
+                    <p class="text-lg sm:text-xl font-bold italic text-charcoal-900 leading-normal">
+                        “再也听不到我喜爱的这两首歌的live了。再也不会有人像Dolores这么适合这两首歌了。但可能觉得最可惜的是，那些听着歌踩着鼓点走在夏夜微风里青春年少的日子，再也回不去了吧。”
+                    </p>
+                    <div class="text-xs font-mono text-terracotta uppercase tracking-wider">— 悼小红莓乐队主唱 Dolores</div>
+                </div>
+
+                <p>
+                    都说时光如水，而流水无情。明明知道怀念也只能是怀念，却还是忍不住感伤。一首歌，一片日光，一抹味道，就会从记忆里生拉硬扯出无数的画面和感觉。
+                </p>
+
+                <p>
+                    于是又立刻回过神来。大概也是年纪大了的缘故吧，感伤也就只有三分钟的时间而已。然后该吃吃该喝喝该睡睡。
+                </p>
+                <figure>
+                    <img src="https://lh3.googleusercontent.com/d/13IvxEhIFdA7pYNh6tmLCnirVrDkmBiwV" class="w-full max-h-[390px] object-cover">
+                    <figcaption></figcaption>
+                </figure>
+                <p>
+                    躺在被窝里的时候想到，记得去年秋天的时候看高晓松老师到爱尔兰做《晓说》，还去看了Dolores，说她的背伤好一点了，想去中国开演唱会。世事无常。然而就因为世事无常，才要珍惜每个当下啊不是么。
+                </p>
+
+                <!-- 结语祝福 -->
+                <div class="my-8 p-5 sm:p-6 bg-archiveCard border border-archiveBorder rounded-xl font-sans space-y-2 text-center">
+                    <p class="text-lg font-serif-sc font-bold text-terracotta">
+                        愿你在天堂依旧是这样的歌者。
+                    </p>
+                </div>
+
+                <!-- 文章底部标签与分享 -->
+                <div class="pt-8 mt-12 border-t border-archiveBorder font-sans flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs text-charcoal-400 font-mono mr-1">TAGS:</span>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">小红莓</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">音乐怀念</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">岁月感悟</a>
+                    </div>
+                </div>
+
+            </article>
+
+            <!-- RIGHT SIDEBAR: 悬浮侧边栏 -->
+            <aside class="lg:col-span-4 space-y-8 lg:sticky lg:top-28 font-sans">
+            
+
+                <!-- Widget 3: 相关阅读 -->
+                <div class="space-y-4">
+                    <div class="text-xs font-brand text-charcoal-400 tracking-widest uppercase font-semibold border-b border-archiveBorder pb-2">
+                        RELATED READING
+                    </div>
+                    <div class="space-y-3">
+                        <a href="EightGlasses.html" class="block p-3 rounded-xl hover:bg-archiveCard/50 border border-transparent hover:border-archiveBorder transition-all group">
+                            <div class="text-[10px] font-mono text-charcoal-400">音乐与感怀</div>
+                            <h4 class="text-xs font-bold font-serif-sc text-charcoal-900 group-hover:text-terracotta transition-colors mt-0.5">
+                                八杯酒的前半生
+                            </h4>
+                        </a>
+                        <a href="NewYear2019.html" class="block p-3 rounded-xl hover:bg-archiveCard/50 border border-transparent hover:border-archiveBorder transition-all group">
+                            <div class="text-[10px] font-mono text-charcoal-400">新年寄语</div>
+                            <h4 class="text-xs font-bold font-serif-sc text-charcoal-900 group-hover:text-terracotta transition-colors mt-0.5">
+                                啰啰嗦嗦2019新年寄语
+                            </h4>
+                        </a>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER 页脚 -->
+    <footer class="bg-charcoal-900 text-archiveBg py-12 border-t border-charcoal-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-charcoal-400">
+            <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-terracotta text-white flex items-center justify-center font-bold font-brand text-xs">
+                    幸福
+                </span>
+                <span class="font-serif-sc">幸福生活 · 个人数字档案馆 © 2026</span>
+            </div>
+            <div>
+                <span>妥善保存于数字云端 · 静默记录</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

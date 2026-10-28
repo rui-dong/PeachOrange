@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>啰啰嗦嗦2019新年寄语 | 幸福生活个人数字档案馆</title>
+    
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 引入 Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+SC:wght@300;400;600;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- 引入 Lucide Icons 图标库 -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind 统一 Token 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        archiveBg: '#FAF5EF',
+                        archiveCard: '#F3ECE2',
+                        archiveBorder: '#E6DCCE',
+                        terracotta: {
+                            DEFAULT: '#E9826A',
+                            hover: '#E24C00',
+                            light: '#F7B89C',
+                            soft: 'rgba(233, 130, 106, 0.12)',
+                        },
+                        charcoal: {
+                            900: '#49352F',
+                            800: '#75554b',
+                            600: '#b78576',
+                            400: '#ffbfa9',
+                        },
+                        darkBlue: {
+                            950: '#050D14',
+                            900: '#081622',
+                            800: '#0D2131',
+                            700: '#133045',
+                        }
+                    },
+                    fontFamily: {
+                        serifSC: ['Noto Serif SC', 'serif'],
+                        brand: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background-color: #FAF5EF;
+            color: #2C2825;
+            overflow-x: hidden;
+        }
+
+        .font-serif-sc {
+            font-family: 'Noto Serif SC', 'Cinzel', serif;
+        }
+
+        .font-brand {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* 首字下沉效果 */
+        .drop-cap::first-letter {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3.8rem;
+            float: left;
+            line-height: 0.85;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-bottom: 2px;
+            color: #E9826A;
+            font-weight: 700;
+        }
+
+        /* 统一自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF5EF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D96B43;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-terracotta selection:text-white flex flex-col min-h-screen">
+
+    <!-- ARTICLE HEADER / HERO SECTION (杂志风非对称 Header) -->
+    <header class="pt-12 pb-10 lg:pt-16 lg:pb-12 bg-archiveBg border-b border-archiveBorder/60">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <!-- 面包屑与分类标记 -->
+            <div class="flex items-center gap-2 text-xs font-mono text-terracotta uppercase tracking-wider mb-6">
+                <a href="../index.html" class="hover:underline">首页</a>
+                <span>/</span>
+                <a href="../NotesEssays/NotesEssays.html" class="hover:underline">手记与随笔</a>
+            </div>
+
+            <!-- 非对称两栏标题区 -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
+                
+                <!-- 左栏：大标题与文章元数据 -->
+                <div class="lg:col-span-8 space-y-6">
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-serif-sc text-charcoal-900 tracking-tight leading-tight">
+                        啰啰嗦嗦2019新年寄语
+                    </h1>
+
+
+                    <div class="flex items-center gap-2">
+                            <img src="https://lh3.googleusercontent.com/d/1U0oZVC805-K154HgLtcuJCcRlhSe3hnF" 
+                                class="w-12 h-12 rounded-full object-cover border border-archiveBorder shadow-sm shrink-0">
+                            <span class="font-sans font-medium text-lg text-charcoal-900">塔库电台</span>
+                    </div>
+                    <!-- 作者、日期、阅读时长 -->
+                    <div class="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-charcoal-600 font-mono pt-2 border-t border-archiveBorder/60">
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="party-popper" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>新年寄语</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <time datetime="2019-01-01">2019.01.01</time>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>预计阅读 5 分钟</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="bookmark" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>约 1,500 字</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右栏：导语/摘要摘要卡片 -->
+                <div class="lg:col-span-4 bg-archiveCard/70 border-l-2 border-terracotta p-5 rounded-r-xl space-y-2">
+                    <div class="text-lg font-brand text-terracotta font-bold tracking-widest uppercase">                    
+                        日复一日的生活虽然有些平凡，但好在身边依旧是挚爱的人，所以终究是温暖而幸福的日子。
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- ARTICLE HERO IMAGE (封面图) -->
+    <div class="max-w-7xl mx-auto px-6 mt-8 lg:mt-10">
+        <div class="relative rounded-2xl overflow-hidden border border-archiveBorder shadow-sm">
+           <img src="https://lh3.googleusercontent.com/d/1UtnXPUFmZaEf8KL952IHlv3mNx9eSPuW"
+                 alt="文章封面图" 
+                 class="w-full h-[320px] sm:h-[450px] object-cover">
+            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-charcoal-900/80 via-charcoal-900/30 to-transparent p-4 sm:p-6 flex justify-between items-end text-white/90 text-xs font-mono">
+                <span>冬日微光 · 岁末感言</span>
+                <span class="hidden sm:inline opacity-75">Photo by Unsplash</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA (主栏 + 悬浮侧边栏) -->
+    <main class="flex-grow py-12 lg:py-16">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            <!-- LEFT MAIN COLUMN: 文章正文区域 -->
+            <article class="lg:col-span-8 space-y-8 font-serif-sc text-charcoal-900 text-base sm:text-lg leading-relaxed">
+                
+                <!-- 引言段落（带首字下沉 Drop Cap） -->
+                <p class="drop-cap text-charcoal-800 leading-loose">
+                    北方岛国的冬日，夜色总是早早降临。清晨天光未至，圣诞余温还在，新年竟已触手可及。
+                </p>
+
+                <p>
+                    组里的几个小伙伴相继迈入了人生新阶段，有的考研，有的结婚，有的跳槽，有的入职。看着他们或困惑迷茫或意气风发，想到自己也曾有过如此的年华，不禁感慨真的是老了。但愿他们新的一年一切顺利。如风如光。自由。明朗。
+                </p>
+
+                <figure>
+                    <img src="https://lh3.googleusercontent.com/d/1d5AftecmLAYDqbUt73Tp0Dnlcanjb0jM" class="w-full max-h-[390px] object-cover">
+                    <figcaption>河水一直向前，也一直在此刻。</figcaption>
+                </figure>
+
+                <!-- 一级小标题 -->
+                <h2 id="section-1" class="text-2xl sm:text-3xl font-bold font-serif-sc text-charcoal-900 pt-6 border-t border-archiveBorder/60 flex items-center gap-3">
+                    <span class="text-terracotta font-mono text-xl">01 /</span>
+                    <span>平凡生活里的温暖与疲惫</span>
+                </h2>
+
+                <p>
+                    这一年是个让人疲惫又欣慰的一年。由被催稿的人变成了催稿的人，开始了天天与文字为伍的生活。遇到了很多有趣的人，经历了很多或欢喜或悲愤的时刻。日复一日的生活虽然有些平凡，但好在身边依旧是挚爱的人，所以终究是温暖而幸福的日子。
+                </p>
+
+                <p>
+                    嘟嘟们按部就班的成长着，双方老人自然是居功至伟值得五体跪拜。但最感激的还是布先生。不论是深夜笑谈，还是饭后困倦，哪怕只是不经意的想起，都会觉得“执子之手”大概是我人生中最庆幸的事了吧。
+                </p>
+
+                <!-- 金句拉标（Pull Quote） -->
+                <div class="my-8 p-6 sm:p-8 rounded-2xl bg-terracotta/5 border-l-4 border-terracotta space-y-3">
+                    <p class="text-lg sm:text-xl font-bold italic text-charcoal-900 leading-normal">
+                        “哪怕只是不经意的想起，都会觉得‘执子之手’大概是我人生中最庆幸的事了吧。”
+                    </p>
+                    <div class="text-xs font-mono text-terracotta uppercase tracking-wider">— 2019新年寄语</div>
+                </div>
+
+                <!-- 二级小标题 -->
+                <h2 id="section-2" class="text-2xl sm:text-3xl font-bold font-serif-sc text-charcoal-900 pt-6 border-t border-archiveBorder/60 flex items-center gap-3">
+                    <span class="text-terracotta font-mono text-xl">02 /</span>
+                    <span>时间的流逝与新年的期许</span>
+                </h2>
+
+                <p>
+                    然而到底是感觉时间太快，自己又懒又颓，不但感觉学无精进，许多想做的事情也没有做。以至于快到年底的时候我还在仰天长叹：为什么又过了一年？！
+                </p>
+                <figure>
+                    <img src="https://lh3.googleusercontent.com/d/1oGX4ZyiUppRPSPy9nMfACWQNsyIzan63" class="w-full max-h-[390px] object-cover">
+                    <figcaption>河水一直向前，也一直在此刻。</figcaption>
+                </figure>
+                <p>
+                    新的一年悄悄立了很多flag。新的一年也没什么特别的心愿。新的一年也许很快就过去了吧。
+                </p>
+
+                <p class="font-bold text-terracotta pt-4">
+                    还请继续多多关照呀。
+                </p>
+
+                <!-- 文章底部标签与分享 -->
+                <div class="pt-8 mt-12 border-t border-archiveBorder font-sans flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs text-charcoal-400 font-mono mr-1">TAGS:</span>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">新年寄语</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">岁末感言</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">生活随笔</a>
+                    </div>
+
+                    <div class="flex items-center gap-3 text-xs text-charcoal-600">
+                        <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-archiveBorder hover:bg-archiveCard transition-colors">
+                            <i data-lucide="heart" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>赞同 (26)</span>
+                        </button>
+                        <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-archiveBorder hover:bg-archiveCard transition-colors">
+                            <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                            <span>分享</span>
+                        </button>
+                    </div>
+                </div>
+
+            </article>
+
+            <!-- RIGHT SIDEBAR: 悬浮侧边栏 -->
+            <aside class="lg:col-span-4 space-y-8 lg:sticky lg:top-28 font-sans">
+                
+                <!-- Widget 1: 目录 -->
+                <div class="bg-archiveCard/60 border border-archiveBorder rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-2 text-xs font-brand text-charcoal-900 font-bold tracking-widest uppercase pb-2 border-b border-archiveBorder">
+                        <i data-lucide="list-tree" class="w-4 h-4 text-terracotta"></i>
+                        <span>TABLE OF CONTENTS</span>
+                    </div>
+                    <nav class="space-y-2 text-xs text-charcoal-600">
+                        <a href="#section-1" class="block py-1 hover:text-terracotta transition-colors font-medium flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-terracotta"></span>
+                            <span>01 / 平凡生活里的温暖与疲惫</span>
+                        </a>
+                        <a href="#section-2" class="block py-1 hover:text-terracotta transition-colors font-medium flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-archiveBorder"></span>
+                            <span>02 / 时间的流逝与新年的期许</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Widget 3: 相关精选随笔 -->
+                <div class="space-y-4">
+                    <div class="text-xs font-brand text-charcoal-400 tracking-widest uppercase font-semibold border-b border-archiveBorder pb-2">
+                        RELATED READING
+                    </div>
+                    <div class="space-y-3">
+                        <a href="NewYear2018" class="block p-3 rounded-xl hover:bg-archiveCard/50 border border-transparent hover:border-archiveBorder transition-all group">
+                            <div class="text-[10px] font-mono text-charcoal-400">2018.01 · 生活碎片</div>
+                            <h4 class="text-xs font-bold font-serif-sc text-charcoal-900 group-hover:text-terracotta transition-colors mt-0.5">
+                                心血来潮的公众号，大洋彼岸的第八年
+                            </h4>
+                        </a>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER 页脚 -->
+    <footer class="bg-charcoal-900 text-archiveBg py-12 border-t border-charcoal-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-charcoal-400">
+            <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-terracotta text-white flex items-center justify-center font-bold font-brand text-xs">
+                    幸福
+                </span>
+                <span class="font-serif-sc">幸福生活 · 个人数字档案馆 © 2026</span>
+            </div>
+            <div>
+                <span>妥善保存于数字云端 · 静默记录</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tocLinks = document.querySelectorAll('aside nav a');
+            const sections = document.querySelectorAll('article h2[id]');
+
+            // 初始化图标
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            if (tocLinks.length > 0 && sections.length > 0) {
+                
+                // --- 1. 点击时立即高亮被点击项 ---
+                tocLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        // 移除所有链接的高亮和圆点状态
+                        tocLinks.forEach(l => {
+                            l.classList.remove('text-terracotta', 'font-bold');
+                            l.classList.add('text-charcoal-600');
+                            const d = l.querySelector('span.rounded-full');
+                            if (d) {
+                                d.classList.remove('bg-terracotta');
+                                d.classList.add('bg-archiveBorder');
+                            }
+                        });
+
+                        // 为当前被点击的链接加上高亮和圆点状态
+                        this.classList.add('text-terracotta', 'font-bold');
+                        this.classList.remove('text-charcoal-600');
+                        const dot = this.querySelector('span.rounded-full');
+                        if (dot) {
+                            dot.classList.remove('bg-archiveBorder');
+                            dot.classList.add('bg-terracotta');
+                        }
+                    });
+                });
+
+                // --- 2. 滚动时的 IntersectionObserver 监听（保持不变，用于常规滚动时更新） ---
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '-20% 0px -60% 0px',
+                    threshold: 0
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const currentId = entry.target.getAttribute('id');
+                            
+                            tocLinks.forEach(link => {
+                                const href = link.getAttribute('href');
+                                if (href === `#${currentId}`) {
+                                    link.classList.add('text-terracotta', 'font-bold');
+                                    link.classList.remove('text-charcoal-600');
+                                    const dot = link.querySelector('span.rounded-full');
+                                    if (dot) {
+                                        dot.classList.remove('bg-archiveBorder');
+                                        dot.classList.add('bg-terracotta');
+                                    }
+                                } else {
+                                    link.classList.remove('text-terracotta', 'font-bold');
+                                    link.classList.add('text-charcoal-600');
+                                    const dot = link.querySelector('span.rounded-full');
+                                    if (dot) {
+                                        dot.classList.remove('bg-terracotta');
+                                        dot.classList.add('bg-archiveBorder');
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }, observerOptions);
+
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

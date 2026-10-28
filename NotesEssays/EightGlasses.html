@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>八杯酒的前半生 | 幸福生活个人数字档案馆</title>
+    
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 引入 Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+SC:wght@300;400;600;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- 引入 Lucide Icons 图标库 -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind 统一 Token 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        archiveBg: '#FAF5EF',
+                        archiveCard: '#F3ECE2',
+                        archiveBorder: '#E6DCCE',
+                        terracotta: {
+                            DEFAULT: '#E9826A',
+                            hover: '#E24C00',
+                            light: '#F7B89C',
+                            soft: 'rgba(233, 130, 106, 0.12)',
+                        },
+                        charcoal: {
+                            900: '#49352F',
+                            800: '#75554b',
+                            600: '#b78576',
+                            400: '#ffbfa9',
+                        },
+                        darkBlue: {
+                            950: '#050D14',
+                            900: '#081622',
+                            800: '#0D2131',
+                            700: '#133045',
+                        }
+                    },
+                    fontFamily: {
+                        serifSC: ['Noto Serif SC', 'serif'],
+                        brand: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background-color: #FAF5EF;
+            color: #2C2825;
+            overflow-x: hidden;
+        }
+
+        .font-serif-sc {
+            font-family: 'Noto Serif SC', 'Cinzel', serif;
+        }
+
+        .font-brand {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* 首字下沉效果 */
+        .drop-cap::first-letter {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3.8rem;
+            float: left;
+            line-height: 0.85;
+            padding-top: 4px;
+            padding-right: 12px;
+            padding-bottom: 2px;
+            color: #E9826A;
+            font-weight: 700;
+        }
+
+        /* 统一自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF5EF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D96B43;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-terracotta selection:text-white flex flex-col min-h-screen">
+
+    <!-- ARTICLE HEADER / HERO SECTION (杂志风非对称 Header) -->
+    <header class="pt-12 pb-10 lg:pt-16 lg:pb-12 bg-archiveBg border-b border-archiveBorder/60">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <!-- 面包屑与分类标记 -->
+            <div class="flex items-center gap-2 text-xs font-mono text-terracotta uppercase tracking-wider mb-6">
+                <a href="../index.html" class="hover:underline">首页</a>
+                <span>/</span>
+                <a href="../NotesEssays/NotesEssays.html" class="hover:underline">手记与随笔</a>
+            </div>
+
+            <!-- 非对称两栏标题区 -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
+                
+                <!-- 左栏：大标题与文章元数据 -->
+                <div class="lg:col-span-8 space-y-6">
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-serif-sc text-charcoal-900 tracking-tight leading-tight">
+                        八杯酒的前半生
+                    </h1>
+
+                    
+                    <div class="flex items-center gap-2">
+                            <img src="https://lh3.googleusercontent.com/d/1U0oZVC805-K154HgLtcuJCcRlhSe3hnF" 
+                                class="w-12 h-12 rounded-full object-cover border border-archiveBorder shadow-sm shrink-0">
+                            <span class="font-sans font-medium text-lg text-charcoal-900">塔库电台</span>
+                    </div>
+
+                    <!-- 作者、阅读时长等元数据 -->
+                    <div class="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-charcoal-600 font-mono pt-2 border-t border-archiveBorder/60">
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="music" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>音乐人生</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <time datetime="2019-01-01">2018.01.21</time>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>预计阅读 6 分钟</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="bookmark" class="w-3.5 h-3.5 text-terracotta"></i>
+                            <span>约 1,800 字</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右栏：导语/摘要卡片 -->
+                <div class="lg:col-span-4 bg-archiveCard/70 border-l-2 border-terracotta p-5 rounded-r-xl space-y-2">
+                    <div class="text-lg font-brand text-terracotta font-bold tracking-widest uppercase">“欢乐场散去，像是做了一场梦，梦了整整前半生。宾来客往却无话可说的落寞，灯红酒绿却无处可去的迷惘，都在这几句里一言而尽。”</div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- ARTICLE HERO IMAGE (封面图) -->
+    <div class="max-w-7xl mx-auto px-6 mt-8 lg:mt-10">
+        <div class="relative rounded-2xl overflow-hidden border border-archiveBorder shadow-sm">
+            <img src="https://lh3.googleusercontent.com/d/1D6MM0Ad6zGIIljU_HK8Lwm4fVb9UrPTL"
+                 alt="文章封面图" 
+                 class="w-full h-[320px] sm:h-[450px] object-cover">
+            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-charcoal-900/80 via-charcoal-900/30 to-transparent p-4 sm:p-6 flex justify-between items-end text-white/90 text-xs font-mono">
+                <span>深夜与旋律 · 消愁八杯酒</span>
+                <span class="hidden sm:inline opacity-75">Photo by Unsplash</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA (主栏 + 悬浮侧边栏) -->
+    <main class="flex-grow py-12 lg:py-16">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            <!-- LEFT MAIN COLUMN: 文章正文区域 -->
+            <article class="lg:col-span-8 space-y-8 font-serif-sc text-charcoal-900 text-base sm:text-lg leading-relaxed">
+                
+                <!-- 引言段落 -->
+                <p class="drop-cap text-charcoal-800 leading-loose">
+                    我向来是把《歌手》这个节目当做综艺节目看的。没有粉没有黑，自己喜欢的好歌好声音，就会认真找来循环听。剩下不感兴趣的那些，可能听到一半就走个过场匆匆快进过去了。
+                </p>
+
+                <p>
+                    李晓东开口唱《消愁》之前，我并不知道这首歌，也从来没有听过。开始的旋律正好是我喜欢的音色和调调，所以就格外注意了些。然而唱到一半就感觉自己心底的触动已经远远大于歌曲本身，一字一句的歌词更是说出了那些难以名状的情绪。于是立刻找来毛不易的原唱开始单曲循环。日里夜里。日里。夜里。
+                </p>
+
+                <!-- 章节一 -->
+                <h2 id="section-1" class="text-2xl sm:text-3xl font-bold font-serif-sc text-charcoal-900 pt-6 border-t border-archiveBorder/60 flex items-center gap-3">
+                    <span class="text-terracotta font-mono text-xl">01 /</span>
+                    <span>一杯敬朝阳，一杯敬月光</span>
+                </h2>
+
+                <p>
+                    我有段时间睡眠不是很好。那时候正是学业压力最大的日子，又在陌生的国家里，生活上也是诸多不顺。于是日夜颠倒，常常凌晨还瞪着眼睛看着天花板，等到真快睡着的时候天已经蒙蒙亮了。
+                </p>
+
+                <p>
+                    我屋子里的床正好贴着窗户那边，后来再睡不着的时候，我也不再强迫自己，索性身上团着被子靠在窗边，看宿舍外面的小路上偶尔经过的人。有时候男男女女一群人拿着酒瓶嬉笑着路过，有时候只有一个路灯下抽烟的冷清的背影。更多的时候，什么人也没有。然而我却不觉得无聊。黑暗里能看到外面路灯橙色的光照在我的床上。很温暖。很孤独。
+                </p>
+
+                <p>
+                    而这偶尔出现的失眠日子已然远离我很多年。现在生活的地方，冬天的白昼很短暂，有时候早高峰走在路上，天边才刚刚有一抹朝霞。粉红的云层被风吹的不断涌动，零星透过的阳光像是海里洒落的金色波浪。我知道生活本平凡。我们都曾以为自己是最不平凡的那一个，到最后也是最甘于平凡的那一个。
+                </p>
+
+                <p class="italic text-terracotta">
+                    谁的生活不是东升西落，春去秋来呢。
+                </p>
+
+                <!-- 章节二 -->
+                <h2 id="section-2" class="text-2xl sm:text-3xl font-bold font-serif-sc text-charcoal-900 pt-6 border-t border-archiveBorder/60 flex items-center gap-3">
+                    <span class="text-terracotta font-mono text-xl">02 /</span>
+                    <span>一杯敬故乡，一杯敬远方</span>
+                </h2>
+
+                <p>
+                    我15岁开始离家住校，如今30岁了。故乡在我的生命里，已然退到只参与了一半的时间。我与她从一开始的隔着城，到如今隔着大陆和海洋，一切已经变得熟悉而又陌生。只是偶尔听父母说起，街口的那家炒货店没有了，亦或小时候的母校跟别的小学合并了这类的事情时，才会有种真切的感觉。
+                </p>
+
+                <div class="my-6 p-5 bg-archiveCard/60 border-l-4 border-terracotta rounded-r-xl space-y-2">
+                    <p class="text-base text-terracotta font-bold">
+                        而故乡永远是故乡。在我吐字的气息中，在我的舌尖上，在我的梦里。
+                        <br>远方也永远是远方。在诗里，在夜里，在一望无际的雨里。
+                    </p>
+                </div>
+
+                <!-- 章节三 -->
+                <h2 id="section-3" class="text-2xl sm:text-3xl font-bold font-serif-sc text-charcoal-900 pt-6 border-t border-archiveBorder/60 flex items-center gap-3">
+                    <span class="text-terracotta font-mono text-xl">03 /</span>
+                    <span>一杯敬明天，一杯敬过往</span>
+                </h2>
+
+                <p>
+                    青春年少的时候，我也曾一个人坐在某个台阶上，微醺，夜风凉，独自神伤。谁还没个文艺的时代呢。然而当细碎且纷杂的事情将生活填满，肩上有了更沉重的担子，感怀的情绪就被慢慢缩小了，即便是有，也很快就被眼前的苟且淹没了。是的，远方仍然在那里，而生活不止眼前的苟且，还有曾经的苟且和未来的苟且。
+                </p>
+
+                <p>
+                    但这样才让我真切的觉得自己是在活着。
+                </p>
+
+                <p>
+                    成长大概就是要坦然接受那个曾经多愁善感45度仰望天空说白了就是有点傻X的自己，也不再为那些曾经经历的磨难和苦痛流泪，多喜欢一点现在的自己，并努力变成一个更好的人吧。
+                </p>
+
+                <!-- 章节四 -->
+                <h2 id="section-4" class="text-2xl sm:text-3xl font-bold font-serif-sc text-charcoal-900 pt-6 border-t border-archiveBorder/60 flex items-center gap-3">
+                    <span class="text-terracotta font-mono text-xl">04 /</span>
+                    <span>一杯敬自由，一杯敬死亡</span>
+                </h2>
+
+                <figure>
+                    <img src="https://lh3.googleusercontent.com/d/1ZA5cRsX9nTq7lztM7jwNHLqoxiFWs5qL" class="w-full max-h-[390px] object-cover">
+                    <figcaption>河水一直向前，也一直在此刻。</figcaption>
+                </figure>
+                <p>
+                    我写下这两个词，觉得自己很渺小，渺小到不配去谈它。十秒钟之后我又觉得自己很可笑，觉得自由和死亡跟吃饭睡觉没有什么本质的不同，如何能不谈呢。
+                </p>
+
+                <p>
+                    因为某些原因，最近看了些关于奥斯维辛集中营的东西。纪录片中密集的铁丝网和成堆的尸体，无一不让人胆战心惊。躺在被窝里准备入睡的时候想了很多，想到历史的残酷，想到人性的黑暗，想到有一天当我目睹这一切时的沉痛和压抑。然而现实却可能正如罗森塔尔在结尾里写的，“在奥斯维辛，没有什么可供报道。这里阳光明媚，绿树成荫，孩子们在集中营大门那里追逐嬉戏。”
+                </p>
+
+                <p>
+                    大概就是这种祥和，让画面下的那些汹涌，那些我们如今无法想象的挣扎和嘶吼，变得更加遥远却真实，让现在的我们给自身以反省，然后能负重前行。
+                </p>
+
+                <!-- 结语卡片 -->
+                <div class="my-8 p-6 rounded-2xl bg-terracotta/5 border border-terracotta/30 space-y-4">
+                    <p>
+                        循环着循环着，最后这一首听完，欢乐场散去，像是做了一场梦，梦了整整前半生。宾来客往却无话可说的落寞，灯红酒绿却无处可去的迷惘，都在这几句里一言而尽。
+                    </p>
+                    <p>
+                        然后我们就这么糊里糊涂的过来了。活成了我们想成为或者不想成为的样子。
+                    </p>
+                    <p class="font-bold text-charcoal-900">
+                        而最幸运的是大概就是还能明日复明日。明日何其多。
+                    </p>
+                    <p class="text-terracotta font-bold text-lg">
+                        所以一杯敬彷徨，一杯敬希望吧。
+                    </p>
+                </div>
+
+                <!-- 文章底部标签与分享 -->
+                <div class="pt-8 mt-12 border-t border-archiveBorder font-sans flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs text-charcoal-400 font-mono mr-1">TAGS:</span>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">消愁</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">音乐随笔</a>
+                        <a href="#" class="px-3 py-1 bg-archiveCard border border-archiveBorder rounded-full text-xs text-charcoal-600 hover:bg-terracotta hover:text-white transition-colors">前半生</a>
+                    </div>
+
+                    
+                </div>
+
+            </article>
+
+            <!-- RIGHT SIDEBAR: 悬浮侧边栏 -->
+            <aside class="lg:col-span-4 space-y-8 lg:sticky lg:top-28 font-sans">
+                
+                <!-- Widget 1: 目录 navigation -->
+                <div class="bg-archiveCard/60 border border-archiveBorder rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-2 text-xs font-brand text-charcoal-900 font-bold tracking-widest uppercase pb-2 border-b border-archiveBorder">
+                        <i data-lucide="list-tree" class="w-4 h-4 text-terracotta"></i>
+                        <span>TABLE OF CONTENTS</span>
+                    </div>
+                    <nav class="space-y-2 text-xs text-charcoal-600">
+                        <a href="#section-1" class="block py-1 hover:text-terracotta transition-colors font-medium flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-terracotta"></span>
+                            <span>01 / 一杯敬朝阳，一杯敬月光</span>
+                        </a>
+                        <a href="#section-2" class="block py-1 hover:text-terracotta transition-colors font-medium flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-archiveBorder"></span>
+                            <span>02 / 一杯敬故乡，一杯敬远方</span>
+                        </a>
+                        <a href="#section-3" class="block py-1 hover:text-terracotta transition-colors font-medium flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-archiveBorder"></span>
+                            <span>03 / 一杯敬明天，一杯敬过往</span>
+                        </a>
+                        <a href="#section-4" class="block py-1 hover:text-terracotta transition-colors font-medium flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-archiveBorder"></span>
+                            <span>04 / 一杯敬自由，一杯敬死亡</span>
+                        </a>
+                    </nav>
+                </div>
+    
+
+                <!-- Widget 3: 相关阅读 -->
+                <div class="space-y-4">
+                    <div class="text-xs font-brand text-charcoal-400 tracking-widest uppercase font-semibold border-b border-archiveBorder pb-2">
+                        RELATED READING
+                    </div>
+                    <div class="space-y-3">
+                        <a href="NewYear2019.html" class="block p-3 rounded-xl hover:bg-archiveCard/50 border border-transparent hover:border-archiveBorder transition-all group">
+                            <div class="text-[10px] font-mono text-charcoal-400">2019.01 · 新年寄语</div>
+                            <h4 class="text-xs font-bold font-serif-sc text-charcoal-900 group-hover:text-terracotta transition-colors mt-0.5">
+                                啰啰嗦嗦2019新年寄语
+                            </h4>
+                        </a>
+                        <a href="NewYear2018.html" class="block p-3 rounded-xl hover:bg-archiveCard/50 border border-transparent hover:border-archiveBorder transition-all group">
+                            <div class="text-[10px] font-mono text-charcoal-400">2018.01 · 生活碎片</div>
+                            <h4 class="text-xs font-bold font-serif-sc text-charcoal-900 group-hover:text-terracotta transition-colors mt-0.5">
+                                心血来潮的公众号，大洋彼岸的第八年
+                            </h4>
+                        </a>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER 页脚 -->
+    <footer class="bg-charcoal-900 text-archiveBg py-12 border-t border-charcoal-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-charcoal-400">
+            <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-terracotta text-white flex items-center justify-center font-bold font-brand text-xs">
+                    幸福
+                </span>
+                <span class="font-serif-sc">幸福生活 · 个人数字档案馆 © 2026</span>
+            </div>
+            <div>
+                <span>妥善保存于数字云端 · 静默记录</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tocLinks = document.querySelectorAll('aside nav a');
+            const sections = document.querySelectorAll('article h2[id]');
+
+            // 初始化图标
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            if (tocLinks.length > 0 && sections.length > 0) {
+                
+                // --- 1. 点击时立即高亮被点击项 ---
+                tocLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        // 移除所有链接的高亮和圆点状态
+                        tocLinks.forEach(l => {
+                            l.classList.remove('text-terracotta', 'font-bold');
+                            l.classList.add('text-charcoal-600');
+                            const d = l.querySelector('span.rounded-full');
+                            if (d) {
+                                d.classList.remove('bg-terracotta');
+                                d.classList.add('bg-archiveBorder');
+                            }
+                        });
+
+                        // 为当前被点击的链接加上高亮和圆点状态
+                        this.classList.add('text-terracotta', 'font-bold');
+                        this.classList.remove('text-charcoal-600');
+                        const dot = this.querySelector('span.rounded-full');
+                        if (dot) {
+                            dot.classList.remove('bg-archiveBorder');
+                            dot.classList.add('bg-terracotta');
+                        }
+                    });
+                });
+
+                // --- 2. 滚动时的 IntersectionObserver 监听（保持不变，用于常规滚动时更新） ---
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '-20% 0px -60% 0px',
+                    threshold: 0
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const currentId = entry.target.getAttribute('id');
+                            
+                            tocLinks.forEach(link => {
+                                const href = link.getAttribute('href');
+                                if (href === `#${currentId}`) {
+                                    link.classList.add('text-terracotta', 'font-bold');
+                                    link.classList.remove('text-charcoal-600');
+                                    const dot = link.querySelector('span.rounded-full');
+                                    if (dot) {
+                                        dot.classList.remove('bg-archiveBorder');
+                                        dot.classList.add('bg-terracotta');
+                                    }
+                                } else {
+                                    link.classList.remove('text-terracotta', 'font-bold');
+                                    link.classList.add('text-charcoal-600');
+                                    const dot = link.querySelector('span.rounded-full');
+                                    if (dot) {
+                                        dot.classList.remove('bg-terracotta');
+                                        dot.classList.add('bg-archiveBorder');
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }, observerOptions);
+
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+            }
+        });
+        
+    </script>
+</body>
+</html>
